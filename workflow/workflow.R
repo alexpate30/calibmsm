@@ -11,7 +11,7 @@ usethis::use_mit_license()
 ###
 ### Use git
 ###
-use_git()
+#use_git()
 
 ###
 ### Add dependencies
@@ -84,3 +84,4 @@ devtools::install()
 devtools::check()
 library(dplyr)
 getwd()
+testchange

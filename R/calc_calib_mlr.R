@@ -54,7 +54,6 @@ calc_calib_mlr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, smoothe
   # w.max = 10
   # w.stabilised = FALSE
   # smoother.type <- "sm.ps"
-  abab <- heyheyhey
 
   ### Extract transition matrix from msdata object
   tmat <- attributes(data.mstate)$trans

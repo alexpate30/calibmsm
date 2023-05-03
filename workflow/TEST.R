@@ -1,6 +1,7 @@
 ###
 ### Testing package functionality
 ###
+testchange <- 1
 a <- 3
 b <- 4
 rm(list=ls())

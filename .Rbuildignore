@@ -2,3 +2,7 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^workflow$
+^README\.Rmd$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$

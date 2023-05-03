@@ -65,9 +65,9 @@ devtools::build_readme()
 usethis::use_pkgdown()
 pkgdown::build_site()
 usethis::use_pkgdown_github_pages()
-# gh_token_help()
-# usethis::create_github_token()
-# gitcreds::gitcreds_set()
+gh_token_help()
+usethis::create_github_token()
+gitcreds::gitcreds_set()
 getwd()
 
 

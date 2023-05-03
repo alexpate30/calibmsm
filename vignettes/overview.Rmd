@@ -1,0 +1,26 @@
+---
+title: "overview"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{overview}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+#library(calibmsm)
+```
+# Introduction
+
+This vignette will be updated at some point.
+
+Saved old overview vignette in vignette_overview_SAVE.Rmd (workflow folder).
+
+Currently planning to use the .Rnw file for the vignette, but the issue is that it takes too long to render. Eventually I will move this across.

@@ -9,6 +9,11 @@ devtools::document()
 usethis::use_mit_license()
 
 ###
+### Use git
+###
+use_git()
+
+###
 ### Add dependencies
 ###
 usethis::use_package("survival")

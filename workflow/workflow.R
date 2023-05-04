@@ -90,3 +90,8 @@ library(dplyr)
 getwd()
 testchange
 testchange2
+.libPaths("C:/Program Files/R/R-4.3.0/library")
+.libPaths()
+install.packages("pkgdown")
+install.packages("devtools")
+install.packages("gitcreds")

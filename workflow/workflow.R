@@ -86,6 +86,7 @@ devtools::check(vignettes = FALSE)
 calibmsm::calc_calib_blr
 devtools::install()
 devtools::check()
+install.packages("Formula")
 library(dplyr)
 getwd()
 testchange

@@ -8,7 +8,7 @@ rm(list=ls())
 load_all()
 check(vignettes = FALSE)
 ?calibmsm::calc_calib_mlr
-
+testhaschanged <- 1
 library(devtools)
 data("ebmtcal")
 data("msebmtcal")

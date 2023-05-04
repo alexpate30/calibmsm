@@ -11,7 +11,7 @@ usethis::use_mit_license()
 ###
 ### Use git
 ###
-#use_git()
+use_git()
 
 ###
 ### Add dependencies
@@ -72,7 +72,7 @@ gitcreds::gitcreds_set()
 getwd()
 library(gitcreds)
 .libPaths()
-
+whyisntworkflowbeingrecognised <- 2
 ###
 ### Install package
 ###

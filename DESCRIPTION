@@ -28,3 +28,4 @@ Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
+URL: https://alexpate30.github.io/calibmsm/

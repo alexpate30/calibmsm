@@ -56,7 +56,7 @@ usethis::use_data(tps100, overwrite = TRUE)
 ### Add R-CMD-CHECK
 ###
 usethis::use_readme_rmd()
-usethis::use_github_action("check-standard")
+usethis::use_github_action_check_standard()
 devtools::build_readme()
 
 ###
@@ -73,7 +73,7 @@ getwd()
 library(gitcreds)
 .libPaths()
 whyisntworkflowbeingrecognised <- 2
-whyisntworkflowbeingrecognised <- 3
+whyisntworkflowbeingrecognised <- 2
 ###
 ### Install package
 ###

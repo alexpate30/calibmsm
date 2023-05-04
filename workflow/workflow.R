@@ -71,6 +71,7 @@ usethis::create_github_token()
 gitcreds::gitcreds_set()
 getwd()
 library(gitcreds)
+.libPaths()
 
 ###
 ### Install package

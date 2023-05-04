@@ -62,6 +62,7 @@ devtools::build_readme()
 ###
 ### Create website
 ###
+library(dplyr)
 usethis::use_pkgdown()
 pkgdown::build_site()
 usethis::use_pkgdown_github_pages()

@@ -50,7 +50,6 @@ calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.t
                            weights = NULL, w.covs, w.landmark.type = "state", w.max = 10, w.stabilised = FALSE, w.max.follow = NULL, CI = FALSE, CI.R.boot,
                            data.pred.plot = NULL, transitions.out = NULL){
 
-
 # data.mstate <- msebmtcal
 # data.raw <- data.boot
 # j <- 1

@@ -73,6 +73,7 @@ getwd()
 library(gitcreds)
 .libPaths()
 whyisntworkflowbeingrecognised <- 2
+whyisntworkflowbeingrecognised <- 3
 ###
 ### Install package
 ###

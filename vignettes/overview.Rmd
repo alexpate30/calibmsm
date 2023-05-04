@@ -7,10 +7,6 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup}
-#library(calibmsm)
-```
-
 # Introduction
 
 This vignette will be updated at some point.

@@ -43,6 +43,7 @@ usethis::use_import_from("VGAM", "s")
 ### Create first vignette
 ###
 usethis::use_vignette("overview")
+usethis::use_vignette("vigtest")
 
 ###
 ### Add data

@@ -38,12 +38,6 @@
 <li class="nav-item">
   <a class="nav-link" href="reference/index.html">Reference</a>
 </li>
-<li class="nav-item dropdown">
-  <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
-  <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="articles/overview.html">overview</a>
-  </div>
-</li>
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -73,12 +67,31 @@
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
-<p>This is a basic example which shows you how to solve a common problem:</p>
+<p>This is a basic example which shows you how to assess the calibration of the transition probabilities at 5 years follow up for individuals out of state <code>j</code> at time <code>s</code>. The predicted transition probabilities are stored in <code>tps0</code>, the individuals data are stored in <code>ebmtcal</code>, and the data is <code>msdata</code> format are stored in <code>msebmtcal</code>. Inverse probability of censoring weights are calculated based on variables year, age, prophylaxis and donor gender match. The calibration curves are produced using restricted cubic splines. A 95% confidence interval is caulcated using bootstrapping with 200 bootstrap replicates.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://alexpate30.github.io/calibmsm/">calibmsm</a></span><span class="op">)</span></span>
-<span><span class="co">## basic example code</span></span>
+<code class="sourceCode R"><span><span class="co">## Load calibmsm</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://alexpate30.github.io/calibmsm/">calibmsm</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">## WRITE BASIC MINIMUM EXAMPLE</span></span></code></pre></div>
+<span><span class="co">## Extract relevant predicted risks from tps0</span></span>
+<span><span class="va">tp.pred</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">tps0</span>, <span class="va">j</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span>, <span class="fu">any_of</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"pstate"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Calculate observed event probabilities</span></span>
+<span><span class="va">dat.calib.blr</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu"><a href="reference/calc_calib_blr.html">calc_calib_blr</a></span><span class="op">(</span>data.mstate <span class="op">=</span> <span class="va">msebmtcal</span>,</span>
+<span>                 data.raw <span class="op">=</span> <span class="va">ebmtcal</span>,</span>
+<span>                 j<span class="op">=</span><span class="fl">1</span>,</span>
+<span>                 s<span class="op">=</span><span class="fl">0</span>,</span>
+<span>                 t.eval <span class="op">=</span> <span class="fl">1826</span>,</span>
+<span>                 tp.pred <span class="op">=</span> <span class="va">tp.pred</span>,</span>
+<span>                 curve.type <span class="op">=</span> <span class="st">"rcs"</span>,</span>
+<span>                 rcs.nk <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>                 w.covs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span>, <span class="st">"agecl"</span>, <span class="st">"proph"</span>, <span class="st">"match"</span><span class="op">)</span>,</span>
+<span>                 CI <span class="op">=</span> <span class="fl">95</span>,</span>
+<span>                 CI.R.boot <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Plot calibration plots</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat.calib.blr</span>, combine <span class="op">=</span> <span class="cn">TRUE</span>, nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/README-example-1.png" width="100%"></p>
 </div>
 <div class="section level2">
 <h2 id="getting-help">Getting help<a class="anchor" aria-label="anchor" href="#getting-help"></a>

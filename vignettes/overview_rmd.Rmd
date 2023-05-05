@@ -1,0 +1,16 @@
+---
+title: "Overview"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{overview HTML}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+```{r, echo = FALSE}
+system('R CMD Sweave overview.Rnw')
+system('pdflatex overview.tex')
+```
+
+<!--- <iframe src="overview.pdf"/> -->
+
+[overview vignette PDF](overview.pdf){target="_blank"}

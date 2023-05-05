@@ -73,6 +73,7 @@ usethis::create_github_token()
 gitcreds::gitcreds_set()
 getwd()
 hello <- 2
+hello <- 3
 library(gitcreds)
 .libPaths()
 whyisntworkflowbeingrecognised <- 2

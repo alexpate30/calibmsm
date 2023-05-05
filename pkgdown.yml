@@ -2,7 +2,7 @@ pandoc: 2.19.2
 pkgdown: 2.0.7
 pkgdown_sha: ~
 articles: {}
-last_built: 2023-05-05T09:22Z
+last_built: 2023-05-05T10:05Z
 urls:
   reference: https://alexpate30.github.io/calibmsm/reference
   article: https://alexpate30.github.io/calibmsm/articles

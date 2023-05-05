@@ -3,7 +3,7 @@
 %% -- LaTeX packages and custom commands ---------------------------------------
 
 %% recommended packages
-\usepackage{orcidlink,thumbpdf,lmodern}
+\usepackage{thumbpdf,lmodern}
 
 %% new custom commands
 \newcommand{\class}[1]{`\code{#1}'}
@@ -23,7 +23,7 @@ options(prompt = "R> ", continue = "+  ", width = 70, useFancyQuotes = FALSE)
 %% - \Plainauthor{} without affiliations
 %% - Separate authors by \And or \AND (in \author) or by comma (in \Plainauthor).
 %% - \AND starts a new line, \And does not.
-\author{Alexander Pate~\orcidlink{0000-0002-0849-3458}\\University of Manchester
+\author{Alexander Pate\\University of Manchester
   \And Glen P. Martin\\University of Manchester}
 \Plainauthor{Alexander Pate, Glen P. Martin}
 

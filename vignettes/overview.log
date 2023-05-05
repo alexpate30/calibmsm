@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2021.5.5)  5 MAY 2023 15:13
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2021.5.5)  5 MAY 2023 16:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -293,7 +293,7 @@ Package hyperref Info: Option `plainpages' set `false' on input line 447.
 Package: thumbpdf 2018/09/07 v3.17 Inclusion of thumbnails (HO)
 THUMBPDF: Compressed PDF objects of PDF 1.5 are not supported
 )
-LaTeX Font Info:    Trying to load font information for T1+lmr on input line 61
+LaTeX Font Info:    Trying to load font information for T1+lmr on input line 52
 .
 
 (c:/texlive/2021/texmf-dist/tex/latex/lm/t1lmr.fd
@@ -307,24 +307,24 @@ File: l3backend-pdftex.def 2021-03-18 L3 backend support: PDF output (pdfTeX)
 (./overview.aux)
 \openout1 = `overview.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 61.
-LaTeX Font Info:    ... okay on input line 61.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
 
 (c:/texlive/2021/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -348,7 +348,7 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-Package hyperref Info: Link coloring ON on input line 61.
+Package hyperref Info: Link coloring ON on input line 52.
 
 (c:/texlive/2021/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
@@ -361,267 +361,80 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
 \c@section@level=\count274
 )
-LaTeX Info: Redefining \ref on input line 61.
-LaTeX Info: Redefining \pageref on input line 61.
-LaTeX Info: Redefining \nameref on input line 61.
+LaTeX Info: Redefining \ref on input line 52.
+LaTeX Info: Redefining \pageref on input line 52.
+LaTeX Info: Redefining \nameref on input line 52.
 
 (./overview.out) (./overview.out)
 \@outlinefile=\write4
 \openout4 = `overview.out'.
 
-LaTeX Font Info:    Trying to load font information for T1+lmss on input line 6
-1.
+LaTeX Font Info:    Trying to load font information for T1+lmss on input line 5
+2.
 
 (c:/texlive/2021/texmf-dist/tex/latex/lm/t1lmss.fd
 File: t1lmss.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 6
-1.
+LaTeX Font Info:    Trying to load font information for OT1+lmr on input line 5
+2.
 
 (c:/texlive/2021/texmf-dist/tex/latex/lm/ot1lmr.fd
 File: ot1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-LaTeX Font Info:    Trying to load font information for OML+lmm on input line 6
-1.
+LaTeX Font Info:    Trying to load font information for OML+lmm on input line 5
+2.
 
 (c:/texlive/2021/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-61.
+52.
 
 (c:/texlive/2021/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-61.
+52.
 
 (c:/texlive/2021/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10.95> on input line 61.
+(Font)              <10.95> on input line 52.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 61.
+(Font)              <8> on input line 52.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 61.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 61.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 61.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 61.
+(Font)              <6> on input line 52.
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 6
+4.
 
-
-Package natbib Warning: Citation `VanSmeden2021' on page 1 undefined on input l
-ine 102.
-
-
-Package natbib Warning: Citation `Putter2006' on page 1 undefined on input line
- 102.
-
-
-Package natbib Warning: Citation `Le-Rademacher2018' on page 1 undefined on inp
-ut line 102.
-
-
-Package natbib Warning: Citation `Lintu2022' on page 1 undefined on input line 
-102.
-
-
-Package natbib Warning: Citation `Masia2017' on page 1 undefined on input line 
-102.
-
-
-Package natbib Warning: Citation `Steyerberg2016' on page 1 undefined on input 
-line 102.
-
-
-Package natbib Warning: Citation `Sperrin2022' on page 1 undefined on input lin
-e 102.
-
-
-Package natbib Warning: Citation `VanCalster2019' on page 1 undefined on input 
-line 102.
-
-
-Package natbib Warning: Citation `VanCalster2016' on page 1 undefined on input 
-line 102.
-
-
-Package natbib Warning: Citation `DeWreede2011' on page 1 undefined on input li
-ne 104.
-
-
-Package natbib Warning: Citation `Houwelingen2007' on page 1 undefined on input
- line 104.
-
-
-Package natbib Warning: Citation `Dafni2011' on page 1 undefined on input line 
-104.
-
-[1
-
-{c:/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-
-Package natbib Warning: Citation `DeWreede2011' on page 2 undefined on input li
-ne 106.
-
-
-Package natbib Warning: Citation `EBMT2023' on page 2 undefined on input line 1
-06.
-
-
-Overfull \hbox (5.47499pt too wide) has occurred while \output is active
-\T1/lmr/m/n/10.95 2 []
- []
-
-[2]
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 1
-33.
- (c:/texlive/2021/texmf-dist/tex/latex/lm/t1lmtt.fd
+(c:/texlive/2021/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+) [1
+
+{c:/texlive/2021/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] (./overview.aux
 )
-Overfull \hbox (5.47499pt too wide) has occurred while \output is active
-[] \T1/lmr/m/n/10.95 3
- []
-
-[3]
-
-Package natbib Warning: Citation `VanHoorde2014' on page 4 undefined on input l
-ine 162.
-
-
-Package natbib Warning: Citation `VanHoorde2015' on page 4 undefined on input l
-ine 162.
-
-
-Package natbib Warning: Citation `Yee2015' on page 4 undefined on input line 17
-0.
-
-
-Package natbib Warning: Citation `VanCalster2016' on page 4 undefined on input 
-line 170.
-
-
-Package natbib Warning: Citation `EBMT2023' on page 4 undefined on input line 1
-75.
-
-
-Package natbib Warning: Citation `DeWreede2011' on page 4 undefined on input li
-ne 175.
-
-
-Package natbib Warning: Citation `DeWreede2011' on page 4 undefined on input li
-ne 177.
-
-
-Overfull \hbox (5.47499pt too wide) has occurred while \output is active
-\T1/lmr/m/n/10.95 4 []
- []
-
-[4]
-
-Package natbib Warning: Citation `DeWreede2011' on page 5 undefined on input li
-ne 217.
-
-
-Package natbib Warning: Citation `DeWreede2011' on page 5 undefined on input li
-ne 217.
-
-
-Overfull \hbox (5.47499pt too wide) has occurred while \output is active
-[] \T1/lmr/m/n/10.95 5
- []
-
-[5]
-Overfull \hbox (5.47499pt too wide) has occurred while \output is active
-\T1/lmr/m/n/10.95 6 []
- []
-
-[6]
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <12> on input line 270.
-
-Overfull \hbox (5.47499pt too wide) has occurred while \output is active
-[] \T1/lmr/m/n/10.95 7
- []
-
-[7]
-LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 
-300.
- (c:/texlive/2021/texmf-dist/tex/latex/lm/ts1lmtt.fd
-File: ts1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)
-Overfull \hbox (5.47499pt too wide) has occurred while \output is active
-\T1/lmr/m/n/10.95 8 []
- []
-
-[8]
-<overview-006.pdf, id=117, 542.025pt x 361.35pt>
-File: overview-006.pdf Graphic file (type pdf)
-<use overview-006.pdf>
-Package pdftex.def Info: overview-006.pdf  used on input line 346.
-(pdftex.def)             Requested size: 354.12434pt x 236.08774pt.
-
-Overfull \hbox (5.47499pt too wide) has occurred while \output is active
-[] \T1/lmr/m/n/10.95 9
- []
-
-[9 <./overview-006.pdf>] (./overview.bbl
-
-Package natbib Warning: Empty `thebibliography' environment on input line 12.
-
-)
-Overfull \hbox (10.94998pt too wide) has occurred while \output is active
-\T1/lmr/m/n/10.95 10 []
- []
-
-[10]
-
-Package natbib Warning: There were undefined citations.
-
-
-Overfull \hbox (10.94998pt too wide) has occurred while \output is active
-[] \T1/lmr/m/n/10.95 11
- []
-
-[11] (./overview.aux)
 Package rerunfilecheck Info: File `overview.out' has not changed.
-(rerunfilecheck)             Checksum: F8E6072DC236D0EEBC24FFDFABD6DB76;3853.
+(rerunfilecheck)             Checksum: 5FF821BA1F3AA30244DA7AE0E9463E9F;118.
  ) 
 Here is how much of TeX's memory you used:
- 9693 strings out of 478994
- 141543 string characters out of 5862208
- 448933 words of memory out of 5000000
- 26976 multiletter control sequences out of 15000+600000
- 480968 words of font info for 71 fonts, out of 8000000 for 9000
+ 9550 strings out of 478994
+ 138474 string characters out of 5862208
+ 439222 words of memory out of 5000000
+ 26887 multiletter control sequences out of 15000+600000
+ 451343 words of font info for 52 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 86i,9n,88p,1511b,323s stack positions out of 5000i,500n,10000p,200000b,80000s
-{c:/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}{c:/texlive/2021/te
-xmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{c:/texlive/2021/texmf-dist/fonts/enc/dvi
-ps/lm/lm-mathit.enc}{c:/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{c
-:/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-mathex.enc}{c:/texlive/2021/tex
-mf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}<c:/texlive/2021/texmf-dist/fonts/type
-1/public/lm/lmb10.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/lm/lmbx10.
-pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/lm/lmbx12.pfb><c:/texlive/20
-21/texmf-dist/fonts/type1/public/lm/lmex10.pfb><c:/texlive/2021/texmf-dist/font
-s/type1/public/lm/lmmi10.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/lm/
-lmmi12.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/lm/lmmi6.pfb><c:/texl
-ive/2021/texmf-dist/fonts/type1/public/lm/lmmi8.pfb><c:/texlive/2021/texmf-dist
-/fonts/type1/public/lm/lmr10.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public
-/lm/lmr12.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/lm/lmr8.pfb><c:/te
-xlive/2021/texmf-dist/fonts/type1/public/lm/lmri10.pfb><c:/texlive/2021/texmf-d
-ist/fonts/type1/public/lm/lmro10.pfb><c:/texlive/2021/texmf-dist/fonts/type1/pu
-blic/lm/lmss10.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/lm/lmssbx10.p
-fb><c:/texlive/2021/texmf-dist/fonts/type1/public/lm/lmsso10.pfb><c:/texlive/20
-21/texmf-dist/fonts/type1/public/lm/lmsy10.pfb><c:/texlive/2021/texmf-dist/font
-s/type1/public/lm/lmtt10.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/lm/
-lmtto10.pfb>
-Output written on overview.pdf (11 pages, 435927 bytes).
+ 86i,9n,88p,220b,318s stack positions out of 5000i,500n,10000p,200000b,80000s
+{c:/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}<c:/texlive/2021/tex
+mf-dist/fonts/type1/public/lm/lmbx10.pfb><c:/texlive/2021/texmf-dist/fonts/type
+1/public/lm/lmbx12.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/lm/lmr10.
+pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/lm/lmri10.pfb><c:/texlive/20
+21/texmf-dist/fonts/type1/public/lm/lmssbx10.pfb><c:/texlive/2021/texmf-dist/fo
+nts/type1/public/lm/lmtt10.pfb>
+Output written on overview.pdf (1 page, 135437 bytes).
 PDF statistics:
- 226 PDF objects out of 1000 (max. 8388607)
- 190 compressed objects within 2 object streams
- 38 named destinations out of 1000 (max. 500000)
- 94 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 45 PDF objects out of 1000 (max. 8388607)
+ 35 compressed objects within 1 object stream
+ 4 named destinations out of 1000 (max. 500000)
+ 9 words of extra memory for PDF output out of 10000 (max. 10000000)
 

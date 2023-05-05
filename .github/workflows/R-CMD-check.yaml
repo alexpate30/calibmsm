@@ -12,6 +12,14 @@ jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
 
+    name: Install Ghostscript on Linux
+        if: runner.os == 'Linux'
+        run: sudo DEBIAN_FRONTEND=noninteractive apt-get install --yes ghostscript
+
+    name: Install Ghostscript on Windows
+        if: runner.os == 'Windows'
+        run: choco install ghostscript --no-progress
+
     name: ${{ matrix.config.os }} (${{ matrix.config.r }})
 
     strategy:

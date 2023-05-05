@@ -44,6 +44,7 @@ usethis::use_import_from("VGAM", "s")
 ###
 usethis::use_vignette("overview")
 usethis::use_vignette("vigtest")
+devtools::install(build_vignettes = TRUE)
 
 ###
 ### Add data

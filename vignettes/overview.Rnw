@@ -247,6 +247,30 @@ plot(dat.calib.blr, combine = TRUE, nrow = 2, ncol = 3)
 \caption{\label{fig:blrj1s0} BLR-IPCW calibration curves out of state j =  1 at time s = 0.}
 \end{figure}
 
+Next we use the MLR-IPCW to evaluate calibration which produces a calibration scatter plot. The process is identical except the use of the function \code{calc_calib_mlr}. The MLR-IPCW calibration plots are contained in Figure \ref{fig:mlrj1s0}.
+
+<<data>>=
+dat.calib.mlr <-
+  calc_calib_mlr(data.mstate = msebmtcal,
+                 data.raw = ebmtcal,
+                 j=1,
+                 s=0,
+                 t.eval = 1826,
+                 tp.pred = tps0 %>%
+                   dplyr::filter(j == 1) %>%
+                   dplyr::select(any_of(paste("pstate", 1:6, sep = ""))),
+                 w.covs = c("year", "agecl", "proph", "match"),
+                 w.landmark.type = "all")
+@
+
+\begin{figure}
+\centering
+<<echo=TRUE, fig=TRUE, height=5, width=7.5>>=
+plot(dat.calib.mlr, combine = TRUE)
+@
+\caption{\label{fig:mlrj1s0} MLR-IPCW calibration curves out of state j =  1 at time s = 0.}
+\end{figure}
+
 %% -- Optional special unnumbered sections -------------------------------------
 \section*{TO DO}
 

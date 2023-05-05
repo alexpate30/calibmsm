@@ -14,7 +14,6 @@
 \SweaveOpts{engine=R, eps=FALSE, keep.source = TRUE}
 <<preliminaries, echo=FALSE, results=hide>>=
 options(prompt = "R> ", continue = "+  ", width = 70, useFancyQuotes = FALSE)
-library("MASS")
 @
 
 
@@ -64,6 +63,11 @@ library("MASS")
 
 \begin{document}
 
+---
+vignette: >
+  %\VignetteIndexEntry{overview}
+  %\VignetteEncoding{UTF-8}
+---
 
 %% -- Introduction -------------------------------------------------------------
 
@@ -173,7 +177,7 @@ where $k_{ref}$ is an arbitrary reference category which can be reached from sta
 
 We utilise data from the European Society for Blood and Marrow Transplantation \citep{EBMT2023}, containing multistate survival data after a transplant for patients with blood cancer. The start of follow up is the day of the transplant and the initial state is alive and in remission. There are three intermediate events ($2$: recovery, $3$: adverse event, or $4$: recovery + adverse event), and two absorbing states ($5$: relapse and $6$: death). This data is available from the \pkg{mstate} package \citep{DeWreede2011}.
 
-Two datasets are provided to enable assessment of a multistate model fitted to these data. The first is \code{ebmtcal}, which is the same as the \code{ebmt} dataset provided in \ciode{mstate}, with two extra variables derived: time until censoring (\code{dtcens}) and an indicator for whether censoring was observed (\code{dtcens.s = 1}) or an absorbing state was entered (\code{dtcens.s = 0}). This dataset contains baseline information on year of transplant (\code{year}), age at transplant (\code{age}), prophylaxis given (\code{proph}), and whether the donor was gender matched (\code{match}). The second dataset provided is \code{msebmtcal}, which is the \code{ebmt} dataset converted into \code{msdata} format using the process outlined in \cite{DeWreede2011}. It contains all transition times, an event indicator for each transition, as well as a \code{trans} attribute containing the transition matrix. The package \pkg{magrittr} is also loaded to enable the use of pipes.
+Two datasets are provided to enable assessment of a multistate model fitted to these data. The first is \code{ebmtcal}, which is the same as the \code{ebmt} dataset provided in \code{mstate}, with two extra variables derived: time until censoring (\code{dtcens}) and an indicator for whether censoring was observed (\code{dtcens.s = 1}) or an absorbing state was entered (\code{dtcens.s = 0}). This dataset contains baseline information on year of transplant (\code{year}), age at transplant (\code{age}), prophylaxis given (\code{proph}), and whether the donor was gender matched (\code{match}). The second dataset provided is \code{msebmtcal}, which is the \code{ebmt} dataset converted into \code{msdata} format using the process outlined in \cite{DeWreede2011}. It contains all transition times, an event indicator for each transition, as well as a \code{trans} attribute containing the transition matrix. The package \pkg{magrittr} is also loaded to enable the use of pipes.
 
 <<data>>=
 library("calibmsm")
@@ -275,10 +279,6 @@ and all packages used are available from the Comprehensive
 
 \section*{Acknowledgments}
 
-\begin{leftbar}
-Thank you to Thomas Yee for helping to debug an issue with implementing vector spline smoothers from the \pkg{VGAM} package within \pkg{calibmsm}.
-\end{leftbar}
-
 \bibliography{refs}
 
 %% -- Appendix (if any) --------------------------------------------------------
@@ -293,53 +293,6 @@ Thank you to Thomas Yee for helping to debug an issue with implementing vector s
 
 \section[Comparison of BLR-IPCW calibration curves for competing risks sub-models with those generated using graphical calibration curves]{\texorpdfstring{Comparison of BLR-IPCW calibration curves for competing risks sub-models with those generated using graphical calibration curves}{Comparison of BLR-IPCW calibration curves for competing risks\\ sub-models with those generated using graphical calibration curves}} \label{app:gcc}
 
-% \begin{leftbar}
-% Appendices can be included after the bibliography (with a page break). Each
-% section within the appendix should have a proper section title (rather than
-% just \emph{Appendix}).
-%
-% For more technical style details, please check out JSS's style FAQ at
-% \url{https://www.jstatsoft.org/pages/view/style#frequently-asked-questions}
-% which includes the following topics:
-% \begin{itemize}
-%   \item Title vs.\ sentence case.
-%   \item Graphics formatting.
-%   \item Naming conventions.
-%   \item Turning JSS manuscripts into \proglang{R} package vignettes.
-%   \item Trouble shooting.
-%   \item Many other potentially helpful details\dots
-% \end{itemize}
-% \end{leftbar}
-%
-%
-% \section[Using BibTeX]{Using \textsc{Bib}{\TeX}} \label{app:bibtex}
-%
-% \begin{leftbar}
-% References need to be provided in a \textsc{Bib}{\TeX} file (\code{.bib}). All
-% references should be made with \verb|\cite|, \verb|\citet|, \verb|\citep|,
-% \verb|\citealp| etc.\ (and never hard-coded). This commands yield different
-% formats of author-year citations and allow to include additional details (e.g.,
-% pages, chapters, \dots) in brackets. In case you are not familiar with these
-% commands see the JSS style FAQ for details.
-%
-% Cleaning up \textsc{Bib}{\TeX} files is a somewhat tedious task -- especially
-% when acquiring the entries automatically from mixed online sources. However,
-% it is important that informations are complete and presented in a consistent
-% style to avoid confusions. JSS requires the following format.
-% \begin{itemize}
-%   \item JSS-specific markup (\verb|\proglang|, \verb|\pkg|, \verb|\code|) should
-%     be used in the references.
-%   \item Titles should be in title case.
-%   \item Journal titles should not be abbreviated and in title case.
-%   \item DOIs should be included where available.
-%   \item Software should be properly cited as well. For \proglang{R} packages
-%     \code{citation("pkgname")} typically provides a good starting point.
-% \end{itemize}
-% \end{leftbar}
-%
 \end{appendix}
-
-%% -----------------------------------------------------------------------------
-
 
 \end{document}

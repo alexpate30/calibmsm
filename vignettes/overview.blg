@@ -3,7 +3,7 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: overview.aux
 The style file: jss.bst
 I couldn't open database file refs.bib
----line 70 of file overview.aux
+---line 48 of file overview.aux
  : \bibdata{refs
  :              }
 I'm skipping whatever remains of this command
@@ -24,15 +24,10 @@ Warning--I didn't find a database entry for "EBMT2023"
 Warning--I didn't find a database entry for "VanHoorde2014"
 Warning--I didn't find a database entry for "VanHoorde2015"
 Warning--I didn't find a database entry for "Yee2015"
-Warning--I didn't find a database entry for "Canty2022"
-Warning--I didn't find a database entry for "Pullenayegum2016"
-Warning--I didn't find a database entry for "Boulesteix2013"
-Warning--I didn't find a database entry for "Heinze2022"
-Warning--I didn't find a database entry for "Austin2022"
 Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
 You've used 0 entries,
             3215 wiz_defined-function locations,
-            677 strings with 5590 characters,
+            667 strings with 5472 characters,
 and the built_in function-call counts, 41 in all, are:
 = -- 0
 > -- 0

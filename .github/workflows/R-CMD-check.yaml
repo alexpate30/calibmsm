@@ -39,12 +39,12 @@ jobs:
           TINYTEX_INSTALLER: TinyTeX
 
       - name: Install Ghostscript on Linux
-          if: runner.os == 'Linux'
-          run: sudo DEBIAN_FRONTEND=noninteractive apt-get install --yes ghostscript
+        if: runner.os == 'Linux'
+        run: sudo DEBIAN_FRONTEND=noninteractive apt-get install --yes ghostscript
 
       - name: Install Ghostscript on Windows
-          if: runner.os == 'Windows'
-          run: choco install ghostscript --no-progress
+        if: runner.os == 'Windows'
+        run: choco install ghostscript --no-progress
 
       - uses: r-lib/actions/setup-r@v2
         with:

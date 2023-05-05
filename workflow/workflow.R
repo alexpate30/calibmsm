@@ -87,6 +87,7 @@ devtools::check(vignettes = FALSE)
 calibmsm::calc_calib_blr
 devtools::install()
 devtools::check(build_args = "--compact-vignettes=gs+qpdf")
+devtools::check()
 install.packages("Formula")
 library(dplyr)
 getwd()

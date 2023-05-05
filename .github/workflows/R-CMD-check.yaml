@@ -33,18 +33,21 @@ jobs:
 
       - uses: r-lib/actions/setup-pandoc@v2
 
-      - uses: r-lib/actions/setup-tinytex@v2
-        env:
-          # install full prebuilt version
-          TINYTEX_INSTALLER: TinyTeX
-
-      - name: Install Ghostscript on Linux
+      - name: Install Ghostscript (Linux)
         if: runner.os == 'Linux'
-        run: sudo DEBIAN_FRONTEND=noninteractive apt-get install --yes ghostscript
+        run: sudo apt-get install --yes ghostscript
 
-      - name: Install Ghostscript on Windows
+      - name: Install Ghostscript (macOS)
+        if: runner.os == 'macOS'
+        run: brew install ghostscript
+
+      - name: Install Ghostscript (Windows)
         if: runner.os == 'Windows'
-        run: choco install ghostscript --no-progress
+        run: |
+          choco install ghostscript --no-progress --version 9.56.1;
+          Add-Content $env:GITHUB_PATH "C:\Program Files\gs\gs9.56.1\bin\";
+          refreshenv;
+        shell: pwsh
 
       - uses: r-lib/actions/setup-r@v2
         with:
@@ -57,6 +60,10 @@ jobs:
           extra-packages: any::rcmdcheck
           needs: check
 
+      - uses: r-lib/actions/setup-tinytex@v2
+        env:
+          TINYTEX_INSTALLER: TinyTeX
+
       - uses: r-lib/actions/check-r-package@v2
         with:
-          upload-snapshots: true
+          build_args: 'c("--no-manual", "--compact-vignettes=both")'

@@ -166,11 +166,28 @@ calc_calib_mlr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, smoothe
   ### Assign output
   output.object <- dplyr::select(data.raw.lmk.js.uncens, id, paste("tp.pred", valid.transitions, sep = ""), paste("mlr.pred.obs", valid.transitions, sep = ""))
 
+  ### Get plotdata in same format as calc_calib_blr
+  ## Start by creating new output object
+  output.object2 <- vector("list", length(valid.transitions))
+  names(output.object2) <- paste("state", valid.transitions, sep = "")
+
+  ## Loop through and create output for each valid transition
+  for (k in 1:length(valid.transitions)){
+
+    ## Assign state of interest
+    state.k <- valid.transitions[k]
+
+    ## Create output object
+    output.object2[[k]] <- data.frame("id" = output.object[, "id"],
+                                     "pred" = output.object[, paste("tp.pred", valid.transitions[k], sep = "")],
+                                     "obs" = output.object[, paste("mlr.pred.obs", valid.transitions[k], sep = "")])
+  }
+
   ### Create metadata object
   metadata <- list("valid.transitions" = valid.transitions)
 
   ### Crate a combined output object with metadata, as well as plot data
-  output.object.comb <- list("plotdata" = output.object, "metadata" = metadata)
+  output.object.comb <- list("plotdata" = output.object2, "metadata" = metadata)
 
   ### Assign calib_blr class
   attr(output.object.comb, "class") <- "calib_mlr"

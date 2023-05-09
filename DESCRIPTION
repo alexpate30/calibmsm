@@ -26,6 +26,8 @@ Depends:
 LazyData: true
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat (>= 3.0.0)
 VignetteBuilder: knitr
 URL: https://alexpate30.github.io/calibmsm/
+Config/testthat/edition: 3

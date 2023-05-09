@@ -46,6 +46,7 @@ usethis::use_vignette("overview")
 usethis::use_vignette("vigtest")
 devtools::install(build_vignettes = TRUE)
 browseVignettes()
+
 ###
 ### Add data
 ###
@@ -55,11 +56,16 @@ usethis::use_data(tps0, overwrite = TRUE)
 usethis::use_data(tps100, overwrite = TRUE)
 
 ###
-### Add R-CMD-CHECK
+### Add R-CMD-CHECK to GitHub actions
 ###
 usethis::use_readme_rmd()
 usethis::use_github_action_check_standard()
 devtools::build_readme()
+
+###
+### Add a testing suite
+###
+usethis::use_testthat(3)
 
 ###
 ### Create website

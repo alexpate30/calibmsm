@@ -56,7 +56,7 @@ calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.t
 # j.in <- 1
 # s<-0
 # t.eval <- 1826
-# tp.pred = tps0 %>% dplyr::filter(j == j.in) %>% dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
+tp.pred = tps100 %>% dplyr::filter(j == 1) %>% dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
 # curve.type = "rcs"
 # rcs.nk = 3
 # weights <- weights.manual
@@ -70,16 +70,20 @@ calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.t
 # data.pred.plot$id <- 1:nrow(data.pred.plot)
 
   ###
-  ### FIRST DO WARNINGS
+  ### Warnings and errors
   ###
 
-  ### Warning if confidence interval requested internally, and a set of predicted risks to plot over has also been inputted (data.pred.plot ignored)
-
   ### Warning if weights inputted manually, and confidence interval requested internally
-
-  ### Check if people have specified internal bootstrap and only for specific weights...
+  if ((CI != FALSE) & !is.null(weights.manual)){
+    warning("Estimation of confidence interval using internal bootstrapping procedure was requested. User inputted weights are being ignored.")
+  }
 
   ### Check if transitions.out is only specified for non-zero columns
+  if (!is.null(transitions.out)){
+    if (sum(c(colSums(tp.pred) == 0)[transitions.out] == TRUE) > 0){
+      stop("Calibraiton curves have been requested for transitions into states which have zero probability of occuring.")
+    }
+  }
 
   ### If a vector of weights has been provided, add it to the dataset
   if (!is.null(weights)){
@@ -181,7 +185,7 @@ calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.t
   ### Function 1 uses loess smoothers
   ### Weights are calculated within the function to allow for proper bootstrapping
   ###
-  calc_obs_loess_weights_func <- function(data.in, indices, state.k, data.in.uncens, data.pred.plot){
+  calc_obs_loess_weights_func <- function(data.in, indices, state.k, data.in.uncens, data.pred.plot = NULL){
 
     ## Create bootstrapped dataset
     data.boot <- data.in[indices, ]
@@ -237,7 +241,7 @@ calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.t
   ### Function 2 uses restricted cubic splines
   ### Weights are calculated within the function to allow for proper bootstrapping
   ###
-  calc_obs_rcs_weights_func <- function(data.in, indices, state.k, data.in.uncens, data.pred.plot){
+  calc_obs_rcs_weights_func <- function(data.in, indices, state.k, data.in.uncens, data.pred.plot = NULL){
 
     ## Create bootstrapped dataset
     data.boot <- data.in[indices, ]
@@ -317,7 +321,7 @@ calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.t
   ### Function 3 uses loess smoothers
   ### Weights are not calculated within the function (assumes they have been inputted by user)
   ###
-  calc_obs_loess_func <- function(data.in, indices, state.k, data.in.uncens, data.pred.plot){
+  calc_obs_loess_func <- function(data.in, indices, state.k, data.in.uncens, data.pred.plot = NULL){
 
     ## Create bootstrapped dataset
     data.boot <- data.in[indices, ]
@@ -358,7 +362,7 @@ calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.t
   ### Function 4 uses restricted cubic splines
   ### Weights are not calculated within the function (assumes they have been inputted by user)
   ###
-  calc_obs_rcs_func <- function(data.in, indices, state.k, data.in.uncens, data.pred.plot){
+  calc_obs_rcs_func <- function(data.in, indices, state.k, data.in.uncens, data.pred.plot = NULL){
 
     ## Create bootstrapped dataset
     data.boot <- data.in[indices, ]
@@ -477,7 +481,13 @@ calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.t
       alpha <- (1-CI/100)/2
 
       ### Run bootstrapping
-      boot.obs <- boot::boot(data.raw, calc_obs_func, R = CI.R.boot, state.k = transitions.out[k], data.in.uncens = data.raw.lmk.js.uncens)$t
+      if (is.null(data.pred.plot)){
+        boot.obs <- boot::boot(data.raw, calc_obs_func, R = CI.R.boot, state.k = transitions.out[k], data.in.uncens = data.raw.lmk.js.uncens)$t
+      } else if (!is.null(data.pred.plot)){
+        boot.obs <- boot::boot(data.raw, calc_obs_func, R = CI.R.boot, state.k = transitions.out[k], data.in.uncens = data.raw.lmk.js.uncens,
+                               data.pred.plot = data.pred.plot)$t
+      }
+
 
       ### Extract confidence bands
       lower <- apply(boot.obs, 2, stats::quantile, probs = alpha, na.rm = TRUE)

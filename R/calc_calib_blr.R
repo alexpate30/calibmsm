@@ -47,7 +47,7 @@
 #'
 #' @export
 calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.type = "rcs", rcs.nk = 3, loess.span = 0.75, loess.degree = 2,
-                           weights = NULL, w.covs, w.landmark.type = "state", w.max = 10, w.stabilised = FALSE, w.max.follow = NULL, CI = FALSE, CI.R.boot,
+                           weights = NULL, w.covs = NULL, w.landmark.type = "state", w.max = 10, w.stabilised = FALSE, w.max.follow = NULL, CI = FALSE, CI.R.boot,
                            data.pred.plot = NULL, transitions.out = NULL){
 
 # data.mstate <- msebmtcal
@@ -56,7 +56,7 @@ calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.t
 # j.in <- 1
 # s<-0
 # t.eval <- 1826
-tp.pred = tps100 %>% dplyr::filter(j == 1) %>% dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
+# tp.pred = tps100 %>% dplyr::filter(j == 1) %>% dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
 # curve.type = "rcs"
 # rcs.nk = 3
 # weights <- weights.manual
@@ -74,7 +74,7 @@ tp.pred = tps100 %>% dplyr::filter(j == 1) %>% dplyr::select(any_of(paste("pstat
   ###
 
   ### Warning if weights inputted manually, and confidence interval requested internally
-  if ((CI != FALSE) & !is.null(weights.manual)){
+  if ((CI != FALSE) & !is.null(weights)){
     warning("Estimation of confidence interval using internal bootstrapping procedure was requested. User inputted weights are being ignored.")
   }
 

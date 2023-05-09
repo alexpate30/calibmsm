@@ -85,23 +85,24 @@ test_that("check plot.calib_blr output (j = 3, s = 100)", {
 test_that("check plot.calib_mlr output (j = 3, s = 100)", {
 
   ## Extract relevant predicted risks from tps0
-  tp.pred <- dplyr::select(dplyr::filter(tps100, j == 3), any_of(paste("pstate", 1:6, sep = "")))
+  tp.pred <- dplyr::select(dplyr::filter(tps100, j == 3), dplyr::any_of(paste("pstate", 1:6, sep = "")))
 
   ## Calculate observed event probabilities
-  dat.calib.mlr <-
-    calc_calib_mlr(data.mstate = msebmtcal,
-                   data.raw = ebmtcal,
-                   j=3,
-                   s=100,
-                   t.eval = 1826,
-                   tp.pred = tp.pred,
-                   w.covs = c("year", "agecl", "proph", "match"))
+  suppressWarnings(
+    dat.calib.mlr <-
+      calc_calib_mlr(data.mstate = msebmtcal,
+                     data.raw = ebmtcal,
+                     j=3,
+                     s=100,
+                     t.eval = 1826,
+                     tp.pred = tp.pred,
+                     w.covs = c("year", "agecl", "proph", "match"))
+  )
 
   ## Plot calibration plots and run tests
   plot.object <- plot(dat.calib.mlr, combine = TRUE, nrow = 2, ncol = 3)
   expect_equal(class(plot.object), c("gg", "ggplot", "ggarrange"))
   plot.object <- plot(dat.calib.mlr, combine = FALSE, nrow = 2, ncol = 3)
-  length(plot.object)
   expect_length(plot.object, 4)
   expect_type(plot.object, "list")
 })

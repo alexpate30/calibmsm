@@ -7,7 +7,7 @@
 calc_weights(
   data.mstate,
   data.raw,
-  covs,
+  covs = NULL,
   t.eval,
   s,
   landmark.type = NULL,

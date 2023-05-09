@@ -4,9 +4,9 @@
 \name{calibmsm-package}
 \alias{calibmsm}
 \alias{calibmsm-package}
-\title{calibmsm: What the Package Does (One Line, Title Case)}
+\title{calibmsm: Calibration plots for the transition probabilities from multistate models}
 \description{
-What the package does (one paragraph).
+A toolbox to aid in the estimation of calibration plots for multistate models which have been developed. Calibration of the transition probabilities at time t when in state j at time s are assessed. This is done using a combination of landmarking, calibration methods for binary logistic and multinomaial logistic regression models and inverse probability of censoring weights.
 }
 \seealso{
 Useful links:
@@ -16,7 +16,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: First Last \email{first.last@example.com} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
+\strong{Maintainer}: Alexander Pate \email{alexander.pate@manchester.ac.uk} (\href{https://orcid.org/0000-0002-0849-3458}{ORCID})
 
 }
 \keyword{internal}

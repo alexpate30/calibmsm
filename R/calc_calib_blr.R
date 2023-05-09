@@ -46,7 +46,7 @@
 #' @param transitions.out Transitions for which to calculate calibration curves. Will do all possible transitions if left as NULL.
 #'
 #' @export
-calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.type = "rcs", rcs.nk = 3, loess.span, loess.degree,
+calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.type = "rcs", rcs.nk = 3, loess.span = 0.75, loess.degree = 2,
                            weights = NULL, w.covs, w.landmark.type = "state", w.max = 10, w.stabilised = FALSE, w.max.follow = NULL, CI = FALSE, CI.R.boot,
                            data.pred.plot = NULL, transitions.out = NULL){
 

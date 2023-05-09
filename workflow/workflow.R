@@ -56,16 +56,23 @@ usethis::use_data(tps0, overwrite = TRUE)
 usethis::use_data(tps100, overwrite = TRUE)
 
 ###
-### Add R-CMD-CHECK to GitHub actions
-###
-usethis::use_readme_rmd()
-usethis::use_github_action_check_standard()
-devtools::build_readme()
-
-###
 ### Add a testing suite
 ###
 usethis::use_testthat(3)
+
+###
+### Add R-CMD-CHECK and testing coverage to GitHub actions
+###
+usethis::use_readme_rmd()
+usethis::use_github_action_check_standard()
+
+## For test coverage, used following sources:
+## 1) https://www.r-bloggers.com/2017/06/how-to-add-code-coverage-codecov-to-your-r-package/
+## 2) The instructions on codecov.io
+usethis::use_coverage(type = "codecov")
+# covr::codecov(token = "INSERT TOKEN HERE")
+use_github_action("test-coverage")
+devtools::build_readme()
 
 ###
 ### Create website

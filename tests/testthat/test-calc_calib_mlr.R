@@ -1,7 +1,7 @@
 test_that("check calc_calib_mlr output", {
 
   ## Extract relevant predicted risks from tps0
-  tp.pred <- dplyr::select(dplyr::filter(tps0, j == 3), any_of(paste("pstate", 1:6, sep = "")))
+  tp.pred <- dplyr::select(dplyr::filter(tps100, j == 3), any_of(paste("pstate", 1:6, sep = "")))
 
   ## Expect error if generate with CI
   expect_error(calc_calib_mlr(data.mstate = msebmtcal,

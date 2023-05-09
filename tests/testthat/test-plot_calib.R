@@ -58,7 +58,7 @@ test_that("check plot.calib_blr output (j = 1, s = 0) with CI", {
 test_that("check plot.calib_blr output (j = 3, s = 100)", {
 
   ## Extract relevant predicted risks from tps0
-  tp.pred <- dplyr::select(dplyr::filter(tps0, j == 3), any_of(paste("pstate", 1:6, sep = "")))
+  tp.pred <- dplyr::select(dplyr::filter(tps100, j == 3), any_of(paste("pstate", 1:6, sep = "")))
 
   ## Calculate observed event probabilities
   dat.calib.blr <-
@@ -85,7 +85,7 @@ test_that("check plot.calib_blr output (j = 3, s = 100)", {
 test_that("check plot.calib_mlr output (j = 3, s = 100)", {
 
   ## Extract relevant predicted risks from tps0
-  tp.pred <- dplyr::select(dplyr::filter(tps0, j == 3), any_of(paste("pstate", 1:6, sep = "")))
+  tp.pred <- dplyr::select(dplyr::filter(tps100, j == 3), any_of(paste("pstate", 1:6, sep = "")))
 
   ## Calculate observed event probabilities
   dat.calib.mlr <-

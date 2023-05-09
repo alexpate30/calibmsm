@@ -60,8 +60,8 @@ test_that("check calc_calib_blr output, (j = 1, s = 0) CI", {
 
 test_that("check calc_calib_blr output, (j = 3, s = 100)", {
 
-  ## Extract relevant predicted risks from tps0
-  tp.pred <- dplyr::select(dplyr::filter(tps0, j == 3), any_of(paste("pstate", 1:6, sep = "")))
+  ## Extract relevant predicted risks from tps100
+  tp.pred <- dplyr::select(dplyr::filter(tps100, j == 3), any_of(paste("pstate", 1:6, sep = "")))
 
   ## Calculate observed event probabilities
   dat.calib.blr <-

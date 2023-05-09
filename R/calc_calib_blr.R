@@ -89,8 +89,7 @@ tp.pred = tps100 %>% dplyr::filter(j == 1) %>% dplyr::select(any_of(paste("pstat
   if (!is.null(weights)){
     ### First check whether it is the correct length (NA's should be present)
     if (length(weights) != nrow(data.raw)){
-      print("Weights vector not same length as data.raw")
-      stop()
+      stop("Weights vector not same length as data.raw")
     } else {
       data.raw$ipcw <- weights
     }

@@ -159,7 +159,6 @@ test_that("check calc_calib_blr output, (j = 3, s = 100)", {
 
 })
 
-
 test_that("check calc_calib_blr output, (j = 1, s = 0), manual weights,
           manually define vector of predicted probabilities,
           manually define transition out", {
@@ -210,4 +209,48 @@ test_that("check calc_calib_blr output, (j = 1, s = 0), manual weights,
   expect_false(dat.calib.blr[["metadata"]]$CI)
 
 })
-### Create weights for j = 1 and s = 0
+
+test_that("test warnings and errors", {
+
+  ## Extract relevant predicted risks from tps0
+  tp.pred <- dplyr::select(dplyr::filter(tps0, j == 3), any_of(paste("pstate", 1:6, sep = "")))
+
+  ## Calculate observed event probabilities
+  expect_error(
+    calc_calib_blr(data.mstate = msebmtcal,
+                   data.raw = ebmtcal,
+                   j=1,
+                   s=0,
+                   t.eval = 1826,
+                   tp.pred = tp.pred,
+                   curve.type = "rcs",
+                   rcs.nk = 3,
+                   w.covs = c("year", "agecl", "proph", "match"),
+                   transitions.out = c(1,2,3,4))
+  )
+
+  ## Calculate observed event probabilities
+  weights.manual <-
+    calc_weights(data.mstate = msebmtcal,
+                 data.raw = ebmtcal,
+                 t.eval = 1826,
+                 s = 0,
+                 landmark.type = "all",
+                 j = 1,
+                 max.weight = 10,
+                 stabilised = FALSE)$ipcw[-1]
+
+  expect_error(
+    calc_calib_blr(data.mstate = msebmtcal,
+                   data.raw = ebmtcal,
+                   j=1,
+                   s=0,
+                   t.eval = 1826,
+                   tp.pred = tp.pred,
+                   curve.type = "rcs",
+                   rcs.nk = 3,
+                   weights = weights.manual)
+  )
+
+})
+

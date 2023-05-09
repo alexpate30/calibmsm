@@ -22,8 +22,26 @@
 #' @param stabilised Indicates whether weights should be stabilised or not
 #' @param max.follow Maximum follow up for model calculating inverse probability of censoring weights. Reducing this to `t.eval` + 1 may aid in the proportional hazards assumption being met in this model.
 #'
+#' @examples
+#' # Create inverse probability of censoring weights.
+#' # This is the probability of being uncensored at t.eval = 1826 days.
+#' # Weights are estimated using a model fit to individuals uncensored at time s = 0.
+#' weights.manual <-
+#' calc_weights(data.mstate = msebmtcal,
+#'   data.raw = ebmtcal,
+#'   covs = c("year", "agecl", "proph", "match"),
+#'   t.eval = 1826,
+#'   s = 0,
+#'   landmark.type = "all",
+#'   j = 1)
+#'
 #' @export
-calc_weights <- function(data.mstate, data.raw, covs = NULL, t.eval, s, landmark.type = NULL, j = NULL, max.weight = 10, stabilised = FALSE, max.follow = NULL){
+calc_weights <- function(data.mstate, data.raw, covs = NULL, t.eval, s, landmark.type = "state", j = NULL, max.weight = 10, stabilised = FALSE, max.follow = NULL){
+
+  ### If individuals have specified landmark.type = "all" and specified a state j, warn that this will be ignored
+  if (landmark.type == "all" & !is.null(j)){
+    warning("landmark.type = 'all' means argument 'j' will be ignored. Model for estimating weights is fit in all individuals uncesored at time s.")
+  }
 
   ### Modify everybody to be censored after time t.eval, if a max.follow has been specified
   if(!is.null(max.follow)){

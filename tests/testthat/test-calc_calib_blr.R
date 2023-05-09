@@ -24,6 +24,28 @@ test_that("check calc_calib_blr output, (j = 1, s = 0), curve.type = rcs", {
   expect_length(dat.calib.blr[["metadata"]], 3)
   expect_false(dat.calib.blr[["metadata"]]$CI)
 
+  ## Calculate observed event probabilities
+  dat.calib.blr <-
+    calc_calib_blr(data.mstate = msebmtcal,
+                   data.raw = ebmtcal,
+                   j=1,
+                   s=0,
+                   t.eval = 1826,
+                   tp.pred = tp.pred,
+                   curve.type = "rcs",
+                   rcs.nk = 3,
+                   w.covs = c("year", "agecl", "proph", "match"),
+                   w.stabilised = TRUE)
+
+  expect_type(dat.calib.blr, "list")
+  expect_equal(class(dat.calib.blr), "calib_blr")
+  expect_length(dat.calib.blr, 2)
+  expect_length(dat.calib.blr[["plotdata"]], 6)
+  expect_length(dat.calib.blr[["plotdata"]][[1]]$id, 1778)
+  expect_length(dat.calib.blr[["plotdata"]][[6]]$id, 1778)
+  expect_length(dat.calib.blr[["metadata"]], 3)
+  expect_false(dat.calib.blr[["metadata"]]$CI)
+
 })
 
 test_that("check calc_calib_blr output, (j = 1, s = 0), curve.type = loess", {
@@ -51,10 +73,31 @@ test_that("check calc_calib_blr output, (j = 1, s = 0), curve.type = loess", {
   expect_length(dat.calib.blr[["metadata"]], 3)
   expect_false(dat.calib.blr[["metadata"]]$CI)
 
+  ## Calculate observed event probabilities
+  dat.calib.blr <-
+    calc_calib_blr(data.mstate = msebmtcal,
+                   data.raw = ebmtcal,
+                   j=1,
+                   s=0,
+                   t.eval = 1826,
+                   tp.pred = tp.pred,
+                   curve.type = "loess",
+                   w.covs = c("year", "agecl", "proph", "match"),
+                   w.stabilised = TRUE)
+
+  expect_type(dat.calib.blr, "list")
+  expect_equal(class(dat.calib.blr), "calib_blr")
+  expect_length(dat.calib.blr, 2)
+  expect_length(dat.calib.blr[["plotdata"]], 6)
+  expect_length(dat.calib.blr[["plotdata"]][[1]]$id, 1778)
+  expect_length(dat.calib.blr[["plotdata"]][[6]]$id, 1778)
+  expect_length(dat.calib.blr[["metadata"]], 3)
+  expect_false(dat.calib.blr[["metadata"]]$CI)
+
 })
 
 
-test_that("check calc_calib_blr output, (j = 1, s = 0) CI", {
+test_that("check calc_calib_blr output, (j = 1, s = 0), with CI", {
 
   ## Extract relevant predicted risks from tps0
   tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
@@ -115,3 +158,56 @@ test_that("check calc_calib_blr output, (j = 3, s = 100)", {
   names(dat.calib.blr[["plotdata"]])
 
 })
+
+
+test_that("check calc_calib_blr output, (j = 1, s = 0), manual weights,
+          manually define vector of predicted probabilities,
+          manually define transition out", {
+
+  ## Extract relevant predicted risks from tps0
+  tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
+
+  ## Extract data for plot manually
+  ids.uncens <- ebmtcal %>%
+    subset(dtcens > t.eval | (dtcens < t.eval & dtcens.s == 0)) %>%
+    dplyr::pull(id)
+  data.pred.plot <- tps0 %>%
+    dplyr::filter(j == 1 & id %in% ids.uncens) %>%
+    dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
+
+  ## Calculate manual weights
+  weights.manual <-
+    calc_weights(data.mstate = msebmtcal,
+                 data.raw = ebmtcal,
+                 t.eval = 1826,
+                 s = 0,
+                 landmark.type = "all",
+                 j = 1,
+                 max.weight = 10,
+                 stabilised = FALSE)
+
+  ## Calculate observed event probabilities
+  dat.calib.blr <-
+    calc_calib_blr(data.mstate = msebmtcal,
+                   data.raw = ebmtcal,
+                   j=1,
+                   s=0,
+                   t.eval = 1826,
+                   tp.pred = tp.pred,
+                   curve.type = "rcs",
+                   rcs.nk = 3,
+                   weights = weights.manual$ipcw,
+                   data.pred.plot = tp.pred,
+                   transitions.out = c(1,2,3,4,5,6))
+
+  expect_type(dat.calib.blr, "list")
+  expect_equal(class(dat.calib.blr), "calib_blr")
+  expect_length(dat.calib.blr, 2)
+  expect_length(dat.calib.blr[["plotdata"]], 6)
+  expect_length(dat.calib.blr[["plotdata"]][[1]]$id, 1778)
+  expect_length(dat.calib.blr[["plotdata"]][[6]]$id, 1778)
+  expect_length(dat.calib.blr[["metadata"]], 3)
+  expect_false(dat.calib.blr[["metadata"]]$CI)
+
+})
+### Create weights for j = 1 and s = 0

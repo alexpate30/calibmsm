@@ -23,7 +23,7 @@
 #' @param max.follow Maximum follow up for model calculating inverse probability of censoring weights. Reducing this to `t.eval` + 1 may aid in the proportional hazards assumption being met in this model.
 #'
 #' @export
-calc_weights <- function(data.mstate, data.raw, covs, t.eval, s, landmark.type = NULL, j = NULL, max.weight = 10, stabilised = FALSE, max.follow = NULL){
+calc_weights <- function(data.mstate, data.raw, covs = NULL, t.eval, s, landmark.type = NULL, j = NULL, max.weight = 10, stabilised = FALSE, max.follow = NULL){
 
   ### Modify everybody to be censored after time t.eval, if a max.follow has been specified
   if(!is.null(max.follow)){

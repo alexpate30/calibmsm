@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 
 The goal of calibmsm is to provide a set of tools for producing calibration plots for validating an existing (i.e. previously developed) multistate model.
 
-TEST TEST TEST - I HAVE CHANGED RMD
+TEST TEST TEST TEST - I HAVE CHANGED RMD
 
 ## Installation
 
@@ -39,50 +39,50 @@ This is a basic example which shows you how to assess the calibration of the tra
 
 ```{r example}
 ## Load calibmsm
-library(calibmsm)
-
-## Extract relevant predicted risks from tps0
-tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
-
-## Calculate observed event probabilities
-dat.calib.blr <-
-  calc_calib_blr(data.mstate = msebmtcal,
-                 data.raw = ebmtcal,
-                 j=1,
-                 s=0,
-                 t.eval = 1826,
-                 tp.pred = tp.pred,
-                 curve.type = "rcs",
-                 rcs.nk = 3,
-                 w.covs = c("year", "agecl", "proph", "match"),
-                 CI = 95,
-                 CI.R.boot = 200)
-
-## Produce summary
-summary(dat.calib.blr)
-
-## Plot calibration plots
-plot(dat.calib.blr, combine = TRUE, nrow = 2, ncol = 3)
+# library(calibmsm)
+# 
+# ## Extract relevant predicted risks from tps0
+# tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
+# 
+# ## Calculate observed event probabilities
+# dat.calib.blr <-
+#   calc_calib_blr(data.mstate = msebmtcal,
+#                  data.raw = ebmtcal,
+#                  j=1,
+#                  s=0,
+#                  t.eval = 1826,
+#                  tp.pred = tp.pred,
+#                  curve.type = "rcs",
+#                  rcs.nk = 3,
+#                  w.covs = c("year", "agecl", "proph", "match"),
+#                  CI = 95,
+#                  CI.R.boot = 200)
+# 
+# ## Produce summary
+# summary(dat.calib.blr)
+# 
+# ## Plot calibration plots
+# plot(dat.calib.blr, combine = TRUE, nrow = 2, ncol = 3)
 ```
 
 Calibration scatter plots can also be estimated using `calc_calib_mlr`.
 
 ```{r}
 ## Calculate observed event probabilities
-dat.calib.mlr <-
-  calc_calib_mlr(data.mstate = msebmtcal,
-                 data.raw = ebmtcal,
-                 j=1,
-                 s=0,
-                 t.eval = 1826,
-                 tp.pred = tp.pred,
-                 w.covs = c("year", "agecl", "proph", "match"))
-
-## Produce summary
-summary(dat.calib.mlr)
-
-## Plot calibration plots
-plot(dat.calib.mlr, combine = TRUE, nrow = 2, ncol = 3)
+# dat.calib.mlr <-
+#   calc_calib_mlr(data.mstate = msebmtcal,
+#                  data.raw = ebmtcal,
+#                  j=1,
+#                  s=0,
+#                  t.eval = 1826,
+#                  tp.pred = tp.pred,
+#                  w.covs = c("year", "agecl", "proph", "match"))
+# 
+# ## Produce summary
+# summary(dat.calib.mlr)
+# 
+# ## Plot calibration plots
+# plot(dat.calib.mlr, combine = TRUE, nrow = 2, ncol = 3)
 ```
 
 ## Getting help

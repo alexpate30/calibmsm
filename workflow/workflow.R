@@ -61,11 +61,14 @@ usethis::use_data(tps100, overwrite = TRUE)
 usethis::use_testthat(3)
 
 ###
-### Add R-CMD-CHECK and testing coverage to GitHub actions
+### GitHub actions
 ###
+
+### R-CMD-check
 usethis::use_readme_rmd()
 usethis::use_github_action_check_standard()
 
+### Test coverage
 ## For test coverage, used following sources:
 ## 1) https://www.r-bloggers.com/2017/06/how-to-add-code-coverage-codecov-to-your-r-package/
 ## 2) The instructions on codecov.io
@@ -73,6 +76,9 @@ usethis::use_coverage(type = "codecov")
 # covr::codecov(token = "INSERT TOKEN HERE")
 use_github_action("test-coverage")
 devtools::build_readme()
+
+### Automatically render .Rmd
+usethis::use_github_action("render-rmarkdown")
 
 ###
 ### Create website
@@ -102,6 +108,9 @@ devtools::document()
 devtools::check(vignettes = FALSE)
 calibmsm::calc_calib_blr
 devtools::install()
+?calibmsm::calc_weights()
+?calibmsm::calc_weights()
+?calibmsm::calc_calib_blr()
 devtools::check(build_args = "--compact-vignettes=gs+qpdf")
 devtools::check()
 install.packages("Formula")

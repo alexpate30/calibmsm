@@ -2,12 +2,12 @@
 % Please edit documentation in R/plot_calib.R
 \name{plot.calib_mlr}
 \alias{plot.calib_mlr}
-\title{Plot calibration scatter plots}
+\title{Plots calibration scatter plots estimated using \code{\link{calc_calib_mlr}}.}
 \usage{
 \method{plot}{calib_mlr}(x, ..., combine = TRUE, ncol = NULL, nrow = NULL)
 }
 \arguments{
-\item{x}{Object of type 'calib_mlr' generated from calc_calib_mlr}
+\item{x}{Object of class 'calib_mlr' generated from \code{\link{calc_calib_mlr}}}
 
 \item{...}{Other}
 
@@ -17,8 +17,12 @@
 
 \item{nrow}{Number of rows for combined calibration plot}
 }
+\value{
+If \code{combine = TRUE}, returns an object of classes \code{gg}, \code{ggplot}, and \code{ggarrange},
+as all ggplots have been combined into one object. If \code{combine = FALSE}, returns an object of
+class \code{list}, each element containing an object of class \code{gg} and \code{ggplot}.
+}
 \description{
-Creates calibration plots for the transition probabilities of a multistate model
-using data estimated from \code{calc_calib_mlr}. Such data was estimated using the
-multinomial logistic regression framework with inverse probability of censoring weights.
+Plots calibration scatter plots for the transition probabilities of a multistate model
+using data estimated from \code{\link{calc_calib_mlr}}.
 }

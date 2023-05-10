@@ -2,8 +2,7 @@
 % Please edit documentation in R/calc_calib_blr.R
 \name{calc_calib_blr}
 \alias{calc_calib_blr}
-\title{Create data for calibration curves using a binary logistic regression
-framework with inverse probability of censoring weights}
+\title{Estimate calibration curves for a multistate model.}
 \usage{
 calc_calib_blr(
   data.mstate,
@@ -17,7 +16,7 @@ calc_calib_blr(
   loess.span = 0.75,
   loess.degree = 2,
   weights = NULL,
-  w.covs,
+  w.covs = NULL,
   w.landmark.type = "state",
   w.max = 10,
   w.stabilised = FALSE,
@@ -29,9 +28,9 @@ calc_calib_blr(
 )
 }
 \arguments{
-\item{data.mstate}{Validation data in \code{msdata} format.}
+\item{data.mstate}{Validation data in \code{msdata} format}
 
-\item{data.raw}{Validation data in data.frame (one row per individual).}
+\item{data.raw}{Validation data in \code{data.frame} (one row per individual)}
 
 \item{j}{Landmark state at which predictions were made}
 
@@ -47,7 +46,7 @@ calc_calib_blr(
 
 \item{loess.span}{Span when curves are estimated using loess smoothers}
 
-\item{loess.degree}{Degree when curves are estimated using loess smoothers}
+\item{loess.degree}{Degree when curves are estimated. using loess smoothers}
 
 \item{weights}{Vector of inverse probability of censoring weights}
 
@@ -69,25 +68,77 @@ calc_calib_blr(
 
 \item{transitions.out}{Transitions for which to calculate calibration curves. Will do all possible transitions if left as NULL.}
 }
+\value{
+\code{\link{\calc_calib_blr}} returns a list containing two elements:
+\code{plotdata} and \code{metadata}. The \code{plotdata} element contains the
+data for the calibration curves. This will itself be a list with each element
+containing the data for the transition probabilities into each of the possible
+states. Each list element contains patient ids (\code{id}), the predicted
+transition probabilities (\code{pred}) and the estimated observed event
+probabilities (\code{obs}). The \code{metadata} element contains metadata
+including a vector of possible transitions, size of the confidence interval
+calculated and the method for estimating the calibration curve.
+}
 \description{
-Creates the underlying data for the calibration plots. Observed event
-probabilities at time \code{t.eval} are estimated for inputted predicted
+Creates the underlying data for the calibration curves. \code{calc_calib_blr}
+estimates the
+observed event probabilities for a given set of predicted transition probabilities
+in a cohort of interest. This is done using techniques for assessing calibration of binary logistic regression models,
+in combination with inverse probability of censoring weights and landmarking.
+}
+\details{
+Observed event probabilities at time \code{t.eval} are estimated for predicted
 transition probabilities \code{tp.pred} out of state \code{j} at time \code{s}.
-\code{calc_calib_blr} estimates calibration curves using a binary logistic
-framework in combination with landmarking and inverse probability of
-censoring weights. A choice between restricted cubic splines and loess
+\code{calc_calib_blr} estimates calibration curves using techniques for assessing the calibration of binary logistic
+regression models. A choice between restricted cubic splines and loess
 smoothers for estimating the calibration curve can be made using \code{curve.type}.
+Landmarking is applied to only assess calibration in individuals who are uncensored
+and in state \code{j} at time \code{s}. Censoring is dealt with using inverse probability of
+censoring weights.
 
-Two datasets for the same cohort of inidividuals must be provided. A \code{msdata}
-format dataset generated using the \code{mstate} package. A \code{data.frame} with one
-row per individual, relevant variables for estimating the weights, and a time
-until censoring varaible (\code{dtcens}) and indicator (\code{dtcens.s}). Weights are
-estimated using a cox-proportional hazard model and assuming linear
+Two datasets for the same cohort of inidividuals must be provided. Firstly \code{data.mstate} must be a dataset of class \code{msdata},
+generated using the \code{[mstate]} package. This dataset is used to apply the landmarking. Secondly, \code{data.raw} must be
+a \code{data.frame} with one row per individual, containing the desired variables for estimating the weights, and variables for the time
+until censoring (\code{dtcens}), and an indicator for censoring \code{dtcens.s}, where (\code{dtcens.s = 1}) if
+an individual is censored at time \code{dtcens}, and \code{dtcens.s = 0} otherwise. When an individual
+enters an absorbing state, this prevents censoring from happening (i.e. dtcens.s = 0). Unless the user specifies
+the weights using \code{weights}, the weights are
+estimated using a cox-proportional hazard model, assuming a linear
 functional form of the variables defined in \code{w.covs}. We urge users to
-specify their own model for estimating the weights. Confidence intervals for
+specify their own model for estimating the weights. The \code{weights} argument
+must be a vector with length equal to the number of rows of \code{data.raw}. Confidence intervals for
 the calibration curves can be estimated using bootstrapping. This procedure
 uses the internal method for estimating weights, we therefore encourage
 users to specify their own bootstrapping procedure, which incorporates their
 own model for estimating the weights. Details on how to do this are provided
-in the vignette.
+in the vignette XXXX.
+
+The calibration curves can be plotted using \code{\link{plot.calib_blr}}.
+}
+\examples{
+# Estimate calibration curves for the predicted transition
+# probabilities at time t.eval = 1826, when predictions were made at time
+# s = 0 in state j = 1. These predicted transition probabilities are stored in tps0.
+
+# Extract the predicted transition probabilities out of state j = 1
+tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
+
+# Now estimate the observed event probabilities for each possible transition.
+# 95\% confidence intervals are estimated using bootstrapping with 200
+# bootstrap repicates. In practice we recommend using a higher number.
+
+dat.calib.blr <-
+calc_calib_blr(data.mstate = msebmtcal,
+ data.raw = ebmtcal,
+ j=1,
+ s=0,
+ t.eval = 1826,
+ tp.pred = tp.pred,
+ w.covs = c("year", "agecl", "proph", "match"),
+ CI = 95,
+ CI.R.boot = 200)
+
+# The data for each calibration curves are stored in the "plotdata" list element.
+str(dat.caib.blr)
+
 }

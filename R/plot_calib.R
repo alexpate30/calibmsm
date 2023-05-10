@@ -1,15 +1,18 @@
-#' Plot calibration curves
+#' Plots calibration curves estimated using \code{\link{calc_calib_blr}}.
 #'
 #' @description
-#' Creates calibration plots for the transition probabilities of a multistate model
-#' using data estimated from `calc_calib_blr`. Such data was estimated using the
-#'  binary logistic regression framework with inverse probability of censoring weights.
+#' Plots calibration curves for the transition probabilities of a multistate model
+#' using data estimated from \code{\link{calc_calib_blr}}.
 #'
-#' @param x Object of type 'calib_blr' generated from calc_calib_blr
+#' @param x Object of class 'calib_blr' generated from \code{\link{calc_calib_blr}}.
 #' @param ... Other
 #' @param combine Whether to combine into one plot using ggarrange, or return as a list of individual plots
 #' @param ncol Number of columns for combined calibration plot
 #' @param nrow Number of rows for combined calibration plot
+#'
+#' @returns If `combine = TRUE`, returns an object of classes `gg`, `ggplot`, and `ggarrange`,
+#' as all ggplots have been combined into one object. If `combine = FALSE`, returns an object of
+#' class `list`, each element containing an object of class `gg` and `ggplot`.
 #'
 #' @importFrom graphics plot
 #' @export
@@ -101,18 +104,21 @@ plot.calib_blr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL){
 }
 
 
-#' Plot calibration scatter plots
+#' Plots calibration scatter plots estimated using \code{\link{calc_calib_mlr}}.
 #'
 #' @description
-#' Creates calibration plots for the transition probabilities of a multistate model
-#' using data estimated from `calc_calib_mlr`. Such data was estimated using the
-#'multinomial logistic regression framework with inverse probability of censoring weights.
+#' Plots calibration scatter plots for the transition probabilities of a multistate model
+#' using data estimated from \code{\link{calc_calib_mlr}}.
 #'
-#' @param x Object of type 'calib_mlr' generated from calc_calib_mlr
+#' @param x Object of class 'calib_mlr' generated from \code{\link{calc_calib_mlr}}
 #' @param ... Other
 #' @param combine Whether to combine into one plot using ggarrange, or return as a list of individual plots
 #' @param ncol Number of columns for combined calibration plot
 #' @param nrow Number of rows for combined calibration plot
+#'
+#' @returns If `combine = TRUE`, returns an object of classes `gg`, `ggplot`, and `ggarrange`,
+#' as all ggplots have been combined into one object. If `combine = FALSE`, returns an object of
+#' class `list`, each element containing an object of class `gg` and `ggplot`.
 #'
 #' @importFrom graphics plot
 #' @export

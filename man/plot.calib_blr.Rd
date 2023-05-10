@@ -2,12 +2,12 @@
 % Please edit documentation in R/plot_calib.R
 \name{plot.calib_blr}
 \alias{plot.calib_blr}
-\title{Plot calibration curves}
+\title{Plots calibration curves estimated using \code{\link{calc_calib_blr}}.}
 \usage{
 \method{plot}{calib_blr}(x, ..., combine = TRUE, ncol = NULL, nrow = NULL)
 }
 \arguments{
-\item{x}{Object of type 'calib_blr' generated from calc_calib_blr}
+\item{x}{Object of class 'calib_blr' generated from \code{\link{calc_calib_blr}}.}
 
 \item{...}{Other}
 
@@ -17,8 +17,12 @@
 
 \item{nrow}{Number of rows for combined calibration plot}
 }
+\value{
+If \code{combine = TRUE}, returns an object of classes \code{gg}, \code{ggplot}, and \code{ggarrange},
+as all ggplots have been combined into one object. If \code{combine = FALSE}, returns an object of
+class \code{list}, each element containing an object of class \code{gg} and \code{ggplot}.
+}
 \description{
-Creates calibration plots for the transition probabilities of a multistate model
-using data estimated from \code{calc_calib_blr}. Such data was estimated using the
-binary logistic regression framework with inverse probability of censoring weights.
+Plots calibration curves for the transition probabilities of a multistate model
+using data estimated from \code{\link{calc_calib_blr}}.
 }

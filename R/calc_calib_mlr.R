@@ -18,17 +18,17 @@
 #' the calibration scatter plots cannot be produced as it is currently unclear how
 #' to present such data.
 #'
-#' @param data.mstate Validation data in msdata format.
-#' @param data.raw Validation data in data.frame (one row per individual).
+#' @param data.mstate Validation data in `msdata` format
+#' @param data.raw Validation data in `data.frame` (one row per individual)
 #' @param j Landmark state at which predictions were made
 #' @param s Landmark time at which predictions were made
 #' @param t.eval Follow up time at which calibration is to be assessed
 #' @param tp.pred Vector of predicted transition probabilities at time t.eval
-#' @param smoother.type s, sm.os or sm.ps
-#' @param ps.int the number of equally-spaced B spline intervals in the vector spline smoother (see VGAM::sm.ps)
-#' @param degree the degree of B-spline basis in the vector spline smoother (see VGAM::sm.ps)
-#' @param s.df degrees of freedom of vector spline (see VGAM::s)
-#' @param niknots number of interior knots for VGAM::sm.os
+#' @param s.df degrees of freedom of vector spline (see \code{\link[VGAM]{s}})
+#' @param smoother.type Type of smoothing applied. Takes values `s` (see \code{\link[VGAM]{s}}), `sm.ps` (see \code{\link[VGAM]{sm.ps}}) or `sm.os` (see \code{\link[VGAM]{sm.os}}).
+#' @param ps.int the number of equally-spaced B spline intervals in the vector spline smoother (see \code{\link[VGAM]{sm.ps}})
+#' @param degree the degree of B-spline basis in the vector spline smoother (see \code{\link[VGAM]{sm.ps}})
+#' @param niknots number of interior knots (see \code{\link[VGAM]{sm.os}})
 #' @param weights Vector of inverse probability of censoring weights
 #' @param w.covs Character vector of variable names to adjust for when calculating inverse probability of censoring weights
 #' @param w.landmark.type Whether weights are estimated in all individuals uncensored at time s ('all') or only in individuals uncensored and in state j at time s ('state')
@@ -36,6 +36,60 @@
 #' @param w.stabilised Indicates whether inverse probability of censoring weights should be stabilised or not
 #' @param w.max.follow Maximum follow up for model calculating inverse probability of censoring weights. Reducing this to `t.eval` + 1 may aid in the proportional hazards assumption being met in this model.
 #'
+#' @details
+#' Observed event probabilities at time `t.eval` are estimated for predicted
+#' transition probabilities `tp.pred` out of state `j` at time `s`.
+#' `calc_calib_mlr` estimates calibration scatter plots using techniques for assessing the calibration of multinomial logistic
+#' regression models. Landmarking is applied to only assess calibration in individuals who are uncensored
+#' and in state `j` at time `s`. Censoring is dealt with using inverse probability of
+#' censoring weights.
+#'
+#' Two datasets for the same cohort of inidividuals must be provided. Firstly `data.mstate` must be a dataset of class `msdata`,
+#' generated using the \code{[mstate]} package. This dataset is used to apply the landmarking. Secondly, `data.raw` must be
+#' a `data.frame` with one row per individual, containing the desired variables for estimating the weights, and variables for the time
+#' until censoring (`dtcens`), and an indicator for censoring `dtcens.s`, where (`dtcens.s = 1`) if
+#' an individual is censored at time `dtcens`, and `dtcens.s = 0` otherwise. When an individual
+#' enters an absorbing state, this prevents censoring from happening (i.e. dtcens.s = 0). Unless the user specifies
+#' the weights using `weights`, the weights are
+#' estimated using a cox-proportional hazard model, assuming a linear
+#' functional form of the variables defined in `w.covs`. We urge users to
+#' specify their own model for estimating the weights. The `weights` argument
+#' must be a vector with length equal to the number of rows of `data.raw`.
+#'
+#' Confidence intervals cannot be generated for the calibration scatter plots. While
+#' confidence intervals could be estimated for each data point, it is not clear how
+#' these would be plotted cohesively.
+#'
+#' The calibration scatter plots can be plotted using \code{\link{plot.calib_mlr}}.
+#'
+#' @examples
+#'
+#' # Estimate calibration scatter plots for the predicted transition
+#' # probabilities at time t.eval = 1826, when predictions were made at time
+#' # s = 0 in state j = 1. These predicted transition probabilities are stored in tps0.
+#'
+#' # Extract the predicted transition probabilities out of state j = 1
+#' tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
+#'
+#' # Now estimate the observed event probabilities for each possible transition.
+#'
+#' dat.calib.mlr <-
+#' calc_calib_mlr(data.mstate = msebmtcal,
+#'  data.raw = ebmtcal,
+#'  j=1,
+#'  s=0,
+#'  t.eval = 1826,
+#'  tp.pred = tp.pred,
+#'  w.covs = c("year", "agecl", "proph", "match"))
+#'
+#' # The data for each calibration curves are stored in the "plotdata" list element.
+#' str(dat.caib.mlr)
+#'
+#' # These curves can be plotted using \code{\link{plot.calib_mlr}}.
+#'
+#' # The inverse probability of censoring weights are estimated using a cox proportional hazards model, with the predictors year, age, prophylaxis and donor gender match.
+#' # We encourage users to take the time to build an accurate model for estimating the inverse probability of censoring weights, rather than relying on the internal procedure.
+#' # Please refer to the appropriate vignette.
 #' @export
 calc_calib_mlr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, smoother.type = "sm.ps", ps.int = 4, degree = 3, s.df = 4, niknots = 4,
                            weights = NULL, w.covs, w.landmark.type = "state", w.max = 10, w.stabilised = FALSE, w.max.follow = NULL){

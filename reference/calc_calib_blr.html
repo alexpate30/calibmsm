@@ -78,7 +78,7 @@ in combination with inverse probability of censoring weights and landmarking.</p
 <span>  w.stabilised <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  w.max.follow <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  CI <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  <span class="va">CI.R.boot</span>,</span>
+<span>  CI.R.boot <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  data.pred.plot <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  transitions.out <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -170,15 +170,17 @@ in combination with inverse probability of censoring weights and landmarking.</p
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p><code>_calib_blr</code> returns a list containing two elements:
+<p><code>calc_calib_blr</code> returns a list containing two elements:
 <code>plotdata</code> and <code>metadata</code>. The <code>plotdata</code> element contains the
 data for the calibration curves. This will itself be a list with each element
 containing the data for the transition probabilities into each of the possible
 states. Each list element contains patient ids (<code>id</code>), the predicted
 transition probabilities (<code>pred</code>) and the estimated observed event
-probabilities (<code>obs</code>). The <code>metadata</code> element contains metadata
-including a vector of possible transitions, size of the confidence interval
-calculated and the method for estimating the calibration curve.</p>
+probabilities (<code>obs</code>). If requested upper (<code>obs.upper</code>) and lower (<code>obs.lower</code>) bounds for the observed
+event probabilities are also returned. The <code>metadata</code> element contains metadata
+including: a vector of the possible transitions, a vector of which transitions
+calibration curves have been estimated for, the size of the confidence interval,
+the method for estimating the calibration curve and other user specified information.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -233,9 +235,57 @@ in the vignette XXXX.</p>
 <span class="r-in"><span> CI <span class="op">=</span> <span class="fl">95</span>,</span></span>
 <span class="r-in"><span> CI.R.boot <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># The data for each calibration curves are stored in the "plotdata" list element.</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">dat.caib.blr</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'dat.caib.blr' not found</span>
+<span class="r-in"><span><span class="co"># The data for each calibration curve are stored in the "plotdata" list</span></span></span>
+<span class="r-in"><span><span class="co"># element.</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">dat.calib.blr</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> List of 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ plotdata:List of 6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ state1:'data.frame':	1778 obs. of  5 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ id       : int [1:1778] 2 4 5 7 10 13 14 16 18 19 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ pred     : num [1:1778] 0.114 0.1384 0.1233 0.0974 0.1137 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs      : num [1:1778] 0.11 0.104 0.105 0.124 0.11 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.lower: num [1:1778] 0.0889 0.079 0.0855 0.0862 0.0888 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.upper: num [1:1778] 0.129 0.123 0.123 0.167 0.129 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ state2:'data.frame':	1778 obs. of  5 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ id       : int [1:1778] 2 4 5 7 10 13 14 16 18 19 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ pred     : num [1:1778] 0.232 0.184 0.161 0.212 0.232 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs      : num [1:1778] 0.17 0.186 0.176 0.179 0.17 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.lower: num [1:1778] 0.115 0.151 0.141 0.143 0.115 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.upper: num [1:1778] 0.223 0.215 0.213 0.212 0.223 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ state3:'data.frame':	1778 obs. of  5 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ id       : int [1:1778] 2 4 5 7 10 13 14 16 18 19 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ pred     : num [1:1778] 0.0844 0.0758 0.0551 0.0615 0.0844 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs      : num [1:1778] 0.1249 0.1167 0.0919 0.1001 0.1248 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.lower: num [1:1778] 0.0907 0.0832 0.0465 0.0596 0.0907 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.upper: num [1:1778] 0.161 0.149 0.133 0.132 0.16 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ state4:'data.frame':	1778 obs. of  5 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ id       : int [1:1778] 2 4 5 7 10 13 14 16 18 19 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ pred     : num [1:1778] 0.233 0.218 0.183 0.221 0.233 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs      : num [1:1778] 0.243 0.224 0.185 0.228 0.243 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.lower: num [1:1778] 0.203 0.189 0.157 0.191 0.203 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.upper: num [1:1778] 0.284 0.259 0.22 0.263 0.284 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ state5:'data.frame':	1778 obs. of  5 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ id       : int [1:1778] 2 4 5 7 10 13 14 16 18 19 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ pred     : num [1:1778] 0.148 0.154 0.143 0.144 0.149 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs      : num [1:1778] 0.191 0.165 0.222 0.212 0.188 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.lower: num [1:1778] 0.164 0.149 0.174 0.171 0.163 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.upper: num [1:1778] 0.221 0.185 0.267 0.253 0.215 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ state6:'data.frame':	1778 obs. of  5 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ id       : int [1:1778] 2 4 5 7 10 13 14 16 18 19 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ pred     : num [1:1778] 0.189 0.23 0.335 0.264 0.189 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs      : num [1:1778] 0.207 0.254 0.316 0.28 0.207 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.lower: num [1:1778] 0.186 0.233 0.274 0.258 0.186 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.upper: num [1:1778] 0.232 0.281 0.357 0.303 0.232 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ metadata:List of 8</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ valid.transitions   : num [1:6] 1 2 3 4 5 6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ assessed.transitions: num [1:6] 1 2 3 4 5 6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ CI                  : num 95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ CI.R.boot           : num 200</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ curve.type          : chr "rcs"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ j                   : num 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ s                   : num 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ t.eval              : num 1826</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "class")= chr "calib_blr"</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

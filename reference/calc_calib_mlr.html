@@ -185,8 +185,9 @@ to present such data.</p>
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Observed event probabilities at time <code>t.eval</code> are estimated for predicted
 transition probabilities <code>tp.pred</code> out of state <code>j</code> at time <code>s</code>.
-<code>calc_calib_mlr</code> estimates calibration scatter plots using techniques for assessing the calibration of multinomial logistic
-regression models. Landmarking is applied to only assess calibration in individuals who are uncensored
+<code>calc_calib_mlr</code> estimates calibration scatter plots uses a technique for assessing the calibration of multinomial logistic
+regression models, namely the nominal calibration framework of #' van Hoorde et al. (2014, 2015).
+Landmarking is applied to only assess calibration in individuals who are uncensored
 and in state <code>j</code> at time <code>s</code>. Censoring is dealt with using inverse probability of
 censoring weights.</p>
 <p>Two datasets for the same cohort of inidividuals must be provided. Firstly <code>data.mstate</code> must be a dataset of class <code>msdata</code>,
@@ -203,7 +204,18 @@ must be a vector with length equal to the number of rows of <code>data.raw</code
 <p>Confidence intervals cannot be generated for the calibration scatter plots. While
 confidence intervals could be estimated for each data point, it is not clear how
 these would be plotted cohesively.</p>
+<p>Calibration plots cannot be produced for specific transitions (i.e. <code>transitions.out</code>
+in <code><a href="calc_calib_blr.html">calc_calib_blr</a></code>) because the nominal calibration framework (van Hoorde et al., 2014, 2015) assesses
+the calibration of all states simultaneously.</p>
 <p>The calibration scatter plots can be plotted using <code><a href="plot.calib_mlr.html">plot.calib_mlr</a></code>.</p>
+<p>#' @returns <code>calc_calib_mlr</code> returns a list containing two elements:
+<code>plotdata</code> and <code>metadata</code>. The <code>plotdata</code> element contains the
+data for the calibration scatter plots This will itself be a list with each element
+containing the data for the transition probabilities into each of the possible
+states. Each list element contains patient ids (<code>id</code>), the predicted
+transition probabilities (<code>pred</code>) and the estimated observed event
+probabilities (<code>obs</code>). The <code>metadata</code> element contains metadata
+including a vector of the possible transitions and other user specified information.</p>
     </div>
 
     <div class="section level2">
@@ -227,15 +239,43 @@ these would be plotted cohesively.</p>
 <span class="r-in"><span> tp.pred <span class="op">=</span> <span class="va">tp.pred</span>,</span></span>
 <span class="r-in"><span> w.covs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span>, <span class="st">"agecl"</span>, <span class="st">"proph"</span>, <span class="st">"match"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># The data for each calibration curves are stored in the "plotdata" list element.</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">dat.caib.mlr</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in eval(expr, envir, enclos):</span> object 'dat.caib.mlr' not found</span>
+<span class="r-in"><span><span class="co"># The data for each calibration scatter plots are stored in the "plotdata"</span></span></span>
+<span class="r-in"><span><span class="co"># list element.</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">dat.calib.mlr</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> List of 2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ plotdata:List of 6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ state1:'data.frame':	1778 obs. of  3 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ id  : int [1:1778] 2 4 5 7 10 13 14 16 18 19 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ pred: num [1:1778] 0.114 0.1384 0.1233 0.0974 0.1137 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs : num [1:1778] 0.092 0.0977 0.0506 0.1051 0.0947 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ state2:'data.frame':	1778 obs. of  3 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ id  : int [1:1778] 2 4 5 7 10 13 14 16 18 19 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ pred: num [1:1778] 0.232 0.184 0.161 0.212 0.232 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs : num [1:1778] 0.0963 0.1609 0.0812 0.1076 0.0981 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ state3:'data.frame':	1778 obs. of  3 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ id  : int [1:1778] 2 4 5 7 10 13 14 16 18 19 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ pred: num [1:1778] 0.0844 0.0758 0.0551 0.0615 0.0844 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs : num [1:1778] 0.1789 0.1387 0.0772 0.1472 0.1811 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ state4:'data.frame':	1778 obs. of  3 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ id  : int [1:1778] 2 4 5 7 10 13 14 16 18 19 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ pred: num [1:1778] 0.233 0.218 0.183 0.221 0.233 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs : num [1:1778] 0.217 0.171 0.351 0.145 0.211 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ state5:'data.frame':	1778 obs. of  3 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ id  : int [1:1778] 2 4 5 7 10 13 14 16 18 19 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ pred: num [1:1778] 0.148 0.154 0.143 0.144 0.149 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs : num [1:1778] 0.187 0.202 0.23 0.15 0.182 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ state6:'data.frame':	1778 obs. of  3 variables:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ id  : int [1:1778] 2 4 5 7 10 13 14 16 18 19 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ pred: num [1:1778] 0.189 0.23 0.335 0.264 0.189 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs : num [1:1778] 0.229 0.23 0.21 0.345 0.233 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ metadata:List of 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ valid.transitions: Named int [1:6] 1 2 3 4 5 6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..- attr(*, "names")= chr [1:6] "tp.pred1" "tp.pred2" "tp.pred3" "tp.pred4" ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ j                : num 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ s                : num 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ t.eval           : num 1826</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "class")= chr "calib_mlr"</span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># These curves can be plotted using \code{\link{plot.calib_mlr}}.</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># The inverse probability of censoring weights are estimated using a cox proportional hazards model, with the predictors year, age, prophylaxis and donor gender match.</span></span></span>
-<span class="r-in"><span><span class="co"># We encourage users to take the time to build an accurate model for estimating the inverse probability of censoring weights, rather than relying on the internal procedure.</span></span></span>
-<span class="r-in"><span><span class="co"># Please refer to the appropriate vignette.</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

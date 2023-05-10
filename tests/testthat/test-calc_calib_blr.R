@@ -21,7 +21,7 @@ test_that("check calc_calib_blr output, (j = 1, s = 0), curve.type = rcs", {
   expect_length(dat.calib.blr[["plotdata"]], 6)
   expect_length(dat.calib.blr[["plotdata"]][[1]]$id, 1778)
   expect_length(dat.calib.blr[["plotdata"]][[6]]$id, 1778)
-  expect_length(dat.calib.blr[["metadata"]], 3)
+  expect_length(dat.calib.blr[["metadata"]], 8)
   expect_false(dat.calib.blr[["metadata"]]$CI)
 
   ## Calculate observed event probabilities
@@ -43,7 +43,7 @@ test_that("check calc_calib_blr output, (j = 1, s = 0), curve.type = rcs", {
   expect_length(dat.calib.blr[["plotdata"]], 6)
   expect_length(dat.calib.blr[["plotdata"]][[1]]$id, 1778)
   expect_length(dat.calib.blr[["plotdata"]][[6]]$id, 1778)
-  expect_length(dat.calib.blr[["metadata"]], 3)
+  expect_length(dat.calib.blr[["metadata"]], 8)
   expect_false(dat.calib.blr[["metadata"]]$CI)
 
 })
@@ -71,7 +71,7 @@ test_that("check calc_calib_blr output, (j = 1, s = 0), curve.type = loess", {
   expect_length(dat.calib.blr[["plotdata"]], 6)
   expect_length(dat.calib.blr[["plotdata"]][[1]]$id, 1778)
   expect_length(dat.calib.blr[["plotdata"]][[6]]$id, 1778)
-  expect_length(dat.calib.blr[["metadata"]], 3)
+  expect_length(dat.calib.blr[["metadata"]], 8)
   expect_false(dat.calib.blr[["metadata"]]$CI)
 
   ## Calculate observed event probabilities
@@ -92,7 +92,7 @@ test_that("check calc_calib_blr output, (j = 1, s = 0), curve.type = loess", {
   expect_length(dat.calib.blr[["plotdata"]], 6)
   expect_length(dat.calib.blr[["plotdata"]][[1]]$id, 1778)
   expect_length(dat.calib.blr[["plotdata"]][[6]]$id, 1778)
-  expect_length(dat.calib.blr[["metadata"]], 3)
+  expect_length(dat.calib.blr[["metadata"]], 8)
   expect_false(dat.calib.blr[["metadata"]]$CI)
 
 })
@@ -125,7 +125,7 @@ test_that("check calc_calib_blr output, (j = 1, s = 0), with CI", {
   expect_equal(ncol(dat.calib.blr[["plotdata"]][[6]]), 5)
   expect_length(dat.calib.blr[["plotdata"]][[1]]$id, 1778)
   expect_length(dat.calib.blr[["plotdata"]][[6]]$id, 1778)
-  expect_length(dat.calib.blr[["metadata"]], 3)
+  expect_length(dat.calib.blr[["metadata"]], 8)
   expect_equal(dat.calib.blr[["metadata"]]$CI, 95)
 
 })
@@ -155,7 +155,7 @@ test_that("check calc_calib_blr output, (j = 3, s = 100)", {
   expect_length(dat.calib.blr[["plotdata"]][["state3"]]$id, 359)
   expect_length(dat.calib.blr[["plotdata"]][["state6"]]$id, 359)
   expect_error(dat.calib.blr[["plotdata"]][[6]])
-  expect_length(dat.calib.blr[["metadata"]], 3)
+  expect_length(dat.calib.blr[["metadata"]], 8)
   expect_false(dat.calib.blr[["metadata"]]$CI)
   names(dat.calib.blr[["plotdata"]])
 
@@ -184,7 +184,7 @@ test_that("check calc_calib_blr output, (j = 1, s = 0), null covs", {
   expect_length(dat.calib.blr[["plotdata"]], 6)
   expect_length(dat.calib.blr[["plotdata"]][[1]]$id, 1778)
   expect_length(dat.calib.blr[["plotdata"]][[6]]$id, 1778)
-  expect_length(dat.calib.blr[["metadata"]], 3)
+  expect_length(dat.calib.blr[["metadata"]], 8)
   expect_false(dat.calib.blr[["metadata"]]$CI)
 
   ## Calculate observed event probabilities
@@ -206,7 +206,7 @@ test_that("check calc_calib_blr output, (j = 1, s = 0), null covs", {
   expect_length(dat.calib.blr[["plotdata"]], 6)
   expect_length(dat.calib.blr[["plotdata"]][[1]]$id, 1778)
   expect_length(dat.calib.blr[["plotdata"]][[6]]$id, 1778)
-  expect_length(dat.calib.blr[["metadata"]], 3)
+  expect_length(dat.calib.blr[["metadata"]], 8)
   expect_false(dat.calib.blr[["metadata"]]$CI)
 
 })
@@ -262,7 +262,7 @@ test_that("check calc_calib_blr output, (j = 1, s = 0),
   expect_length(dat.calib.blr[["plotdata"]], 6)
   expect_length(dat.calib.blr[["plotdata"]][[1]]$pred, 1778)
   expect_length(dat.calib.blr[["plotdata"]][[6]]$pred, 1778)
-  expect_length(dat.calib.blr[["metadata"]], 3)
+  expect_length(dat.calib.blr[["metadata"]], 8)
   expect_false(dat.calib.blr[["metadata"]]$CI)
 
 })
@@ -309,7 +309,7 @@ test_that("check calc_calib_blr output, (j = 1, s = 0),
             expect_length(dat.calib.blr[["plotdata"]], 6)
             expect_length(dat.calib.blr[["plotdata"]][[1]]$pred, 1778)
             expect_length(dat.calib.blr[["plotdata"]][[6]]$pred, 1778)
-            expect_length(dat.calib.blr[["metadata"]], 3)
+            expect_length(dat.calib.blr[["metadata"]], 8)
             expect_equal(dat.calib.blr[["metadata"]]$CI, 95)
 
           })

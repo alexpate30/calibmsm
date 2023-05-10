@@ -24,7 +24,6 @@ test_that("check calc_calib_mlr output", {
                    tp.pred = tp.pred,
                    w.covs = c("year", "agecl", "proph", "match"))
 
-  str(dat.calib.mlr)
   expect_type(dat.calib.mlr, "list")
   expect_equal(class(dat.calib.mlr), "calib_mlr")
   expect_length(dat.calib.mlr, 2)
@@ -32,6 +31,6 @@ test_that("check calc_calib_mlr output", {
   expect_length(dat.calib.mlr[["plotdata"]][["state3"]]$id, 359)
   expect_length(dat.calib.mlr[["plotdata"]][["state6"]]$id, 359)
   expect_error(dat.calib.mlr[["plotdata"]][[6]])
-  expect_length(dat.calib.mlr[["metadata"]], 1)
+  expect_length(dat.calib.mlr[["metadata"]], 4)
 
 })

@@ -3,7 +3,7 @@ pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   vigtest: vigtest.html
-last_built: 2023-05-10T13:16Z
+last_built: 2023-05-10T13:25Z
 urls:
   reference: https://alexpate30.github.io/calibmsm/reference
   article: https://alexpate30.github.io/calibmsm/articles

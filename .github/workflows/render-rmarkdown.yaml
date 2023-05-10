@@ -23,7 +23,7 @@ jobs:
 
       - name: Install renv
       - run:
-        R -e 'install.pacakges("renv")'
+          R -e 'install.pacakges("renv")'
 
       - uses: r-lib/actions/setup-renv@v2
 

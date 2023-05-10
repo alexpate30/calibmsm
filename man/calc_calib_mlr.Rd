@@ -80,8 +80,9 @@ to present such data.
 \details{
 Observed event probabilities at time \code{t.eval} are estimated for predicted
 transition probabilities \code{tp.pred} out of state \code{j} at time \code{s}.
-\code{calc_calib_mlr} estimates calibration scatter plots using techniques for assessing the calibration of multinomial logistic
-regression models. Landmarking is applied to only assess calibration in individuals who are uncensored
+\code{calc_calib_mlr} estimates calibration scatter plots uses a technique for assessing the calibration of multinomial logistic
+regression models, namely the nominal calibration framework of #' van Hoorde et al. (2014, 2015).
+Landmarking is applied to only assess calibration in individuals who are uncensored
 and in state \code{j} at time \code{s}. Censoring is dealt with using inverse probability of
 censoring weights.
 
@@ -101,7 +102,20 @@ Confidence intervals cannot be generated for the calibration scatter plots. Whil
 confidence intervals could be estimated for each data point, it is not clear how
 these would be plotted cohesively.
 
+Calibration plots cannot be produced for specific transitions (i.e. \code{transitions.out}
+in \code{\link{calc_calib_blr}}) because the nominal calibration framework (van Hoorde et al., 2014, 2015) assesses
+the calibration of all states simultaneously.
+
 The calibration scatter plots can be plotted using \code{\link{plot.calib_mlr}}.
+
+#' @returns \code{\link{calc_calib_mlr}} returns a list containing two elements:
+\code{plotdata} and \code{metadata}. The \code{plotdata} element contains the
+data for the calibration scatter plots This will itself be a list with each element
+containing the data for the transition probabilities into each of the possible
+states. Each list element contains patient ids (\code{id}), the predicted
+transition probabilities (\code{pred}) and the estimated observed event
+probabilities (\code{obs}). The \code{metadata} element contains metadata
+including a vector of the possible transitions and other user specified information.
 }
 \examples{
 
@@ -123,12 +137,8 @@ calc_calib_mlr(data.mstate = msebmtcal,
  tp.pred = tp.pred,
  w.covs = c("year", "agecl", "proph", "match"))
 
-# The data for each calibration curves are stored in the "plotdata" list element.
-str(dat.caib.mlr)
+# The data for each calibration scatter plots are stored in the "plotdata"
+# list element.
+str(dat.calib.mlr)
 
-# These curves can be plotted using \code{\link{plot.calib_mlr}}.
-
-# The inverse probability of censoring weights are estimated using a cox proportional hazards model, with the predictors year, age, prophylaxis and donor gender match.
-# We encourage users to take the time to build an accurate model for estimating the inverse probability of censoring weights, rather than relying on the internal procedure.
-# Please refer to the appropriate vignette.
 }

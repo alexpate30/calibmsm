@@ -39,8 +39,9 @@
 #' @details
 #' Observed event probabilities at time `t.eval` are estimated for predicted
 #' transition probabilities `tp.pred` out of state `j` at time `s`.
-#' `calc_calib_mlr` estimates calibration scatter plots using techniques for assessing the calibration of multinomial logistic
-#' regression models. Landmarking is applied to only assess calibration in individuals who are uncensored
+#' `calc_calib_mlr` estimates calibration scatter plots uses a technique for assessing the calibration of multinomial logistic
+#' regression models, namely the nominal calibration framework of #' van Hoorde et al. (2014, 2015).
+#' Landmarking is applied to only assess calibration in individuals who are uncensored
 #' and in state `j` at time `s`. Censoring is dealt with using inverse probability of
 #' censoring weights.
 #'
@@ -60,7 +61,20 @@
 #' confidence intervals could be estimated for each data point, it is not clear how
 #' these would be plotted cohesively.
 #'
+#' Calibration plots cannot be produced for specific transitions (i.e. `transitions.out`
+#' in \code{\link{calc_calib_blr}}) because the nominal calibration framework (van Hoorde et al., 2014, 2015) assesses
+#' the calibration of all states simultaneously.
+#'
 #' The calibration scatter plots can be plotted using \code{\link{plot.calib_mlr}}.
+#'
+#'#' @returns \code{\link{calc_calib_mlr}} returns a list containing two elements:
+#' \code{plotdata} and \code{metadata}. The \code{plotdata} element contains the
+#' data for the calibration scatter plots This will itself be a list with each element
+#' containing the data for the transition probabilities into each of the possible
+#' states. Each list element contains patient ids (\code{id}), the predicted
+#' transition probabilities (\code{pred}) and the estimated observed event
+#' probabilities (\code{obs}). The \code{metadata} element contains metadata
+#' including a vector of the possible transitions and other user specified information.
 #'
 #' @examples
 #'
@@ -82,14 +96,11 @@
 #'  tp.pred = tp.pred,
 #'  w.covs = c("year", "agecl", "proph", "match"))
 #'
-#' # The data for each calibration curves are stored in the "plotdata" list element.
-#' str(dat.caib.mlr)
+#' # The data for each calibration scatter plots are stored in the "plotdata"
+#' # list element.
+#' str(dat.calib.mlr)
 #'
-#' # These curves can be plotted using \code{\link{plot.calib_mlr}}.
-#'
-#' # The inverse probability of censoring weights are estimated using a cox proportional hazards model, with the predictors year, age, prophylaxis and donor gender match.
-#' # We encourage users to take the time to build an accurate model for estimating the inverse probability of censoring weights, rather than relying on the internal procedure.
-#' # Please refer to the appropriate vignette.
+
 #' @export
 calc_calib_mlr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, smoother.type = "sm.ps", ps.int = 4, degree = 3, s.df = 4, niknots = 4,
                            weights = NULL, w.covs, w.landmark.type = "state", w.max = 10, w.stabilised = FALSE, w.max.follow = NULL){
@@ -238,7 +249,10 @@ calc_calib_mlr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, smoothe
   }
 
   ### Create metadata object
-  metadata <- list("valid.transitions" = valid.transitions)
+  metadata <- list("valid.transitions" = valid.transitions,
+                   "j" = j,
+                   "s" = s,
+                   "t.eval" = t.eval)
 
   ### Crate a combined output object with metadata, as well as plot data
   output.object.comb <- list("plotdata" = output.object2, "metadata" = metadata)
@@ -249,3 +263,19 @@ calc_calib_mlr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, smoothe
   return(output.object.comb)
 
 }
+
+#' @export
+summary.calib_mlr <- function(object, ...) {
+
+  cat("There were non-zero predicted transition probabilities into states ",
+      paste(object[["metadata"]]$valid.transitions, collapse = ","),  sep = " ")
+
+  cat("\n\nCalibration was assessed at time ", object[["metadata"]]$t.eval, " and calibration was assessed in a landmarked cohort of individuals in state j = ", object[["metadata"]]$j,
+      " at time s = ", object[["metadata"]]$s, sep = "")
+
+  cat("\n\nThe estimated calibration scatter plots are stored in list element `plotdata`:\n\n")
+
+  print(lapply(object[["plotdata"]], "head"))
+
+}
+

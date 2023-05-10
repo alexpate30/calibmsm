@@ -57,15 +57,17 @@
 #'
 #' The calibration curves can be plotted using \code{\link{plot.calib_blr}}.
 #'
-#' @returns \code{\link{\calc_calib_blr}} returns a list containing two elements:
+#' @returns \code{\link{calc_calib_blr}} returns a list containing two elements:
 #' \code{plotdata} and \code{metadata}. The \code{plotdata} element contains the
 #' data for the calibration curves. This will itself be a list with each element
 #' containing the data for the transition probabilities into each of the possible
 #' states. Each list element contains patient ids (\code{id}), the predicted
 #' transition probabilities (\code{pred}) and the estimated observed event
-#' probabilities (\code{obs}). The \code{metadata} element contains metadata
-#' including a vector of possible transitions, size of the confidence interval
-#' calculated and the method for estimating the calibration curve.
+#' probabilities (\code{obs}). If requested upper (`obs.upper`) and lower (`obs.lower`) bounds for the observed
+#' event probabilities are also returned. The \code{metadata} element contains metadata
+#' including: a vector of the possible transitions, a vector of which transitions
+#' calibration curves have been estimated for, the size of the confidence interval,
+#' the method for estimating the calibration curve and other user specified information.
 #'
 #' @examples
 #' # Estimate calibration curves for the predicted transition
@@ -90,12 +92,13 @@
 #'  CI = 95,
 #'  CI.R.boot = 200)
 #'
-#' # The data for each calibration curves are stored in the "plotdata" list element.
-#' str(dat.caib.blr)
+#' # The data for each calibration curve are stored in the "plotdata" list
+#' # element.
+#' str(dat.calib.blr)
 #'
 #' @export
 calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.type = "rcs", rcs.nk = 3, loess.span = 0.75, loess.degree = 2,
-                           weights = NULL, w.covs = NULL, w.landmark.type = "state", w.max = 10, w.stabilised = FALSE, w.max.follow = NULL, CI = FALSE, CI.R.boot,
+                           weights = NULL, w.covs = NULL, w.landmark.type = "state", w.max = 10, w.stabilised = FALSE, w.max.follow = NULL, CI = FALSE, CI.R.boot = NULL,
                            data.pred.plot = NULL, transitions.out = NULL){
 
 # data.mstate <- msebmtcal
@@ -124,6 +127,11 @@ calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.t
   ### Warning if weights inputted manually, and confidence interval requested internally
   if ((CI != FALSE) & !is.null(weights)){
     warning("Estimation of confidence interval using internal bootstrapping procedure was requested. User inputted weights are being ignored.")
+  }
+
+  ### Warning if weights inputted manually, and confidence interval requested internally
+  if ((CI != FALSE) & is.null(CI.R.boot)){
+    stop("Estimation of confidence interval requested but number of bootstrap replicates not specified")
   }
 
   ### Check if transitions.out is only specified for non-zero columns
@@ -557,7 +565,14 @@ calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.t
   }
 
   ### Create metadata object
-  metadata <- list("valid.transitions" = valid.transitions, "CI" = CI, "curve.type" = curve.type)
+  metadata <- list("valid.transitions" = as.numeric(valid.transitions),
+                   "assessed.transitions" = as.numeric(transitions.out),
+                   "CI" = CI,
+                   "CI.R.boot" = CI.R.boot,
+                   "curve.type" = curve.type,
+                   "j" = j,
+                   "s" = s,
+                   "t.eval" = t.eval)
 
   ### Crate a combined output object with metadata, as well as plot data
   output.object.comb <- list("plotdata" = output.object, "metadata" = metadata)
@@ -566,4 +581,28 @@ calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.t
   attr(output.object.comb, "class") <- "calib_blr"
 
   return(output.object.comb)
+}
+
+#' @export
+summary.calib_blr <- function(object, ...) {
+
+  cat("There were non-zero predicted transition probabilities into states ",
+      paste(object[["metadata"]]$valid.transitions, collapse = ","),  sep = " ")
+
+  cat("\n\nCalibration curves have been estimated for transitions into states ",
+      paste(object[["metadata"]]$assessed.transitions, collapse = ","), sep = " ")
+
+  cat("\n\nCalibration was assessed at time ", object[["metadata"]]$t.eval, " and calibration was assessed in a landmarked cohort of individuals in state j = ", object[["metadata"]]$j,
+      " at time s = ", object[["metadata"]]$s, sep = "")
+
+  if (isFALSE(object[["metadata"]]$CI)){
+    cat("\n\nA confidence interval was not estimated")
+  } else {
+    cat("\n\nA ",  object[["metadata"]]$CI, "% confidence interval was estimated withb", object[["metadata"]]$CI.R.boot, " bootstrap replicates", sep = "")
+  }
+
+  cat("\n\nThe estimated calibration curves are stored in list element `plotdata`:\n\n")
+
+  print(lapply(object[["plotdata"]], "head"))
+
 }

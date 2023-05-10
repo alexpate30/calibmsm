@@ -22,7 +22,7 @@ calc_calib_blr(
   w.stabilised = FALSE,
   w.max.follow = NULL,
   CI = FALSE,
-  CI.R.boot,
+  CI.R.boot = NULL,
   data.pred.plot = NULL,
   transitions.out = NULL
 )
@@ -69,15 +69,17 @@ calc_calib_blr(
 \item{transitions.out}{Transitions for which to calculate calibration curves. Will do all possible transitions if left as NULL.}
 }
 \value{
-\code{\link{\calc_calib_blr}} returns a list containing two elements:
+\code{\link{calc_calib_blr}} returns a list containing two elements:
 \code{plotdata} and \code{metadata}. The \code{plotdata} element contains the
 data for the calibration curves. This will itself be a list with each element
 containing the data for the transition probabilities into each of the possible
 states. Each list element contains patient ids (\code{id}), the predicted
 transition probabilities (\code{pred}) and the estimated observed event
-probabilities (\code{obs}). The \code{metadata} element contains metadata
-including a vector of possible transitions, size of the confidence interval
-calculated and the method for estimating the calibration curve.
+probabilities (\code{obs}). If requested upper (\code{obs.upper}) and lower (\code{obs.lower}) bounds for the observed
+event probabilities are also returned. The \code{metadata} element contains metadata
+including: a vector of the possible transitions, a vector of which transitions
+calibration curves have been estimated for, the size of the confidence interval,
+the method for estimating the calibration curve and other user specified information.
 }
 \description{
 Creates the underlying data for the calibration curves. \code{calc_calib_blr}
@@ -138,7 +140,8 @@ calc_calib_blr(data.mstate = msebmtcal,
  CI = 95,
  CI.R.boot = 200)
 
-# The data for each calibration curves are stored in the "plotdata" list element.
-str(dat.caib.blr)
+# The data for each calibration curve are stored in the "plotdata" list
+# element.
+str(dat.calib.blr)
 
 }

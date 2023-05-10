@@ -61,12 +61,18 @@ usethis::use_data(tps100, overwrite = TRUE)
 usethis::use_testthat(3)
 
 ###
-### GitHub actions
+### Add GitHub actions
 ###
 
-### R-CMD-check
+### First link to GitHub
+gh_token_help()
+usethis::create_github_token()
+gitcreds::gitcreds_set()
+
+### R-CMD-check action
 usethis::use_readme_rmd()
 usethis::use_github_action_check_standard()
+
 
 ### Test coverage
 ## For test coverage, used following sources:
@@ -83,20 +89,17 @@ usethis::use_github_action("render-rmarkdown")
 ###
 ### Create website
 ###
-library(dplyr)
+
+## Now create website
 usethis::use_pkgdown()
 pkgdown::build_site()
 usethis::use_pkgdown_github_pages()
-gh_token_help()
-usethis::create_github_token()
-gitcreds::gitcreds_set()
-getwd()
-hello <- 2
-hello <- 3
-library(gitcreds)
-.libPaths()
-whyisntworkflowbeingrecognised <- 2
-whyisntworkflowbeingrecognised <- 2
+
+###
+### Set ghostscript location
+### If this causes issues with CRAN, just remove all .pdf vignettes
+###
+Sys.setenv(R_GSCMD = "C:\\Program Files\\gs\\gs10.01.1\\bin\\gswin64c.exe")
 
 ###
 ### Install package
@@ -108,9 +111,10 @@ devtools::document()
 devtools::check(vignettes = FALSE)
 calibmsm::calc_calib_blr
 devtools::install()
-?calibmsm::calc_weights()
-?calibmsm::calc_weights()
-?calibmsm::calc_calib_blr()
+library(calibmsm)
+?calibmsm::calc_weights
+?calibmsm::calc_calib_blr
+?calibmsm::calc_calib_mlr
 devtools::check(build_args = "--compact-vignettes=gs+qpdf")
 devtools::check()
 install.packages("Formula")
@@ -118,8 +122,7 @@ library(dplyr)
 getwd()
 testchange
 testchange2
-.libPaths("C:/Program Files/R/R-4.3.0/library")
-.libPaths()
+
 install.packages("pkgdown")
 install.packages("devtools")
 install.packages("gitcreds")

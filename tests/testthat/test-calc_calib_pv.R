@@ -570,3 +570,52 @@ test_that("check calc_calib_pv output, (j = 3, s = 100), curve.type = rcs, CI.ty
   expect_equal(dat.calib.pv.1[["plotdata"]][[1]]$pred, dat.calib.pv.10[["plotdata"]][[1]]$pred)
 
 })
+
+### Finally add some tests for when each of group.vars and n.pctls are left as NULL
+test_that("check calc_calib_pv output, (j = 3, s = 100), groups.vars and n.pctls = NULL", {
+
+  ## Extract relevant predicted risks from tps0
+  tp.pred <- dplyr::select(dplyr::filter(tps100, j == 3), dplyr::any_of(paste("pstate", 1:6, sep = "")))
+
+  ## Calculate observed event probabilities using transitions.out = NULL
+  dat.calib.pv.1 <- calc_calib_pv(data.mstate = msebmtcal,
+                                  data.raw = ebmtcal,
+                                  j = 3,
+                                  s = 100,
+                                  t.eval = 1826,
+                                  tp.pred = tp.pred,
+                                  curve.type = "rcs",
+                                  data.pred.plot = NULL, transitions.out = NULL)
+
+  expect_equal(ncol(dat.calib.pv.1[["plotdata"]][[1]]), 3)
+  expect_equal(length(dat.calib.pv.1[["plotdata"]]), 3)
+
+  ## Calculate observed event probabilities using transitions.out = NULL
+  dat.calib.pv.2 <- calc_calib_pv(data.mstate = msebmtcal,
+                                  data.raw = ebmtcal,
+                                  j = 3,
+                                  s = 100,
+                                  t.eval = 1826,
+                                  tp.pred = tp.pred,
+                                  curve.type = "rcs",
+                                  group.vars = c("year")
+                                  data.pred.plot = NULL, transitions.out = NULL)
+
+  expect_equal(ncol(dat.calib.pv.2[["plotdata"]][[1]]), 3)
+  expect_equal(length(dat.calib.pv.2[["plotdata"]]), 3)
+
+  ## Calculate observed event probabilities using transitions.out = NULL
+  dat.calib.pv.3 <- calc_calib_pv(data.mstate = msebmtcal,
+                                  data.raw = ebmtcal,
+                                  j = 3,
+                                  s = 100,
+                                  t.eval = 1826,
+                                  tp.pred = tp.pred,
+                                  curve.type = "rcs",
+                                  n.pctls = 2,
+                                  data.pred.plot = NULL, transitions.out = NULL)
+
+  expect_equal(ncol(dat.calib.pv.3[["plotdata"]][[1]]), 3)
+  expect_equal(length(dat.calib.pv.3[["plotdata"]]), 3)
+
+})

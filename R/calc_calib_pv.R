@@ -236,9 +236,6 @@ calc_calib_pv <- function(data.mstate,
   ###
   ### Warnings and errors
 
-  curve.type = "rcs"
-  CI <- FALSE
-  CI.type <- NULL
   ### Error if CI requested by CI.type ignored
   if (CI != FALSE & is.null(CI.type)){
     stop("Confidence interval requested but CI.type not specified. Choose either 'parametric' or 'bootstrap'.
@@ -260,8 +257,10 @@ calc_calib_pv <- function(data.mstate,
   }
 
   ### Stop if CI.type = "bootstrap" but CI.R.boot not specified
-  if (CI.type == "bootstrap" & is.null(CI.R.boot)){
-    stop("Must specify number of bootstrap replicates for confidence interval using CI.R.boot.")
+  if (!is.null(CI.type)){
+    if (CI.type == "bootstrap" & is.null(CI.R.boot)){
+      stop("Must specify number of bootstrap replicates for confidence interval using CI.R.boot.")
+    }
   }
 
   ### Check if transitions.out is only specified for non-zero columns

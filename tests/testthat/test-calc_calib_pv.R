@@ -571,7 +571,7 @@ test_that("check calc_calib_pv output, (j = 3, s = 100), curve.type = rcs, CI.ty
 
 })
 
-### Finally add some tests for when each of group.vars and n.pctls are left as NULL
+### Add some tests for when each of group.vars and n.pctls are left as NULL
 test_that("check calc_calib_pv output, (j = 3, s = 100), groups.vars and n.pctls = NULL", {
 
   ## Extract relevant predicted risks from tps0
@@ -617,5 +617,60 @@ test_that("check calc_calib_pv output, (j = 3, s = 100), groups.vars and n.pctls
 
   expect_equal(ncol(dat.calib.pv.3[["plotdata"]][[1]]), 3)
   expect_equal(length(dat.calib.pv.3[["plotdata"]]), 3)
+
+})
+
+
+### Add some tests where we expect errors, if requesting things that aren't possible
+test_that("check calc_calib_pv output, (j = 3, s = 100), groups.vars and n.pctls = NULL", {
+
+  ## Extract relevant predicted risks from tps0
+  tp.pred <- dplyr::select(dplyr::filter(tps100, j == 3), dplyr::any_of(paste("pstate", 1:6, sep = "")))
+
+  ## Request confidence interval but don't state what type
+  expect_error(calc_calib_pv(data.mstate = msebmtcal,
+                             data.raw = ebmtcal,
+                             j = 3,
+                             s = 100,
+                             t.eval = 1826,
+                             tp.pred = tp.pred,
+                             curve.type = "rcs",
+                             CI = 95,
+                             data.pred.plot = NULL, transitions.out = NULL))
+
+  ## Request confidence interval for loess, and specify parametric
+  expect_error(calc_calib_pv(data.mstate = msebmtcal,
+                             data.raw = ebmtcal,
+                             j = 3,
+                             s = 100,
+                             t.eval = 1826,
+                             tp.pred = tp.pred,
+                             curve.type = "loess",
+                             CI = 95,
+                             CI.type = "parametric",
+                             data.pred.plot = NULL, transitions.out = NULL))
+
+  ## Request bootstrap confidence interval and don't give number of bootstrap replicates (for either rcs or parametric)
+  expect_error(calc_calib_pv(data.mstate = msebmtcal,
+                             data.raw = ebmtcal,
+                             j = 3,
+                             s = 100,
+                             t.eval = 1826,
+                             tp.pred = tp.pred,
+                             curve.type = "loess",
+                             CI = 95,
+                             CI.type = "bootstrap",
+                             data.pred.plot = NULL, transitions.out = NULL))
+
+  expect_error(calc_calib_pv(data.mstate = msebmtcal,
+                             data.raw = ebmtcal,
+                             j = 3,
+                             s = 100,
+                             t.eval = 1826,
+                             tp.pred = tp.pred,
+                             curve.type = "rcs",
+                             CI = 95,
+                             CI.type = "bootstrap",
+                             data.pred.plot = NULL, transitions.out = NULL))
 
 })

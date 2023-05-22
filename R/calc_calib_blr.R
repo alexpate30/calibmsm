@@ -443,6 +443,11 @@ calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.t
     eq.rcs <- stats::formula(paste(eq.LHS, eq.RHS, sep = ""))
 
     ## Fit model
+    ## NB: Warnings are suppressed beceause rms gives the following warning:
+      ## In rms::lrm(eq.rcs, data = data.boot.lmk.js.uncens, weights = data.boot.lmk.js.uncens[,:
+      ## currently weights are ignored in model validation and bootstrapping lrm fits
+    ## We are not using the model validation or bootstrapping aspects of rms::lrm (we are applying bootstrapping ourselves),
+    ## meaning the warning is not neccesary.
     suppressWarnings(
     rcs.model <- rms::lrm(eq.rcs,
                           data = data.boot.lmk.js.uncens,

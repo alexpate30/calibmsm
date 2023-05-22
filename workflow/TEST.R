@@ -27,6 +27,20 @@ head(tps0)
 devtools::document()
 check
 
+logit.func <- function(x){
+  return(log(x/(1-x)))}
+inv.logit.func <- function(x){
+  return(1/(1+exp(-x)))
+}
+
+logit.func(3)
+
+inv.logit.func(-100)
+logit.func(0.7)
+inv.logit.func(0.84)
+
+
+
 ####################
 ### Test weights ###
 ####################

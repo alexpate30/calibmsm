@@ -142,8 +142,6 @@ test_that("check calc_calib_pv output, (j = 3, s = 100), curve.type = loess", {
   expect_true(mean(dat.calib.pv.7[["plotdata"]][[1]]$obs.upper - dat.calib.pv.7[["plotdata"]][[1]]$obs.lower, na.rm = TRUE) >
     mean(dat.calib.pv.8[["plotdata"]][[1]]$obs.upper - dat.calib.pv.8[["plotdata"]][[1]]$obs.lower, na.rm = TRUE))
 
-
-
   ## Calculate observed event probabilities with a confidence interval using bootstrapping, transitions.out = NULL and defining data.pred.plot manually
 
   ### Create landmark ids to get data.pred.plot correct
@@ -192,4 +190,3 @@ test_that("check calc_calib_pv output, (j = 3, s = 100), curve.type = loess", {
   expect_equal(dat.calib.pv.1[["plotdata"]][[1]]$pred, dat.calib.pv.10[["plotdata"]][[1]]$pred)
 
 })
-

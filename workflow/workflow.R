@@ -1,4 +1,9 @@
 ###
+### Install
+###
+devtools::install()
+
+###
 ### Update .Rd files
 ###
 devtools::document()

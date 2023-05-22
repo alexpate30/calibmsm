@@ -6,7 +6,7 @@ a <- 3
 b <- 4
 rm(list=ls())
 load_all()
-check(vignettes = FALSE)
+devtools::check()
 ?calibmsm::calc_calib_mlr
 testhaschanged <- 1
 whyisntworkflowbeingrecognised <- 3

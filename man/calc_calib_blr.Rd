@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_calib_blr.R
 \name{calc_calib_blr}
 \alias{calc_calib_blr}
-\title{Estimate calibration curves for a multistate model.}
+\title{Estimate calibration curves for a multistate model using binary logistic regression calibration techniques and inverse probability of censoring weights.'}
 \usage{
 calc_calib_blr(
   data.mstate,
@@ -72,14 +72,16 @@ calc_calib_blr(
 \code{\link{calc_calib_blr}} returns a list containing two elements:
 \code{plotdata} and \code{metadata}. The \code{plotdata} element contains the
 data for the calibration curves. This will itself be a list with each element
-containing the data for the transition probabilities into each of the possible
-states. Each list element contains patient ids (\code{id}), the predicted
+containing calibration plot data for the transition probabilities into each of the possible
+states. Each list element contains patient ids (\code{id}) from \code{data.raw}, the predicted
 transition probabilities (\code{pred}) and the estimated observed event
-probabilities (\code{obs}). If requested upper (\code{obs.upper}) and lower (\code{obs.lower}) bounds for the observed
-event probabilities are also returned. The \code{metadata} element contains metadata
-including: a vector of the possible transitions, a vector of which transitions
-calibration curves have been estimated for, the size of the confidence interval,
-the method for estimating the calibration curve and other user specified information.
+probabilities (\code{obs}). If a confidence interval is requested, upper (\code{obs.upper})
+and lower (\code{obs.lower}) bounds for the observed event probabilities are also returned.
+If data.pred.plot is defined manually, column (\code{id}) is not returned.
+The \code{metadata} element contains metadata including: a vector of the possible transitions,
+a vector of which transitions calibration curves have been estimated for, the
+size of the confidence interval, the method for estimating the calibration curve
+and other user specified information.
 }
 \description{
 Creates the underlying data for the calibration curves. \code{calc_calib_blr}

@@ -17,7 +17,7 @@ use_git()
 ### Add dependencies
 ###
 usethis::use_package("survival")
-#usethis::use_package("mstate")
+usethis::use_package("mstate")
 usethis::use_package("dplyr")
 usethis::use_package("tidyr")
 usethis::use_package("stats")
@@ -48,8 +48,9 @@ devtools::install(build_vignettes = TRUE)
 browseVignettes()
 
 ###
-### Add data
+### Add file for creation of data
 ###
+usethis::use_data_raw()
 usethis::use_data(ebmtcal, overwrite = TRUE)
 usethis::use_data(msebmtcal, overwrite = TRUE)
 usethis::use_data(tps0, overwrite = TRUE)
@@ -84,7 +85,11 @@ use_github_action("test-coverage")
 devtools::build_readme()
 
 ### Automatically render .Rmd
-usethis::use_github_action("render-rmarkdown")
+## This didn't work for me as the "renv" package wouldn't install when running action
+## r-lib/actions/setup-renv@v2. I have removed for now.
+## If reinstating, you need to remove the git pre-commit hooks which require .Rmd
+## and .md files to be the same.
+# usethis::use_github_action("render-rmarkdown")
 
 ###
 ### Create website

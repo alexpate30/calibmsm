@@ -483,12 +483,6 @@ calc_calib_pv <- function(data.mstate,
 
       ### 1) No grouping
 
-      if (length(transitions.out) < length(valid.transitions)){
-        message("Pseudo-values for each state are calculated simultaenously for each individual, because individuals
-              are not being grouped by predicted risk. No efficiency gains to only estimate pseudo-values for a subset
-              of states, argument 'transitions.out' has been ignored")
-      }
-
       ### Calculate the observed Aalen-Johansen once to enable quicker calculation for the pseudo-values
       obs.aj.save <- calc_aj(data.mstate = data.mstate.lmk.js,
                              tmat = tmat.lmk.js,
@@ -511,12 +505,6 @@ calc_calib_pv <- function(data.mstate,
     } else if (!is.null(group.vars) & is.null(n.pctls)) {
 
       ### 2) Grouping only by baseline variables
-
-      if (length(transitions.out) < length(valid.transitions)){
-        message("Pseudo-values for each state are calculated simultaenously for each individual, because individuals
-              are not being grouped by predicted risk. No efficiency gains to only estimate pseudo-values for a subset
-              of states, argument 'transitions.out' has been ignored")
-      }
 
       ###
       ### Split data into groups defined by the variables in group.vars
@@ -659,11 +647,6 @@ calc_calib_pv <- function(data.mstate,
     } else if (!is.null(group.vars) & !is.null(n.pctls)) {
 
       ### 4) Grouping by baseline variables and predicted risk
-
-      ### Assign transitions.out if required
-      if (is.null(transitions.out)){
-        transitions.out <- valid.transitions
-      }
 
       ### Create object to store data grouped by percentiles of predicted risk
       data.groups.pctls <- vector("list", length(transitions.out))

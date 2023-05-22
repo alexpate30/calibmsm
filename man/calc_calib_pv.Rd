@@ -11,11 +11,14 @@ calc_calib_pv(
   s,
   t.eval,
   tp.pred,
-  group.vars = NULL,
-  n.pctls = NULL,
+  curve.type = "rcs",
+  rcs.nk = 3,
   loess.span = 0.75,
   loess.degree = 2,
+  group.vars = NULL,
+  n.pctls = NULL,
   CI = FALSE,
+  CI.type = NULL,
   CI.R.boot = NULL,
   data.pred.plot = NULL,
   transitions.out = NULL
@@ -34,17 +37,23 @@ calc_calib_pv(
 
 \item{tp.pred}{Matrix of predicted transition probabilities at time t.eval, if in state j at time s. There must be a seperate column for the predicted transition probabilities into every state, even if these predicted transition probabilities are 0.}
 
-\item{group.vars}{Baseline variables to define groups within which to estimate pseudo-values}
+\item{curve.type}{Whether calibration curves are estimated using restricted cubic splines ('rcs') or loess smoothers ('loess')}
 
-\item{n.pctls}{Number of percentiles to group individuals by with respect to predicted transition probabilities when estimating pseudo-values}
+\item{rcs.nk}{Number of knots when curves are estimated using restricted cubic splines}
 
 \item{loess.span}{Span when curves are estimated using loess smoothers}
 
 \item{loess.degree}{Degree when curves are estimated. using loess smoothers}
 
+\item{group.vars}{Baseline variables to define groups within which to estimate pseudo-values}
+
+\item{n.pctls}{Number of percentiles to group individuals by with respect to predicted transition probabilities when estimating pseudo-values}
+
 \item{CI}{Size of confidence intervals as a \%}
 
-\item{CI.R.boot}{Number of bootstrap replicates when estimating the confidence interval for the calibration curve}
+\item{CI.type}{Way confidence interval is calculated (\code{bootstrap} or \code{parametric})}
+
+\item{CI.R.boot}{Number of bootstrap replicates when estimating the confidence interval for the calibration curve using bootstrapping}
 
 \item{data.pred.plot}{Data frame or matrix of predicted risks for each possible transition over which to plot the calibration curves. Must have one column for every possible transition.}
 

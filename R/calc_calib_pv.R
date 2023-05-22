@@ -109,7 +109,8 @@ calc_pv_aj <- function(person_id.eval, data.mstate, obs.aj, tmat, n.cohort, t.ev
 #' @param group.vars Baseline variables to define groups within which to estimate pseudo-values
 #' @param n.pctls Number of percentiles to group individuals by with respect to predicted transition probabilities when estimating pseudo-values
 #' @param CI Size of confidence intervals as a %
-#' @param CI.R.boot Number of bootstrap replicates when estimating the confidence interval for the calibration curve
+#' @param CI.type Way confidence interval is calculated (`bootstrap` or `parametric`)
+#' @param CI.R.boot Number of bootstrap replicates when estimating the confidence interval for the calibration curve using bootstrapping
 #' @param data.pred.plot Data frame or matrix of predicted risks for each possible transition over which to plot the calibration curves. Must have one column for every possible transition.
 #' @param transitions.out Transitions for which to calculate calibration curves. Will do all possible transitions if left as NULL.
 #'
@@ -235,6 +236,9 @@ calc_calib_pv <- function(data.mstate,
   ###
   ### Warnings and errors
 
+  curve.type = "rcs"
+  CI <- FALSE
+  CI.type <- NULL
   ### Error if CI requested by CI.type ignored
   if (CI != FALSE & is.null(CI.type)){
     stop("Confidence interval requested but CI.type not specified. Choose either 'parametric' or 'bootstrap'.
@@ -242,13 +246,17 @@ calc_calib_pv <- function(data.mstate,
   }
 
   ### Make sure CI.type is specified to one of the required values
-  if (!is.null(CI.type) & !(CI.type %in% c("parametric", "bootstrap"))){
-    stop("CI.type must be 'parametric' or 'bootstrap'.")
+  if (!is.null(CI.type)){
+    if (!(CI.type %in% c("parametric", "bootstrap"))){
+      stop("CI.type must be 'parametric' or 'bootstrap'.")
+    }
   }
 
-  ### Stop if curve.type = "loess" and CI.type = "parametric".
-  if (curve.type == "loess" & CI != FALSE & CI.type != "bootstrap"){
-    stop("For curve.type = 'loess', CI.type must be 'bootstrap'.")
+  ### Stop if curve.type = "loess" and CI requested but CI.type not specified to be 'bootstrap'.
+  if (curve.type == "loess" & CI != FALSE & !is.null(CI.type)){
+    if (CI.type != "bootstrap"){
+      stop("For curve.type = 'loess', CI.type must be 'bootstrap'.")
+    }
   }
 
   ### Stop if CI.type = "bootstrap" but CI.R.boot not specified
@@ -343,7 +351,6 @@ calc_calib_pv <- function(data.mstate,
          THAN ONE STATE")
     }
 
-    print("START BOOT SAMPLE")
     # data.raw.in <- data.raw
     # data.mstate.in <- data.mstate
     # indices <- sample(1:nrow(data.raw), nrow(data.raw), replace = TRUE)
@@ -593,7 +600,7 @@ calc_calib_pv <- function(data.mstate,
 
         ### Assign the state of interest
         state.k <- as.numeric(transitions.out[state])
-        print(paste("state = ", state.k, Sys.time()))
+        print(paste("Calculate pseudo values for state = ", state.k, Sys.time()))
 
         ### Split data by predicted risk of state k
         data.pctls[[state]] <- base::split(data.raw.lmk.js,
@@ -674,7 +681,6 @@ calc_calib_pv <- function(data.mstate,
 
         ### Assign the state of interest
         state.k <- as.numeric(transitions.out[state])
-        print(paste("state = ", state.k, Sys.time()))
 
         ###
         ### Split data into groups defined by the variables in group.vars
@@ -817,11 +823,11 @@ calc_calib_pv <- function(data.mstate,
 
       ### Define equation
       eq.LHS <- paste("pv ~ ", sep = "")
-      eq.RHS <- paste("rcs.x", 1:ncol(rcs.logit.pred), sep = "", collapse = "+")
+      eq.RHS <- paste("rcs.x", 1:ncol(rcs.plotdat), sep = "", collapse = "+")
       eq.rcs <- stats::formula(paste(eq.LHS, eq.RHS, sep = ""))
 
       ## Fit the model
-      rcs.model <- glm(eq.rcs, data = data.rcs, family = gaussian(link = "logit"), start = rep(0, ncol(rcs.pred) + 1))
+      rcs.model <- stats::glm(eq.rcs, data = data.rcs, family = stats::gaussian(link = "logit"), start = rep(0, ncol(rcs.pred) + 1))
 
       ## Calculate predicted observed probabilities (and confidence intervals if requested using parametric approach)
       ## Note we do not calculate standard errors if confidence interval has been requested using the bootstrap
@@ -843,8 +849,8 @@ calc_calib_pv <- function(data.mstate,
           alpha <- (1-CI/100)/2
           ## Put into dataframe
           obs.data <- data.frame("obs" = 1/(1+exp(-obs$fit)),
-                                 "lower" = 1/(1+exp(-(obs$fit - qnorm(1-alpha)*obs$se.fit))),
-                                 "upper" = 1/(1+exp(-(obs$fit + qnorm(1-alpha)*obs$se.fit)))
+                                 "lower" = 1/(1+exp(-(obs$fit - stats::qnorm(1-alpha)*obs$se.fit))),
+                                 "upper" = 1/(1+exp(-(obs$fit + stats::qnorm(1-alpha)*obs$se.fit)))
           )
         }
 
@@ -950,10 +956,13 @@ calc_calib_pv <- function(data.mstate,
         ### Assign state.k
         state.k <- transitions.out[state]
 
+        ### Print progress
+        print(paste("Beginning bootstrapping for state = ", state.k, Sys.time()))
+
         ### Put function through bootstrap
         boot.obs <- boot::boot(data.raw,
                                calib_pseudo_func,
-                               R = 2,
+                               R = CI.R.boot,
                                data.mstate = data.mstate,
                                transitions.out = state.k,
                                boot.format = TRUE)

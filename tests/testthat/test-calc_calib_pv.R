@@ -381,7 +381,7 @@ test_that("check calc_calib_pv output, (j = 3, s = 100), curve.type = rcs, CI.ty
 
 })
 
-### Run tests for when curve.type = "rcs" and CI.type = "bootstrap".
+### Run tests for when curve.type = "rcs" and CI.type = "parametric".
 test_that("check calc_calib_pv output, (j = 3, s = 100), curve.type = rcs, CI.type = parametric.", {
 
   ## Extract relevant predicted risks from tps0

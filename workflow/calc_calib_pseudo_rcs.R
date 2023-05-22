@@ -68,7 +68,7 @@ calc_calib_pv <- function(data.mstate,
   ### Error if CI requested by CI.type ignored
   if (CI != FALSE & is.null(CI.type)){
     stop("Confidence interval requested but CI.type not specified. Choose either 'parametric' or 'bootstrap'.
-         IF curve.type = 'loess', CI.type cannot be equal to 'parametric'.")
+         If curve.type = 'loess', CI.type cannot be equal to 'parametric'.")
   }
 
   if (!is.null(CI.type) & !(CI.type %in% c("parametric", "bootstrap"))){

@@ -191,5 +191,5 @@ test_that("check calc_calib_pv output, (j = 3, s = 100), curve.type = loess", {
   expect_equal(dat.calib.pv.1[["plotdata"]][[1]]$obs, dat.calib.pv.10[["plotdata"]][[1]]$obs)
   expect_equal(dat.calib.pv.1[["plotdata"]][[1]]$pred, dat.calib.pv.10[["plotdata"]][[1]]$pred)
 
-}
+})
 

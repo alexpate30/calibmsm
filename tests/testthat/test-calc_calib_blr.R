@@ -1,7 +1,7 @@
 test_that("check calc_calib_blr output, (j = 1, s = 0), curve.type = rcs", {
 
   ## Extract relevant predicted risks from tps0
-  tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
+  tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), dplyr::any_of(paste("pstate", 1:6, sep = "")))
 
   ## Calculate observed event probabilities
   dat.calib.blr <-

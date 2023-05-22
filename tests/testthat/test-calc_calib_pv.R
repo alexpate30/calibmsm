@@ -1,7 +1,7 @@
 test_that("check calc_calib_pv output, (j = 3, s = 100), curve.type = loess", {
 
   ## Extract relevant predicted risks from tps0
-  tp.pred <- dplyr::select(dplyr::filter(tps100, j == 3), any_of(paste("pstate", 1:6, sep = "")))
+  tp.pred <- dplyr::select(dplyr::filter(tps100, j == 3), dplyr::any_of(paste("pstate", 1:6, sep = "")))
 
   ## Calculate observed event probabilities using transitions.out = NULL
   dat.calib.pv.1 <- calc_calib_pv(data.mstate = msebmtcal,

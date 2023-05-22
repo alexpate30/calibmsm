@@ -169,7 +169,6 @@ calc_pv_aj <- function(person_id.eval, data.mstate, obs.aj, tmat, n.cohort, t.ev
 #'
 #' #'
 #' @export
-### Define a function to calculate the calibration plot data for a cohort of individuals
 calc_calib_pv <- function(data.mstate,
                           data.raw,
                           j,

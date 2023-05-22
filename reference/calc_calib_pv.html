@@ -67,11 +67,14 @@ in combination with inverse probability of censoring weights and landmarking.</p
 <span>  <span class="va">s</span>,</span>
 <span>  <span class="va">t.eval</span>,</span>
 <span>  <span class="va">tp.pred</span>,</span>
-<span>  group.vars <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  n.pctls <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  curve.type <span class="op">=</span> <span class="st">"rcs"</span>,</span>
+<span>  rcs.nk <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  loess.span <span class="op">=</span> <span class="fl">0.75</span>,</span>
 <span>  loess.degree <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  group.vars <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  n.pctls <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  CI <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  CI.type <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  CI.R.boot <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  data.pred.plot <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  transitions.out <span class="op">=</span> <span class="cn">NULL</span></span>
@@ -104,12 +107,12 @@ in combination with inverse probability of censoring weights and landmarking.</p
 <dd><p>Matrix of predicted transition probabilities at time t.eval, if in state j at time s. There must be a seperate column for the predicted transition probabilities into every state, even if these predicted transition probabilities are 0.</p></dd>
 
 
-<dt>group.vars</dt>
-<dd><p>Baseline variables to define groups within which to estimate pseudo-values</p></dd>
+<dt>curve.type</dt>
+<dd><p>Whether calibration curves are estimated using restricted cubic splines ('rcs') or loess smoothers ('loess')</p></dd>
 
 
-<dt>n.pctls</dt>
-<dd><p>Number of percentiles to group individuals by with respect to predicted transition probabilities when estimating pseudo-values</p></dd>
+<dt>rcs.nk</dt>
+<dd><p>Number of knots when curves are estimated using restricted cubic splines</p></dd>
 
 
 <dt>loess.span</dt>
@@ -120,12 +123,24 @@ in combination with inverse probability of censoring weights and landmarking.</p
 <dd><p>Degree when curves are estimated. using loess smoothers</p></dd>
 
 
+<dt>group.vars</dt>
+<dd><p>Baseline variables to define groups within which to estimate pseudo-values</p></dd>
+
+
+<dt>n.pctls</dt>
+<dd><p>Number of percentiles to group individuals by with respect to predicted transition probabilities when estimating pseudo-values</p></dd>
+
+
 <dt>CI</dt>
 <dd><p>Size of confidence intervals as a %</p></dd>
 
 
+<dt>CI.type</dt>
+<dd><p>Way confidence interval is calculated (<code>bootstrap</code> or <code>parametric</code>)</p></dd>
+
+
 <dt>CI.R.boot</dt>
-<dd><p>Number of bootstrap replicates when estimating the confidence interval for the calibration curve</p></dd>
+<dd><p>Number of bootstrap replicates when estimating the confidence interval for the calibration curve using bootstrapping</p></dd>
 
 
 <dt>data.pred.plot</dt>
@@ -192,7 +207,7 @@ Confidence intervals for the calibration curves can be estimated using bootstrap
 <span class="r-in"><span>  group.vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  n.pctls <span class="op">=</span> <span class="fl">2</span>,</span></span>
 <span class="r-in"><span>  loess.span <span class="op">=</span> <span class="fl">0.75</span>, loess.degree <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in if (!is.null(CI.type) &amp; !(CI.type %in% c("parametric", "bootstrap"))) {    stop("CI.type must be 'parametric' or 'bootstrap'.")}:</span> argument is of length zero</span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in if (CI.type == "bootstrap" &amp; is.null(CI.R.boot)) {    stop("Must specify number of bootstrap replicates for confidence interval using CI.R.boot.")}:</span> argument is of length zero</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># The data for each calibration curve are stored in the "plotdata" list</span></span></span>
 <span class="r-in"><span><span class="co"># element.</span></span></span>

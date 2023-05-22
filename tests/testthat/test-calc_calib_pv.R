@@ -598,7 +598,7 @@ test_that("check calc_calib_pv output, (j = 3, s = 100), groups.vars and n.pctls
                                   t.eval = 1826,
                                   tp.pred = tp.pred,
                                   curve.type = "rcs",
-                                  group.vars = c("year")
+                                  group.vars = c("year"),
                                   data.pred.plot = NULL, transitions.out = NULL)
 
   expect_equal(ncol(dat.calib.pv.2[["plotdata"]][[1]]), 3)

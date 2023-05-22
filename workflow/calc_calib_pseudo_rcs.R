@@ -1,3 +1,6 @@
+
+load_all()
+
 calc_calib_pv <- function(data.mstate,
                           data.raw,
                           j,
@@ -6,9 +9,12 @@ calc_calib_pv <- function(data.mstate,
                           tp.pred,
                           group.vars = NULL,
                           n.pctls = NULL,
+                          curve.type = "rcs",
                           loess.span = 0.75,
                           loess.degree = 2,
+                          rcs.nk = 3,
                           CI = FALSE,
+                          CI.type = NULL,
                           CI.R.boot = NULL,
                           data.pred.plot = NULL,
                           transitions.out = NULL){
@@ -43,6 +49,7 @@ calc_calib_pv <- function(data.mstate,
   loess.span <- 0.75
   loess.degree <- 2
   CI <- FALSE
+  CI.type <- parametric
   CI.R.boot <- 2
   rcs.nk <- 3
   curve.type <- "rcs"
@@ -57,6 +64,22 @@ calc_calib_pv <- function(data.mstate,
 
   ###
   ### Warnings and errors
+
+  ### Error if CI requested by CI.type ignored
+  if (CI != FALSE & is.null(CI.type)){
+    stop("Confidence interval requested but CI.type not specified. Choose either 'parametric' or 'bootstrap'.
+         IF curve.type = 'loess', CI.type cannot be equal to 'parametric'.")
+  }
+
+  if (!is.null(CI.type) & !(CI.type %in% c("parametric", "bootstrap"))){
+    stop("CI.type must be 'parametric' or 'bootstrap'.")
+  }
+
+  if (!is.null(transitions.out)){
+    if (sum(c(colSums(tp.pred) == 0)[transitions.out] == TRUE) > 0){
+      stop("Calibraiton curves have been requested for transitions into states which have zero probability of occuring.")
+    }
+  }
 
   ### Check if transitions.out is only specified for non-zero columns
   if (!is.null(transitions.out)){
@@ -122,7 +145,7 @@ calc_calib_pv <- function(data.mstate,
   }
 
   ###
-  ### calib_pseudo_boot_func calculates the calibration curves by estimating observed event probabilities
+  ### calib_pseudo_func calculates the calibration curves by estimating observed event probabilities
   ### through the pseudo-value approach. It is written in a way to allow bootstrapping to be applied.
   ### If the argument indices is specified to be 1:nrow(data.raw), this will result in the calibration curve
   ### for data.raw with no bootstrapping applied.
@@ -137,7 +160,7 @@ calc_calib_pv <- function(data.mstate,
   ### This allows us to use the same function to generate observed event probabilities, whether
   ### a confidence interval has been requested via bootstrapping or not.
 
-  calib_pseudo_boot_func <- function(data.raw, indices, data.mstate, transitions.out, boot.format = FALSE){
+  calib_pseudo_func <- function(data.raw, indices, data.mstate, transitions.out, boot.format = FALSE){
 
     ### If boot.format = TRUE and requested more than one state, stop
     if (boot.format == TRUE & (length(transitions.out) > 1)){
@@ -587,9 +610,10 @@ calc_calib_pv <- function(data.mstate,
 
       ### Created observed event probabilities for each individual
       obs <- predict(loess.model, newdata = plotdat)
+      obs.data <- data.frame("obs" = obs)
 
-      ### Only return observed
-      return(obs)
+      ### Return obs.data
+      return(obs.data)
 
     }
 
@@ -597,65 +621,62 @@ calc_calib_pv <- function(data.mstate,
     ### Define function to calculate observed event probabilities/calibration plot data,
     ### for given set of pseudo-values (pv) and predicted risks (pred), using a logit link
     ### function and restricted cubic splines
-    pred <-
-
-      data.raw.lmk.js[,paste("tp.pred", 3, sep = "")]
-    calc_obs_loess_func <- function(pred, pv, plotdat){
-      rcs.nk <- 3
-      pred <- data.raw.lmk.js[,paste("tp.pred", 3, sep = "")]
-      pv <- pv.out[,paste("pstate", state.k, sep = "")]
-      plotdat <- data.pred.plot[,paste("tp.pred", 3, sep = "")]
-pred == plotdat
-      ### Start by taking logit of the predicted risks (and predicted risks for plotting)
-      logit.pred <- log(pred/(1-pred))
-      logit.plotdat <- log(plotdat/(1-plotdat))
+    calc_obs_rcs_func <- function(pred, pv, plotdat, rcs.nk){
+      # rcs.nk <- 3
+      # pred <- data.raw.lmk.js[,paste("tp.pred", 3, sep = "")]
+      # pv <- pv.out[,paste("pstate", state.k, sep = "")]
+      # plotdat <- data.pred.plot[,paste("tp.pred", 3, sep = "")]
 
       ### Create spline terms based on predicted risks
-      rcs.logit.pred <- Hmisc::rcspline.eval(logit.pred, nk=rcs.nk, inclx=T)
-      colnames(rcs.logit.pred) <- paste("rcs.x", 1:ncol(rcs.logit.pred), sep = "")
-      knots <- attr(rcs.logit.pred,"knots")
-
-
-      ### Create spline terms based on predicted risks
-        rcs.pred <- Hmisc::rcspline.eval(pred, nk=rcs.nk, inclx=T)
-        colnames(rcs.pred) <- paste("rcs.x", 1:ncol(rcs.pred), sep = "")
-        knots.pred <- attr(rcs.pred,"knots")
-
+      rcs.pred <- Hmisc::rcspline.eval(pred, nk=rcs.nk, inclx=T)
+      colnames(rcs.pred) <- paste("rcs.x", 1:ncol(rcs.pred), sep = "")
+      knots.pred <- attr(rcs.pred,"knots")
 
       ### Create spline terms in plotdat (using same knot locations derived from the predicted risks)
       ### Note that if plotdat == pred, these will be the same
-      rcs.logit.plotdat <- data.frame(Hmisc::rcspline.eval(logit.plotdat ,knots = knots, inclx=T))
-      colnames(rcs.logit.plotdat) <- paste("rcs.x", 1:ncol(rcs.logit.plotdat), sep = "")
-
-        rcs.plotdat <- data.frame(Hmisc::rcspline.eval(plotdat ,knots = knots.pred, inclx=T))
-        colnames(rcs.plotdat) <- paste("rcs.x", 1:ncol(rcs.plotdat), sep = "")
+      rcs.plotdat <- data.frame(Hmisc::rcspline.eval(plotdat ,knots = knots.pred, inclx=T))
+      colnames(rcs.plotdat) <- paste("rcs.x", 1:ncol(rcs.plotdat), sep = "")
 
       ### Create dataset in which to fit the model
-      data.logit.rcs <- data.frame("pv" = pv, rcs.logit.pred)
       data.rcs <- data.frame("pv" = pv, rcs.pred)
 
-       ### Define equation
+      ### Define equation
       eq.LHS <- paste("pv ~ ", sep = "")
       eq.RHS <- paste("rcs.x", 1:ncol(rcs.logit.pred), sep = "", collapse = "+")
       eq.rcs <- stats::formula(paste(eq.LHS, eq.RHS, sep = ""))
 
       ## Fit the model
-      rcs.logit.model <- lm(eq.rcs, data = data.logit.rcs)
-      rcs.model <- lm(eq.rcs, data = data.rcs)
+      rcs.model <- glm(eq.rcs, data = data.rcs, family = gaussian(link = "logit"), start = rep(0, ncol(rcs.pred) + 1))
 
-      ## Calculate predicted observed probabilities
-      rcs.logit.pred.obs <- predict(rcs.logit.model, newdata = rcs.logit.plotdat, type = "response")
-      rcs.pred.obs <- predict(rcs.model, newdata = rcs.plotdat, type = "response")
+      ## Calculate predicted observed probabilities (and confidence intervals if requested using parametric approach)
+      ## Note we do not calculate standard errors if confidence interval has been requested using the bootstrap
+      if (CI == FALSE){
+        ## Predict observed
+        obs <- predict(rcs.model, newdata = rcs.plotdat, type = "link")
+        ## Put into dataframe
+        obs.data <- data.frame("obs" = 1/(1+exp(-obs)))
+      } else if (CI != FALSE){
+        if (CI.type == "bootstrap"){
+          ## Predict observed
+          obs <- predict(rcs.model, newdata = rcs.plotdat, type = "link")
+          ## Put into dataframe
+          obs.data <- data.frame("obs" = 1/(1+exp(-obs)))
+        } else if (CI.type == "parametric"){
+          ## Predict observed
+          obs <- predict(rcs.model, newdata = rcs.plotdat, type = "link", se.fit = TRUE)
+          ## Define alpha for CIs
+          alpha <- (1-CI/100)/2
+          ## Put into dataframe
+          obs.data <- data.frame("obs" = 1/(1+exp(-obs$fit)),
+                                 "lower" = 1/(1+exp(-(obs$fit - qnorm(1-alpha)*obs$se.fit))),
+                                 "upper" = 1/(1+exp(-(obs$fit + qnorm(1-alpha)*obs$se.fit)))
+          )
+        }
 
-      head(rcs.logit.pred.obs)
-      head(rcs.pred.obs)
-rcs.pred.obs
-      ## Convert back onto appropriate scale
-      ### Created observed event probabilities for each individual
-      obs <- predict(loess.model, newdata = plotdat)
+      }
 
-      ### Only return observed
-      return(obs)
+      ### Return obs.data
+      return(obs.data)
 
     }
 
@@ -676,19 +697,28 @@ rcs.pred.obs
       state.k <- transitions.out[state]
 
       ### Calculate observed event probabilities
-      obs <- calc_obs_loess_func(pred = data.raw.lmk.js[,paste("tp.pred", state.k, sep = "")],
+      if (curve.type == "loess"){
+        obs <- calc_obs_loess_func(pred = data.raw.lmk.js[,paste("tp.pred", state.k, sep = "")],
+                                   pv = pv.out[,paste("pstate", state.k, sep = "")],
+                                   plotdat = data.pred.plot[,paste("tp.pred", state.k, sep = "")])
+      } else if (curve.type == "rcs"){
+        obs <- calc_obs_rcs_func(pred = data.raw.lmk.js[,paste("tp.pred", state.k, sep = "")],
                                  pv = pv.out[,paste("pstate", state.k, sep = "")],
-                                 plotdat = data.pred.plot[,paste("tp.pred", state.k, sep = "")])
+                                 plotdat = data.pred.plot[,paste("tp.pred", state.k, sep = "")],
+                                 rcs.nk = rcs.nk)
+      }
 
       ### Create output object
       if (manual.data.pred.plot == FALSE) {
-        output.object[[state]] <- data.frame("id" = id.lmk.js,
-                                             "pred" = data.pred.plot[,paste("tp.pred", state.k, sep = "")],
-                                             "obs" = obs)
+        output.object[[state]] <- data.frame(
+          "id" = id.lmk.js,
+          "pred" = data.pred.plot[,paste("tp.pred", state.k, sep = "")],
+          obs)
+
       } else if (manual.data.pred.plot == TRUE) {
         output.object[[state]] <- data.frame(
           "pred" = data.pred.plot[,paste("tp.pred", state.k, sep = "")],
-          "obs" = obs)
+          obs)
       }
 
     }
@@ -705,78 +735,96 @@ rcs.pred.obs
 
   ##############################################
   ##############################################
-  ### END OF FUNCTION calib_pseudo_boot_func ###
+  ### END OF FUNCTION calib_pseudo_func ###
   ##############################################
   ##############################################
 
   ###
   ### Create plotdata object (this contains the observed event probabilities/calibration plot data through
-  ### application of calib_pseudo_boot_func).
+  ### application of calib_pseudo_func).
 
-  ### If a confidence interval was not requested, run this function once, specifying indices to be
-  ### the sequence 1:nrow(data.raw), in order to calculate the plot data. If a confidence interval was requested,
-  ### use in conjuction with boot::boot.
+  ### 1) If a confidence interval was requested using bootstrapping, use calib_pseudo_func in conjuction with boot::boot.
+  ### This must be done separately for each state.
 
-  ### If a confidence interval has been specified, run the function through boot::boot seperately for
-  ### each state
-  if (CI == FALSE) {
+  ### 2) If a confidence interval was requested using parametric form, call calib_pseudo_func once, specifying indices to be
+  ### the sequence 1:nrow(data.raw), in order to calculate the plot data.
 
-    ### Run function
-    plotdata <- calib_pseudo_boot_func(data.raw = data.raw,
-                                       indices = 1:nrow(data.raw),
-                                       data.mstate = data.mstate,
-                                       transitions.out = transitions.out)
+  ### 3) If a confidence interval was not requested, call calib_pseudo_func once, specifying indices to be
+  ### the sequence 1:nrow(data.raw), in order to calculate the plot data.
 
-  } else if (CI != FALSE) {
+  ### Note that 2) and 3) are the same. This is because the function calib_pseudo_func is dependent on CI and CI.type,
+  ### which were defined as input into calc_calib_pv. They will there give different output (as they should) when it is run.
 
-    ### Define alpha for CI's
-    alpha <- (1-CI/100)/2
+  ### Note that if curve.type = "loess", a request for CI.type = "parametric" will be ignored and no CI is reported.
+  ### A stop error is given if a user tries to request this.
 
-    ### Create object to store plot data
-    plotdata <- vector("list", length(transitions.out))
+  ### If a confidence interval was not requested, run this function once,
+  if (CI != FALSE) {
 
-    ### Cycle through states
-    for (state in 1:length(transitions.out)){
+    if (CI.type == "bootstrap"){
 
-      ### Assign state.k
-      state.k <- transitions.out[state]
+      ### Define alpha for CI's
+      alpha <- (1-CI/100)/2
 
-      ### Put function through bootstrap
-      boot.obs <- boot::boot(data.raw,
-                             calib_pseudo_boot_func,
-                             R = 2,
-                             data.mstate = data.mstate,
-                             transitions.out = state.k,
-                             boot.format = TRUE)
+      ### Create object to store plot data
+      plotdata <- vector("list", length(transitions.out))
 
-      ### Extract confidence bands
-      lower <- apply(boot.obs$t, 2, stats::quantile, probs = alpha, na.rm = TRUE)
-      upper <- apply(boot.obs$t, 2, stats::quantile, probs = 1-alpha, na.rm = TRUE)
+      ### Cycle through states
+      for (state in 1:length(transitions.out)){
 
-      ### Produce a warning if any NA values
-      if(sum(is.na(boot.obs$t)) > 0){
-        print(paste("WARNING, SOME BOOTSTRAPPED OBSERVED RISKS WERE NA FOR STATE", transitions.out[state]))
-        print(paste("THERE ARE ", sum(apply(boot.obs$t, 1, function(x) {sum(is.na(x)) > 0})), " ITERATIONS WITH NA's FOR OBSERVED RISKS"))
-        print(paste("THE MEAN NUMBER OF NA's IN EACH ITERATION IS", mean(apply(boot.obs$t, 1, function(x) {sum(is.na(x))}))))
+        ### Assign state.k
+        state.k <- transitions.out[state]
+
+        ### Put function through bootstrap
+        boot.obs <- boot::boot(data.raw,
+                               calib_pseudo_func,
+                               R = 2,
+                               data.mstate = data.mstate,
+                               transitions.out = state.k,
+                               boot.format = TRUE)
+
+        ### Extract confidence bands
+        lower <- apply(boot.obs$t, 2, stats::quantile, probs = alpha, na.rm = TRUE)
+        upper <- apply(boot.obs$t, 2, stats::quantile, probs = 1-alpha, na.rm = TRUE)
+
+        ### Produce a warning if any NA values
+        if(sum(is.na(boot.obs$t)) > 0){
+          print(paste("WARNING, SOME BOOTSTRAPPED OBSERVED RISKS WERE NA FOR STATE", transitions.out[state]))
+          print(paste("THERE ARE ", sum(apply(boot.obs$t, 1, function(x) {sum(is.na(x)) > 0})), " ITERATIONS WITH NA's FOR OBSERVED RISKS"))
+          print(paste("THE MEAN NUMBER OF NA's IN EACH ITERATION IS", mean(apply(boot.obs$t, 1, function(x) {sum(is.na(x))}))))
+        }
+
+        ### Assign output
+        if (manual.data.pred.plot == FALSE) {
+          plotdata[[state]] <- data.frame("id" = id.lmk.js,
+                                          "pred" = data.pred.plot[,paste("tp.pred", state.k, sep = "")],
+                                          "obs" = boot.obs$t0,
+                                          "obs.lower" = lower,
+                                          "obs.upper" = upper)
+        } else if (manual.data.pred.plot == TRUE) {
+          plotdata[[state]] <- data.frame(
+            "pred" = data.pred.plot[,paste("tp.pred", state.k, sep = "")],
+            "obs" = boot.obs$t0,
+            "obs.lower" = lower,
+            "obs.upper" = upper)
+        }
       }
+    } else if (CI.type == "parametric"){
 
-      ### Assign output
-      if (manual.data.pred.plot == FALSE) {
-        plotdata[[state]] <- data.frame("id" = id.lmk.js,
-                                        "pred" = data.pred.plot[,paste("tp.pred", state.k, sep = "")],
-                                        "obs" = boot.obs$t0,
-                                        "obs.lower" = lower,
-                                        "obs.upper" = upper)
-      } else if (manual.data.pred.plot == TRUE) {
-        plotdata[[state]] <- data.frame(
-          "pred" = data.pred.plot[,paste("tp.pred", state.k, sep = "")],
-          "obs" = boot.obs$t0,
-          "obs.lower" = lower,
-          "obs.upper" = upper)
-      }
-
-
+      ### Note that calib_pseudo_func is dependent on curve.type and CI.type, parameters input to calc_calib_pv
+      plotdata <- calib_pseudo_func(data.raw = data.raw,
+                                    indices = 1:nrow(data.raw),
+                                    data.mstate = data.mstate,
+                                    transitions.out = transitions.out)
     }
+
+  } else if (CI == FALSE) {
+
+    ### Calculate calibration plot data
+    plotdata <- calib_pseudo_func(data.raw = data.raw,
+                                  indices = 1:nrow(data.raw),
+                                  data.mstate = data.mstate,
+                                  transitions.out = transitions.out)
 
   }
 
@@ -785,6 +833,7 @@ rcs.pred.obs
   metadata <- list("valid.transitions" = as.numeric(valid.transitions),
                    "assessed.transitions" = as.numeric(transitions.out),
                    "CI" = CI,
+                   "CI.type" = CI.type,
                    "CI.R.boot" = CI.R.boot,
                    "j" = j,
                    "s" = s,

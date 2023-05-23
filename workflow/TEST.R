@@ -7,6 +7,7 @@ b <- 4
 rm(list=ls())
 load_all()
 devtools::check()
+devtools::install()
 ?calibmsm::calc_calib_mlr
 testhaschanged <- 1
 whyisntworkflowbeingrecognised <- 3

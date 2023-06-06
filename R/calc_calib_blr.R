@@ -306,7 +306,7 @@ data.pred.plot$id <- 1:nrow(data.pred.plot)
 
     # data.boot <- data.raw
     # state.k <- 1
-    data.in.uncens = data.pred.plot
+    # data.in.uncens = data.raw.lmk.js.uncens
 
     ## Create landmarked dataset
     data.boot.lmk.js <-  data.boot %>% base::subset(id %in% ids.state.js)
@@ -362,11 +362,10 @@ data.pred.plot$id <- 1:nrow(data.pred.plot)
       }
     )
 
-    ## Create predicted observed probabilities. Create predictions for the vector of predicted probabilities for uncensored individuals from original dataset.
-
-    ## Calculate predicted observed probabilities
+    ## Create predicted observed probabilities.
     if (is.null(data.pred.plot)){
 
+      ## Create predictions for the vector of predicted probabilities for uncensored individuals from original dataset.
       ## For this, need to calculate the correct splines for the original dataset.
       rcs.mat.data.in.uncens <- Hmisc::rcspline.eval(data.in.uncens[,paste("tp.pred.logit", state.k, sep = "")],knots = knots,inclx=T)
       colnames(rcs.mat.data.in.uncens) <- paste("rcs.x", 1:ncol(rcs.mat), sep = "")
@@ -377,6 +376,7 @@ data.pred.plot$id <- 1:nrow(data.pred.plot)
 
       ## Calculate predicted observed probabilities
       rcs.pred.obs <- predict(rcs.model, newdata = data.in.uncens, type = "fitted")
+
     } else {
       ## Create spline terms for data.pred.plot
       rcs.mat.data.pred.plot <- Hmisc::rcspline.eval(data.pred.plot[,paste("tp.pred.logit", state.k, sep = "")],knots = knots,inclx=T)

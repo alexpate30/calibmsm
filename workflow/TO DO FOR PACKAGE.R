@@ -6,3 +6,4 @@
 ### 4) Anything to do around sub-models? i.e. re-write the supp_gcc program
 ### 5) Rewrite supplementary material (in particulkar think pseudo values ones should be removed?)
 ### DONE 6) Add more tests for pseudo-values when rcs type curve is included
+### 7) Add more warnings. A) Is data.mstaet and data.raw got the same id's?

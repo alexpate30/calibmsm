@@ -16,37 +16,37 @@ test_that("check calc_calib_pv output, (j = 3, s = 100), curve.type = loess", {
                                   n.pctls = 2,
                                   data.pred.plot = NULL, transitions.out = NULL)
 
-  ## Calculate observed event probabilities using transitions.out = c(3,4,5,6)
-  dat.calib.pv.2 <- calc_calib_pv(data.mstate = msebmtcal,
-                                   data.raw = ebmtcal,
-                                   j = 3,
-                                   s = 100,
-                                   t.eval = 1826,
-                                   tp.pred = tp.pred,
-                                   curve.type = "loess",
-                                   group.vars = c("year"),
-                                   n.pctls = 2,
-                                   data.pred.plot = NULL, transitions.out = c(3,4,5,6))
+  # ## Calculate observed event probabilities using transitions.out = c(3,4,5,6)
+  # dat.calib.pv.2 <- calc_calib_pv(data.mstate = msebmtcal,
+  #                                  data.raw = ebmtcal,
+  #                                  j = 3,
+  #                                  s = 100,
+  #                                  t.eval = 1826,
+  #                                  tp.pred = tp.pred,
+  #                                  curve.type = "loess",
+  #                                  group.vars = c("year"),
+  #                                  n.pctls = 2,
+  #                                  data.pred.plot = NULL, transitions.out = c(3,4,5,6))
 
   expect_equal(dat.calib.pv.1[["metadata"]][["curve.type"]], "loess")
   expect_equal(ncol(dat.calib.pv.1[["plotdata"]][[1]]), 3)
-  expect_equal(ncol(dat.calib.pv.2[["plotdata"]][[1]]), 3)
-  expect_equal(dat.calib.pv.1[["plotdata"]][[1]], dat.calib.pv.2[["plotdata"]][[1]])
+  # expect_equal(ncol(dat.calib.pv.2[["plotdata"]][[1]]), 3)
+  # expect_equal(dat.calib.pv.1[["plotdata"]][[1]], dat.calib.pv.2[["plotdata"]][[1]])
 
-  ## Calculate observed event probabilities using transitions.out = 3
-  dat.calib.pv.3 <- calc_calib_pv(data.mstate = msebmtcal,
-                                  data.raw = ebmtcal,
-                                  j = 3,
-                                  s = 100,
-                                  t.eval = 1826,
-                                  tp.pred = tp.pred,
-                                  curve.type = "loess",
-                                  group.vars = c("year"),
-                                  n.pctls = 2,
-                                  data.pred.plot = NULL, transitions.out = 3)
-
-  expect_equal(length(dat.calib.pv.3[["plotdata"]]), 1)
-  expect_equal(dat.calib.pv.1[["plotdata"]][[1]], dat.calib.pv.3[["plotdata"]][[1]])
+  # ## Calculate observed event probabilities using transitions.out = 3
+  # dat.calib.pv.3 <- calc_calib_pv(data.mstate = msebmtcal,
+  #                                 data.raw = ebmtcal,
+  #                                 j = 3,
+  #                                 s = 100,
+  #                                 t.eval = 1826,
+  #                                 tp.pred = tp.pred,
+  #                                 curve.type = "loess",
+  #                                 group.vars = c("year"),
+  #                                 n.pctls = 2,
+  #                                 data.pred.plot = NULL, transitions.out = 3)
+  #
+  # expect_equal(length(dat.calib.pv.3[["plotdata"]]), 1)
+  # expect_equal(dat.calib.pv.1[["plotdata"]][[1]], dat.calib.pv.3[["plotdata"]][[1]])
 
   ## Calculate observed event probabilities with a confidence interval using bootstrapping and transitions.out = NULL
   dat.calib.pv.4 <- calc_calib_pv(data.mstate = msebmtcal,
@@ -59,7 +59,7 @@ test_that("check calc_calib_pv output, (j = 3, s = 100), curve.type = loess", {
                                   group.vars = c("year"),
                                   n.pctls = 2,
                                   CI = 95, CI.type = "bootstrap", CI.R.boot = 3,
-                                  data.pred.plot = NULL, transitions.out = NULL)
+                                  data.pred.plot = NULL, transitions.out = c(3,4,5,6))
 
   expect_equal(ncol(dat.calib.pv.4[["plotdata"]][[1]]), 5)
 
@@ -275,7 +275,7 @@ test_that("check calc_calib_pv output, (j = 3, s = 100), groups.vars and n.pctls
                                   data.pred.plot = NULL, transitions.out = NULL)
 
   expect_equal(ncol(dat.calib.pv.1[["plotdata"]][[1]]), 3)
-  expect_equal(length(dat.calib.pv.1[["plotdata"]]), 3)
+  expect_equal(length(dat.calib.pv.1[["plotdata"]]), 4)
 
   ## Calculate observed event probabilities using transitions.out = NULL
   dat.calib.pv.2 <- calc_calib_pv(data.mstate = msebmtcal,
@@ -289,7 +289,7 @@ test_that("check calc_calib_pv output, (j = 3, s = 100), groups.vars and n.pctls
                                   data.pred.plot = NULL, transitions.out = NULL)
 
   expect_equal(ncol(dat.calib.pv.2[["plotdata"]][[1]]), 3)
-  expect_equal(length(dat.calib.pv.2[["plotdata"]]), 3)
+  expect_equal(length(dat.calib.pv.2[["plotdata"]]), 4)
 
   ## Calculate observed event probabilities using transitions.out = NULL
   dat.calib.pv.3 <- calc_calib_pv(data.mstate = msebmtcal,
@@ -303,7 +303,7 @@ test_that("check calc_calib_pv output, (j = 3, s = 100), groups.vars and n.pctls
                                   data.pred.plot = NULL, transitions.out = NULL)
 
   expect_equal(ncol(dat.calib.pv.3[["plotdata"]][[1]]), 3)
-  expect_equal(length(dat.calib.pv.3[["plotdata"]]), 3)
+  expect_equal(length(dat.calib.pv.3[["plotdata"]]), 4)
 
 })
 

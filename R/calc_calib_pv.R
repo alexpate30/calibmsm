@@ -568,7 +568,7 @@ calc_calib_pv <- function(data.mstate,
 
       ### 3) Grouping only by predicted risk
 
-      ### Because we have to do this seperately for each state [in 1) and 2) we
+      ### Because we have to do this seperately for each state, [in 1) and 2) we
       ### just fitted a single AJ within each group for all states], this process will only loop through
       ### the transitions specified by transitions.out (or valid.transitions if unspecified)
 
@@ -831,8 +831,8 @@ calc_calib_pv <- function(data.mstate,
           alpha <- (1-CI/100)/2
           ## Put into dataframe
           obs.data <- data.frame("obs" = 1/(1+exp(-obs$fit)),
-                                 "lower" = 1/(1+exp(-(obs$fit - stats::qnorm(1-alpha)*obs$se.fit))),
-                                 "upper" = 1/(1+exp(-(obs$fit + stats::qnorm(1-alpha)*obs$se.fit)))
+                                 "obs.lower" = 1/(1+exp(-(obs$fit - stats::qnorm(1-alpha)*obs$se.fit))),
+                                 "obs.upper" = 1/(1+exp(-(obs$fit + stats::qnorm(1-alpha)*obs$se.fit)))
           )
         }
 
@@ -998,6 +998,7 @@ calc_calib_pv <- function(data.mstate,
   ### Create metadata object
   metadata <- list("valid.transitions" = as.numeric(valid.transitions),
                    "assessed.transitions" = as.numeric(transitions.out),
+                   "curve.type" = curve.type,
                    "CI" = CI,
                    "CI.type" = CI.type,
                    "CI.R.boot" = CI.R.boot,
@@ -1010,7 +1011,7 @@ calc_calib_pv <- function(data.mstate,
   output.object.comb <- list("plotdata" = plotdata, "metadata" = metadata)
 
   ### Assign calib_pseudo class
-  attr(output.object.comb, "class") <- "calib_psuedo"
+  attr(output.object.comb, "class") <- "calib_pv"
 
   return(output.object.comb)
 

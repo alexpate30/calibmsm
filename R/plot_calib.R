@@ -21,19 +21,19 @@ plot.calib_blr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL){
   ### Extract plot data and relevant metadata
   object.in <- x
   plot.data <- object.in[["plotdata"]]
-  valid.transitions <- object.in[["metadata"]][["valid.transitions"]]
+  assessed.transitions <- object.in[["metadata"]][["assessed.transitions"]]
   CI <- object.in[["metadata"]][["CI"]]
 
   if (CI != FALSE){
     ### Create list to store plots
-    plots.list <- vector("list", length(valid.transitions))
+    plots.list <- vector("list", length(assessed.transitions))
 
-    for (k in 1:length(valid.transitions)){
+    for (k in 1:length(assessed.transitions)){
       ### Assign plot data
       plot.data.k <- plot.data[[k]]
 
       ### Assign state of interest
-      state.k <- valid.transitions[k]
+      state.k <- assessed.transitions[k]
 
       ### Pivot longer to create data for ggplot and assign appropriate labels
       plot.data.k.longer <- tidyr::pivot_longer(plot.data.k, cols = c(obs, obs.upper, obs.lower), names_to = "line.group")
@@ -61,14 +61,14 @@ plot.calib_blr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL){
     }
   } else if (CI == FALSE){
     ### Create list to store plots
-    plots.list <- vector("list", length(valid.transitions))
-    for (k in 1:length(valid.transitions)){
+    plots.list <- vector("list", length(assessed.transitions))
+    for (k in 1:length(assessed.transitions)){
 
       ### Assign plot data
       plot.data.k <- plot.data[[k]]
 
       ### Assign state of interest
-      state.k <- valid.transitions[k]
+      state.k <- assessed.transitions[k]
 
       ### Create the plots
       plots.list[[k]] <- ggplot2::ggplot(data = plot.data.k %>% dplyr::arrange(pred) %>% dplyr::select(id, pred, obs)) +
@@ -127,14 +127,14 @@ plot.calib_mlr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL){
   ### Extract plot data and relevant metadata
   object.in <- x
   plot.data <- object.in[["plotdata"]]
-  valid.transitions <- object.in[["metadata"]][["valid.transitions"]]
+  assessed.transitions <- object.in[["metadata"]][["assessed.transitions"]]
 
   ### Create list to store plots
-  plots.list <- vector("list", length(valid.transitions))
-  for (k in 1:length(valid.transitions)){
+  plots.list <- vector("list", length(assessed.transitions))
+  for (k in 1:length(assessed.transitions)){
 
     ### Assign state of interest
-    state.k <- valid.transitions[k]
+    state.k <- assessed.transitions[k]
 
     ### Assign plot data
     plot.data.k <- plot.data[[k]]
@@ -196,19 +196,19 @@ plot.calib_pv <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL){
   ### Extract plot data and relevant metadata
   object.in <- x
   plot.data <- object.in[["plotdata"]]
-  valid.transitions <- object.in[["metadata"]][["valid.transitions"]]
+  assessed.transitions <- object.in[["metadata"]][["assessed.transitions"]]
   CI <- object.in[["metadata"]][["CI"]]
 
   if (CI != FALSE){
     ### Create list to store plots
-    plots.list <- vector("list", length(valid.transitions))
+    plots.list <- vector("list", length(assessed.transitions))
 
-    for (k in 1:length(valid.transitions)){
+    for (k in 1:length(assessed.transitions)){
       ### Assign plot data
       plot.data.k <- plot.data[[k]]
 
       ### Assign state of interest
-      state.k <- valid.transitions[k]
+      state.k <- assessed.transitions[k]
 
       ### Pivot longer to create data for ggplot and assign appropriate labels
       plot.data.k.longer <- tidyr::pivot_longer(plot.data.k, cols = c(obs, obs.upper, obs.lower), names_to = "line.group")
@@ -236,14 +236,14 @@ plot.calib_pv <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL){
     }
   } else if (CI == FALSE){
     ### Create list to store plots
-    plots.list <- vector("list", length(valid.transitions))
-    for (k in 1:length(valid.transitions)){
+    plots.list <- vector("list", length(assessed.transitions))
+    for (k in 1:length(assessed.transitions)){
 
       ### Assign plot data
       plot.data.k <- plot.data[[k]]
 
       ### Assign state of interest
-      state.k <- valid.transitions[k]
+      state.k <- assessed.transitions[k]
 
       ### Create the plots
       plots.list[[k]] <- ggplot2::ggplot(data = plot.data.k %>% dplyr::arrange(pred) %>% dplyr::select(id, pred, obs)) +

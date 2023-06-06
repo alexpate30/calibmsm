@@ -205,6 +205,7 @@ load_all()
 calc_calib_mlr
 devtools::check(vignettes = FALSE)
 devtools::install()
+devtools::test()
 .libPaths()
 calibmsm::
 

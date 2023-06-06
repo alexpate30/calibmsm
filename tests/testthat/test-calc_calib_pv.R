@@ -147,9 +147,9 @@ test_that("check calc_calib_pv output, (j = 3, s = 100), curve.type = loess", {
                                tmat = attributes(msebmtcal)$trans,
                                j = 3,
                                t.eval = 100)
-  data.pred.plot.in <- tps100 %>%
-    dplyr::filter(id %in% id.lmk) %>%
-    dplyr::filter(j == 3) %>%
+  data.pred.plot.in <- tps100 |>
+    dplyr::filter(id %in% id.lmk) |>
+    dplyr::filter(j == 3) |>
     dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
 
   ## No confidence interval

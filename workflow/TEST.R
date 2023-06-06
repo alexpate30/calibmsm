@@ -204,12 +204,14 @@ rm(list=ls())
 load_all()
 calc_calib_mlr
 devtools::check(vignettes = FALSE)
-devtools::install()
+
 devtools::test()
 .libPaths()
-
+devtools::install()
 testthat::test_file("tests/testthat/test-calc_calib_blr.R")
 testthat::test_file("tests/testthat/test-calc_calib_mlr.R")
+testthat::test_file("tests/testthat/test-weights.R")
+testthat::test_file("tests/testthat/test-calc_calib_pv.R")
 testthat::test_file("tests/testthat/test-plot_calib.R")
 
 load_all()

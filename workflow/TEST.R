@@ -207,7 +207,9 @@ devtools::check(vignettes = FALSE)
 devtools::install()
 devtools::test()
 .libPaths()
-calibmsm::
+
+testthat::test_file("tests/testthat/test-calc_calib_blr.R")
+
 
 load_all()
 dat.calib.mlr.j1.s0.s <- calc_calib_mlr(data.mstate = msebmtcal,

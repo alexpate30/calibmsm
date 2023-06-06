@@ -102,24 +102,26 @@ calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.t
                            weights = NULL, w.covs = NULL, w.landmark.type = "state", w.max = 10, w.stabilised = FALSE, w.max.follow = NULL, CI = FALSE, CI.R.boot = NULL,
                            data.pred.plot = NULL, transitions.out = NULL){
 
-# data.mstate <- msebmtcal
-# data.raw <- data.boot
-# j <- 1
-# j.in <- 1
-# s<-0
-# t.eval <- 1826
-# tp.pred = tps100 %>% dplyr::filter(j == 1) %>% dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
-# curve.type = "rcs"
-# rcs.nk = 3
-# weights <- weights.manual
-# w.covs = c("year", "agecl", "proph", "match")
-# w.landmark.type = "all"
-# w.max = 10
-# w.stabilised = FALSE
-# CI = FALSE
-# str(data.pred.plot)
-# data.pred.plot <- tps0 %>% dplyr::filter(j == j.in) %>% dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
-# data.pred.plot$id <- 1:nrow(data.pred.plot)
+  load_all()
+data.mstate <- msebmtcal
+data.raw <- ebmtcal
+j <- 1
+j.in <- 1
+s<-0
+t.eval <- 1826
+tp.pred = tps100 %>% dplyr::filter(j == 1) %>% dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
+curve.type = "rcs"
+rcs.nk = 3
+weights <- weights.manual
+w.covs = c("year", "agecl", "proph", "match")
+w.landmark.type = "state"
+w.max = 10
+w.stabilised = FALSE
+w.max.follow = NULL
+CI = FALSE
+str(data.pred.plot)
+data.pred.plot <- tps0 %>% dplyr::filter(j == j.in) %>% dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
+data.pred.plot$id <- 1:nrow(data.pred.plot)
 
   ###
   ### Warnings and errors
@@ -302,6 +304,10 @@ calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.t
     ## Create bootstrapped dataset
     data.boot <- data.in[indices, ]
 
+    # data.boot <- data.raw
+    # state.k <- 1
+    data.in.uncens = data.pred.plot
+
     ## Create landmarked dataset
     data.boot.lmk.js <-  data.boot %>% base::subset(id %in% ids.state.js)
 
@@ -358,16 +364,30 @@ calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.t
 
     ## Create predicted observed probabilities. Create predictions for the vector of predicted probabilities for uncensored individuals from original dataset.
 
-    ## For this, need to calculate the correct splines for the original dataset.
-    rcs.mat.data.in.uncens <- Hmisc::rcspline.eval(data.in.uncens[,paste("tp.pred.logit", state.k, sep = "")],knots = knots,inclx=T)
-    colnames(rcs.mat.data.in.uncens) <- paste("rcs.x", 1:ncol(rcs.mat), sep = "")
-    #attr(rcs.mat.data.in.uncens,"knots")
-
-    ## Add the cubic splines for logit of the predicted probability to data.in.uncens
-    data.in.uncens <- data.frame(cbind(data.in.uncens, rcs.mat.data.in.uncens))
-
     ## Calculate predicted observed probabilities
-    rcs.pred.obs <- predict(rcs.model, newdata = data.in.uncens, type = "fitted")
+    if (is.null(data.pred.plot)){
+
+      ## For this, need to calculate the correct splines for the original dataset.
+      rcs.mat.data.in.uncens <- Hmisc::rcspline.eval(data.in.uncens[,paste("tp.pred.logit", state.k, sep = "")],knots = knots,inclx=T)
+      colnames(rcs.mat.data.in.uncens) <- paste("rcs.x", 1:ncol(rcs.mat), sep = "")
+      #attr(rcs.mat.data.in.uncens,"knots")
+
+      ## Add the cubic splines for logit of the predicted probability to data.in.uncens
+      data.in.uncens <- data.frame(cbind(data.in.uncens, rcs.mat.data.in.uncens))
+
+      ## Calculate predicted observed probabilities
+      rcs.pred.obs <- predict(rcs.model, newdata = data.in.uncens, type = "fitted")
+    } else {
+      ## Create spline terms for data.pred.plot
+      rcs.mat.data.pred.plot <- Hmisc::rcspline.eval(data.pred.plot[,paste("tp.pred.logit", state.k, sep = "")],knots = knots,inclx=T)
+      colnames(rcs.mat.data.pred.plot) <- paste("rcs.x", 1:ncol(rcs.mat), sep = "")
+
+      ## Add to dataset
+      data.pred.plot <- data.frame(cbind(data.pred.plot, rcs.mat.data.pred.plot))
+
+      ## Calculate predicted observed probabilities
+      rcs.pred.obs <- predict(rcs.model, newdata = data.pred.plot, type = "fitted")
+    }
 
     return(rcs.pred.obs)
   }
@@ -458,16 +478,18 @@ calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.t
     ## Create predicted observed probabilities. Create predictions for the vector of predicted probabilities form the original model
     ## So that we always plot over the same range.
 
-    ## For this, need to calculate the correct splines for the original dataset.
-    rcs.mat.data.in.uncens <- Hmisc::rcspline.eval(data.in.uncens[,paste("tp.pred.logit", state.k, sep = "")],knots = knots,inclx=T)
-    colnames(rcs.mat.data.in.uncens) <- paste("rcs.x", 1:ncol(rcs.mat), sep = "")
-    #attr(rcs.mat.data.in.uncens,"knots")
-
-    ## Add the cubic splines for logit of the predicted probability to data.in.uncens
-    data.in.uncens <- data.frame(cbind(data.in.uncens, rcs.mat.data.in.uncens))
-
     ## Calculate predicted observed probabilities
     if (is.null(data.pred.plot)){
+
+      ## For this, need to calculate the correct splines for the original dataset.
+      rcs.mat.data.in.uncens <- Hmisc::rcspline.eval(data.in.uncens[,paste("tp.pred.logit", state.k, sep = "")],knots = knots,inclx=T)
+      colnames(rcs.mat.data.in.uncens) <- paste("rcs.x", 1:ncol(rcs.mat), sep = "")
+      #attr(rcs.mat.data.in.uncens,"knots")
+
+      ## Add the cubic splines for logit of the predicted probability to data.in.uncens
+      data.in.uncens <- data.frame(cbind(data.in.uncens, rcs.mat.data.in.uncens))
+
+      ## Calculate predicted observed probabilities
       rcs.pred.obs <- predict(rcs.model, newdata = data.in.uncens, type = "fitted")
     } else {
       ## Create spline terms for data.pred.plot

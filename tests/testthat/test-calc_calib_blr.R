@@ -237,7 +237,7 @@ test_that("check calc_calib_blr output, (j = 1, s = 0),
                  data.raw = ebmtcal,
                  t.eval = t.eval,
                  s = 0,
-                 landmark.type = "all",
+                 landmark.type = "state",
                  j = 1,
                  max.weight = 10,
                  stabilised = FALSE)
@@ -340,7 +340,7 @@ test_that("test warnings and errors", {
                  data.raw = ebmtcal,
                  t.eval = 1826,
                  s = 0,
-                 landmark.type = "all",
+                 landmark.type = "state",
                  j = 1,
                  max.weight = 10,
                  stabilised = FALSE)$ipcw[-1]

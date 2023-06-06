@@ -209,7 +209,8 @@ devtools::test()
 .libPaths()
 
 testthat::test_file("tests/testthat/test-calc_calib_blr.R")
-
+testthat::test_file("tests/testthat/test-calc_calib_mlr.R")
+testthat::test_file("tests/testthat/test-plot_calib.R")
 
 load_all()
 dat.calib.mlr.j1.s0.s <- calc_calib_mlr(data.mstate = msebmtcal,

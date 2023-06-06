@@ -127,14 +127,14 @@ plot.calib_mlr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL){
   ### Extract plot data and relevant metadata
   object.in <- x
   plot.data <- object.in[["plotdata"]]
-  assessed.transitions <- object.in[["metadata"]][["assessed.transitions"]]
+  valid.transitions <- object.in[["metadata"]][["valid.transitions"]]
 
   ### Create list to store plots
-  plots.list <- vector("list", length(assessed.transitions))
-  for (k in 1:length(assessed.transitions)){
+  plots.list <- vector("list", length(valid.transitions))
+  for (k in 1:length(valid.transitions)){
 
     ### Assign state of interest
-    state.k <- assessed.transitions[k]
+    state.k <- valid.transitions[k]
 
     ### Assign plot data
     plot.data.k <- plot.data[[k]]

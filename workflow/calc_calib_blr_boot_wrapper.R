@@ -1,5 +1,5 @@
 ### WRAPPER FOR CALC_CALB_BLR
-
+my_wrapper <- function(data.mstate, data.raw,)
 
 ### Start by defining predicted risks
   tp.pred <- tps100 %>%

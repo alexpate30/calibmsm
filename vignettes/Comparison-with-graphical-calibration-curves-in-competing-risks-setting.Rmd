@@ -96,7 +96,7 @@ plot.calibmsm.pv
 
 Finally we assess the calibration of this competing risks model using the graphical calibration curves approach of @Austin2022. A custom function is written to do this, which estimates the calibration curves and returns a list of plots using `ggplot2`.
 
-```{r}
+```{r, echo = FALSE}
 calc.calib.gcc.mod <- function(data.mstate, data.raw, j, s, t.eval, p.est, nk = 3){
 
         # data.mstate <- msebmtcal.cmprsk

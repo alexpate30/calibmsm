@@ -49,11 +49,6 @@
 #' @export
 calc_weights <- function(data.mstate, data.raw, covs = NULL, t.eval, s, landmark.type = "state", j = NULL, max.weight = 10, stabilised = FALSE, max.follow = NULL){
 
-  ### If individuals have specified landmark.type = "all" and specified a state j, warn that this will be ignored
-  if (landmark.type == "all" & !is.null(j)){
-    warning("landmark.type = 'all' means argument 'j' will be ignored. Model for estimating weights is fit in all individuals uncesored at time s.")
-  }
-
   ### Modify everybody to be censored after time t.eval, if a max.follow has been specified
   if(!is.null(max.follow)){
     if (max.follow == "t.eval"){

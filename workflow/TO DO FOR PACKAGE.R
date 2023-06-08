@@ -4,9 +4,9 @@
 ### DONE 2) Add tests for pseudo-values
 ### 3) Add a wrapper to help with confidence intervals for calc_calib_blr and calc_calib_mlr. Think I'm actually not going to do this, and allow people to specify their own weights function.
 ### 4) Anything to do around sub-models? i.e. re-write the supp_gcc program
-### 5) Rewrite supplementary material (in particulkar think pseudo values ones should be removed?)
+### DONE 5) Rewrite supplementary material (in particular think pseudo values ones should be removed?)
 ### DONE 6) Add more tests for pseudo-values when rcs type curve is included
-### 7) Add more warnings. A) Is data.mstaet and data.raw got the same id's? B) Remove warning about weights and landmark.all = "all", otherwise it comes up when we specify land.mark.type = "all"
+### 7) Add more warnings. A) Is data.mstate and data.raw got the same id's? B) Remove warning about weights and landmark.all = "all", otherwise it comes up when we specify land.mark.type = "all"
 ### 8) Change some terminology, A) remove the calc_ bits, B) change t.eval to t
 ### 9) Add the supplementary material gcc to the paper
 ### 10) Get rid of warnings in pv for when there are zero probability possible transitions

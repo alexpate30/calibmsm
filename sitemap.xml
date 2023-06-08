@@ -10,6 +10,9 @@
     <loc>https://alexpate30.github.io/calibmsm/LICENSE.html</loc>
   </url>
   <url>
+    <loc>https://alexpate30.github.io/calibmsm/articles/Comparison-with-graphical-calibration-curves-in-competing-risks-setting.html</loc>
+  </url>
+  <url>
     <loc>https://alexpate30.github.io/calibmsm/articles/index.html</loc>
   </url>
   <url>
@@ -49,6 +52,9 @@
     <loc>https://alexpate30.github.io/calibmsm/reference/index.html</loc>
   </url>
   <url>
+    <loc>https://alexpate30.github.io/calibmsm/reference/msebmtcal.cmprsk.html</loc>
+  </url>
+  <url>
     <loc>https://alexpate30.github.io/calibmsm/reference/msebmtcal.html</loc>
   </url>
   <url>
@@ -59,6 +65,9 @@
   </url>
   <url>
     <loc>https://alexpate30.github.io/calibmsm/reference/plot.calib_pv.html</loc>
+  </url>
+  <url>
+    <loc>https://alexpate30.github.io/calibmsm/reference/tp.cmprsk.j0.html</loc>
   </url>
   <url>
     <loc>https://alexpate30.github.io/calibmsm/reference/tps0.html</loc>

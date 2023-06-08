@@ -51,10 +51,8 @@ plot.calib_blr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL){
         ggplot2::geom_line(ggplot2::aes(x = pred, y = value, group = line.group, color = mapping)) +
         ggplot2::geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
         ggplot2::xlab("Predicted risk") + ggplot2::ylab("Observed risk") +
-        ggplot2::xlim(c(0, max(plot.data.k.longer$pred,
-                                plot.data.k.longer$value))) +
-        ggplot2::ylim(c(0, max(plot.data.k.longer$pred,
-                                plot.data.k.longer$value))) +
+        ggplot2::xlim(c(0, max(plot.data.k.longer$pred))) +
+        ggplot2::ylim(c(0, max(plot.data.k.longer$value))) +
         ggplot2::geom_rug(data = plot.data.k.longer %>% dplyr::arrange(pred) %>% dplyr::select(pred, line.group, value, mapping) %>% subset(line.group == "Calibration"),
                           ggplot2::aes(x = pred, y = value), col = grDevices::rgb(1, 0, 0, alpha = 0.3)) +
         ggplot2::ggtitle(paste("State ", state.k, sep = ""))
@@ -75,10 +73,8 @@ plot.calib_blr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL){
         ggplot2::geom_line(ggplot2::aes(x = pred, y = obs)) +
         ggplot2::geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
         ggplot2::xlab("Predicted risk") + ggplot2::ylab("Observed risk") +
-        ggplot2::xlim(c(0, max(plot.data.k$pred,
-                                plot.data.k$obs))) +
-        ggplot2::ylim(c(0, max(plot.data.k$pred,
-                                plot.data.k$obs))) +
+        ggplot2::xlim(c(0, max(plot.data.k$pred))) +
+        ggplot2::ylim(c(0, max(plot.data.k$obs))) +
         ggplot2::geom_rug(ggplot2::aes(x = pred, y = obs), col = grDevices::rgb(1, 0, 0, alpha = 0.3)) +
         ggplot2::theme(legend.position = "none") +
         ggplot2::ggtitle(paste("State ", state.k, sep = ""))
@@ -144,10 +140,8 @@ plot.calib_mlr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL){
       ggplot2::geom_point(ggplot2::aes(x = pred, y = obs), color = "red", size = 0.5) +
       ggplot2::geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
       ggplot2::xlab("Predicted risk") + ggplot2::ylab("Observed risk") +
-      ggplot2::xlim(c(0, max(plot.data.k$pred,
-                    plot.data.k$obs))) +
-      ggplot2::ylim(c(0, max(plot.data.k$pred,
-                    plot.data.k$obs))) +
+      ggplot2::xlim(c(0, max(plot.data.k$pred))) +
+      ggplot2::ylim(c(0, max(plot.data.k$obs))) +
       ggplot2::geom_rug(ggplot2::aes(x = pred, y = obs), col = grDevices::rgb(1, 0, 0, alpha = .3)) +
       ggplot2::theme(legend.position = "none") +
       ggplot2::ggtitle(paste("State ", state.k, sep = ""))
@@ -226,10 +220,8 @@ plot.calib_pv <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL){
         ggplot2::geom_line(ggplot2::aes(x = pred, y = value, group = line.group, color = mapping)) +
         ggplot2::geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
         ggplot2::xlab("Predicted risk") + ggplot2::ylab("Observed risk") +
-        ggplot2::xlim(c(0, max(plot.data.k.longer$pred,
-                               plot.data.k.longer$value))) +
-        ggplot2::ylim(c(0, max(plot.data.k.longer$pred,
-                               plot.data.k.longer$value))) +
+        ggplot2::xlim(c(0, max(plot.data.k.longer$pred))) +
+        ggplot2::ylim(c(0, max(plot.data.k.longer$value))) +
         ggplot2::geom_rug(data = plot.data.k.longer %>% dplyr::arrange(pred) %>% dplyr::select(pred, line.group, value, mapping) %>% subset(line.group == "Calibration"),
                           ggplot2::aes(x = pred, y = value), col = grDevices::rgb(1, 0, 0, alpha = 0.3)) +
         ggplot2::ggtitle(paste("State ", state.k, sep = ""))
@@ -250,10 +242,8 @@ plot.calib_pv <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL){
         ggplot2::geom_line(ggplot2::aes(x = pred, y = obs)) +
         ggplot2::geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
         ggplot2::xlab("Predicted risk") + ggplot2::ylab("Observed risk") +
-        ggplot2::xlim(c(0, max(plot.data.k$pred,
-                               plot.data.k$obs))) +
-        ggplot2::ylim(c(0, max(plot.data.k$pred,
-                               plot.data.k$obs))) +
+        ggplot2::xlim(c(0, max(plot.data.k$pred))) +
+        ggplot2::ylim(c(0, max(plot.data.k$obs))) +
         ggplot2::geom_rug(ggplot2::aes(x = pred, y = obs), col = grDevices::rgb(1, 0, 0, alpha = 0.3)) +
         ggplot2::theme(legend.position = "none") +
         ggplot2::ggtitle(paste("State ", state.k, sep = ""))

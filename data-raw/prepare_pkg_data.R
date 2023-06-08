@@ -1,12 +1,11 @@
-##################################################
-### Code to prepare datasets provided with package
-##################################################
+######################################################
+### Code to prepare datasets provided with package ###
+######################################################
 
 ### Load the ebmt4 dataset from mstate package and rename it
 ### Note that mstate is not an import for calibmsm, so this package may need to be installed.
 # install.packages("mstate")
 library(mstate)
-library(magrittr)
 data("ebmt4")
 ebmt <- ebmt4
 
@@ -80,7 +79,7 @@ for (id.iter in 1:nrow(ebmt)){
   ### Write a function to extract the transition probabilities from state j into each state, after followup time f.time
   extract.tp <- function(tp.object, state, f.time){
     ### Create output object
-    output.object <- as.numeric(base::subset(tp.object[[state]], time > f.time) %>% dplyr::slice(1) %>% dplyr::select(-c(time)))
+    output.object <- as.numeric(base::subset(tp.object[[state]], time > f.time) |> dplyr::slice(1) |> dplyr::select(-c(time)))
     return(output.object)
   }
 
@@ -138,7 +137,7 @@ for (id.iter in 1:nrow(ebmt)){
   ### Write a function to extract the transition probabilities from state j into each state, after followup time f.time
   extract.tp <- function(tp.object, state, f.time){
     ### Create output object
-    output.object <- as.numeric(base::subset(tp.object[[state]], time > f.time) %>% dplyr::slice(1) %>% dplyr::select(-c(time)))
+    output.object <- as.numeric(base::subset(tp.object[[state]], time > f.time) |> dplyr::slice(1) |> dplyr::select(-c(time)))
     return(output.object)
   }
 

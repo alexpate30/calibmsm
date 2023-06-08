@@ -203,7 +203,7 @@ getwd()
 rm(list=ls())
 load_all()
 calc_calib_mlr
-devtools::check(vignettes = FALSE)
+devtools::check(vignettes = FALSE, args = c("--no-tests"))
 
 devtools::test()
 .libPaths()
@@ -214,6 +214,7 @@ testthat::test_file("tests/testthat/test-weights.R")
 testthat::test_file("tests/testthat/test-calc_calib_pv.R")
 testthat::test_file("tests/testthat/test-plot_calib.R")
 
+library(calibmsm)
 load_all()
 dat.calib.mlr.j1.s0.s <- calc_calib_mlr(data.mstate = msebmtcal,
                                       data.raw = ebmtcal,
@@ -300,16 +301,29 @@ dat.calib.blr.j2.s100 <- calc_calib_blr(data.mstate = msebmtcal,
                                         rcs.nk = 3,
                                         w.covs = c("year", "agecl", "proph", "match"))
 
-dat.calib.blr.j3.s100 <- calc_calib_blr(data.mstate = msebmtcal,
+load_all()
+dat.calib.blr.j3.s100 <- calc_calib_pv(data.mstate = msebmtcal,
                                         data.raw = ebmtcal,
                                         j=3,
                                         s=100,
-                                        t.eval = t.eval,
-                                        tp.pred = tps100 %>% filter(j == 3) %>% select(any_of(paste("pstate", 1:6, sep = ""))),
+                                        t.eval = 1826,
+                                        tp.pred = tps100 %>% dplyr::filter(j == 3) %>% dplyr::select(any_of(paste("pstate", 1:6, sep = ""))),
                                         curve.type = "rcs",
                                         rcs.nk = 3,
-                                        w.covs = c("year", "agecl", "proph", "match"))
+                                       group.vars = c("year"),
+                                       n.pctls = 2)
 
+temp.func <- function(x){
+  if (x> 3){
+    warning("abcdefg")
+  }
+}
+grepl("abc", "abcdefg")
+
+temp.func(1)
+temp.func(4)
+warn.func <- function
+suppressWarnings(temp.func(4), .f = function(x){grepl("abc", x)})
 plot(dat.calib.blr.j1.s100, combine = TRUE, nrow = 2, ncol = 3)
 plot(dat.calib.blr.j2.s100, combine = TRUE, nrow = 2, ncol = 3)
 plot(dat.calib.blr.j3.s100, combine = TRUE, nrow = 2, ncol = 3)

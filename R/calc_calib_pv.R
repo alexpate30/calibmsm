@@ -21,10 +21,19 @@ calc_aj <- function(data.mstate, tmat, t.eval, j){
   csh.aj <- survival::coxph(survival::Surv(Tstart, Tstop, status) ~ strata(trans), data.mstate)
 
   ### Calculate cumulative incidence functions using the new transition matrix
-  msfit.aj <- mstate::msfit(csh.aj, trans = tmat)
+  suppressWarnings(
+    msfit.aj <- mstate::msfit(csh.aj, trans = tmat)
+  )
+    ### Note that warnings are suppressed because user will be warned if there are states which can possibly be moved to, but no individual
+    ### makes this transition, resulting in zero probabilities. For example in our vignette example, this happens when individuals are in
+    ### starting state for 100 days, by definition they can no longer have an adverse event, and mstate gives a warning:
+    ### "In max(x[!is.na(x)]) : no non-missing arguments to max; returning -Inf"
+    ### There are no problems with this, as it just returns a zero probability of being in that state in the next step (mstate::probtrans), which
+    ### A) is correct, and B) we aren't interested in those states anyway
 
   ### Calculate Aalen-Johansen estimator
   pt.aj <- mstate::probtrans(msfit.aj, predt = 0)
+
 
   ### Extract the closest time in the data to the time we want to evaluate at
   t.eval.dat <- pt.aj[[j]]$time[max(which(pt.aj[[j]]$time <= t.eval))]
@@ -233,8 +242,9 @@ calc_calib_pv <- function(data.mstate,
   #   ### apply a bootstrap temporarily
   #   data.raw <- data.raw[sample(1:nrow(data.raw), nrow(data.raw), replace = TRUE),]
 
-  ###
-  ### Warnings and errors
+  ###########################
+  ### Warnings and errors ###
+  ###########################
 
   ### Error if CI requested by CI.type ignored
   if (CI != FALSE & is.null(CI.type)){
@@ -277,8 +287,9 @@ calc_calib_pv <- function(data.mstate,
     }
   }
 
-  ###
-  ### Initialise inputted data
+  ################################
+  ### Initialise inputted data ###
+  ################################
 
   ### Assign colnames to predicted transition probabilities (and in data.pred.plot if specified)
   colnames(tp.pred) <- paste("tp.pred", 1:ncol(tp.pred), sep = "")
@@ -326,7 +337,14 @@ calc_calib_pv <- function(data.mstate,
 
   }
 
-  ###
+  ########################################################################
+  ### Create function to calculate pseudo-values for a cohort data.raw ###
+  ########################################################################
+
+  ### This functions has two steps:
+  ###   A) Calculate the pseudo values
+  ###   B) Calculate the observed event probabilities based off the pseudo-values
+
   ### calib_pseudo_func calculates the calibration curves by estimating observed event probabilities
   ### through the pseudo-value approach. It is written in a way to allow bootstrapping to be applied.
   ### If the argument indices is specified to be 1:nrow(data.raw), this will result in the calibration curve
@@ -459,9 +477,9 @@ calc_calib_pv <- function(data.mstate,
     ### Define max.state (note this be will the same as ncol(tmat))
     max.state <- ncol(tmat.lmk.js)
 
-    ###################################
-    ### CALCULATE THE PSEUDO VALUES ###
-    ###################################
+    ######################################
+    ### A) CALCULATE THE PSEUDO VALUES ###
+    ######################################
 
     ### Data must now be split up into groups defined by predictor variables and/or predicted risks
     ### Pseudo-values will be calculated seperately within each of these groups. We will also calculate
@@ -761,7 +779,14 @@ calc_calib_pv <- function(data.mstate,
     ### PSEUDO VALUES HAVE NOW BEEN CALCULATED ###
     ##############################################
 
+
+    #################################################
+    ### B) Calculate observed event probabilities ###
+    #################################################
+
     ###
+    ### Define a function to do this depending on whether loess or rcs was requested
+
     ### Define function to calculate observed event probabilities/calibration plot data,
     ### for given set of pseudo-values (pv) and predicted risks (pred) using loess smoothers
     calc_obs_loess_func <- function(pred, pv, plotdat){
@@ -844,7 +869,7 @@ calc_calib_pv <- function(data.mstate,
     }
 
     ###
-    ### Generate observed event probabilities for each state using the calculated pseudo-values
+    ### Now generate the observed event probabilities for each state using the calculated pseudo-values
     ### stored in pv.out, and the function for fitting the calibration model: calc_obs_loess_func
 
     ###
@@ -896,11 +921,11 @@ calc_calib_pv <- function(data.mstate,
 
   }
 
-  ##############################################
-  ##############################################
+  #########################################
+  #########################################
   ### END OF FUNCTION calib_pseudo_func ###
-  ##############################################
-  ##############################################
+  #########################################
+  #########################################
 
   ###
   ### Create plotdata object (this contains the observed event probabilities/calibration plot data through

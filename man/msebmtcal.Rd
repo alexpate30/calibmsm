@@ -24,6 +24,6 @@ A data frame with 15,512 rows and 8 columns:
 msebmtcal
 }
 \description{
-ebmt data in mstate format
+ebmt data in 'msdata' format, derived from the ebmt dataset using software from the mstate package
 }
 \keyword{datasets}

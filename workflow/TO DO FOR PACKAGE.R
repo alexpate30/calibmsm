@@ -13,6 +13,7 @@
 ### 11) Write vignette for producing confidence interval using your own method for estimating the weights
 ### 12) Add a function to allow users to prespecify their weights function within calc_calib_pv. This can be part of the vignette.
 ### 13) Add the robust sandwich-type estimator
+### 14) Why is package failing CMD check now?
 
 ### Notes to add to document
 ### 1) Verification of assumptions for each method

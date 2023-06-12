@@ -240,4 +240,6 @@ plot.gcc.rcs <- ggpubr::ggarrange(plotlist = plot.gcc.rcs.list)
 plot.gcc.rcs
 ```
 
-The only remaining thing to do is to compare them!!!!
+# Comarpsion of results
+
+Note that the graphical calibration curves approach does not provide a way to assess the calibration of state 1. The calibration of the transition probabilities into all other states is very similar irrespecive of the method used to assess calibration. This is with the exception of the calibration of the transition probabilities into state 3 when using the BLR-IPCW approach. Possible reasons for this are discussed in the main vignette REF XXXX.

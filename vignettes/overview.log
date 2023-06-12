@@ -1,12 +1,13 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2021.5.5)  5 MAY 2023 16:20
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/W32TeX) (preloaded format=pdflatex 2021.5.5)  12 JUN 2023 11:16
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **overview.tex
 (./overview.tex
 LaTeX2e <2020-10-01> patch level 4
-L3 programming layer <2021-02-18> (./jss.cls
-Document Class: jss 2021/05/23 3.3 jss class by Achim Zeileis
+L3 programming layer <2021-02-18>
+(c:/Program Files/R/R-4.3.0/share/texmf/tex/latex/jss.cls
+Document Class: jss 2023/03/05 3.4 jss class by Achim Zeileis
 (c:/texlive/2021/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2020/04/10 v1.4m Standard LaTeX document class
 (c:/texlive/2021/texmf-dist/tex/latex/base/size11.clo
@@ -65,12 +66,6 @@ Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
 )
-(c:/texlive/2021/texmf-dist/tex/latex/ae/ae.sty
-Package: ae 2001/02/12 1.3 Almost European Computer Modern
-
-(c:/texlive/2021/texmf-dist/tex/latex/base/fontenc.sty
-Package: fontenc 2020/08/10 v2.0s Standard LaTeX package
-))
 (c:/texlive/2021/texmf-dist/tex/latex/fancyvrb/fancyvrb.sty
 Package: fancyvrb 2021/01/20 v3.7 verbatim text (tvz,hv)
 \FV@CodeLineNo=\count187
@@ -82,12 +77,7 @@ Package: fancyvrb 2021/01/20 v3.7 verbatim text (tvz,hv)
 )
 (c:/texlive/2021/texmf-dist/tex/latex/base/fontenc.sty
 Package: fontenc 2020/08/10 v2.0s Standard LaTeX package
-LaTeX Font Info:    Trying to load font information for T1+aer on input line 11
-2.
-
-(c:/texlive/2021/texmf-dist/tex/latex/ae/t1aer.fd
-File: t1aer.fd 1997/11/16 Font definitions for T1/aer.
-))
+)
 (c:/texlive/2021/texmf-dist/tex/latex/upquote/upquote.sty
 Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verba
 tim
@@ -281,15 +271,11 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 \preSskip=\skip56
 \postMskip=\skip57
 \postSskip=\skip58
-
-
-Package hyperref Warning: Option `hyperindex' has already been used,
-(hyperref)                setting the option has no effect on input line 447.
-
 Package hyperref Info: Option `colorlinks' set `true' on input line 447.
 Package hyperref Info: Option `linktocpage' set `true' on input line 447.
 Package hyperref Info: Option `plainpages' set `false' on input line 447.
-) (c:/texlive/2021/texmf-dist/tex/generic/thumbpdf/thumbpdf.sty
+)
+(c:/texlive/2021/texmf-dist/tex/generic/thumbpdf/thumbpdf.sty
 Package: thumbpdf 2018/09/07 v3.17 Inclusion of thumbnails (HO)
 THUMBPDF: Compressed PDF objects of PDF 1.5 are not supported
 )
@@ -418,13 +404,13 @@ Package rerunfilecheck Info: File `overview.out' has not changed.
 (rerunfilecheck)             Checksum: 5FF821BA1F3AA30244DA7AE0E9463E9F;118.
  ) 
 Here is how much of TeX's memory you used:
- 9550 strings out of 478994
- 138474 string characters out of 5862208
- 439222 words of memory out of 5000000
- 26887 multiletter control sequences out of 15000+600000
- 451343 words of font info for 52 fonts, out of 8000000 for 9000
+ 9500 strings out of 478994
+ 137573 string characters out of 5862208
+ 439139 words of memory out of 5000000
+ 26845 multiletter control sequences out of 15000+600000
+ 449848 words of font info for 51 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 86i,9n,88p,220b,318s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 86i,9n,88p,214b,318s stack positions out of 5000i,500n,10000p,200000b,80000s
 {c:/texlive/2021/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}<c:/texlive/2021/tex
 mf-dist/fonts/type1/public/lm/lmbx10.pfb><c:/texlive/2021/texmf-dist/fonts/type
 1/public/lm/lmbx12.pfb><c:/texlive/2021/texmf-dist/fonts/type1/public/lm/lmr10.

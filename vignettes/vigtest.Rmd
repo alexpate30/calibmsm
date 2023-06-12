@@ -1,23 +1,16 @@
 ---
-title: "vigtest"
+title: "PDF Vignettes"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{vigtest}
+  %\VignetteIndexEntry{PDF Vignettes}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
+```{r, echo = FALSE}
+system('R CMD Sweave overview.Rnw')
+system('pdflatex overview.tex')
 ```
 
-```{r setup}
-library(calibmsm)
-```
+<!--- <iframe src="overview.pdf"/> -->
 
-TESTING VIGNETTE FOR WEBSITE - TURN THIS INTO SHORTER VIGNETTE FOR INITIAL SUBMISSION TO CRAN
-
-TESTING VIGNETTE UPDATE - IS IT AUTOMATIC WITHOUT NEED TO RENDER?
+[Vignette Number 1](overview.pdf){target="_blank"}

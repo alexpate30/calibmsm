@@ -24,16 +24,18 @@ calc_aj <- function(data.mstate, tmat, t.eval, j){
   suppressWarnings(
     msfit.aj <- mstate::msfit(csh.aj, trans = tmat)
   )
-    ### Note that warnings are suppressed because user will be warned if there are states which can possibly be moved to, but no individual
-    ### makes this transition, resulting in zero probabilities. For example in our vignette example, this happens when individuals are in
-    ### starting state for 100 days, by definition they can no longer have an adverse event, and mstate gives a warning:
-    ### "In max(x[!is.na(x)]) : no non-missing arguments to max; returning -Inf"
-    ### There are no problems with this, as it just returns a zero probability of being in that state in the next step (mstate::probtrans), which
-    ### A) is correct, and B) we aren't interested in those states anyway
 
   ### Calculate Aalen-Johansen estimator
+  suppressWarnings(
   pt.aj <- mstate::probtrans(msfit.aj, predt = 0)
+  )
 
+  ### Note that warnings are suppressed at both these stages because user will be warned if there are states which can possibly be moved to, but no individual
+  ### makes this transition, resulting in zero probabilities. For example in our vignette example, this happens when individuals are in
+  ### starting state for 100 days, by definition they can no longer have an adverse event, and mstate gives a warning:
+  ### "In max(x[!is.na(x)]) : no non-missing arguments to max; returning -Inf"
+  ### There are no problems with this, as it just returns a zero probability of being in that state in the next step (mstate::probtrans), which
+  ### A) is correct, and B) we aren't interested in those states anyway
 
   ### Extract the closest time in the data to the time we want to evaluate at
   t.eval.dat <- pt.aj[[j]]$time[max(which(pt.aj[[j]]$time <= t.eval))]

@@ -17,11 +17,13 @@ calc_calib_mlr(
   s.df = 4,
   niknots = 4,
   weights = NULL,
+  w.function = NULL,
   w.covs,
   w.landmark.type = "state",
   w.max = 10,
   w.stabilised = FALSE,
-  w.max.follow = NULL
+  w.max.follow = NULL,
+  ...
 )
 }
 \arguments{
@@ -49,6 +51,8 @@ calc_calib_mlr(
 
 \item{weights}{Vector of inverse probability of censoring weights}
 
+\item{w.function}{Custom function for estimating the inverse probability of censoring weights}
+
 \item{w.covs}{Character vector of variable names to adjust for when calculating inverse probability of censoring weights}
 
 \item{w.landmark.type}{Whether weights are estimated in all individuals uncensored at time s ('all') or only in individuals uncensored and in state j at time s ('state')}
@@ -58,6 +62,8 @@ calc_calib_mlr(
 \item{w.stabilised}{Indicates whether inverse probability of censoring weights should be stabilised or not}
 
 \item{w.max.follow}{Maximum follow up for model calculating inverse probability of censoring weights. Reducing this to \code{t.eval} + 1 may aid in the proportional hazards assumption being met in this model.}
+
+\item{...}{Extra arguments to be passed to w.function (custom function for estimating weights)}
 }
 \description{
 Creates the underlying data for the calibration plots. Observed event

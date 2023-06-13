@@ -16,6 +16,7 @@ calc_calib_blr(
   loess.span = 0.75,
   loess.degree = 2,
   weights = NULL,
+  w.function = NULL,
   w.covs = NULL,
   w.landmark.type = "state",
   w.max = 10,
@@ -24,7 +25,8 @@ calc_calib_blr(
   CI = FALSE,
   CI.R.boot = NULL,
   data.pred.plot = NULL,
-  transitions.out = NULL
+  transitions.out = NULL,
+  ...
 )
 }
 \arguments{
@@ -50,6 +52,8 @@ calc_calib_blr(
 
 \item{weights}{Vector of inverse probability of censoring weights}
 
+\item{w.function}{Custom function for estimating the inverse probability of censoring weights}
+
 \item{w.covs}{Character vector of variable names to adjust for when calculating inverse probability of censoring weights}
 
 \item{w.landmark.type}{Whether weights are estimated in all individuals uncensored at time s ('all') or only in individuals uncensored and in state j at time s ('state')}
@@ -67,6 +71,8 @@ calc_calib_blr(
 \item{data.pred.plot}{Data frame or matrix of predicted risks for each possible transition over which to plot the calibration curves. Must have one column for every possible transition.}
 
 \item{transitions.out}{Transitions for which to calculate calibration curves. Will do all possible transitions if left as NULL.}
+
+\item{...}{Extra arguments to be passed to w.function (custom function for estimating weights)}
 }
 \value{
 \code{\link{calc_calib_blr}} returns a list containing two elements:

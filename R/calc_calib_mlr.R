@@ -30,11 +30,13 @@
 #' @param degree the degree of B-spline basis in the vector spline smoother (see \code{\link[VGAM]{sm.ps}})
 #' @param niknots number of interior knots (see \code{\link[VGAM]{sm.os}})
 #' @param weights Vector of inverse probability of censoring weights
+#' @param w.function Custom function for estimating the inverse probability of censoring weights
 #' @param w.covs Character vector of variable names to adjust for when calculating inverse probability of censoring weights
 #' @param w.landmark.type Whether weights are estimated in all individuals uncensored at time s ('all') or only in individuals uncensored and in state j at time s ('state')
 #' @param w.max Maximum bound for inverse probability of censoring weights
 #' @param w.stabilised Indicates whether inverse probability of censoring weights should be stabilised or not
 #' @param w.max.follow Maximum follow up for model calculating inverse probability of censoring weights. Reducing this to `t.eval` + 1 may aid in the proportional hazards assumption being met in this model.
+#' @param ... Extra arguments to be passed to w.function (custom function for estimating weights)
 #'
 #' @details
 #' Observed event probabilities at time `t.eval` are estimated for predicted
@@ -103,7 +105,7 @@
 
 #' @export
 calc_calib_mlr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, smoother.type = "sm.ps", ps.int = 4, degree = 3, s.df = 4, niknots = 4,
-                           weights = NULL, w.covs, w.landmark.type = "state", w.max = 10, w.stabilised = FALSE, w.max.follow = NULL){
+                           weights = NULL, w.function = NULL, w.covs, w.landmark.type = "state", w.max = 10, w.stabilised = FALSE, w.max.follow = NULL, ...){
 
   # data.mstate <- msebmtcal
   # data.raw <- ebmtcal
@@ -119,6 +121,21 @@ calc_calib_mlr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, smoothe
   # w.max = 10
   # w.stabilised = FALSE
   # smoother.type <- "sm.ps"
+
+  ### If vector of weights and custom function for specifying weights both inputted, give error
+  if (!is.null(weights) & !is.null(w.function)){
+    stop("Cannot specify weights manually, and specify a custom function for estimating the weights. Choose one or the other.")
+  }
+
+  ### If a vector of weights has been provided, add it to the dataset
+  if (!is.null(weights)){
+    ### First check whether it is the correct length (NA's should be present)
+    if (length(weights) != nrow(data.raw)){
+      stop("Weights vector not same length as data.raw")
+    } else {
+      data.raw$ipcw <- weights
+    }
+  }
 
   ### Extract transition matrix from msdata object
   tmat <- attributes(data.mstate)$trans
@@ -173,22 +190,33 @@ calc_calib_mlr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, smoothe
   ### this is the set of predicted risks over which we plot calibration curves
   data.raw.lmk.js.uncens <- data.raw %>% base::subset(id %in% ids.state.js) %>% base::subset(!is.na(state.poly))
 
-  ## Calculate weights
-  ## Note this is done in the entire dataset data.raw, which has its own functionality (w.landmark.type) to landmark on j and s, or just s, before
-  ## calculating the weights
-  weights <- calc_weights(data.mstate = data.mstate,
-                          data.raw = data.raw,
-                          covs = w.covs,
-                          t.eval = t.eval,
-                          s = s,
-                          landmark.type = w.landmark.type,
-                          j = j,
-                          max.weight = w.max,
-                          stabilised = w.stabilised,
-                          max.follow = w.max.follow)
+  ### Calculate weights if not specified manually
+  if (is.null(weights)){
 
-  ## Add to data.boot
-  data.raw.lmk.js.uncens <- dplyr::left_join(data.raw.lmk.js.uncens, dplyr::distinct(weights), by = dplyr::join_by(id))
+    ### Assign custom function for estimating weights, if specified
+    if (!is.null(w.function)){
+      ### stop if w.function doesn't have correct arguments
+      if(!all(methods::formalArgs(calc_weights) %in% methods::formalArgs(w.function))){
+        stop("Arguments for w.function does not contain those from calibmsm::calc_weights")
+      }
+      calc_weights <- w.function
+    }
+
+    ### Estimate the weights
+    weights <- calc_weights(data.mstate = data.mstate,
+                            data.raw = data.raw,
+                            covs = w.covs,
+                            t.eval = t.eval,
+                            s = s,
+                            landmark.type = w.landmark.type,
+                            j = j,
+                            max.weight = w.max,
+                            stabilised = w.stabilised,
+                            max.follow = w.max.follow,
+                            ...)
+    ## Add to data.raw
+    data.raw.lmk.js.uncens <- dplyr::left_join(data.raw.lmk.js.uncens, dplyr::distinct(weights), by = dplyr::join_by(id))
+  }
 
   ### Define equation
   eq.LHS <- paste("state.poly.fac ~ ")

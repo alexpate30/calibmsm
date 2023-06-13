@@ -214,7 +214,59 @@ testthat::test_file("tests/testthat/test-weights.R")
 testthat::test_file("tests/testthat/test-calc_calib_pv.R")
 testthat::test_file("tests/testthat/test-plot_calib.R")
 
+### Testing manually function for weights with internal CI
+load_all()
+
+tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), dplyr::any_of(paste("pstate", 1:6, sep = "")))
+
+dat.calib.blr <-
+  calc_calib_blr(data.mstate = msebmtcal,
+                 data.raw = ebmtcal,
+                 j=1,
+                 s=0,
+                 t.eval = 1826,
+                 tp.pred = tp.pred,
+                 curve.type = "rcs",
+                 rcs.nk = 3)
+
+## Calculate observed event probabilities
+dat.calib.blr.w.function <-
+  calc_calib_blr(data.mstate = msebmtcal,
+                 data.raw = ebmtcal,
+                 j=1,
+                 s=0,
+                 t.eval = 1826,
+                 tp.pred = tp.pred,
+                 curve.type = "rcs",
+                 rcs.nk = 3,
+                 w.function = calc_weights)
+
+str(dat.calib.blr[["plotdata"]])
+str(dat.calib.blr.w.function[["plotdata"]])
+
+
+### Test summar yfunction for pv
+load_all()
+## Extract relevant predicted risks from tps0
+tp.pred <- dplyr::select(dplyr::filter(tps100, j == 3), dplyr::any_of(paste("pstate", 1:6, sep = "")))
+
+## Calculate observed event probabilities using transitions.out = NULL
+dat.calib.pv.1 <- calc_calib_pv(data.mstate = msebmtcal,
+                                data.raw = ebmtcal,
+                                j = 3,
+                                s = 100,
+                                t.eval = 1826,
+                                tp.pred = tp.pred,
+                                curve.type = "loess",
+                                group.vars = c("year"),
+                                n.pctls = 2,
+                                data.pred.plot = NULL, transitions.out = NULL)
+str(dat.calib.pv.1[["metadata"]])
+summary.calib_pv(dat.calib.pv.1)
+
+setequal(c(1,2,3,4,5), c(3,4,2,5,1))
 library(calibmsm)
+
 load_all()
 dat.calib.mlr.j1.s0.s <- calc_calib_mlr(data.mstate = msebmtcal,
                                       data.raw = ebmtcal,

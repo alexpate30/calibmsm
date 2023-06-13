@@ -1031,7 +1031,9 @@ calc_calib_pv <- function(data.mstate,
                    "CI.R.boot" = CI.R.boot,
                    "j" = j,
                    "s" = s,
-                   "t.eval" = t.eval)
+                   "t.eval" = t.eval,
+                   "group.vars" = group.vars,
+                   "n.pctls" = n.pctls)
 
   ###
   ### Crate a combined output object with metadata, as well as plot data
@@ -1041,5 +1043,37 @@ calc_calib_pv <- function(data.mstate,
   attr(output.object.comb, "class") <- "calib_pv"
 
   return(output.object.comb)
+
+}
+
+#' @export
+summary.calib_pv <- function(object, ...) {
+
+  cat("There were non-zero predicted transition probabilities into states ",
+      paste(object[["metadata"]]$valid.transitions, collapse = ","),  sep = " ")
+
+  cat("\n\nCalibration curves have been estimated for transitions into states ",
+      paste(object[["metadata"]]$assessed.transitions, collapse = ","), sep = " ")
+
+  cat("\n\nCalibration was assessed at time ", object[["metadata"]]$t.eval, " and calibration was assessed in a landmarked cohort of individuals in state j = ", object[["metadata"]]$j,
+      " at time s = ", object[["metadata"]]$s, sep = "")
+
+  if (isFALSE(object[["metadata"]]$CI)){
+    cat("\n\nA confidence interval was not estimated")
+  } else {
+    cat("\n\nA ",  object[["metadata"]]$CI, "% confidence interval was estimated with", object[["metadata"]]$CI.R.boot, " bootstrap replicates", sep = "")
+  }
+
+  if (!is.null(object[["metadata"]]$group.vars)){
+    cat("\n\nPseudo-values were calculated within groups specified by covariates", paste(object[["metadata"]]$group.vars, collapse = ","), sep = "")
+  }
+
+  if (!is.null(object[["metadata"]]$n.pctls)){
+    cat("\n\nPseudo-values were calculated within groups defined by predicted risk of each transition probability. the numbre of groups was", object[["metadata"]]$n.pctls, sep = "")
+  }
+
+  cat("\n\nThe estimated calibration curves are stored in list element `plotdata`:\n\n")
+
+  print(lapply(object[["plotdata"]], "head"))
 
 }

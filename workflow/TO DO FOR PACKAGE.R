@@ -15,6 +15,7 @@
 ### 13) Add the robust sandwich-type estimator
 ### 14) Why is package failing CMD check now?
 ### 15) Add something to text manuscript about robust sandwich being conservative
+### 16) Get r-cmd-check working, only possibility left is more troubleshooting of the error, or try removing the pdf vignette
 
 ### Notes to add to document
 ### 1) Verification of assumptions for each method

@@ -17,6 +17,7 @@
 #' @param loess.span Span when curves are estimated using loess smoothers
 #' @param loess.degree Degree when curves are estimated. using loess smoothers
 #' @param weights Vector of inverse probability of censoring weights
+#' @param w.function Custom function for estimating the inverse probability of censoring weights
 #' @param w.covs Character vector of variable names to adjust for when calculating inverse probability of censoring weights
 #' @param w.landmark.type Whether weights are estimated in all individuals uncensored at time s ('all') or only in individuals uncensored and in state j at time s ('state')
 #' @param w.max Maximum bound for inverse probability of censoring weights
@@ -26,6 +27,7 @@
 #' @param CI.R.boot Number of bootstrap replicates when estimating the confidence interval for the calibration curve
 #' @param data.pred.plot Data frame or matrix of predicted risks for each possible transition over which to plot the calibration curves. Must have one column for every possible transition.
 #' @param transitions.out Transitions for which to calculate calibration curves. Will do all possible transitions if left as NULL.
+#' @param ... Extra arguments to be passed to w.function (custom function for estimating weights)
 #'
 #' @details
 #' Observed event probabilities at time `t.eval` are estimated for predicted
@@ -99,8 +101,8 @@
 #'
 #' @export
 calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.type = "rcs", rcs.nk = 3, loess.span = 0.75, loess.degree = 2,
-                           weights = NULL, w.covs = NULL, w.landmark.type = "state", w.max = 10, w.stabilised = FALSE, w.max.follow = NULL, CI = FALSE, CI.R.boot = NULL,
-                           data.pred.plot = NULL, transitions.out = NULL){
+                           weights = NULL, w.function = NULL, w.covs = NULL, w.landmark.type = "state", w.max = 10, w.stabilised = FALSE, w.max.follow = NULL, CI = FALSE, CI.R.boot = NULL,
+                           data.pred.plot = NULL, transitions.out = NULL, ...){
 
 #   load_all()
 # data.mstate <- msebmtcal
@@ -129,7 +131,7 @@ calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.t
 
   ### Warning if weights inputted manually, and confidence interval requested internally
   if ((CI != FALSE) & !is.null(weights)){
-    warning("Estimation of confidence interval using internal bootstrapping procedure was requested. User inputted weights are being ignored.")
+    stop("Estimation of confidence interval using internal bootstrapping procedure was requested. This is not possible with user-inputted weights.")
   }
 
   ### Warning if weights inputted manually, and confidence interval requested internally
@@ -144,6 +146,11 @@ calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.t
     }
   }
 
+  ### If vector of weights and custom function for specifying weights both inputted, give error
+  if (!is.null(weights) & !is.null(w.function)){
+    stop("Cannot specify weights manually, and specify a custom function for estimating the weights. Choose one or the other.")
+  }
+
   ### If a vector of weights has been provided, add it to the dataset
   if (!is.null(weights)){
     ### First check whether it is the correct length (NA's should be present)
@@ -152,6 +159,15 @@ calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.t
     } else {
       data.raw$ipcw <- weights
     }
+  }
+
+  ### If custom function for estimating weights has been inputted ("w.function"), replace "calc_weights" with this function
+  if (!is.null(w.function)){
+    ### stop if w.function doesn't have correct arguments
+    if(!all(methods::formalArgs(calc_weights) %in% methods::formalArgs(w.function))){
+      stop("Arguments for w.function does not contain those from calibmsm::calc_weights")
+    }
+    calc_weights <- w.function
   }
 
   ### Extract transition matrix from msdata object
@@ -263,7 +279,8 @@ calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.t
                             j = j,
                             max.weight = w.max,
                             stabilised = w.stabilised,
-                            max.follow = w.max.follow)
+                            max.follow = w.max.follow,
+                            ...)
 
     ## Add to data.boot
     data.boot.lmk.js <- dplyr::left_join(data.boot.lmk.js, dplyr::distinct(weights), by = dplyr::join_by(id))
@@ -323,7 +340,8 @@ calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.t
                             j = j,
                             max.weight = w.max,
                             stabilised = w.stabilised,
-                            max.follow = w.max.follow)
+                            max.follow = w.max.follow,
+                            ...)
 
     ## Add to data.boot
     data.boot.lmk.js <- dplyr::left_join(data.boot.lmk.js, dplyr::distinct(weights), by = dplyr::join_by(id))

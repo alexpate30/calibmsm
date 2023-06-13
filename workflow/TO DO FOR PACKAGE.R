@@ -9,16 +9,18 @@
 ### 7) Add more warnings. A) Is data.mstate and data.raw got the same id's? B) Remove warning about weights and landmark.all = "all", otherwise it comes up when we specify land.mark.type = "all"
 ### 8) Change some terminology, A) remove the calc_ bits, B) change t.eval to t
 ### DONE 9) Add the supplementary material gcc to the paper
-### 10) Get rid of warnings in pv for when there are zero probability possible transitions
-### 11) Write vignette for producing confidence interval using your own method for estimating the weights
-### 12) Add a function to allow users to prespecify their weights function within calc_calib_pv. This can be part of the vignette.
+### DONE 10) Get rid of warnings in pv for when there are zero probability possible transitions
+### DONE 11) Write vignette for producing confidence interval using your own method for estimating the weights
+### DONE 12) Add a function to allow users to prespecify their weights function within calc_calib_pv. This can be part of the vignette.
 ### 13) Add the robust sandwich-type estimator
-### 14) Why is package failing CMD check now?
+### DONE 14) Why is package failing CMD check now?
 ### 15) Add something to text manuscript about robust sandwich being conservative
-### 16) Get r-cmd-check working, only possibility left is more troubleshooting of the error, or try removing the pdf vignette
-### 17) Check all vignettes refer to correct vignettes names of other vignettes
+### DONE 16) Get r-cmd-check working, only possibility left is more troubleshooting of the error, or try removing the pdf vignette
+### DONE 17) Check all vignettes refer to correct vignettes names of other vignettes
 
 ### Notes to add to document
 ### 1) Verification of assumptions for each method
 ### 2) Whether to delve into which method I believe is appropriate
 ### 3) Need to verify Whether its true that LMAJ = Landmark then AJ
+
+### It's basically just to add the robust sandwich...

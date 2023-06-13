@@ -30,6 +30,39 @@ head(tps0)
 devtools::document()
 check
 
+### Test trying to add transparency
+load_all()
+
+tp.pred <- tps100 |>
+  dplyr::filter(j == 3) |>
+  dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
+
+dat.calib.blr <-
+  calib_blr(data.mstate = msebmtcal,
+            data.raw = ebmtcal,
+            j=3,
+            s=100,
+            t.eval = 1826,
+            tp.pred = tp.pred,
+            curve.type = "rcs",
+            rcs.nk = 3)
+
+dat.calib.mlr <-
+  calib_mlr(data.mstate = msebmtcal,
+            data.raw = ebmtcal,
+            j=3,
+            s=100,
+            t.eval = 1826,
+            tp.pred = tp.pred)
+
+png("workflow/figures/plotmlralpha01.png", width = 7.5, height = 5, units = "in", res = 300)
+plot.calib_mlr(dat.calib.mlr)
+dev.off()
+
+png("workflow/figures/plotmlralpha09.png", width = 7.5, height = 5, units = "in", res = 300)
+plot.calib_mlr(dat.calib.mlr, transparency.plot = 0.9)
+dev.off()
+
 logit.func <- function(x){
   return(log(x/(1-x)))}
 inv.logit.func <- function(x){
@@ -210,11 +243,12 @@ calc_calib_mlr
 devtools::test()
 .libPaths()
 devtools::install()
-testthat::test_file("tests/testthat/test-calc_calib_blr.R")
-testthat::test_file("tests/testthat/test-calc_calib_mlr.R")
+testthat::test_file("tests/testthat/test-calib_blr.R")
+testthat::test_file("tests/testthat/test-calib_mlr.R")
 testthat::test_file("tests/testthat/test-weights.R")
-testthat::test_file("tests/testthat/test-calc_calib_pv.R")
+testthat::test_file("tests/testthat/test-calib_pv.R")
 testthat::test_file("tests/testthat/test-plot_calib.R")
+
 
 ### Testing manually function for weights with internal CI
 load_all()

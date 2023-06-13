@@ -16,7 +16,7 @@
 #'
 #' @importFrom graphics plot
 #' @export
-plot.calib_blr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL){
+plot.calib_blr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, transparency.rug = 0.1){
 
   ### Extract plot data and relevant metadata
   object.in <- x
@@ -54,7 +54,7 @@ plot.calib_blr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL){
         ggplot2::xlim(c(0, max(plot.data.k.longer$pred))) +
         ggplot2::ylim(c(0, max(plot.data.k.longer$value))) +
         ggplot2::geom_rug(data = plot.data.k.longer |> dplyr::arrange(pred) |> dplyr::select(pred, line.group, value, mapping) |> subset(line.group == "Calibration"),
-                          ggplot2::aes(x = pred, y = value), col = grDevices::rgb(1, 0, 0, alpha = 0.3)) +
+                          ggplot2::aes(x = pred, y = value), col = grDevices::rgb(1, 0, 0, alpha = transparency.rug)) +
         ggplot2::ggtitle(paste("State ", state.k, sep = ""))
     }
   } else if (CI == FALSE){
@@ -75,7 +75,7 @@ plot.calib_blr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL){
         ggplot2::xlab("Predicted risk") + ggplot2::ylab("Observed risk") +
         ggplot2::xlim(c(0, max(plot.data.k$pred))) +
         ggplot2::ylim(c(0, max(plot.data.k$obs))) +
-        ggplot2::geom_rug(ggplot2::aes(x = pred, y = obs), col = grDevices::rgb(1, 0, 0, alpha = 0.3)) +
+        ggplot2::geom_rug(ggplot2::aes(x = pred, y = obs), col = grDevices::rgb(1, 0, 0, alpha = transparency.rug)) +
         ggplot2::theme(legend.position = "none") +
         ggplot2::ggtitle(paste("State ", state.k, sep = ""))
     }
@@ -118,7 +118,7 @@ plot.calib_blr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL){
 #'
 #' @importFrom graphics plot
 #' @export
-plot.calib_mlr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL){
+plot.calib_mlr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, transparency.plot = 0.25, transparency.rug = 0.1){
 
   ### Extract plot data and relevant metadata
   object.in <- x
@@ -137,12 +137,12 @@ plot.calib_mlr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL){
 
     ### Create the plots
     plots.list[[k]] <- ggplot2::ggplot(data = plot.data.k |> dplyr::arrange(pred) |>  dplyr::select(id, pred, obs)) +
-      ggplot2::geom_point(ggplot2::aes(x = pred, y = obs), color = "red", size = 0.5) +
+      ggplot2::geom_point(ggplot2::aes(x = pred, y = obs), color = "red", alpha = transparency.plot, size = 0.5) +
       ggplot2::geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
       ggplot2::xlab("Predicted risk") + ggplot2::ylab("Observed risk") +
       ggplot2::xlim(c(0, max(plot.data.k$pred))) +
       ggplot2::ylim(c(0, max(plot.data.k$obs))) +
-      ggplot2::geom_rug(ggplot2::aes(x = pred, y = obs), col = grDevices::rgb(1, 0, 0, alpha = .3)) +
+      ggplot2::geom_rug(ggplot2::aes(x = pred, y = obs), col = grDevices::rgb(1, 0, 0, alpha = .3), alpha = transparency.rug) +
       ggplot2::theme(legend.position = "none") +
       ggplot2::ggtitle(paste("State ", state.k, sep = ""))
 
@@ -185,7 +185,7 @@ plot.calib_mlr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL){
 #'
 #' @importFrom graphics plot
 #' @export
-plot.calib_pv <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL){
+plot.calib_pv <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, transparency.rug = 0.1){
 
   ### Extract plot data and relevant metadata
   object.in <- x
@@ -223,7 +223,7 @@ plot.calib_pv <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL){
         ggplot2::xlim(c(0, max(plot.data.k.longer$pred))) +
         ggplot2::ylim(c(0, max(plot.data.k.longer$value))) +
         ggplot2::geom_rug(data = plot.data.k.longer |> dplyr::arrange(pred) |> dplyr::select(pred, line.group, value, mapping) |> subset(line.group == "Calibration"),
-                          ggplot2::aes(x = pred, y = value), col = grDevices::rgb(1, 0, 0, alpha = 0.3)) +
+                          ggplot2::aes(x = pred, y = value), col = grDevices::rgb(1, 0, 0, alpha = transparency.rug)) +
         ggplot2::ggtitle(paste("State ", state.k, sep = ""))
     }
   } else if (CI == FALSE){
@@ -244,7 +244,7 @@ plot.calib_pv <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL){
         ggplot2::xlab("Predicted risk") + ggplot2::ylab("Observed risk") +
         ggplot2::xlim(c(0, max(plot.data.k$pred))) +
         ggplot2::ylim(c(0, max(plot.data.k$obs))) +
-        ggplot2::geom_rug(ggplot2::aes(x = pred, y = obs), col = grDevices::rgb(1, 0, 0, alpha = 0.3)) +
+        ggplot2::geom_rug(ggplot2::aes(x = pred, y = obs), col = grDevices::rgb(1, 0, 0, alpha = transparency.rug)) +
         ggplot2::theme(legend.position = "none") +
         ggplot2::ggtitle(paste("State ", state.k, sep = ""))
     }

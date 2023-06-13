@@ -21,3 +21,4 @@
 ### Notes to add to document
 ### 1) Verification of assumptions for each method
 ### 2) Whether to delve into which method I believe is appropriate
+### 3) Need to verify Whether its true that LMAJ = Landmark then AJ

@@ -1,9 +1,9 @@
 ---
-title: "Comparison-with-graphical-calibration-curves-in-competing-risks-setting"
+title: "BLR-IPCW-manual-bootstrap-with-custom-function-for-estimating-the-weights"
 output: rmarkdown::html_vignette
 bibliography: refs.bib
 vignette: >
-  %\VignetteIndexEntry{Comparison-with-graphical-calibration-curves-in-competing-risks-setting}
+  %\VignetteIndexEntry{Manual-bootstrap-with-custom-function-for-estimating-the-weights}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -101,7 +101,7 @@ plot(dat.calib.blr.w.function, combine = TRUE, nrow = 2, ncol = 3)
 
 # Confidence intervals for BLR-IPCW by manually running bootstrapping procedure with custom function for estimating the weights
 
-Finally, we showcase how to run the bootstrapping procedure manually. This will allow users to specify functions to estimate the weights with arguments that differ from those in `calc_weights`, and also allow users to parallelise their code to reduce computational runtime. This is done by using the package `boot` [@Canty2022] in conjunction with `calib_blr`.
+Finally, we showcase how to run the bootstrapping procedure manually. This will allow users to specify functions to estimate the weights with arguments that differ from those in `calc_weights`, and also allow users to parallelise their code to reduce computational runtime. This is done by using the package \emph{boot}[@Canty2022] in conjunction with `calib_blr`.
 
 We start by creating a permanent object with the predicted risks of each individual. When the validation cohort `code` is resampled, the appropriate predicted transition probabilities must also be resampled from this object.
 
@@ -155,7 +155,7 @@ dat.calib.boot.manual <-
                  weights = weights.manual)
 ```
 
-It is now time to estimate the confidence interval for this curve. We define a function `calc_obs_boot` to generate a bootstrapped calibration curve which is compatible with the \code{boot} function from the \pkg{boot} package. Within each bootstrapped dataset, weights are calculated and then a calibration curve is estimated using \code{calib_blr}. The use of the argument \code{data.pred.plot} in \code{calib_blr} is essential here, to ensure the bootstrapped observed event probabilities are generated for the same vectors of predicted transition probabilities. The function is also written to estimate a curve for the transition probabilities into a specific state $k$, as the output for \code{boot} must be a vector, rather than a matrix. This is done by utilising the \code{transitions.out} argument in \code{calib_blr}.
+It is now time to estimate the confidence interval for this curve. We define a function `calc_obs_boot` to generate a bootstrapped calibration curve which is compatible with the `boot` function from the \emph{boot} package. Within each bootstrapped dataset, weights are calculated and then a calibration curve is estimated using `calib_blr`. The use of the argument `data.pred.plot` in `calib_blr` is essential here, to ensure the bootstrapped observed event probabilities are generated for the same vectors of predicted transition probabilities. The function is also written to estimate a curve for the transition probabilities into a specific state $k$, as the output for `boot` must be a vector, rather than a matrix. This is done by utilising the `transitions.out` argument in `calib_blr`.
 
 ```{r}
 calc_obs_boot <- function(data, indices, tp.pred, state.k){
@@ -208,7 +208,7 @@ valid.transitions <- which(colSums(tp.pred) != 0)
 plot.data.list <- vector("list", length(valid.transitions))
 ```
 
-The bootstrap procedure is now applied to the validation dataset \code{ebmtcal} for each state $k$ in \code{valid.transitions}, and the upper and lower confidence bands are stored in a \code{data.frame} along with the calibration curve calculated earlier.
+The bootstrap procedure is now applied to the validation dataset `ebmtcal` for each state $k$ in `valid.transitions`, and the upper and lower confidence bands are stored in a `data.frame` along with the calibration curve calculated earlier.
 
 ```{r}
 for (k in 1:length(valid.transitions)){
@@ -237,7 +237,7 @@ for (k in 1:length(valid.transitions)){
 }
 ```
 
-Finally, metadata is added and the appropriate \code{class} is defined so that the data is in the same format as the output from \code{calib_blr}, meaning it can be used with the S3 generic \code{plot}. Note that in this example `assessed.transitions` = `valid.transitions`, but this may not be the case if you only estimated calibration curves for a subset of the possible transitions.
+Finally, metadata is added and the appropriate `class` is defined so that the data is in the same format as the output from `calib_blr`, meaning it can be used with the S3 generic `plot`. Note that in this example `assessed.transitions` = `valid.transitions`, but this may not be the case if you only estimated calibration curves for a subset of the possible transitions.
 
 ```{r}
 metadata <- list("valid.transitions"= valid.transitions,

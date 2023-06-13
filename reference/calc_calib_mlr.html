@@ -52,6 +52,7 @@ to present such data."><!-- mathjax --><script src="https://cdnjs.cloudflare.com
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/BLR-IPCW-manual-bootstrap-with-custom-function-for-estimating-the-weights.html">Comparison-with-graphical-calibration-curves-in-competing-risks-setting</a>
     <a class="dropdown-item" href="../articles/Comparison-with-graphical-calibration-curves-in-competing-risks-setting.html">Comparison-with-graphical-calibration-curves-in-competing-risks-setting</a>
     <a class="dropdown-item" href="../articles/vigtest.html">PDF Vignettes</a>
   </div>
@@ -104,11 +105,13 @@ to present such data.</p>
 <span>  s.df <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  niknots <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  weights <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  w.function <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">w.covs</span>,</span>
 <span>  w.landmark.type <span class="op">=</span> <span class="st">"state"</span>,</span>
 <span>  w.max <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  w.stabilised <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  w.max.follow <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  w.max.follow <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -162,6 +165,10 @@ to present such data.</p>
 <dd><p>Vector of inverse probability of censoring weights</p></dd>
 
 
+<dt>w.function</dt>
+<dd><p>Custom function for estimating the inverse probability of censoring weights</p></dd>
+
+
 <dt>w.covs</dt>
 <dd><p>Character vector of variable names to adjust for when calculating inverse probability of censoring weights</p></dd>
 
@@ -180,6 +187,10 @@ to present such data.</p>
 
 <dt>w.max.follow</dt>
 <dd><p>Maximum follow up for model calculating inverse probability of censoring weights. Reducing this to <code>t.eval</code> + 1 may aid in the proportional hazards assumption being met in this model.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>Extra arguments to be passed to w.function (custom function for estimating weights)</p></dd>
 
 </dl></div>
     <div class="section level2">

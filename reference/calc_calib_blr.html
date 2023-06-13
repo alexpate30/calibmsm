@@ -32,6 +32,7 @@ in combination with inverse probability of censoring weights and landmarking."><
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/BLR-IPCW-manual-bootstrap-with-custom-function-for-estimating-the-weights.html">Comparison-with-graphical-calibration-curves-in-competing-risks-setting</a>
     <a class="dropdown-item" href="../articles/Comparison-with-graphical-calibration-curves-in-competing-risks-setting.html">Comparison-with-graphical-calibration-curves-in-competing-risks-setting</a>
     <a class="dropdown-item" href="../articles/vigtest.html">PDF Vignettes</a>
   </div>
@@ -73,6 +74,7 @@ in combination with inverse probability of censoring weights and landmarking.</p
 <span>  loess.span <span class="op">=</span> <span class="fl">0.75</span>,</span>
 <span>  loess.degree <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  weights <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  w.function <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  w.covs <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  w.landmark.type <span class="op">=</span> <span class="st">"state"</span>,</span>
 <span>  w.max <span class="op">=</span> <span class="fl">10</span>,</span>
@@ -81,7 +83,8 @@ in combination with inverse probability of censoring weights and landmarking.</p
 <span>  CI <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  CI.R.boot <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  data.pred.plot <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  transitions.out <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  transitions.out <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -131,6 +134,10 @@ in combination with inverse probability of censoring weights and landmarking.</p
 <dd><p>Vector of inverse probability of censoring weights</p></dd>
 
 
+<dt>w.function</dt>
+<dd><p>Custom function for estimating the inverse probability of censoring weights</p></dd>
+
+
 <dt>w.covs</dt>
 <dd><p>Character vector of variable names to adjust for when calculating inverse probability of censoring weights</p></dd>
 
@@ -165,6 +172,10 @@ in combination with inverse probability of censoring weights and landmarking.</p
 
 <dt>transitions.out</dt>
 <dd><p>Transitions for which to calculate calibration curves. Will do all possible transitions if left as NULL.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>Extra arguments to be passed to w.function (custom function for estimating weights)</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -247,38 +258,38 @@ in the vignette XXXX.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ id       : int [1:1778] 2 4 5 7 10 13 14 16 18 19 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ pred     : num [1:1778] 0.114 0.1384 0.1233 0.0974 0.1137 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs      : num [1:1778] 0.11 0.104 0.105 0.124 0.11 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.lower: num [1:1778] 0.0892 0.081 0.0846 0.0869 0.0892 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.upper: num [1:1778] 0.132 0.126 0.126 0.164 0.133 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.lower: num [1:1778] 0.087 0.0812 0.0843 0.0858 0.0869 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.upper: num [1:1778] 0.134 0.13 0.126 0.172 0.135 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ state2:'data.frame':	1778 obs. of  5 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ id       : int [1:1778] 2 4 5 7 10 13 14 16 18 19 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ pred     : num [1:1778] 0.232 0.184 0.161 0.212 0.232 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs      : num [1:1778] 0.17 0.186 0.176 0.179 0.17 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.lower: num [1:1778] 0.122 0.156 0.143 0.147 0.122 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.upper: num [1:1778] 0.225 0.218 0.214 0.211 0.225 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.lower: num [1:1778] 0.126 0.152 0.139 0.15 0.126 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.upper: num [1:1778] 0.223 0.221 0.216 0.213 0.223 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ state3:'data.frame':	1778 obs. of  5 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ id       : int [1:1778] 2 4 5 7 10 13 14 16 18 19 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ pred     : num [1:1778] 0.0844 0.0758 0.0551 0.0615 0.0844 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs      : num [1:1778] 0.1249 0.1167 0.0919 0.1001 0.1248 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.lower: num [1:1778] 0.0937 0.0888 0.0465 0.0611 0.0937 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.upper: num [1:1778] 0.154 0.144 0.145 0.141 0.154 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.lower: num [1:1778] 0.0959 0.0854 0.0541 0.0664 0.0959 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.upper: num [1:1778] 0.157 0.143 0.149 0.141 0.157 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ state4:'data.frame':	1778 obs. of  5 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ id       : int [1:1778] 2 4 5 7 10 13 14 16 18 19 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ pred     : num [1:1778] 0.233 0.218 0.183 0.221 0.233 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs      : num [1:1778] 0.243 0.224 0.185 0.228 0.243 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.lower: num [1:1778] 0.197 0.189 0.154 0.191 0.197 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.upper: num [1:1778] 0.28 0.259 0.222 0.263 0.28 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.lower: num [1:1778] 0.199 0.194 0.158 0.194 0.199 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.upper: num [1:1778] 0.283 0.257 0.214 0.262 0.283 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ state5:'data.frame':	1778 obs. of  5 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ id       : int [1:1778] 2 4 5 7 10 13 14 16 18 19 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ pred     : num [1:1778] 0.148 0.154 0.143 0.144 0.149 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs      : num [1:1778] 0.191 0.165 0.222 0.212 0.188 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.lower: num [1:1778] 0.166 0.147 0.18 0.176 0.164 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.upper: num [1:1778] 0.218 0.183 0.269 0.254 0.214 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.lower: num [1:1778] 0.166 0.147 0.181 0.175 0.165 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.upper: num [1:1778] 0.217 0.184 0.266 0.251 0.214 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ state6:'data.frame':	1778 obs. of  5 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ id       : int [1:1778] 2 4 5 7 10 13 14 16 18 19 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ pred     : num [1:1778] 0.189 0.23 0.335 0.264 0.189 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs      : num [1:1778] 0.207 0.254 0.316 0.28 0.207 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.lower: num [1:1778] 0.185 0.231 0.284 0.26 0.185 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.upper: num [1:1778] 0.229 0.284 0.354 0.305 0.229 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.lower: num [1:1778] 0.186 0.23 0.275 0.254 0.186 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.upper: num [1:1778] 0.228 0.281 0.354 0.308 0.228 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ metadata:List of 8</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ valid.transitions   : num [1:6] 1 2 3 4 5 6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ assessed.transitions: num [1:6] 1 2 3 4 5 6</span>

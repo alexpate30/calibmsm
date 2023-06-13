@@ -32,6 +32,7 @@ in combination with inverse probability of censoring weights and landmarking."><
 <li class="nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
+    <a class="dropdown-item" href="../articles/BLR-IPCW-manual-bootstrap-with-custom-function-for-estimating-the-weights.html">Comparison-with-graphical-calibration-curves-in-competing-risks-setting</a>
     <a class="dropdown-item" href="../articles/Comparison-with-graphical-calibration-curves-in-competing-risks-setting.html">Comparison-with-graphical-calibration-curves-in-competing-risks-setting</a>
     <a class="dropdown-item" href="../articles/vigtest.html">PDF Vignettes</a>
   </div>
@@ -230,7 +231,7 @@ Confidence intervals for the calibration curves can be estimated using bootstrap
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ id  : num [1:413] 3 13 18 22 23 24 25 26 27 28 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ pred: num [1:413] 0.225 0.225 0.426 0.347 0.347 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs : num [1:413] 0.196 0.196 0.585 0.404 0.404 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  $ metadata:List of 9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  $ metadata:List of 11</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ valid.transitions   : num [1:4] 3 4 5 6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ assessed.transitions: num [1:4] 3 4 5 6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ curve.type          : chr "rcs"</span>
@@ -240,6 +241,8 @@ Confidence intervals for the calibration curves can be estimated using bootstrap
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ j                   : num 3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ s                   : num 100</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ t.eval              : num 1826</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ group.vars          : chr "year"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ n.pctls             : num 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "class")= chr "calib_pv"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">#'</span></span></span>

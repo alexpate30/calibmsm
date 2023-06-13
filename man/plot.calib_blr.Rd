@@ -2,12 +2,12 @@
 % Please edit documentation in R/plot_calib.R
 \name{plot.calib_blr}
 \alias{plot.calib_blr}
-\title{Plots calibration curves estimated using \code{\link{calc_calib_blr}}.}
+\title{Plots calibration curves estimated using \code{\link{calib_blr}}.}
 \usage{
 \method{plot}{calib_blr}(x, ..., combine = TRUE, ncol = NULL, nrow = NULL)
 }
 \arguments{
-\item{x}{Object of class 'calib_blr' generated from \code{\link{calc_calib_blr}}.}
+\item{x}{Object of class 'calib_blr' generated from \code{\link{calib_blr}}.}
 
 \item{...}{Other}
 
@@ -24,5 +24,5 @@ class \code{list}, each element containing an object of class \code{gg} and \cod
 }
 \description{
 Plots calibration curves for the transition probabilities of a multistate model
-using data estimated from \code{\link{calc_calib_blr}}.
+using data estimated from \code{\link{calib_blr}}.
 }

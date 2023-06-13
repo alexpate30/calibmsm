@@ -2,12 +2,12 @@
 % Please edit documentation in R/plot_calib.R
 \name{plot.calib_mlr}
 \alias{plot.calib_mlr}
-\title{Plots calibration scatter plots estimated using \code{\link{calc_calib_mlr}}.}
+\title{Plots calibration scatter plots estimated using \code{\link{calib_mlr}}.}
 \usage{
 \method{plot}{calib_mlr}(x, ..., combine = TRUE, ncol = NULL, nrow = NULL)
 }
 \arguments{
-\item{x}{Object of class 'calib_mlr' generated from \code{\link{calc_calib_mlr}}}
+\item{x}{Object of class 'calib_mlr' generated from \code{\link{calib_mlr}}}
 
 \item{...}{Other}
 
@@ -24,5 +24,5 @@ class \code{list}, each element containing an object of class \code{gg} and \cod
 }
 \description{
 Plots calibration scatter plots for the transition probabilities of a multistate model
-using data estimated from \code{\link{calc_calib_mlr}}.
+using data estimated from \code{\link{calib_mlr}}.
 }

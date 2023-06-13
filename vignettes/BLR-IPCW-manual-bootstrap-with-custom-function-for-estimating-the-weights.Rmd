@@ -50,7 +50,7 @@ The code to produce the confidence interval is as follows:
 
 ```{r}
 dat.calib.blr <-
-  calc_calib_blr(data.mstate = msebmtcal,
+  calib_blr(data.mstate = msebmtcal,
                  data.raw = ebmtcal,
                  j=1,
                  s=0,
@@ -69,17 +69,17 @@ dat.calib.blr <-
 plot(dat.calib.blr, combine = TRUE)
 ```
 
-# Confidence intervals for BLR-IPCW by inputting custom weights funciton into calc_calib_blr
+# Confidence intervals for BLR-IPCW by inputting custom weights funciton into calib_blr
 
 While the above approach is accessible, it may lead to a misspecified model for the weights given the user has no control over the choice of model (Cox model) or the functional form of the predictor variables $\textbf{Z}$, where all continuous variables are assumed to have linear effects on the hazard, and there are no interaction terms. We encourage users to explore their data and produce a more suitable model to estimate the weights. Please see the vignette \emph{overview} for a definition of the weights and how to estimate them. 
 
-The internal bootstrapping procedure can then be utilised with your own function for estimating the weights, specified through the `w.function` argument. This function must have the same parameters as the function from the internal procedure `calc_weights`, even if you do not plan to use these parameters. These parameters are then called through arguments with the `w.` prefix in `calc_calib_blr`. Specification of extra parameters not in `calc_weights` is also allowed. These parameters are called through the `...` argument in `calc_clib_blr`. We showcase this by defining a new function `calc_weights_manual`. For this example, we specify this to be the same as `calc_weights`, which is the function used to estimate the weights in the internal procedure, as the aim of this vignette is to exemplify how to use the package. In practice, the reason for this option is for the user to specify their own function for estimating the weights. Given our choice of function to estimate the weights, the calibration curve is the same as that from Figure 1, and the confidence interval is a similar size.
+The internal bootstrapping procedure can then be utilised with your own function for estimating the weights, specified through the `w.function` argument. This function must have the same parameters as the function from the internal procedure `calc_weights`, even if you do not plan to use these parameters. These parameters are then called through arguments with the `w.` prefix in `calib_blr`. Specification of extra parameters not in `calc_weights` is also allowed. These parameters are called through the `...` argument in `calc_clib_blr`. We showcase this by defining a new function `calc_weights_manual`. For this example, we specify this to be the same as `calc_weights`, which is the function used to estimate the weights in the internal procedure, as the aim of this vignette is to exemplify how to use the package. In practice, the reason for this option is for the user to specify their own function for estimating the weights. Given our choice of function to estimate the weights, the calibration curve is the same as that from Figure 1, and the confidence interval is a similar size.
 
 ```{r}
 calc_weights_manual <- calibmsm::calc_weights
 
 dat.calib.blr.w.function <-
-  calc_calib_blr(data.mstate = msebmtcal,
+  calib_blr(data.mstate = msebmtcal,
                  data.raw = ebmtcal,
                  j=1,
                  s=0,
@@ -101,7 +101,7 @@ plot(dat.calib.blr.w.function, combine = TRUE, nrow = 2, ncol = 3)
 
 # Confidence intervals for BLR-IPCW by manually running bootstrapping procedure with custom function for estimating the weights
 
-Finally, we showcase how to run the bootstrapping procedure manually. This will allow users to specify functions to estimate the weights with arguments that differ from those in `calc_weights`, and also allow users to parallelise their code to reduce computational runtime. This is done by using the package `boot` [@Canty2022] in conjunction with `calc_calib_blr`.
+Finally, we showcase how to run the bootstrapping procedure manually. This will allow users to specify functions to estimate the weights with arguments that differ from those in `calc_weights`, and also allow users to parallelise their code to reduce computational runtime. This is done by using the package `boot` [@Canty2022] in conjunction with `calib_blr`.
 
 We start by creating a permanent object with the predicted risks of each individual. When the validation cohort `code` is resampled, the appropriate predicted transition probabilities must also be resampled from this object.
 
@@ -140,11 +140,11 @@ weights.manual <-
 str(weights.manual)
 ```
 
-The observed event probabilities can then be estimated using `calc_calib_blr` and a call to the `weights` argument.
+The observed event probabilities can then be estimated using `calib_blr` and a call to the `weights` argument.
 
 ```{r}
 dat.calib.boot.manual <-
-  calc_calib_blr(data.mstate = msebmtcal,
+  calib_blr(data.mstate = msebmtcal,
                  data.raw = ebmtcal,
                  j=1,
                  s=0,
@@ -155,7 +155,7 @@ dat.calib.boot.manual <-
                  weights = weights.manual)
 ```
 
-It is now time to estimate the confidence interval for this curve. We define a function `calc_obs_boot` to generate a bootstrapped calibration curve which is compatible with the \code{boot} function from the \pkg{boot} package. Within each bootstrapped dataset, weights are calculated and then a calibration curve is estimated using \code{calc_calib_blr}. The use of the argument \code{data.pred.plot} in \code{calc_calib_blr} is essential here, to ensure the bootstrapped observed event probabilities are generated for the same vectors of predicted transition probabilities. The function is also written to estimate a curve for the transition probabilities into a specific state $k$, as the output for \code{boot} must be a vector, rather than a matrix. This is done by utilising the \code{transitions.out} argument in \code{calc_calib_blr}.
+It is now time to estimate the confidence interval for this curve. We define a function `calc_obs_boot` to generate a bootstrapped calibration curve which is compatible with the \code{boot} function from the \pkg{boot} package. Within each bootstrapped dataset, weights are calculated and then a calibration curve is estimated using \code{calib_blr}. The use of the argument \code{data.pred.plot} in \code{calib_blr} is essential here, to ensure the bootstrapped observed event probabilities are generated for the same vectors of predicted transition probabilities. The function is also written to estimate a curve for the transition probabilities into a specific state $k$, as the output for \code{boot} must be a vector, rather than a matrix. This is done by utilising the \code{transitions.out} argument in \code{calib_blr}.
 
 ```{r}
 calc_obs_boot <- function(data, indices, tp.pred, state.k){
@@ -179,7 +179,7 @@ calc_obs_boot <- function(data, indices, tp.pred, state.k){
 
   ## Estimate bootstrapped calibration curve
   curve.est <-
-    calc_calib_blr(data.mstate = msebmtcal,
+    calib_blr(data.mstate = msebmtcal,
                    data.raw = data.boot,
                    j=1,
                    s=0,
@@ -237,7 +237,7 @@ for (k in 1:length(valid.transitions)){
 }
 ```
 
-Finally, metadata is added and the appropriate \code{class} is defined so that the data is in the same format as the output from \code{calc_calib_blr}, meaning it can be used with the S3 generic \code{plot}. Note that in this example `assessed.transitions` = `valid.transitions`, but this may not be the case if you only estimated calibration curves for a subset of the possible transitions.
+Finally, metadata is added and the appropriate \code{class} is defined so that the data is in the same format as the output from \code{calib_blr}, meaning it can be used with the S3 generic \code{plot}. Note that in this example `assessed.transitions` = `valid.transitions`, but this may not be the case if you only estimated calibration curves for a subset of the possible transitions.
 
 ```{r}
 metadata <- list("valid.transitions"= valid.transitions,

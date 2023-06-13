@@ -1,370 +1,55 @@
-test_that("check calc_calib_blr output, (j = 1, s = 0), curve.type = rcs", {
+test_that("check calib_mlr output", {
 
   ## Extract relevant predicted risks from tps0
-  tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), dplyr::any_of(paste("pstate", 1:6, sep = "")))
+  tp.pred <- dplyr::select(dplyr::filter(tps100, j == 3), dplyr::any_of(paste("pstate", 1:6, sep = "")))
 
-  ###
-  ### Calculate observed event probabilities
-  dat.calib.blr <-
-    calc_calib_blr(data.mstate = msebmtcal,
-                   data.raw = ebmtcal,
-                   j=1,
-                   s=0,
-                   t.eval = 1826,
-                   tp.pred = tp.pred,
-                   curve.type = "rcs",
-                   rcs.nk = 3,
-                   w.covs = c("year", "agecl", "proph", "match"))
+  ## Expect error if generate with CI
+  expect_error(calib_mlr(data.mstate = msebmtcal,
+                              data.raw = ebmtcal,
+                              j=3,
+                              s=100,
+                              t.eval = 1826,
+                              tp.pred = tp.pred,
+                              w.covs = c("year", "agecl", "proph", "match"),
+                              CI = 95,
+                              CI.R.boot = 5))
 
-  expect_type(dat.calib.blr, "list")
-  expect_equal(class(dat.calib.blr), "calib_blr")
-  expect_length(dat.calib.blr, 2)
-  expect_length(dat.calib.blr[["plotdata"]], 6)
-  expect_length(dat.calib.blr[["plotdata"]][[1]]$id, 1778)
-  expect_length(dat.calib.blr[["plotdata"]][[6]]$id, 1778)
-  expect_length(dat.calib.blr[["metadata"]], 8)
-  expect_false(dat.calib.blr[["metadata"]]$CI)
-
-  ###
-  ### Calculate observed event probabilities with stabilised weights
-  dat.calib.blr.stab <-
-    calc_calib_blr(data.mstate = msebmtcal,
-                   data.raw = ebmtcal,
-                   j=1,
-                   s=0,
-                   t.eval = 1826,
-                   tp.pred = tp.pred,
-                   curve.type = "rcs",
-                   rcs.nk = 3,
-                   w.covs = c("year", "agecl", "proph", "match"),
-                   w.stabilised = TRUE)
-
-  expect_type(dat.calib.blr.stab, "list")
-  expect_equal(class(dat.calib.blr.stab), "calib_blr")
-  expect_length(dat.calib.blr.stab, 2)
-  expect_length(dat.calib.blr.stab[["plotdata"]], 6)
-  expect_length(dat.calib.blr.stab[["plotdata"]][[1]]$id, 1778)
-  expect_length(dat.calib.blr.stab[["plotdata"]][[6]]$id, 1778)
-  expect_length(dat.calib.blr.stab[["metadata"]], 8)
-  expect_false(dat.calib.blr.stab[["metadata"]]$CI)
-
-  ### Check answer is same whether stabilisation used or not
-  expect_equal(dat.calib.blr[["plotdata"]][[1]], dat.calib.blr.stab[["plotdata"]][[1]])
-
-})
-
-
-test_that("check calc_calib_blr output, (j = 1, s = 0), curve.type = loess", {
-
-  ## Extract relevant predicted risks from tps0
-  tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
-
-  ## Calculate observed event probabilities
-  dat.calib.blr <-
-    calc_calib_blr(data.mstate = msebmtcal,
-                   data.raw = ebmtcal,
-                   j=1,
-                   s=0,
-                   t.eval = 1826,
-                   tp.pred = tp.pred,
-                   curve.type = "loess",
-                   w.covs = c("year", "agecl", "proph", "match"))
-
-  expect_type(dat.calib.blr, "list")
-  expect_equal(class(dat.calib.blr), "calib_blr")
-  expect_length(dat.calib.blr, 2)
-  expect_length(dat.calib.blr[["plotdata"]], 6)
-  expect_length(dat.calib.blr[["plotdata"]][[1]]$id, 1778)
-  expect_length(dat.calib.blr[["plotdata"]][[6]]$id, 1778)
-  expect_length(dat.calib.blr[["metadata"]], 8)
-  expect_false(dat.calib.blr[["metadata"]]$CI)
-
-  ## Calculate observed event probabilities
-  dat.calib.blr.stab <-
-    calc_calib_blr(data.mstate = msebmtcal,
-                   data.raw = ebmtcal,
-                   j=1,
-                   s=0,
-                   t.eval = 1826,
-                   tp.pred = tp.pred,
-                   curve.type = "loess",
-                   w.covs = c("year", "agecl", "proph", "match"),
-                   w.stabilised = TRUE)
-
-  expect_type(dat.calib.blr.stab, "list")
-  expect_equal(class(dat.calib.blr.stab), "calib_blr")
-  expect_length(dat.calib.blr.stab, 2)
-  expect_length(dat.calib.blr.stab[["plotdata"]], 6)
-  expect_length(dat.calib.blr.stab[["plotdata"]][[1]]$id, 1778)
-  expect_length(dat.calib.blr.stab[["plotdata"]][[6]]$id, 1778)
-  expect_length(dat.calib.blr.stab[["metadata"]], 8)
-  expect_false(dat.calib.blr.stab[["metadata"]]$CI)
-
-  ### Check answer is same whether stabilisation used or not
-  expect_equal(dat.calib.blr[["plotdata"]][[1]], dat.calib.blr.stab[["plotdata"]][[1]])
-
-  ## Calculate observed event probabilities
-  dat.calib.blr.w.function <-
-    calc_calib_blr(data.mstate = msebmtcal,
-                   data.raw = ebmtcal,
-                   j=1,
-                   s=0,
-                   t.eval = 1826,
-                   tp.pred = tp.pred,
-                   curve.type = "loess",
-                   w.function = calc_weights,
-                   w.covs = c("year", "agecl", "proph", "match"))
-
-  expect_type(dat.calib.blr.w.function, "list")
-  expect_equal(class(dat.calib.blr.w.function), "calib_blr")
-  expect_length(dat.calib.blr.w.function, 2)
-  expect_length(dat.calib.blr.w.function[["plotdata"]], 6)
-  expect_length(dat.calib.blr.w.function[["plotdata"]][[1]]$id, 1778)
-  expect_length(dat.calib.blr.w.function[["plotdata"]][[6]]$id, 1778)
-  expect_length(dat.calib.blr.w.function[["metadata"]], 8)
-  expect_false(dat.calib.blr.w.function[["metadata"]]$CI)
-
-  ### Check answer is same whether stabilisation used or not
-  expect_equal(dat.calib.blr[["plotdata"]][[1]], dat.calib.blr.w.function[["plotdata"]][[1]])
-  expect_equal(dat.calib.blr[["plotdata"]][[6]], dat.calib.blr.w.function[["plotdata"]][[6]])
-
-})
-
-
-test_that("check calc_calib_blr output, (j = 1, s = 0), with CI", {
-
-  ## Extract relevant predicted risks from tps0
-  tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
-
-  ## Calculate observed event probabilities
-  dat.calib.blr <-
-    calc_calib_blr(data.mstate = msebmtcal,
-                   data.raw = ebmtcal,
-                   j=1,
-                   s=0,
-                   t.eval = 1826,
-                   tp.pred = tp.pred,
-                   curve.type = "rcs",
-                   rcs.nk = 3,
-                   w.covs = c("year", "agecl", "proph", "match"),
-                   CI = 95,
-                   CI.R.boot = 5)
-
-  expect_type(dat.calib.blr, "list")
-  expect_equal(class(dat.calib.blr), "calib_blr")
-  expect_length(dat.calib.blr, 2)
-  expect_length(dat.calib.blr[["plotdata"]], 6)
-  expect_equal(ncol(dat.calib.blr[["plotdata"]][[1]]), 5)
-  expect_equal(ncol(dat.calib.blr[["plotdata"]][[6]]), 5)
-  expect_length(dat.calib.blr[["plotdata"]][[1]]$id, 1778)
-  expect_length(dat.calib.blr[["plotdata"]][[6]]$id, 1778)
-  expect_length(dat.calib.blr[["metadata"]], 8)
-  expect_equal(dat.calib.blr[["metadata"]]$CI, 95)
-
-})
-
-
-test_that("check calc_calib_blr output, (j = 3, s = 100)", {
-
-  ## Extract relevant predicted risks from tps100
-  tp.pred <- dplyr::select(dplyr::filter(tps100, j == 3), any_of(paste("pstate", 1:6, sep = "")))
-
-  ## Calculate observed event probabilities
-  dat.calib.blr <-
-    calc_calib_blr(data.mstate = msebmtcal,
+  ## Calculate observed event probabilities (run it on j = 3 and s = 100 so its a bit quicker, as smaller number of individuals)
+  dat.calib.mlr <-
+    calib_mlr(data.mstate = msebmtcal,
                    data.raw = ebmtcal,
                    j=3,
                    s=100,
                    t.eval = 1826,
                    tp.pred = tp.pred,
-                   curve.type = "rcs",
-                   rcs.nk = 3,
                    w.covs = c("year", "agecl", "proph", "match"))
 
-  expect_type(dat.calib.blr, "list")
-  expect_equal(class(dat.calib.blr), "calib_blr")
-  expect_length(dat.calib.blr, 2)
-  expect_length(dat.calib.blr[["plotdata"]], 4)
-  expect_length(dat.calib.blr[["plotdata"]][["state3"]]$id, 359)
-  expect_length(dat.calib.blr[["plotdata"]][["state6"]]$id, 359)
-  expect_error(dat.calib.blr[["plotdata"]][[6]])
-  expect_length(dat.calib.blr[["metadata"]], 8)
-  expect_false(dat.calib.blr[["metadata"]]$CI)
-  names(dat.calib.blr[["plotdata"]])
+  expect_type(dat.calib.mlr, "list")
+  expect_equal(class(dat.calib.mlr), "calib_mlr")
+  expect_length(dat.calib.mlr, 2)
+  expect_length(dat.calib.mlr[["plotdata"]], 4)
+  expect_length(dat.calib.mlr[["plotdata"]][["state3"]]$id, 359)
+  expect_length(dat.calib.mlr[["plotdata"]][["state6"]]$id, 359)
+  expect_error(dat.calib.mlr[["plotdata"]][[6]])
+  expect_length(dat.calib.mlr[["metadata"]], 4)
 
 })
 
-
-test_that("check calc_calib_blr output, (j = 1, s = 0), null covs", {
-
-  ## Extract relevant predicted risks from tps0
-  tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
-
-  ## Calculate observed event probabilities
-  dat.calib.blr <-
-    calc_calib_blr(data.mstate = msebmtcal,
-                   data.raw = ebmtcal,
-                   j=1,
-                   s=0,
-                   t.eval = 1826,
-                   tp.pred = tp.pred,
-                   curve.type = "rcs",
-                   rcs.nk = 3)
-
-  expect_type(dat.calib.blr, "list")
-  expect_equal(class(dat.calib.blr), "calib_blr")
-  expect_length(dat.calib.blr, 2)
-  expect_length(dat.calib.blr[["plotdata"]], 6)
-  expect_length(dat.calib.blr[["plotdata"]][[1]]$id, 1778)
-  expect_length(dat.calib.blr[["plotdata"]][[6]]$id, 1778)
-  expect_length(dat.calib.blr[["metadata"]], 8)
-  expect_false(dat.calib.blr[["metadata"]]$CI)
-
-  ## Calculate observed event probabilities
-  dat.calib.blr <-
-    calc_calib_blr(data.mstate = msebmtcal,
-                   data.raw = ebmtcal,
-                   j=1,
-                   s=0,
-                   t.eval = 1826,
-                   tp.pred = tp.pred,
-                   curve.type = "rcs",
-                   rcs.nk = 3,
-                   w.covs = c("year", "agecl", "proph", "match"),
-                   w.stabilised = TRUE)
-
-  expect_type(dat.calib.blr, "list")
-  expect_equal(class(dat.calib.blr), "calib_blr")
-  expect_length(dat.calib.blr, 2)
-  expect_length(dat.calib.blr[["plotdata"]], 6)
-  expect_length(dat.calib.blr[["plotdata"]][[1]]$id, 1778)
-  expect_length(dat.calib.blr[["plotdata"]][[6]]$id, 1778)
-  expect_length(dat.calib.blr[["metadata"]], 8)
-  expect_false(dat.calib.blr[["metadata"]]$CI)
-
-})
-
-
-test_that("check calc_calib_blr output, (j = 1, s = 0),
-          manual weights,
-          manually define vector of predicted probabilities,
-          manually define transition out", {
-
-  ## Extract relevant predicted risks from tps0
-  tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
-
-  ## Define t.eval
-  t.eval <- 1826
-
-  ## Extract data for plot manually
-  ids.uncens <- ebmtcal %>%
-    subset(dtcens > t.eval | (dtcens < t.eval & dtcens.s == 0)) %>%
-    dplyr::pull(id)
-  data.pred.plot <- tps0 %>%
-    dplyr::filter(j == 1 & id %in% ids.uncens) %>%
-    dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
-
-  ## Calculate manual weights
-  weights.manual <-
-    calc_weights(data.mstate = msebmtcal,
-                 data.raw = ebmtcal,
-                 t.eval = 1826,
-                 s = 0,
-                 landmark.type = "state",
-                 j = 1,
-                 max.weight = 10,
-                 stabilised = FALSE)
-
-  ## Calculate observed event probabilities using weights.manual
-  dat.calib.blr.w.manual <-
-    calc_calib_blr(data.mstate = msebmtcal,
-                   data.raw = ebmtcal,
-                   j=1,
-                   s=0,
-                   t.eval = 1826,
-                   tp.pred = tp.pred,
-                   curve.type = "rcs",
-                   rcs.nk = 3,
-                   weights = weights.manual$ipcw,
-                   data.pred.plot = data.pred.plot,
-                   transitions.out = c(1,2,3,4,5,6))
-
-  expect_type(dat.calib.blr.w.manual, "list")
-  expect_equal(class(dat.calib.blr.w.manual), "calib_blr")
-  expect_length(dat.calib.blr.w.manual, 2)
-  expect_length(dat.calib.blr.w.manual[["plotdata"]], 6)
-  expect_length(dat.calib.blr.w.manual[["plotdata"]][[1]]$pred, 1778)
-  expect_length(dat.calib.blr.w.manual[["plotdata"]][[6]]$pred, 1778)
-  expect_length(dat.calib.blr.w.manual[["metadata"]], 8)
-  expect_false(dat.calib.blr.w.manual[["metadata"]]$CI)
-
-})
-
-
-test_that("check calc_calib_blr output, (j = 1, s = 0),
-          with CI,
-          manually define vector of predicted probabilities,
-          manually define transition out", {
-
-            ## Extract relevant predicted risks from tps0
-            tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
-
-            ## Define t.eval
-            t.eval <- 1826
-
-            ## Extract data for plot manually
-            ids.uncens <- ebmtcal %>%
-              subset(dtcens > t.eval | (dtcens < t.eval & dtcens.s == 0)) %>%
-              dplyr::pull(id)
-            data.pred.plot <- tps0 %>%
-              dplyr::filter(j == 1 & id %in% ids.uncens) %>%
-              dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
-
-            ## Calculate observed event probabilities
-            dat.calib.blr <-
-              calc_calib_blr(data.mstate = msebmtcal,
-                             data.raw = ebmtcal,
-                             j=1,
-                             s=0,
-                             t.eval = 1826,
-                             tp.pred = tp.pred,
-                             curve.type = "rcs",
-                             rcs.nk = 3,
-                             w.covs = c("year", "agecl", "proph", "match"),
-                             CI = 95,
-                             CI.R.boot = 5,
-                             data.pred.plot = data.pred.plot,
-                             transitions.out = c(1,2,3,4,5,6))
-
-            expect_type(dat.calib.blr, "list")
-            expect_equal(class(dat.calib.blr), "calib_blr")
-            expect_length(dat.calib.blr, 2)
-            expect_length(dat.calib.blr[["plotdata"]], 6)
-            expect_length(dat.calib.blr[["plotdata"]][[1]]$pred, 1778)
-            expect_length(dat.calib.blr[["plotdata"]][[6]]$pred, 1778)
-            expect_length(dat.calib.blr[["metadata"]], 8)
-            expect_equal(dat.calib.blr[["metadata"]]$CI, 95)
-
-          })
-
-
-test_that("check calc_calib_blr output, (j = 1, s = 0),
+test_that("check calib_mlr output, (j = 3, s = 100),
           Manually define function to estimate weights", {
 
             ## Extract relevant predicted risks from tps0
-            tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), dplyr::any_of(paste("pstate", 1:6, sep = "")))
+            tp.pred <- dplyr::select(dplyr::filter(tps100, j == 3), dplyr::any_of(paste("pstate", 1:6, sep = "")))
 
             ###
             ### Calculate observed event probabilities
-            dat.calib.blr <-
-              calc_calib_blr(data.mstate = msebmtcal,
+            dat.calib.mlr <-
+              calib_mlr(data.mstate = msebmtcal,
                              data.raw = ebmtcal,
-                             j=1,
-                             s=0,
+                             j = 3,
+                             s = 100,
                              t.eval = 1826,
                              tp.pred = tp.pred,
-                             curve.type = "rcs",
-                             rcs.nk = 3,
                              w.covs = c("year", "agecl", "proph", "match"))
 
             ###
@@ -374,70 +59,63 @@ test_that("check calc_calib_blr output, (j = 1, s = 0),
                            data.raw = ebmtcal,
                            covs =  c("year", "agecl", "proph", "match"),
                            t.eval = 1826,
-                           s = 0,
+                           s = 100,
                            landmark.type = "state",
-                           j = 1,
+                           j = 3,
                            max.weight = 10,
                            stabilised = FALSE)
 
             ###
-            ### Calculate observed event probabilities same function as internal procedure, and check it agrees with dat.calib.blr
-            dat.calib.blr.w.manual <-
-              calc_calib_blr(data.mstate = msebmtcal,
+            ### Calculate observed event probabilities same function as internal procedure, and check it agrees with dat.calib.mlr
+            dat.calib.mlr.w.manual <-
+              calib_mlr(data.mstate = msebmtcal,
                              data.raw = ebmtcal,
-                             j=1,
-                             s=0,
+                             j = 3,
+                             s = 100,
                              t.eval = 1826,
                              tp.pred = tp.pred,
-                             curve.type = "rcs",
-                             rcs.nk = 3,
                              weights = weights.manual$ipcw)
 
-            expect_equal(dat.calib.blr[["plotdata"]][[1]], dat.calib.blr.w.manual[["plotdata"]][[1]])
+            expect_equal(dat.calib.mlr[["plotdata"]][[1]], dat.calib.mlr.w.manual[["plotdata"]][[1]])
 
             ###
-            ### Calculate observed event probabilities using an incorrect vector of weights, and see if its different from dat.calib.blr
-            dat.calib.blr.w.manual <-
-              calc_calib_blr(data.mstate = msebmtcal,
+            ### Calculate observed event probabilities using an incorrect vector of weights, and see if its different from dat.calib.mlr
+            dat.calib.mlr.w.manual <-
+              calib_mlr(data.mstate = msebmtcal,
                              data.raw = ebmtcal,
-                             j=1,
-                             s=0,
+                             j = 3,
+                             s = 100,
                              t.eval = 1826,
                              tp.pred = tp.pred,
-                             curve.type = "rcs",
-                             rcs.nk = 3,
                              weights = rep(1,nrow(weights.manual)))
 
-            expect_false(any(dat.calib.blr[["plotdata"]][[1]]$obs == dat.calib.blr.w.manual[["plotdata"]][[1]]$obs))
+            expect_false(any(dat.calib.mlr[["plotdata"]][[1]]$obs == dat.calib.mlr.w.manual[["plotdata"]][[1]]$obs))
 
             ###
             ### Calculate observed event probabilities with w.function, where calc_weights_manual = calc_weights (exactly same as internal procedure)
             calc_weights_manual <- calc_weights
 
-            dat.calib.blr.w.function <-
-              calc_calib_blr(data.mstate = msebmtcal,
+            dat.calib.mlr.w.function <-
+              calib_mlr(data.mstate = msebmtcal,
                              data.raw = ebmtcal,
-                             j=1,
-                             s=0,
+                             j = 3,
+                             s = 100,
                              t.eval = 1826,
                              tp.pred = tp.pred,
-                             curve.type = "rcs",
-                             rcs.nk = 3,
                              w.function = calc_weights_manual,
                              w.covs = c("year", "agecl", "proph", "match"))
 
-            expect_type(dat.calib.blr.w.function, "list")
-            expect_equal(class(dat.calib.blr.w.function), "calib_blr")
-            expect_length(dat.calib.blr.w.function, 2)
-            expect_length(dat.calib.blr.w.function[["plotdata"]], 6)
-            expect_length(dat.calib.blr.w.function[["plotdata"]][[1]]$id, 1778)
-            expect_length(dat.calib.blr.w.function[["plotdata"]][[6]]$id, 1778)
-            expect_length(dat.calib.blr.w.function[["metadata"]], 8)
-            expect_false(dat.calib.blr.w.function[["metadata"]]$CI)
+            expect_type(dat.calib.mlr.w.function, "list")
+            expect_equal(class(dat.calib.mlr.w.function), "calib_mlr")
+            expect_length(dat.calib.mlr.w.function, 2)
+            expect_length(dat.calib.mlr.w.function[["plotdata"]], 4)
+            expect_length(dat.calib.mlr.w.function[["plotdata"]][[1]]$id, 359)
+            expect_length(dat.calib.mlr.w.function[["plotdata"]][[4]]$id, 359)
+            expect_length(dat.calib.mlr.w.function[["metadata"]], 4)
 
             ## Check answer is same whether w.function used or not
-            expect_equal(dat.calib.blr[["plotdata"]][[1]], dat.calib.blr.w.function[["plotdata"]][[1]])
-            expect_equal(dat.calib.blr[["plotdata"]][[6]], dat.calib.blr.w.function[["plotdata"]][[6]])
+            expect_equal(dat.calib.mlr[["plotdata"]][[1]], dat.calib.mlr.w.function[["plotdata"]][[1]])
+            expect_equal(dat.calib.mlr[["plotdata"]][[4]], dat.calib.mlr.w.function[["plotdata"]][[4]])
 
             ###
             ### Redefine calc_weights, but change order of all the input arguments (this shouldn't make a difference)
@@ -471,23 +149,23 @@ test_that("check calc_calib_blr output, (j = 1, s = 0),
               ### who have reached absorbing states, who have been 'censored' from the survival distribution is censoring)
               if (landmark.type == "state"){
                 ### Identify individuals who are uncensored in state j at time s
-                ids.uncens <- base::subset(data.mstate, from == j & Tstart <= s & s < Tstop) %>%
-                  dplyr::select(id) %>%
-                  dplyr::distinct(id) %>%
+                ids.uncens <- base::subset(data.mstate, from == j & Tstart <= s & s < Tstop) |>
+                  dplyr::select(id) |>
+                  dplyr::distinct(id) |>
                   dplyr::pull(id)
 
               } else if (landmark.type == "all"){
                 ### Identify individuals who are uncensored time s
-                ids.uncens <- base::subset(data.mstate, Tstart <= s & s < Tstop) %>%
-                  dplyr::select(id) %>%
-                  dplyr::distinct(id) %>%
+                ids.uncens <- base::subset(data.mstate, Tstart <= s & s < Tstop) |>
+                  dplyr::select(id) |>
+                  dplyr::distinct(id) |>
                   dplyr::pull(id)
 
               }
 
               ### Subset data.mstate and data.raw to these individuals
-              data.mstate <- data.mstate %>% base::subset(id %in% ids.uncens)
-              data.raw <- data.raw %>% base::subset(id %in% ids.uncens)
+              data.mstate <- data.mstate |> base::subset(id %in% ids.uncens)
+              data.raw <- data.raw |> base::subset(id %in% ids.uncens)
 
               ###
               ### Create models for censoring in order to calculate the IPCW weights
@@ -606,35 +284,31 @@ test_that("check calc_calib_blr output, (j = 1, s = 0),
             }
 
             ### Calculate observed event probabilities with new w.function
-            dat.calib.blr.w.function <-
-              calc_calib_blr(data.mstate = msebmtcal,
+            dat.calib.mlr.w.function <-
+              calib_mlr(data.mstate = msebmtcal,
                              data.raw = ebmtcal,
-                             j=1,
-                             s=0,
+                             j = 3,
+                             s = 100,
                              t.eval = 1826,
                              tp.pred = tp.pred,
-                             curve.type = "rcs",
-                             rcs.nk = 3,
                              w.function = calc_weights_manual,
                              w.covs = c("year", "agecl", "proph", "match"))
 
-            expect_type(dat.calib.blr.w.function, "list")
-            expect_equal(class(dat.calib.blr.w.function), "calib_blr")
-            expect_length(dat.calib.blr.w.function, 2)
-            expect_length(dat.calib.blr.w.function[["plotdata"]], 6)
-            expect_length(dat.calib.blr.w.function[["plotdata"]][[1]]$id, 1778)
-            expect_length(dat.calib.blr.w.function[["plotdata"]][[6]]$id, 1778)
-            expect_length(dat.calib.blr.w.function[["metadata"]], 8)
-            expect_false(dat.calib.blr.w.function[["metadata"]]$CI)
+            expect_type(dat.calib.mlr.w.function, "list")
+            expect_equal(class(dat.calib.mlr.w.function), "calib_mlr")
+            expect_length(dat.calib.mlr.w.function, 2)
+            expect_length(dat.calib.mlr.w.function[["plotdata"]], 4)
+            expect_length(dat.calib.mlr.w.function[["plotdata"]][[1]]$id, 359)
+            expect_length(dat.calib.mlr.w.function[["plotdata"]][[4]]$id, 359)
+            expect_length(dat.calib.mlr.w.function[["metadata"]], 4)
 
             ## Check answer is same whether w.function used or not
-            expect_equal(dat.calib.blr[["plotdata"]][[1]], dat.calib.blr.w.function[["plotdata"]][[1]])
-            expect_equal(dat.calib.blr[["plotdata"]][[6]], dat.calib.blr.w.function[["plotdata"]][[6]])
-
+            expect_equal(dat.calib.mlr[["plotdata"]][[1]], dat.calib.mlr.w.function[["plotdata"]][[1]])
+            expect_equal(dat.calib.mlr[["plotdata"]][[4]], dat.calib.mlr.w.function[["plotdata"]][[4]])
 
             ###
             ### Repeat this process (manual definition of calc_weights), again arguments are in different order, but this time an extra argument is added, which adds 10 to every weight.
-            ### This extra arguments is something that could be inputted by user, and want to check it does actually change the answer. It should no longer agree with dat.calb.blr.
+            ### This extra arguments is something that could be inputted by user, and want to check it does actually change the answer. It should no longer agree with dat.calb.mlr.
             calc_weights_manual <- function(stabilised = FALSE, max.follow = NULL, data.mstate, covs = NULL, landmark.type = "state", j = NULL, t.eval, s, max.weight = 10, data.raw, extra.arg = NULL){
 
               ### Modify everybody to be censored after time t.eval, if a max.follow has been specified
@@ -665,23 +339,23 @@ test_that("check calc_calib_blr output, (j = 1, s = 0),
               ### who have reached absorbing states, who have been 'censored' from the survival distribution is censoring)
               if (landmark.type == "state"){
                 ### Identify individuals who are uncensored in state j at time s
-                ids.uncens <- base::subset(data.mstate, from == j & Tstart <= s & s < Tstop) %>%
-                  dplyr::select(id) %>%
-                  dplyr::distinct(id) %>%
+                ids.uncens <- base::subset(data.mstate, from == j & Tstart <= s & s < Tstop) |>
+                  dplyr::select(id) |>
+                  dplyr::distinct(id) |>
                   dplyr::pull(id)
 
               } else if (landmark.type == "all"){
                 ### Identify individuals who are uncensored time s
-                ids.uncens <- base::subset(data.mstate, Tstart <= s & s < Tstop) %>%
-                  dplyr::select(id) %>%
-                  dplyr::distinct(id) %>%
+                ids.uncens <- base::subset(data.mstate, Tstart <= s & s < Tstop) |>
+                  dplyr::select(id) |>
+                  dplyr::distinct(id) |>
                   dplyr::pull(id)
 
               }
 
               ### Subset data.mstate and data.raw to these individuals
-              data.mstate <- data.mstate %>% base::subset(id %in% ids.uncens)
-              data.raw <- data.raw %>% base::subset(id %in% ids.uncens)
+              data.mstate <- data.mstate |> base::subset(id %in% ids.uncens)
+              data.raw <- data.raw |> base::subset(id %in% ids.uncens)
 
               ###
               ### Create models for censoring in order to calculate the IPCW weights
@@ -803,91 +477,27 @@ test_that("check calc_calib_blr output, (j = 1, s = 0),
             }
 
             ### Calculate observed event probabilities with new w.function
-            dat.calib.blr.w.function <-
-              calc_calib_blr(data.mstate = msebmtcal,
+            dat.calib.mlr.w.function <-
+              calib_mlr(data.mstate = msebmtcal,
                              data.raw = ebmtcal,
-                             j=1,
-                             s=0,
+                             j = 3,
+                             s = 100,
                              t.eval = 1826,
                              tp.pred = tp.pred,
-                             curve.type = "rcs",
-                             rcs.nk = 3,
                              w.function = calc_weights_manual,
                              w.covs = c("year", "agecl", "proph", "match"),
                              extra.arg = 10)
 
-            expect_type(dat.calib.blr.w.function, "list")
-            expect_equal(class(dat.calib.blr.w.function), "calib_blr")
-            expect_length(dat.calib.blr.w.function, 2)
-            expect_length(dat.calib.blr.w.function[["plotdata"]], 6)
-            expect_length(dat.calib.blr.w.function[["plotdata"]][[1]]$id, 1778)
-            expect_length(dat.calib.blr.w.function[["plotdata"]][[6]]$id, 1778)
-            expect_length(dat.calib.blr.w.function[["metadata"]], 8)
-            expect_false(dat.calib.blr.w.function[["metadata"]]$CI)
+            expect_type(dat.calib.mlr.w.function, "list")
+            expect_equal(class(dat.calib.mlr.w.function), "calib_mlr")
+            expect_length(dat.calib.mlr.w.function, 2)
+            expect_length(dat.calib.mlr.w.function[["plotdata"]], 4)
+            expect_length(dat.calib.mlr.w.function[["plotdata"]][[1]]$id, 359)
+            expect_length(dat.calib.mlr.w.function[["plotdata"]][[4]]$id, 359)
+            expect_length(dat.calib.mlr.w.function[["metadata"]], 4)
 
             ## Check answer is same whether w.function used or not
-            expect_false(any(dat.calib.blr[["plotdata"]][[1]]$obs == dat.calib.blr.w.function[["plotdata"]][[1]]$obs))
+            expect_false(any(dat.calib.mlr[["plotdata"]][[1]]$obs == dat.calib.mlr.w.function[["plotdata"]][[1]]$obs))
 
           })
-
-test_that("test warnings and errors", {
-
-  ## Extract relevant predicted risks from tps0
-  tp.pred <- dplyr::select(dplyr::filter(tps0, j == 3), any_of(paste("pstate", 1:6, sep = "")))
-
-  ## Calculate observed event probabilities
-  expect_error(
-    calc_calib_blr(data.mstate = msebmtcal,
-                   data.raw = ebmtcal,
-                   j=1,
-                   s=0,
-                   t.eval = 1826,
-                   tp.pred = tp.pred,
-                   curve.type = "rcs",
-                   rcs.nk = 3,
-                   w.covs = c("year", "agecl", "proph", "match"),
-                   transitions.out = c(1,2,3,4))
-  )
-
-  ## Calculate observed event probabilities
-  weights.manual <-
-    calc_weights(data.mstate = msebmtcal,
-                 data.raw = ebmtcal,
-                 t.eval = 1826,
-                 s = 0,
-                 landmark.type = "state",
-                 j = 1,
-                 max.weight = 10,
-                 stabilised = FALSE)$ipcw[-1]
-
-  expect_error(
-    calc_calib_blr(data.mstate = msebmtcal,
-                   data.raw = ebmtcal,
-                   j=1,
-                   s=0,
-                   t.eval = 1826,
-                   tp.pred = tp.pred,
-                   curve.type = "rcs",
-                   rcs.nk = 3,
-                   weights = weights.manual)
-  )
-
-  ## Write a weights function with the wrong variable names
-  calc_weights_error <- function(data.mstate, data.raw, covs = NULL, t.eval, s, j = NULL, max.weight = 10, stabilised = FALSE, max.follow = NULL){
-    return(data.mstate)
-  }
-  expect_error(
-    calc_calib_blr(data.mstate = msebmtcal,
-                   data.raw = ebmtcal,
-                   j=1,
-                   s=0,
-                   t.eval = 1826,
-                   tp.pred = tp.pred,
-                   curve.type = "rcs",
-                   rcs.nk = 3,
-                   w.function = calc_weights_error,
-                   w.covs = c("year", "agecl", "proph", "match"))
-  )
-
-})
 

@@ -115,25 +115,6 @@ Sys.setenv(R_GSCMD = "C:\\Program Files\\gs\\gs10.01.1\\bin\\gswin64c.exe")
 ###
 ### Install package
 ###
-getwd()
-load_all()
-calc_calib_blr
-devtools::document()
-devtools::check(vignettes = FALSE)
-calibmsm::calc_calib_blr
 devtools::install()
-library(calibmsm)
-?calibmsm::calc_weights
-?calibmsm::calc_calib_blr
-?calibmsm::calc_calib_mlr
-devtools::check(build_args = "--compact-vignettes=gs+qpdf")
-devtools::check()
-install.packages("Formula")
-library(dplyr)
-getwd()
-testchange
-testchange2
 
-install.packages("pkgdown")
-install.packages("devtools")
-install.packages("gitcreds")
+

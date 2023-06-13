@@ -77,23 +77,23 @@ calc_weights <- function(data.mstate, data.raw, covs = NULL, t.eval, s, landmark
   ### who have reached absorbing states, who have been 'censored' from the survival distribution is censoring)
   if (landmark.type == "state"){
     ### Identify individuals who are uncensored in state j at time s
-    ids.uncens <- base::subset(data.mstate, from == j & Tstart <= s & s < Tstop) %>%
-      dplyr::select(id) %>%
-      dplyr::distinct(id) %>%
+    ids.uncens <- base::subset(data.mstate, from == j & Tstart <= s & s < Tstop) |>
+      dplyr::select(id) |>
+      dplyr::distinct(id) |>
       dplyr::pull(id)
 
   } else if (landmark.type == "all"){
     ### Identify individuals who are uncensored time s
-    ids.uncens <- base::subset(data.mstate, Tstart <= s & s < Tstop) %>%
-      dplyr::select(id) %>%
-      dplyr::distinct(id) %>%
+    ids.uncens <- base::subset(data.mstate, Tstart <= s & s < Tstop) |>
+      dplyr::select(id) |>
+      dplyr::distinct(id) |>
       dplyr::pull(id)
 
   }
 
   ### Subset data.mstate and data.raw to these individuals
-  data.mstate <- data.mstate %>% base::subset(id %in% ids.uncens)
-  data.raw <- data.raw %>% base::subset(id %in% ids.uncens)
+  data.mstate <- data.mstate |> base::subset(id %in% ids.uncens)
+  data.raw <- data.raw |> base::subset(id %in% ids.uncens)
 
   ###
   ### Create models for censoring in order to calculate the IPCW weights

@@ -6,8 +6,10 @@ a <- 3
 b <- 4
 rm(list=ls())
 load_all()
+devtools::document()
 devtools::check()
 devtools::install()
+devtools::check(vignettes = FALSE, args = c("--no-tests"))
 ?calibmsm::calc_calib_mlr
 testhaschanged <- 1
 whyisntworkflowbeingrecognised <- 3
@@ -203,7 +205,7 @@ getwd()
 rm(list=ls())
 load_all()
 calc_calib_mlr
-devtools::check(vignettes = FALSE, args = c("--no-tests"))
+
 
 devtools::test()
 .libPaths()

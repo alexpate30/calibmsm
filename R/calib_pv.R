@@ -101,7 +101,7 @@ calc_pv_aj <- function(person_id.eval, data.mstate, obs.aj, tmat, n.cohort, t.ev
 #' Estimate calibration curves for a multistate model using pseudo-values.
 #'
 #' @description
-#' Creates the underlying data for the calibration curves. `calc_calib_pv`
+#' Creates the underlying data for the calibration curves. `calib_pv`
 #' estimates the
 #' observed event probabilities for a given set of predicted transition probabilities
 #' in a cohort of interest. This is done using techniques for assessing calibration of binary logistic regression models,
@@ -128,7 +128,7 @@ calc_pv_aj <- function(person_id.eval, data.mstate, obs.aj, tmat, n.cohort, t.ev
 #' @details
 #' Observed event probabilities at time `t.eval` are estimated for predicted
 #' transition probabilities `tp.pred` out of state `j` at time `s`.
-#' `calc_calib_pv` estimates the observed event probabilities using pseudo-values.
+#' `calib_pv` estimates the observed event probabilities using pseudo-values.
 #' Calibraiton curves are generatd by regression the pseudo-values for the transition
 #' probabilities on the predicted transition probabilities. REF XXXX. Currently calibration
 #' curves can only be produced using loess smoothers. This will be updated to include
@@ -143,7 +143,7 @@ calc_pv_aj <- function(person_id.eval, data.mstate, obs.aj, tmat, n.cohort, t.ev
 #'
 #' The calibration curves can be plotted using \code{\link{plot.calib_pv}}.
 #'
-#' @returns \code{\link{calc_calib_pv}} returns a list containing two elements:
+#' @returns \code{\link{calib_pv}} returns a list containing two elements:
 #' \code{plotdata} and \code{metadata}. The \code{plotdata} element contains the
 #' data for the calibration curves. This will itself be a list with each element
 #' containing calibration plot data for the transition probabilities into each of the possible
@@ -167,7 +167,7 @@ calc_pv_aj <- function(person_id.eval, data.mstate, obs.aj, tmat, n.cohort, t.ev
 #'
 #' # Now estimate the observed event probabilities for each possible transition.
 #'
-#' dat.calib.pseudo <- calc_calib_pv(data.mstate = msebmtcal,
+#' dat.calib.pseudo <- calib_pv(data.mstate = msebmtcal,
 #'   data.raw = ebmtcal,
 #'   j = 3,
 #'   s = 100,
@@ -183,7 +183,7 @@ calc_pv_aj <- function(person_id.eval, data.mstate, obs.aj, tmat, n.cohort, t.ev
 #'
 #' #'
 #' @export
-calc_calib_pv <- function(data.mstate,
+calib_pv <- function(data.mstate,
                           data.raw,
                           j,
                           s,
@@ -215,14 +215,14 @@ calc_calib_pv <- function(data.mstate,
   # j <- 3
   # s <- 100
   # t.eval <- 1826
-  # tp.pred <- tps100 %>% dplyr::filter(j == 3) %>% dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
+  # tp.pred <- tps100 |> dplyr::filter(j == 3) |> dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
   # # id.lmk <- extract_ids_states(data.mstate = data.mstate,
   # #                              tmat = attributes(data.mstate)$trans,
   # #                              j = j,
   # #                              t.eval = s)
-  # # data.pred.plot <- tps100 %>%
-  # #   dplyr::filter(id %in% id.lmk) %>%
-  # #   dplyr::filter(j == 3) %>%
+  # # data.pred.plot <- tps100 |>
+  # #   dplyr::filter(id %in% id.lmk) |>
+  # #   dplyr::filter(j == 3) |>
   # #   dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
   # data.pred.plot <- NULL
   # transitions.out <- NULL
@@ -325,8 +325,8 @@ calc_calib_pv <- function(data.mstate,
                                     t.eval = s)
 
     ### Extract predicted risks of these individuals
-    data.pred.plot <- data.raw %>%
-      dplyr::filter(id %in% id.lmk.js) %>%
+    data.pred.plot <- data.raw |>
+      dplyr::filter(id %in% id.lmk.js) |>
       dplyr::select(dplyr::any_of(paste("tp.pred", 1:6, sep = "")))
 
     ### Indicator to remember data.pred.plot was defined manually
@@ -389,7 +389,7 @@ calc_calib_pv <- function(data.mstate,
       do.call("rbind",
               lapply(1:nrow(data.raw.boot),
                      function(x) {
-                       base::subset(data.mstate, id == data.raw.boot$id[x]) %>%
+                       base::subset(data.mstate, id == data.raw.boot$id[x]) |>
                          dplyr::mutate(id2 = data.raw.boot$id2[x])
                      }
               )
@@ -412,7 +412,7 @@ calc_calib_pv <- function(data.mstate,
     ids.state.js <- extract_ids_states(data.mstate = data.mstate, tmat = tmat, j = j, t.eval = s)
 
     ### Apply landmarking to data.raw and data.mstate
-    data.raw.lmk.js <- data.raw %>% base::subset(id %in% ids.state.js)
+    data.raw.lmk.js <- data.raw |> base::subset(id %in% ids.state.js)
     data.mstate.lmk.js <- base::subset(data.mstate, id %in% ids.state.js)
 
     ###
@@ -423,7 +423,7 @@ calc_calib_pv <- function(data.mstate,
       dplyr::mutate(data.mstate.lmk.js,
                     Tstart = pmax(0, Tstart - s),
                     Tstop = pmax(0, Tstop - s),
-                    time = Tstop - Tstart) %>%
+                    time = Tstop - Tstart) |>
       base::subset(!(Tstart == 0 & Tstop == 0))
 
     ###
@@ -433,8 +433,8 @@ calc_calib_pv <- function(data.mstate,
     ### a possible transition.
 
     ### Start by identifying which transitions these are
-    suppressMessages(zero.transition.table <- data.mstate.lmk.js %>%
-                       dplyr::group_by(from, to) %>%
+    suppressMessages(zero.transition.table <- data.mstate.lmk.js |>
+                       dplyr::group_by(from, to) |>
                        dplyr::summarise(Frequency = sum(status)))
 
     ### Only edit the dataset if some transitions have a frequency of zero
@@ -943,7 +943,7 @@ calc_calib_pv <- function(data.mstate,
   ### the sequence 1:nrow(data.raw), in order to calculate the plot data.
 
   ### Note that 2) and 3) are the same. This is because the function calib_pseudo_func is dependent on CI and CI.type,
-  ### which were defined as input into calc_calib_pv. They will there give different output (as they should) when it is run.
+  ### which were defined as input into calib_pv. They will there give different output (as they should) when it is run.
 
   ### Note that if curve.type = "loess", a request for CI.type = "parametric" will be ignored and no CI is reported.
   ### A stop error is given if a user tries to request this.
@@ -1004,7 +1004,7 @@ calc_calib_pv <- function(data.mstate,
       }
     } else if (CI.type == "parametric"){
 
-      ### Note that calib_pseudo_func is dependent on curve.type and CI.type, parameters input to calc_calib_pv
+      ### Note that calib_pseudo_func is dependent on curve.type and CI.type, parameters input to calib_pv
       plotdata <- calib_pseudo_func(data.raw = data.raw,
                                     indices = 1:nrow(data.raw),
                                     data.mstate = data.mstate,

@@ -1,6 +1,6 @@
 #' Estimate calibration curves for a multistate model using binary logistic regression calibration techniques and inverse probability of censoring weights.'
 #' @description
-#' Creates the underlying data for the calibration curves. `calc_calib_blr`
+#' Creates the underlying data for the calibration curves. `calib_blr`
 #' estimates the
 #' observed event probabilities for a given set of predicted transition probabilities
 #' in a cohort of interest. This is done using techniques for assessing calibration of binary logistic regression models,
@@ -32,7 +32,7 @@
 #' @details
 #' Observed event probabilities at time `t.eval` are estimated for predicted
 #' transition probabilities `tp.pred` out of state `j` at time `s`.
-#' `calc_calib_blr` estimates calibration curves using techniques for assessing the calibration of binary logistic
+#' `calib_blr` estimates calibration curves using techniques for assessing the calibration of binary logistic
 #' regression models. A choice between restricted cubic splines and loess
 #' smoothers for estimating the calibration curve can be made using `curve.type`.
 #' Landmarking is applied to only assess calibration in individuals who are uncensored
@@ -58,7 +58,7 @@
 #'
 #' The calibration curves can be plotted using \code{\link{plot.calib_blr}}.
 #'
-#' @returns \code{\link{calc_calib_blr}} returns a list containing two elements:
+#' @returns \code{\link{calib_blr}} returns a list containing two elements:
 #' \code{plotdata} and \code{metadata}. The \code{plotdata} element contains the
 #' data for the calibration curves. This will itself be a list with each element
 #' containing calibration plot data for the transition probabilities into each of the possible
@@ -85,7 +85,7 @@
 #' # bootstrap repicates. In practice we recommend using a higher number.
 #'
 #' dat.calib.blr <-
-#' calc_calib_blr(data.mstate = msebmtcal,
+#' calib_blr(data.mstate = msebmtcal,
 #'  data.raw = ebmtcal,
 #'  j=1,
 #'  s=0,
@@ -100,7 +100,7 @@
 #' str(dat.calib.blr)
 #'
 #' @export
-calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.type = "rcs", rcs.nk = 3, loess.span = 0.75, loess.degree = 2,
+calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.type = "rcs", rcs.nk = 3, loess.span = 0.75, loess.degree = 2,
                            weights = NULL, w.function = NULL, w.covs = NULL, w.landmark.type = "state", w.max = 10, w.stabilised = FALSE, w.max.follow = NULL, CI = FALSE, CI.R.boot = NULL,
                            data.pred.plot = NULL, transitions.out = NULL, ...){
 
@@ -111,7 +111,7 @@ calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.t
 # j.in <- 1
 # s<-0
 # t.eval <- 1826
-# tp.pred = tps100 %>% dplyr::filter(j == 1) %>% dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
+# tp.pred = tps100 |> dplyr::filter(j == 1) |> dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
 # curve.type = "rcs"
 # rcs.nk = 3
 # weights <- weights.manual
@@ -122,7 +122,7 @@ calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.t
 # w.max.follow = NULL
 # CI = FALSE
 # str(data.pred.plot)
-# data.pred.plot <- tps0 %>% dplyr::filter(j == j.in) %>% dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
+# data.pred.plot <- tps0 |> dplyr::filter(j == j.in) |> dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
 # data.pred.plot$id <- 1:nrow(data.pred.plot)
 
   ###
@@ -164,7 +164,7 @@ calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.t
   ### If custom function for estimating weights has been inputted ("w.function"), replace "calc_weights" with this function
   if (!is.null(w.function)){
     ### stop if w.function doesn't have correct arguments
-    if(!all(methods::formalArgs(calc_weights) %in% methods::formalArgs(w.function))){
+    if(!all(names(formals(calc_weights)) %in% names(formals(w.function)))){
       stop("Arguments for w.function does not contain those from calibmsm::calc_weights")
     }
     calc_weights <- w.function
@@ -235,14 +235,14 @@ calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.t
   rm(temp.dummy)
 
   ### Identify individuals who are in state j at time s (will be used for landmarking)
-  ids.state.js <- base::subset(data.mstate, from == j & Tstart <= s & s < Tstop) %>%
-    dplyr::select(id) %>%
-    dplyr::distinct(id) %>%
+  ids.state.js <- base::subset(data.mstate, from == j & Tstart <= s & s < Tstop) |>
+    dplyr::select(id) |>
+    dplyr::distinct(id) |>
     dplyr::pull(id)
 
   ### Reduce data.raw to landmarked dataset of individuals who are uncensored at time t.eval,
   ### this is the set of predicted risks over which we plot calibration curves
-  data.raw.lmk.js.uncens <- data.raw %>% base::subset(id %in% ids.state.js) %>% base::subset(!is.na(state.poly))
+  data.raw.lmk.js.uncens <- data.raw |> base::subset(id %in% ids.state.js) |> base::subset(!is.na(state.poly))
 
 
   ############################################################
@@ -265,7 +265,7 @@ calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.t
     data.boot <- data.in[indices, ]
 
     ## Create landmarked dataset
-    data.boot.lmk.js <-  data.boot %>% base::subset(id %in% ids.state.js)
+    data.boot.lmk.js <-  data.boot |> base::subset(id %in% ids.state.js)
 
     ## Calculate weights
     ## Note this is done in the entire dataset data.boot, which has its own functionality (w.landmark.type) to landmark on j and s, or just s, before
@@ -326,7 +326,7 @@ calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.t
     # data.in.uncens = data.raw.lmk.js.uncens
 
     ## Create landmarked dataset
-    data.boot.lmk.js <-  data.boot %>% base::subset(id %in% ids.state.js)
+    data.boot.lmk.js <-  data.boot |> base::subset(id %in% ids.state.js)
 
     ## Calculate weights
     ## Note this is done in the entire dataset data.boot, which has its own functionality (w.landmark.type) to landmark on j and s, or just s, before
@@ -421,7 +421,7 @@ calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.t
     data.boot <- data.in[indices, ]
 
     ## Create landmarked dataset
-    data.boot.lmk.js <-  data.boot %>% base::subset(id %in% ids.state.js)
+    data.boot.lmk.js <-  data.boot |> base::subset(id %in% ids.state.js)
 
     ## Reduce data.boot to individuals who are uncensored at time t.eval
     data.boot.lmk.js.uncens <- base::subset(data.boot.lmk.js, !is.na(state.poly))
@@ -462,7 +462,7 @@ calc_calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.t
     data.boot <- data.in[indices, ]
 
     ## Create landmarked dataset
-    data.boot.lmk.js <-  data.boot %>% base::subset(id %in% ids.state.js)
+    data.boot.lmk.js <-  data.boot |> base::subset(id %in% ids.state.js)
 
     ## Reduce data.boot to individuals who are uncensored at time t.eval
     data.boot.lmk.js.uncens <- base::subset(data.boot.lmk.js, !is.na(state.poly))

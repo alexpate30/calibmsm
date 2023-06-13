@@ -13,15 +13,15 @@ extract_ids_states <- function(data.mstate, tmat, j, t.eval){
   ### For non-absorbing states, to be in state j at time t, you must have an observations from state j, where Tstart <= t.eval < Tstop
   if (!(j %in% absorbing.states)){
     ## Extract ids
-    ids.state.j <- base::subset(data.mstate, from == j & Tstart <= t.eval & t.eval < Tstop) %>%
-      dplyr::select(id) %>%
+    ids.state.j <- base::subset(data.mstate, from == j & Tstart <= t.eval & t.eval < Tstop) |>
+      dplyr::select(id) |>
       dplyr::distinct(id)
     ## Put into numeric vector
     ids.state.j <- as.numeric(ids.state.j$id)
   } else if (j %in% absorbing.states){
     ### For absorbing state, just have to have moved into it
-    ids.state.j <- base::subset(data.mstate, to == j & t.eval >= Tstop & status == 1) %>%
-      dplyr::select(id) %>%
+    ids.state.j <- base::subset(data.mstate, to == j & t.eval >= Tstop & status == 1) |>
+      dplyr::select(id) |>
       dplyr::distinct(id)
     ## Put into numeric vector
     ids.state.j <- as.numeric(ids.state.j$id)

@@ -1,10 +1,10 @@
-#' Plots calibration curves estimated using \code{\link{calc_calib_blr}}.
+#' Plots calibration curves estimated using \code{\link{calib_blr}}.
 #'
 #' @description
 #' Plots calibration curves for the transition probabilities of a multistate model
-#' using data estimated from \code{\link{calc_calib_blr}}.
+#' using data estimated from \code{\link{calib_blr}}.
 #'
-#' @param x Object of class 'calib_blr' generated from \code{\link{calc_calib_blr}}.
+#' @param x Object of class 'calib_blr' generated from \code{\link{calib_blr}}.
 #' @param ... Other
 #' @param combine Whether to combine into one plot using ggarrange, or return as a list of individual plots
 #' @param ncol Number of columns for combined calibration plot
@@ -47,13 +47,13 @@ plot.calib_blr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL){
       levels(plot.data.k.longer$mapping) <- c("Calibration", "95% CI")
 
       ### Create the plots
-      plots.list[[k]] <- ggplot2::ggplot(data = plot.data.k.longer %>% dplyr::arrange(pred) %>% dplyr::select(pred, line.group, value, mapping)) +
+      plots.list[[k]] <- ggplot2::ggplot(data = plot.data.k.longer |> dplyr::arrange(pred) |> dplyr::select(pred, line.group, value, mapping)) +
         ggplot2::geom_line(ggplot2::aes(x = pred, y = value, group = line.group, color = mapping)) +
         ggplot2::geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
         ggplot2::xlab("Predicted risk") + ggplot2::ylab("Observed risk") +
         ggplot2::xlim(c(0, max(plot.data.k.longer$pred))) +
         ggplot2::ylim(c(0, max(plot.data.k.longer$value))) +
-        ggplot2::geom_rug(data = plot.data.k.longer %>% dplyr::arrange(pred) %>% dplyr::select(pred, line.group, value, mapping) %>% subset(line.group == "Calibration"),
+        ggplot2::geom_rug(data = plot.data.k.longer |> dplyr::arrange(pred) |> dplyr::select(pred, line.group, value, mapping) |> subset(line.group == "Calibration"),
                           ggplot2::aes(x = pred, y = value), col = grDevices::rgb(1, 0, 0, alpha = 0.3)) +
         ggplot2::ggtitle(paste("State ", state.k, sep = ""))
     }
@@ -69,7 +69,7 @@ plot.calib_blr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL){
       state.k <- assessed.transitions[k]
 
       ### Create the plots
-      plots.list[[k]] <- ggplot2::ggplot(data = plot.data.k %>% dplyr::arrange(pred) %>% dplyr::select(id, pred, obs)) +
+      plots.list[[k]] <- ggplot2::ggplot(data = plot.data.k |> dplyr::arrange(pred) |> dplyr::select(id, pred, obs)) +
         ggplot2::geom_line(ggplot2::aes(x = pred, y = obs)) +
         ggplot2::geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
         ggplot2::xlab("Predicted risk") + ggplot2::ylab("Observed risk") +
@@ -100,13 +100,13 @@ plot.calib_blr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL){
 }
 
 
-#' Plots calibration scatter plots estimated using \code{\link{calc_calib_mlr}}.
+#' Plots calibration scatter plots estimated using \code{\link{calib_mlr}}.
 #'
 #' @description
 #' Plots calibration scatter plots for the transition probabilities of a multistate model
-#' using data estimated from \code{\link{calc_calib_mlr}}.
+#' using data estimated from \code{\link{calib_mlr}}.
 #'
-#' @param x Object of class 'calib_mlr' generated from \code{\link{calc_calib_mlr}}
+#' @param x Object of class 'calib_mlr' generated from \code{\link{calib_mlr}}
 #' @param ... Other
 #' @param combine Whether to combine into one plot using ggarrange, or return as a list of individual plots
 #' @param ncol Number of columns for combined calibration plot
@@ -136,7 +136,7 @@ plot.calib_mlr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL){
     plot.data.k <- plot.data[[k]]
 
     ### Create the plots
-    plots.list[[k]] <- ggplot2::ggplot(data = plot.data.k %>% dplyr::arrange(pred) %>%  dplyr::select(id, pred, obs)) +
+    plots.list[[k]] <- ggplot2::ggplot(data = plot.data.k |> dplyr::arrange(pred) |>  dplyr::select(id, pred, obs)) +
       ggplot2::geom_point(ggplot2::aes(x = pred, y = obs), color = "red", size = 0.5) +
       ggplot2::geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
       ggplot2::xlab("Predicted risk") + ggplot2::ylab("Observed risk") +
@@ -167,13 +167,13 @@ plot.calib_mlr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL){
 }
 
 
-#' Plots calibration curves estimated using \code{\link{calc_calib_pv}}.
+#' Plots calibration curves estimated using \code{\link{calib_pv}}.
 #'
 #' @description
 #' Plots calibration curves for the transition probabilities of a multistate model
-#' using data estimated from \code{\link{calc_calib_pv}}.
+#' using data estimated from \code{\link{calib_pv}}.
 #'
-#' @param x Object of class 'calib_pseudo' generated from \code{\link{calc_calib_pv}}.
+#' @param x Object of class 'calib_pseudo' generated from \code{\link{calib_pv}}.
 #' @param ... Other
 #' @param combine Whether to combine into one plot using ggarrange, or return as a list of individual plots
 #' @param ncol Number of columns for combined calibration plot
@@ -216,13 +216,13 @@ plot.calib_pv <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL){
       levels(plot.data.k.longer$mapping) <- c("Calibration", "95% CI")
 
       ### Create the plots
-      plots.list[[k]] <- ggplot2::ggplot(data = plot.data.k.longer %>% dplyr::arrange(pred) %>% dplyr::select(pred, line.group, value, mapping)) +
+      plots.list[[k]] <- ggplot2::ggplot(data = plot.data.k.longer |> dplyr::arrange(pred) |> dplyr::select(pred, line.group, value, mapping)) +
         ggplot2::geom_line(ggplot2::aes(x = pred, y = value, group = line.group, color = mapping)) +
         ggplot2::geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
         ggplot2::xlab("Predicted risk") + ggplot2::ylab("Observed risk") +
         ggplot2::xlim(c(0, max(plot.data.k.longer$pred))) +
         ggplot2::ylim(c(0, max(plot.data.k.longer$value))) +
-        ggplot2::geom_rug(data = plot.data.k.longer %>% dplyr::arrange(pred) %>% dplyr::select(pred, line.group, value, mapping) %>% subset(line.group == "Calibration"),
+        ggplot2::geom_rug(data = plot.data.k.longer |> dplyr::arrange(pred) |> dplyr::select(pred, line.group, value, mapping) |> subset(line.group == "Calibration"),
                           ggplot2::aes(x = pred, y = value), col = grDevices::rgb(1, 0, 0, alpha = 0.3)) +
         ggplot2::ggtitle(paste("State ", state.k, sep = ""))
     }
@@ -238,7 +238,7 @@ plot.calib_pv <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL){
       state.k <- assessed.transitions[k]
 
       ### Create the plots
-      plots.list[[k]] <- ggplot2::ggplot(data = plot.data.k %>% dplyr::arrange(pred) %>% dplyr::select(id, pred, obs)) +
+      plots.list[[k]] <- ggplot2::ggplot(data = plot.data.k |> dplyr::arrange(pred) |> dplyr::select(id, pred, obs)) +
         ggplot2::geom_line(ggplot2::aes(x = pred, y = obs)) +
         ggplot2::geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
         ggplot2::xlab("Predicted risk") + ggplot2::ylab("Observed risk") +

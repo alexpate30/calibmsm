@@ -4,7 +4,7 @@
 #' Creates the underlying data for the calibration plots. Observed event
 #' probabilities at time `t.eval` are estimated for inputted predicted
 #' transition probabilities `tp.pred` out of state `j` at time `s`.
-#' `calc_calib_mlr` estimates calibration scatter plots using a multinomial logistic
+#' `calib_mlr` estimates calibration scatter plots using a multinomial logistic
 #' framework in combination with landmarking and inverse probability of
 #' censoring weights.
 #'
@@ -41,7 +41,7 @@
 #' @details
 #' Observed event probabilities at time `t.eval` are estimated for predicted
 #' transition probabilities `tp.pred` out of state `j` at time `s`.
-#' `calc_calib_mlr` estimates calibration scatter plots uses a technique for assessing the calibration of multinomial logistic
+#' `calib_mlr` estimates calibration scatter plots uses a technique for assessing the calibration of multinomial logistic
 #' regression models, namely the nominal calibration framework of #' van Hoorde et al. (2014, 2015).
 #' Landmarking is applied to only assess calibration in individuals who are uncensored
 #' and in state `j` at time `s`. Censoring is dealt with using inverse probability of
@@ -64,12 +64,12 @@
 #' these would be plotted cohesively.
 #'
 #' Calibration plots cannot be produced for specific transitions (i.e. `transitions.out`
-#' in \code{\link{calc_calib_blr}}) because the nominal calibration framework (van Hoorde et al., 2014, 2015) assesses
+#' in \code{\link{calib_blr}}) because the nominal calibration framework (van Hoorde et al., 2014, 2015) assesses
 #' the calibration of all states simultaneously.
 #'
 #' The calibration scatter plots can be plotted using \code{\link{plot.calib_mlr}}.
 #'
-#'#' @returns \code{\link{calc_calib_mlr}} returns a list containing two elements:
+#'#' @returns \code{\link{calib_mlr}} returns a list containing two elements:
 #' \code{plotdata} and \code{metadata}. The \code{plotdata} element contains the
 #' data for the calibration scatter plots This will itself be a list with each element
 #' containing the data for the transition probabilities into each of the possible
@@ -90,7 +90,7 @@
 #' # Now estimate the observed event probabilities for each possible transition.
 #'
 #' dat.calib.mlr <-
-#' calc_calib_mlr(data.mstate = msebmtcal,
+#' calib_mlr(data.mstate = msebmtcal,
 #'  data.raw = ebmtcal,
 #'  j=1,
 #'  s=0,
@@ -104,7 +104,7 @@
 #'
 
 #' @export
-calc_calib_mlr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, smoother.type = "sm.ps", ps.int = 4, degree = 3, s.df = 4, niknots = 4,
+calib_mlr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, smoother.type = "sm.ps", ps.int = 4, degree = 3, s.df = 4, niknots = 4,
                            weights = NULL, w.function = NULL, w.covs, w.landmark.type = "state", w.max = 10, w.stabilised = FALSE, w.max.follow = NULL, ...){
 
   # data.mstate <- msebmtcal
@@ -112,7 +112,7 @@ calc_calib_mlr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, smoothe
   # j<-1
   # s<-0
   # t.eval <- 1826
-  # tp.pred = tps0 %>% dplyr::filter(j == 1) %>% dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
+  # tp.pred = tps0 |> dplyr::filter(j == 1) |> dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
   # ps.int <- 4
   # degree <- 3
   # weights <- NULL
@@ -181,14 +181,14 @@ calc_calib_mlr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, smoothe
                             state.poly.fac = base::factor(state.poly))
 
   ### Identify individuals who are in state j at time s (will be used for landmarking)
-  ids.state.js <- base::subset(data.mstate, from == j & Tstart <= s & s < Tstop) %>%
-    dplyr::select(id) %>%
-    dplyr::distinct(id) %>%
+  ids.state.js <- base::subset(data.mstate, from == j & Tstart <= s & s < Tstop) |>
+    dplyr::select(id) |>
+    dplyr::distinct(id) |>
     dplyr::pull(id)
 
   ### Reduce data.raw to landmarked dataset of individuals who are uncensored at time t.eval,
   ### this is the set of predicted risks over which we plot calibration curves
-  data.raw.lmk.js.uncens <- data.raw %>% base::subset(id %in% ids.state.js) %>% base::subset(!is.na(state.poly))
+  data.raw.lmk.js.uncens <- data.raw |> base::subset(id %in% ids.state.js) |> base::subset(!is.na(state.poly))
 
   ### Calculate weights if not specified manually
   if (is.null(weights)){
@@ -196,7 +196,7 @@ calc_calib_mlr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, smoothe
     ### Assign custom function for estimating weights, if specified
     if (!is.null(w.function)){
       ### stop if w.function doesn't have correct arguments
-      if(!all(methods::formalArgs(calc_weights) %in% methods::formalArgs(w.function))){
+      if(!all(names(formals(calc_weights)) %in% names(formals(w.function)))){
         stop("Arguments for w.function does not contain those from calibmsm::calc_weights")
       }
       calc_weights <- w.function
@@ -259,7 +259,7 @@ calc_calib_mlr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, smoothe
   ### Assign output
   output.object <- dplyr::select(data.raw.lmk.js.uncens, id, paste("tp.pred", valid.transitions, sep = ""), paste("mlr.pred.obs", valid.transitions, sep = ""))
 
-  ### Get plotdata in same format as calc_calib_blr
+  ### Get plotdata in same format as calib_blr
   ## Start by creating new output object
   output.object2 <- vector("list", length(valid.transitions))
   names(output.object2) <- paste("state", valid.transitions, sep = "")

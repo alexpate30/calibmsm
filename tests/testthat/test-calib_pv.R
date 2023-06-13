@@ -1,11 +1,11 @@
 ### Run tests for when curve.type = "loess".
-test_that("check calc_calib_pv output, (j = 3, s = 100), curve.type = loess", {
+test_that("check calib_pv output, (j = 3, s = 100), curve.type = loess", {
 
   ## Extract relevant predicted risks from tps0
   tp.pred <- dplyr::select(dplyr::filter(tps100, j == 3), dplyr::any_of(paste("pstate", 1:6, sep = "")))
 
   ## Calculate observed event probabilities using transitions.out = NULL
-  dat.calib.pv.1 <- calc_calib_pv(data.mstate = msebmtcal,
+  dat.calib.pv.1 <- calib_pv(data.mstate = msebmtcal,
                                   data.raw = ebmtcal,
                                   j = 3,
                                   s = 100,
@@ -17,7 +17,7 @@ test_that("check calc_calib_pv output, (j = 3, s = 100), curve.type = loess", {
                                   data.pred.plot = NULL, transitions.out = NULL)
 
   # ## Calculate observed event probabilities using transitions.out = c(3,4,5,6)
-  # dat.calib.pv.2 <- calc_calib_pv(data.mstate = msebmtcal,
+  # dat.calib.pv.2 <- calib_pv(data.mstate = msebmtcal,
   #                                  data.raw = ebmtcal,
   #                                  j = 3,
   #                                  s = 100,
@@ -34,7 +34,7 @@ test_that("check calc_calib_pv output, (j = 3, s = 100), curve.type = loess", {
   # expect_equal(dat.calib.pv.1[["plotdata"]][[1]], dat.calib.pv.2[["plotdata"]][[1]])
 
   # ## Calculate observed event probabilities using transitions.out = 3
-  # dat.calib.pv.3 <- calc_calib_pv(data.mstate = msebmtcal,
+  # dat.calib.pv.3 <- calib_pv(data.mstate = msebmtcal,
   #                                 data.raw = ebmtcal,
   #                                 j = 3,
   #                                 s = 100,
@@ -49,7 +49,7 @@ test_that("check calc_calib_pv output, (j = 3, s = 100), curve.type = loess", {
   # expect_equal(dat.calib.pv.1[["plotdata"]][[1]], dat.calib.pv.3[["plotdata"]][[1]])
 
   ## Calculate observed event probabilities with a confidence interval using bootstrapping and transitions.out = NULL
-  dat.calib.pv.4 <- calc_calib_pv(data.mstate = msebmtcal,
+  dat.calib.pv.4 <- calib_pv(data.mstate = msebmtcal,
                                   data.raw = ebmtcal,
                                   j = 3,
                                   s = 100,
@@ -70,7 +70,7 @@ test_that("check calc_calib_pv output, (j = 3, s = 100), curve.type = loess", {
   expect_equal(dat.calib.pv.1[["plotdata"]][[4]]$pred, dat.calib.pv.4[["plotdata"]][[4]]$pred)
 
   # ## Calculate observed event probabilities with a confidence interval using bootstrapping and transitions.out = c(3,4,5,6)
-  # dat.calib.pv.5 <- calc_calib_pv(data.mstate = msebmtcal,
+  # dat.calib.pv.5 <- calib_pv(data.mstate = msebmtcal,
   #                                 data.raw = ebmtcal,
   #                                 j = 3,
   #                                 s = 100,
@@ -89,7 +89,7 @@ test_that("check calc_calib_pv output, (j = 3, s = 100), curve.type = loess", {
   # expect_equal(dat.calib.pv.4[["plotdata"]][[4]]$pred, dat.calib.pv.5[["plotdata"]][[4]]$pred)
 
   # ## Calculate observed event probabilities with a confidence interval using bootstrapping and transitions.out = 3
-  # dat.calib.pv.6 <- calc_calib_pv(data.mstate = msebmtcal,
+  # dat.calib.pv.6 <- calib_pv(data.mstate = msebmtcal,
   #                                 data.raw = ebmtcal,
   #                                 j = 3,
   #                                 s = 100,
@@ -107,7 +107,7 @@ test_that("check calc_calib_pv output, (j = 3, s = 100), curve.type = loess", {
   # expect_equal(dat.calib.pv.4[["plotdata"]][[1]]$pred, dat.calib.pv.6[["plotdata"]][[1]]$pred)
 
   # ## Calculate observed event probabilities with a confidence interval using bootstrapping and transitions.out = 6
-  # dat.calib.pv.7 <- calc_calib_pv(data.mstate = msebmtcal,
+  # dat.calib.pv.7 <- calib_pv(data.mstate = msebmtcal,
   #                                 data.raw = ebmtcal,
   #                                 j = 3,
   #                                 s = 100,
@@ -124,7 +124,7 @@ test_that("check calc_calib_pv output, (j = 3, s = 100), curve.type = loess", {
   # expect_false(isTRUE(all.equal(dat.calib.pv.4[["plotdata"]][[1]]$obs, dat.calib.pv.7[["plotdata"]][[1]]$obs)))
   #
   # ## Calculate observed event probabilities with a confidence interval using bootstrapping, transitions.out = 6 and a smaller confidence interval
-  # dat.calib.pv.8 <- calc_calib_pv(data.mstate = msebmtcal,
+  # dat.calib.pv.8 <- calib_pv(data.mstate = msebmtcal,
   #                                 data.raw = ebmtcal,
   #                                 j = 3,
   #                                 s = 100,
@@ -150,7 +150,7 @@ test_that("check calc_calib_pv output, (j = 3, s = 100), curve.type = loess", {
     dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
 
   ## No confidence interval
-  dat.calib.pv.9 <- calc_calib_pv(data.mstate = msebmtcal,
+  dat.calib.pv.9 <- calib_pv(data.mstate = msebmtcal,
                                   data.raw = ebmtcal,
                                   j = 3,
                                   s = 100,
@@ -167,7 +167,7 @@ test_that("check calc_calib_pv output, (j = 3, s = 100), curve.type = loess", {
   expect_equal(dat.calib.pv.1[["plotdata"]][[1]]$pred, dat.calib.pv.9[["plotdata"]][[1]]$pred)
 
   ## With confidence interval
-  dat.calib.pv.10 <- calc_calib_pv(data.mstate = msebmtcal,
+  dat.calib.pv.10 <- calib_pv(data.mstate = msebmtcal,
                                   data.raw = ebmtcal,
                                   j = 3,
                                   s = 100,
@@ -189,13 +189,13 @@ test_that("check calc_calib_pv output, (j = 3, s = 100), curve.type = loess", {
 ### Note for this, the CI.type can either be 'bootstrap' or 'parametric'
 
 ### Run tests for when curve.type = "rcs" and CI.type = "bootstrap".
-test_that("check calc_calib_pv output, (j = 3, s = 100), curve.type = rcs, CI.type = bootstrap.", {
+test_that("check calib_pv output, (j = 3, s = 100), curve.type = rcs, CI.type = bootstrap.", {
 
   ## Extract relevant predicted risks from tps0
   tp.pred <- dplyr::select(dplyr::filter(tps100, j == 3), dplyr::any_of(paste("pstate", 1:6, sep = "")))
 
   ## Calculate observed event probabilities using transitions.out = NULL
-  dat.calib.pv.1 <- calc_calib_pv(data.mstate = msebmtcal,
+  dat.calib.pv.1 <- calib_pv(data.mstate = msebmtcal,
                                   data.raw = ebmtcal,
                                   j = 3,
                                   s = 100,
@@ -211,7 +211,7 @@ test_that("check calc_calib_pv output, (j = 3, s = 100), curve.type = rcs, CI.ty
   expect_equal(ncol(dat.calib.pv.1[["plotdata"]][[1]]), 3)
 
   ## Calculate observed event probabilities with a confidence interval using bootstrapping
-  dat.calib.pv.4 <- calc_calib_pv(data.mstate = msebmtcal,
+  dat.calib.pv.4 <- calib_pv(data.mstate = msebmtcal,
                                   data.raw = ebmtcal,
                                   j = 3,
                                   s = 100,
@@ -232,7 +232,7 @@ test_that("check calc_calib_pv output, (j = 3, s = 100), curve.type = rcs, CI.ty
   expect_equal(dat.calib.pv.1[["plotdata"]][[4]]$pred, dat.calib.pv.4[["plotdata"]][[4]]$pred)
 
   ## Calculate observed event probabilities with a confidence interval using parametric approach
-  dat.calib.pv.4 <- calc_calib_pv(data.mstate = msebmtcal,
+  dat.calib.pv.4 <- calib_pv(data.mstate = msebmtcal,
                                   data.raw = ebmtcal,
                                   j = 3,
                                   s = 100,
@@ -256,13 +256,13 @@ test_that("check calc_calib_pv output, (j = 3, s = 100), curve.type = rcs, CI.ty
 
 
 ### Add some tests for when each of group.vars and n.pctls are left as NULL
-test_that("check calc_calib_pv output, (j = 3, s = 100), groups.vars and n.pctls = NULL", {
+test_that("check calib_pv output, (j = 3, s = 100), groups.vars and n.pctls = NULL", {
 
   ## Extract relevant predicted risks from tps0
   tp.pred <- dplyr::select(dplyr::filter(tps100, j == 3), dplyr::any_of(paste("pstate", 1:6, sep = "")))
 
   ## Calculate observed event probabilities using transitions.out = NULL
-  dat.calib.pv.1 <- calc_calib_pv(data.mstate = msebmtcal,
+  dat.calib.pv.1 <- calib_pv(data.mstate = msebmtcal,
                                   data.raw = ebmtcal,
                                   j = 3,
                                   s = 100,
@@ -275,7 +275,7 @@ test_that("check calc_calib_pv output, (j = 3, s = 100), groups.vars and n.pctls
   expect_equal(length(dat.calib.pv.1[["plotdata"]]), 4)
 
   ## Calculate observed event probabilities using transitions.out = NULL
-  dat.calib.pv.2 <- calc_calib_pv(data.mstate = msebmtcal,
+  dat.calib.pv.2 <- calib_pv(data.mstate = msebmtcal,
                                   data.raw = ebmtcal,
                                   j = 3,
                                   s = 100,
@@ -289,7 +289,7 @@ test_that("check calc_calib_pv output, (j = 3, s = 100), groups.vars and n.pctls
   expect_equal(length(dat.calib.pv.2[["plotdata"]]), 4)
 
   ## Calculate observed event probabilities using transitions.out = NULL
-  dat.calib.pv.3 <- calc_calib_pv(data.mstate = msebmtcal,
+  dat.calib.pv.3 <- calib_pv(data.mstate = msebmtcal,
                                   data.raw = ebmtcal,
                                   j = 3,
                                   s = 100,
@@ -306,13 +306,13 @@ test_that("check calc_calib_pv output, (j = 3, s = 100), groups.vars and n.pctls
 
 
 ### Add some tests where we expect errors, if requesting things that aren't possible
-test_that("check calc_calib_pv output, (j = 3, s = 100), cause errors", {
+test_that("check calib_pv output, (j = 3, s = 100), cause errors", {
 
   ## Extract relevant predicted risks from tps0
   tp.pred <- dplyr::select(dplyr::filter(tps100, j == 3), dplyr::any_of(paste("pstate", 1:6, sep = "")))
 
   ## Request confidence interval but don't state what type
-  expect_error(calc_calib_pv(data.mstate = msebmtcal,
+  expect_error(calib_pv(data.mstate = msebmtcal,
                              data.raw = ebmtcal,
                              j = 3,
                              s = 100,
@@ -323,7 +323,7 @@ test_that("check calc_calib_pv output, (j = 3, s = 100), cause errors", {
                              data.pred.plot = NULL, transitions.out = NULL))
 
   ## Request confidence interval for loess, and specify parametric
-  expect_error(calc_calib_pv(data.mstate = msebmtcal,
+  expect_error(calib_pv(data.mstate = msebmtcal,
                              data.raw = ebmtcal,
                              j = 3,
                              s = 100,
@@ -335,7 +335,7 @@ test_that("check calc_calib_pv output, (j = 3, s = 100), cause errors", {
                              data.pred.plot = NULL, transitions.out = NULL))
 
   ## Request bootstrap confidence interval and don't give number of bootstrap replicates (for either rcs or parametric)
-  expect_error(calc_calib_pv(data.mstate = msebmtcal,
+  expect_error(calib_pv(data.mstate = msebmtcal,
                              data.raw = ebmtcal,
                              j = 3,
                              s = 100,
@@ -346,7 +346,7 @@ test_that("check calc_calib_pv output, (j = 3, s = 100), cause errors", {
                              CI.type = "bootstrap",
                              data.pred.plot = NULL, transitions.out = NULL))
 
-  expect_error(calc_calib_pv(data.mstate = msebmtcal,
+  expect_error(calib_pv(data.mstate = msebmtcal,
                              data.raw = ebmtcal,
                              j = 3,
                              s = 100,

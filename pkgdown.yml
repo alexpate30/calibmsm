@@ -4,8 +4,8 @@ pkgdown_sha: ~
 articles:
   BLR-IPCW-manual-bootstrap-with-custom-function-for-estimating-the-weights: BLR-IPCW-manual-bootstrap-with-custom-function-for-estimating-the-weights.html
   Comparison-with-graphical-calibration-curves-in-competing-risks-setting: Comparison-with-graphical-calibration-curves-in-competing-risks-setting.html
-  vigtest: vigtest.html
-last_built: 2023-06-13T15:54Z
+  overview: overview.html
+last_built: 2023-06-13T16:56Z
 urls:
   reference: https://alexpate30.github.io/calibmsm/reference
   article: https://alexpate30.github.io/calibmsm/articles

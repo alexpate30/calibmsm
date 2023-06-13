@@ -43,7 +43,7 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/BLR-IPCW-manual-bootstrap-with-custom-function-for-estimating-the-weights.html">BLR-IPCW-manual-bootstrap-with-custom-function-for-estimating-the-weights</a>
     <a class="dropdown-item" href="../articles/Comparison-with-graphical-calibration-curves-in-competing-risks-setting.html">Comparison-with-graphical-calibration-curves-in-competing-risks-setting</a>
-    <a class="dropdown-item" href="../articles/vigtest.html">PDF Vignettes</a>
+    <a class="dropdown-item" href="../articles/overview.html">overview</a>
   </div>
 </li>
       </ul>
@@ -83,8 +83,8 @@ of censoring weights. We start by reminding ourselves of the EBMT <span class="c
 transition probabilities from a multistate model out of state
 <code>j = 1</code> made a time <code>s = 0</code> (<code>tps0</code>).
 We also set the time at which we want to evaluate the transition
-probabilities <code>t.eval</code>. Please refer to vignette for a more
-detailed description of this data.</p>
+probabilities <code>t.eval</code>. Please refer to vignette
+<em>overview</em> for a more detailed description of this data.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">101</span><span class="op">)</span></span>
 <span></span>
@@ -143,18 +143,18 @@ procedure<a class="anchor" aria-label="anchor" href="#confidence-intervals-for-b
 <p>We now remind ourselves of the procedure for generating a confidence
 interval, and estimate a confidence interval for a BLR-IPCW calibration
 curve using the internal bootstrapping procedure, as in done in the
-vignette .</p>
-<ul>
-<li>Item 1 Resample validation dataset with replacement</li>
-<li>Item 2 Landmark the dataset for assessment of calibration</li>
-<li>Item 3 Calculate inverse probability of censoring weights</li>
-<li>Item 4 Fit the preferred calibration model in the landmarked dataset
+vignette <em>overview</em>.</p>
+<ol style="list-style-type: decimal">
+<li>Resample validation dataset with replacement</li>
+<li>Landmark the dataset for assessment of calibration</li>
+<li>Calculate inverse probability of censoring weights</li>
+<li>Fit the preferred calibration model in the landmarked dataset
 (restricted cubic splines or loess smoother)</li>
-<li>Item 5 Generate observed event probabilities for a fixed vector of
+<li>Generate observed event probabilities for a fixed vector of
 predicted transition probabilities (specifically the predicted
 transition probabilities from the non-bootstrapped landmark validation
 dataset)</li>
-</ul>
+</ol>
 <p>The code to produce the confidence interval is as follows:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dat.calib.blr</span> <span class="op">&lt;-</span></span>
@@ -192,7 +192,8 @@ model (Cox model) or the functional form of the predictor variables
 variables are assumed to have linear effects on the hazard, and there
 are no interaction terms. We encourage users to explore their data and
 produce a more suitable model to estimate the weights. Please see the
-vignette for a definition of the weights and how to estimate them.</p>
+vignette <em>overview</em> for a definition of the weights and how to
+estimate them.</p>
 <p>The internal bootstrapping procedure can then be utilised with your
 own function for estimating the weights, specified through the
 <code>w.function</code> argument. This function must have the same
@@ -248,8 +249,8 @@ procedure with custom function for estimating the weights<a class="anchor" aria-
 This will allow users to specify functions to estimate the weights with
 arguments that differ from those in <code>calc_weights</code>, and also
 allow users to parallelise their code to reduce computational runtime.
-This is done by using the package <span class="citation">(Canty and
-Ripley 2022)</span> in conjunction with <code>calib_blr</code>.</p>
+This is done by using the package <em>boot</em><span class="citation">(Canty and Ripley 2022)</span> in conjunction with
+<code>calib_blr</code>.</p>
 <p>We start by creating a permanent object with the predicted risks of
 each individual. When the validation cohort <code>code</code> is
 resampled, the appropriate predicted transition probabilities must also
@@ -312,9 +313,9 @@ argument.</p>
 <p>It is now time to estimate the confidence interval for this curve. We
 define a function <code>calc_obs_boot</code> to generate a bootstrapped
 calibration curve which is compatible with the <code>boot</code>
-function from the package. Within each bootstrapped dataset, weights are
-calculated and then a calibration curve is estimated using
-<code>calib_blr</code>. The use of the argument
+function from the <em>boot</em> package. Within each bootstrapped
+dataset, weights are calculated and then a calibration curve is
+estimated using <code>calib_blr</code>. The use of the argument
 <code>data.pred.plot</code> in <code>calib_blr</code> is essential here,
 to ensure the bootstrapped observed event probabilities are generated
 for the same vectors of predicted transition probabilities. The function

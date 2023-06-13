@@ -1,0 +1,19 @@
+---
+title: "overview"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{overview}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+Please click the link below to access the *overview* vignette, which is rendered as a pdf and therefore cannot be directly viewed through the Github created website. Please ignore the tex error.
+
+```{r, echo = FALSE}
+system('R CMD Sweave overview.Rnw')
+system('pdflatex overview.tex')
+```
+
+<!--- <iframe src="overview.pdf"/> -->
+
+[Vignette: overview](overview.pdf){target="_blank"}

@@ -31,19 +31,19 @@
     <loc>https://alexpate30.github.io/calibmsm/reference/calc_aj.html</loc>
   </url>
   <url>
-    <loc>https://alexpate30.github.io/calibmsm/reference/calc_calib_blr.html</loc>
-  </url>
-  <url>
-    <loc>https://alexpate30.github.io/calibmsm/reference/calc_calib_mlr.html</loc>
-  </url>
-  <url>
-    <loc>https://alexpate30.github.io/calibmsm/reference/calc_calib_pv.html</loc>
-  </url>
-  <url>
     <loc>https://alexpate30.github.io/calibmsm/reference/calc_pv_aj.html</loc>
   </url>
   <url>
     <loc>https://alexpate30.github.io/calibmsm/reference/calc_weights.html</loc>
+  </url>
+  <url>
+    <loc>https://alexpate30.github.io/calibmsm/reference/calib_blr.html</loc>
+  </url>
+  <url>
+    <loc>https://alexpate30.github.io/calibmsm/reference/calib_mlr.html</loc>
+  </url>
+  <url>
+    <loc>https://alexpate30.github.io/calibmsm/reference/calib_pv.html</loc>
   </url>
   <url>
     <loc>https://alexpate30.github.io/calibmsm/reference/calibmsm-package.html</loc>

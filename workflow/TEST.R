@@ -28,8 +28,12 @@ head(ebmtcal)
 head(tps0)
 ?dplyr::mutate
 devtools::document()
-check
 
+
+### Want to submit to GitHub to test building of package
+
+
+Sys.getenv("R_ENVIRON")
 ### Test trying to add transparency
 load_all()
 

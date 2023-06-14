@@ -75,9 +75,14 @@
 <p>Please click the link below to access the <em>overview</em> vignette,
 which is rendered as a pdf and therefore cannot be directly viewed
 through the Github created website. Please ignore the tex error.</p>
-<pre><code><span><span class="co">## Warning in system("pdflatex overview.tex"): error in running command</span></span></code></pre>
-<!--- <iframe src="overview.pdf"/> -->
-<p><a href="overview.pdf" target="_blank">Vignette: overview</a></p>
+<pre><code><span><span class="co">## Warning in system("pdflatex overview_rnw.tex"): error in running command</span></span></code></pre>
+<!--- <iframe src="overview_rnw.pdf"/> -->
+<p><a href="overview_rnw.pdf" target="_blank">Vignette: overview</a></p>
+<!-- If this continues not to work unless overview.pdf has already been defined, this may be the solution: -->
+<!-- https://tex.stackexchange.com/questions/429757/pdflatex-problem-with-rstudio -->
+<!-- and -->
+<!-- https://stackoverflow.com/questions/33650869/how-can-i-set-the-latex-path-for-sweave-in-r -->
+<!-- Although manually specifying something would no longer work if the source code is on someone elses machine... Think I just need to render overview.pdf and ship it with the package. -->
   </main>
 </div>
 

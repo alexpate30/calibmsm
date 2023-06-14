@@ -34,7 +34,7 @@ in combination with inverse probability of censoring weights and landmarking."><
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/BLR-IPCW-manual-bootstrap-with-custom-function-for-estimating-the-weights.html">BLR-IPCW-manual-bootstrap-with-custom-function-for-estimating-the-weights</a>
     <a class="dropdown-item" href="../articles/Comparison-with-graphical-calibration-curves-in-competing-risks-setting.html">Comparison-with-graphical-calibration-curves-in-competing-risks-setting</a>
-    <a class="dropdown-item" href="../articles/overview_html.html">overview</a>
+    <a class="dropdown-item" href="../articles/overview.html">overview</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -258,38 +258,38 @@ in the vignette XXXX.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ id       : int [1:1778] 2 4 5 7 10 13 14 16 18 19 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ pred     : num [1:1778] 0.114 0.1384 0.1233 0.0974 0.1137 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs      : num [1:1778] 0.11 0.104 0.105 0.124 0.11 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.lower: num [1:1778] 0.0899 0.0818 0.086 0.0876 0.09 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.upper: num [1:1778] 0.131 0.129 0.127 0.164 0.131 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.lower: num [1:1778] 0.0875 0.0793 0.0846 0.0859 0.0879 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.upper: num [1:1778] 0.13 0.124 0.125 0.16 0.13 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ state2:'data.frame':	1778 obs. of  5 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ id       : int [1:1778] 2 4 5 7 10 13 14 16 18 19 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ pred     : num [1:1778] 0.232 0.184 0.161 0.212 0.232 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs      : num [1:1778] 0.17 0.186 0.176 0.179 0.17 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.lower: num [1:1778] 0.122 0.154 0.14 0.147 0.122 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.upper: num [1:1778] 0.219 0.212 0.205 0.21 0.219 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.lower: num [1:1778] 0.125 0.154 0.14 0.145 0.125 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.upper: num [1:1778] 0.22 0.213 0.206 0.208 0.22 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ state3:'data.frame':	1778 obs. of  5 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ id       : int [1:1778] 2 4 5 7 10 13 14 16 18 19 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ pred     : num [1:1778] 0.0844 0.0758 0.0551 0.0615 0.0844 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs      : num [1:1778] 0.1249 0.1167 0.0919 0.1001 0.1248 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.lower: num [1:1778] 0.0962 0.0929 0.0497 0.0652 0.0962 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.upper: num [1:1778] 0.155 0.147 0.138 0.14 0.155 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.lower: num [1:1778] 0.095 0.0889 0.0461 0.0623 0.095 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.upper: num [1:1778] 0.153 0.142 0.135 0.135 0.153 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ state4:'data.frame':	1778 obs. of  5 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ id       : int [1:1778] 2 4 5 7 10 13 14 16 18 19 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ pred     : num [1:1778] 0.233 0.218 0.183 0.221 0.233 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs      : num [1:1778] 0.243 0.224 0.185 0.228 0.243 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.lower: num [1:1778] 0.203 0.192 0.155 0.195 0.203 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.upper: num [1:1778] 0.288 0.254 0.215 0.259 0.287 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.lower: num [1:1778] 0.203 0.191 0.153 0.193 0.203 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.upper: num [1:1778] 0.283 0.254 0.215 0.256 0.283 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ state5:'data.frame':	1778 obs. of  5 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ id       : int [1:1778] 2 4 5 7 10 13 14 16 18 19 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ pred     : num [1:1778] 0.148 0.154 0.143 0.144 0.149 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs      : num [1:1778] 0.191 0.165 0.222 0.212 0.188 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.lower: num [1:1778] 0.165 0.147 0.185 0.179 0.164 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.upper: num [1:1778] 0.22 0.184 0.267 0.253 0.215 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.lower: num [1:1778] 0.163 0.147 0.174 0.171 0.162 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.upper: num [1:1778] 0.215 0.182 0.269 0.253 0.21 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ state6:'data.frame':	1778 obs. of  5 variables:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ id       : int [1:1778] 2 4 5 7 10 13 14 16 18 19 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ pred     : num [1:1778] 0.189 0.23 0.335 0.264 0.189 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs      : num [1:1778] 0.207 0.254 0.316 0.28 0.207 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.lower: num [1:1778] 0.187 0.23 0.28 0.255 0.187 ...</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.upper: num [1:1778] 0.231 0.281 0.358 0.307 0.231 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.lower: num [1:1778] 0.182 0.232 0.281 0.261 0.182 ...</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .. ..$ obs.upper: num [1:1778] 0.229 0.281 0.35 0.304 0.229 ...</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  $ metadata:List of 8</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ valid.transitions   : num [1:6] 1 2 3 4 5 6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ assessed.transitions: num [1:6] 1 2 3 4 5 6</span>

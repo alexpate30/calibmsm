@@ -18,7 +18,7 @@ calib_mlr(
   niknots = 4,
   weights = NULL,
   w.function = NULL,
-  w.covs,
+  w.covs = NULL,
   w.landmark.type = "state",
   w.max = 10,
   w.stabilised = FALSE,

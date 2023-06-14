@@ -9,6 +9,7 @@
 #' @param combine Whether to combine into one plot using ggarrange, or return as a list of individual plots
 #' @param ncol Number of columns for combined calibration plot
 #' @param nrow Number of rows for combined calibration plot
+#' @param transparency.rug Degree of transparency for the density rug plot along each axis
 #'
 #' @returns If `combine = TRUE`, returns an object of classes `gg`, `ggplot`, and `ggarrange`,
 #' as all ggplots have been combined into one object. If `combine = FALSE`, returns an object of
@@ -111,6 +112,8 @@ plot.calib_blr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, tra
 #' @param combine Whether to combine into one plot using ggarrange, or return as a list of individual plots
 #' @param ncol Number of columns for combined calibration plot
 #' @param nrow Number of rows for combined calibration plot
+#' @param transparency.plot Degree of transparency for the calibration scatter plot
+#' @param transparency.rug Degree of transparency for the density rug plot along each axis
 #'
 #' @returns If `combine = TRUE`, returns an object of classes `gg`, `ggplot`, and `ggarrange`,
 #' as all ggplots have been combined into one object. If `combine = FALSE`, returns an object of
@@ -178,6 +181,7 @@ plot.calib_mlr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, tra
 #' @param combine Whether to combine into one plot using ggarrange, or return as a list of individual plots
 #' @param ncol Number of columns for combined calibration plot
 #' @param nrow Number of rows for combined calibration plot
+#' @param transparency.rug Degree of transparency for the density rug plot along each axis
 #'
 #' @returns If `combine = TRUE`, returns an object of classes `gg`, `ggplot`, and `ggarrange`,
 #' as all ggplots have been combined into one object. If `combine = FALSE`, returns an object of

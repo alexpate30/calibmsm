@@ -4,7 +4,7 @@
 \alias{plot.calib_blr}
 \title{Plots calibration curves estimated using \code{\link{calib_blr}}.}
 \usage{
-\method{plot}{calib_blr}(x, ..., combine = TRUE, ncol = NULL, nrow = NULL)
+\method{plot}{calib_blr}(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, transparency.rug = 0.1)
 }
 \arguments{
 \item{x}{Object of class 'calib_blr' generated from \code{\link{calib_blr}}.}
@@ -16,6 +16,8 @@
 \item{ncol}{Number of columns for combined calibration plot}
 
 \item{nrow}{Number of rows for combined calibration plot}
+
+\item{transparency.rug}{Degree of transparency for the density rug plot along each axis}
 }
 \value{
 If \code{combine = TRUE}, returns an object of classes \code{gg}, \code{ggplot}, and \code{ggarrange},

@@ -16,7 +16,7 @@ system('pdflatex overview_rnw.tex')
 
 <!--- <iframe src="overview_rnw.pdf"/> -->
 
-[Vignette: overview](overview_rnw.pdf){target="_blank"}
+[Vignette: overview_rnw](overview_rnw.pdf){target="_blank"}
 
 <!-- If this continues not to work unless overview.pdf has already been defined, this may be the solution: -->
 

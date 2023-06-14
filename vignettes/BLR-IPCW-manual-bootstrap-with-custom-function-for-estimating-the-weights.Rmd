@@ -3,7 +3,7 @@ title: "BLR-IPCW-manual-bootstrap-with-custom-function-for-estimating-the-weight
 output: rmarkdown::html_vignette
 bibliography: refs.bib
 vignette: >
-  %\VignetteIndexEntry{Manual-bootstrap-with-custom-function-for-estimating-the-weights}
+  %\VignetteIndexEntry{BLR-IPCW-manual-bootstrap-with-custom-function-for-estimating-the-weights}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

@@ -10,13 +10,13 @@ vignette: >
 Please click the link below to access the *overview* vignette, which is rendered as a pdf and therefore cannot be directly viewed through the Github created website. Please ignore the tex error.
 
 ```{r, echo = FALSE}
-system('R CMD Sweave overview.Rnw')
-system('pdflatex overview.tex')
+system('R CMD Sweave overview_rnw.Rnw')
+system('pdflatex overview_rnw.tex')
 ```
 
-<!--- <iframe src="overview.pdf"/> -->
+<!--- <iframe src="overview_rnw.pdf"/> -->
 
-[Vignette: overview](overview.pdf){target="_blank"}
+[Vignette: overview](overview_rnw.pdf){target="_blank"}
 
 <!-- If this continues not to work unless overview.pdf has already been defined, this may be the solution: -->
 

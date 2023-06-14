@@ -9,6 +9,7 @@ load_all()
 devtools::document()
 devtools::check()
 devtools::install()
+small.change <- 1
 devtools::check(vignettes = FALSE, args = c("--no-tests"))
 ?calibmsm::calc_calib_mlr
 testhaschanged <- 1

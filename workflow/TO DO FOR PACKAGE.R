@@ -17,6 +17,7 @@
 ### 15) Add something to text manuscript about robust sandwich being conservative
 ### DONE 16) Get r-cmd-check working, only possibility left is more troubleshooting of the error, or try removing the pdf vignette
 ### DONE 17) Check all vignettes refer to correct vignettes names of other vignettes
+### 18) Update the example on the GitHub website
 
 ### Notes to add to document
 ### 1) Verification of assumptions for each method

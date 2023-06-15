@@ -1,0 +1,15 @@
+---
+title: "manual_vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{manual_vignette}
+%\VignetteEngine{knitr::rmarkdown}
+%\VignetteEncoding{UTF-8}
+---
+
+Please click the link below to access the *overview* vignette, which is rendered as a pdf and therefore cannot be directly viewed through the Github created website. Please ignore the tex error.
+
+<!--- <iframe src="manual_vignette.pdf"/> -->
+
+[Vignette: manual_vignette](manual_vignette.pdf){target="_blank"}
+

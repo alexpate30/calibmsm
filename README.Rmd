@@ -48,8 +48,8 @@ tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6
 dat.calib.blr <-
   calib_blr(data.mstate = msebmtcal,
                  data.raw = ebmtcal,
-                 j=1,
-                 s=0,
+                 j = 1,
+                 s = 0,
                  t = 1826,
                  tp.pred = tp.pred,
                  curve.type = "rcs",
@@ -67,5 +67,3 @@ plot(dat.calib.blr, combine = TRUE, nrow = 2, ncol = 3)
 
 ## Getting help
 If you encounter a bug, please file an issue with a minimal reproducible example on [GitHub](https://github.com/alexpate30/calibmsm).
-
-

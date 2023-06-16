@@ -1,6 +1,7 @@
 ###
 ### Testing package functionality
 ###
+install.packages()
 testchange <- 1
 a <- 3
 b <- 4

@@ -167,11 +167,13 @@ calib_blr <- function(data.mstate,
   }
 
   ### Stop if CI.type = "bootstrap" but CI.R.boot not specified
-  if (!(CI.type %in% c("parametric", "bootstrap"))){
-    stop("CI.type takes values in 'parametric' and 'bootstrap'")
-  } else {
-    if (CI.type == "bootstrap" & is.null(CI.R.boot)){
-      stop("Must specify number of bootstrap replicates for confidence interval using CI.R.boot.")
+  if (CI != FALSE){
+    if (!(CI.type %in% c("parametric", "bootstrap"))){
+      stop("CI.type takes values in 'parametric' and 'bootstrap'")
+    } else {
+      if (CI.type == "bootstrap" & is.null(CI.R.boot)){
+        stop("Must specify number of bootstrap replicates for confidence interval using CI.R.boot.")
+      }
     }
   }
 

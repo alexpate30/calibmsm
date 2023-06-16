@@ -146,8 +146,8 @@ The observed event probabilities can then be estimated using `calib_blr` and a c
 dat.calib.boot.manual <-
   calib_blr(data.mstate = msebmtcal,
                  data.raw = ebmtcal,
-                 j=1,
-                 s=0,
+                 j = 1,
+                 s = 0,
                  t = t,
                  tp.pred = tp.pred,
                  curve.type = "rcs",

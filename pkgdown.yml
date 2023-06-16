@@ -5,8 +5,7 @@ articles:
   BLR-IPCW-manual-bootstrap-with-custom-function-for-estimating-the-weights: BLR-IPCW-manual-bootstrap-with-custom-function-for-estimating-the-weights.html
   Comparison-with-graphical-calibration-curves-in-competing-risks-setting: Comparison-with-graphical-calibration-curves-in-competing-risks-setting.html
   overview: overview.html
-  test_manual_vignette: test_manual_vignette.html
-last_built: 2023-06-15T12:07Z
+last_built: 2023-06-16T15:39Z
 urls:
   reference: https://alexpate30.github.io/calibmsm/reference
   article: https://alexpate30.github.io/calibmsm/articles

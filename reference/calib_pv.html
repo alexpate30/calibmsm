@@ -35,7 +35,6 @@ in combination with inverse probability of censoring weights and landmarking."><
     <a class="dropdown-item" href="../articles/BLR-IPCW-manual-bootstrap-with-custom-function-for-estimating-the-weights.html">BLR-IPCW-manual-bootstrap-with-custom-function-for-estimating-the-weights</a>
     <a class="dropdown-item" href="../articles/Comparison-with-graphical-calibration-curves-in-competing-risks-setting.html">Comparison-with-graphical-calibration-curves-in-competing-risks-setting</a>
     <a class="dropdown-item" href="../articles/overview.html">overview</a>
-    <a class="dropdown-item" href="../articles/test_manual_vignette.html">test_manual_vignette</a>
   </div>
 </li>
       </ul><form class="form-inline my-2 my-lg-0" role="search">
@@ -68,7 +67,7 @@ in combination with inverse probability of censoring weights and landmarking.</p
 <span>  <span class="va">data.raw</span>,</span>
 <span>  <span class="va">j</span>,</span>
 <span>  <span class="va">s</span>,</span>
-<span>  <span class="va">t.eval</span>,</span>
+<span>  <span class="va">t</span>,</span>
 <span>  <span class="va">tp.pred</span>,</span>
 <span>  curve.type <span class="op">=</span> <span class="st">"rcs"</span>,</span>
 <span>  rcs.nk <span class="op">=</span> <span class="fl">3</span>,</span>
@@ -77,7 +76,7 @@ in combination with inverse probability of censoring weights and landmarking.</p
 <span>  group.vars <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  n.pctls <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  CI <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  CI.type <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  CI.type <span class="op">=</span> <span class="st">"parametric"</span>,</span>
 <span>  CI.R.boot <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  data.pred.plot <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  transitions.out <span class="op">=</span> <span class="cn">NULL</span></span>
@@ -102,12 +101,12 @@ in combination with inverse probability of censoring weights and landmarking.</p
 <dd><p>Landmark time at which predictions were made</p></dd>
 
 
-<dt>t.eval</dt>
+<dt>t</dt>
 <dd><p>Follow up time at which calibration is to be assessed</p></dd>
 
 
 <dt>tp.pred</dt>
-<dd><p>Matrix of predicted transition probabilities at time t.eval, if in state j at time s. There must be a seperate column for the predicted transition probabilities into every state, even if these predicted transition probabilities are 0.</p></dd>
+<dd><p>Matrix of predicted transition probabilities at time t, if in state j at time s. There must be a seperate column for the predicted transition probabilities into every state, even if these predicted transition probabilities are 0.</p></dd>
 
 
 <dt>curve.type</dt>
@@ -139,7 +138,7 @@ in combination with inverse probability of censoring weights and landmarking.</p
 
 
 <dt>CI.type</dt>
-<dd><p>Way confidence interval is calculated (<code>bootstrap</code> or <code>parametric</code>)</p></dd>
+<dd><p>Method for estimating confidence interval (<code>bootstrap</code> or <code>parametric</code>)</p></dd>
 
 
 <dt>CI.R.boot</dt>
@@ -174,7 +173,7 @@ and other user specified information.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Observed event probabilities at time <code>t.eval</code> are estimated for predicted
+    <p>Observed event probabilities at time <code>t</code> are estimated for predicted
 transition probabilities <code>tp.pred</code> out of state <code>j</code> at time <code>s</code>.
 <code>calib_pv</code> estimates the observed event probabilities using pseudo-values.
 Calibraiton curves are generatd by regression the pseudo-values for the transition
@@ -193,7 +192,7 @@ Confidence intervals for the calibration curves can be estimated using bootstrap
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Estimate calibration curves for the predicted transition</span></span></span>
-<span class="r-in"><span><span class="co"># probabilities at time t.eval = 1826, when predictions were made at time</span></span></span>
+<span class="r-in"><span><span class="co"># probabilities at time t = 1826, when predictions were made at time</span></span></span>
 <span class="r-in"><span><span class="co"># s = 100 in state j = 3. These predicted transition probabilities are stored in tps100.</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Extract the predicted transition probabilities out of state j = 1</span></span></span>
@@ -205,7 +204,7 @@ Confidence intervals for the calibration curves can be estimated using bootstrap
 <span class="r-in"><span>  data.raw <span class="op">=</span> <span class="va">ebmtcal</span>,</span></span>
 <span class="r-in"><span>  j <span class="op">=</span> <span class="fl">3</span>,</span></span>
 <span class="r-in"><span>  s <span class="op">=</span> <span class="fl">100</span>,</span></span>
-<span class="r-in"><span>  t.eval <span class="op">=</span> <span class="fl">1826</span>,</span></span>
+<span class="r-in"><span>  t <span class="op">=</span> <span class="fl">1826</span>,</span></span>
 <span class="r-in"><span>  tp.pred <span class="op">=</span> <span class="va">tp.pred</span>,</span></span>
 <span class="r-in"><span>  group.vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  n.pctls <span class="op">=</span> <span class="fl">2</span>,</span></span>
@@ -237,11 +236,11 @@ Confidence intervals for the calibration curves can be estimated using bootstrap
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ assessed.transitions: num [1:4] 3 4 5 6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ curve.type          : chr "rcs"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ CI                  : logi FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ CI.type             : NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ CI.type             : chr "parametric"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ CI.R.boot           : NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ j                   : num 3</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ s                   : num 100</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ t.eval              : num 1826</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ t                   : num 1826</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ group.vars          : chr "year"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ n.pctls             : num 2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  - attr(*, "class")= chr "calib_pv"</span>

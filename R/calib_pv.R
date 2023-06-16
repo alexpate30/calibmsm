@@ -258,12 +258,6 @@ calib_pv <- function(data.mstate,
     warning("All patients in data.mstate are not contained in data.raw. Landmarking can still be applied, but potential mismatch in these two datasets?")
   }
 
-  ### Error if CI requested by CI.type ignored
-  if (CI != FALSE & is.null(CI.type)){
-    stop("Confidence interval requested but CI.type not specified. Choose either 'parametric' or 'bootstrap'.
-         If curve.type = 'loess', CI.type cannot be equal to 'parametric'.")
-  }
-
   ### Make sure CI.type is specified to one of the required values
   if (!is.null(CI.type)){
     if (!(CI.type %in% c("parametric", "bootstrap"))){

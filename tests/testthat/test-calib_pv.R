@@ -311,17 +311,6 @@ test_that("check calib_pv output, (j = 3, s = 100), cause errors", {
   ## Extract relevant predicted risks from tps0
   tp.pred <- dplyr::select(dplyr::filter(tps100, j == 3), dplyr::any_of(paste("pstate", 1:6, sep = "")))
 
-  ## Request confidence interval but don't state what type
-  expect_error(calib_pv(data.mstate = msebmtcal,
-                             data.raw = ebmtcal,
-                             j = 3,
-                             s = 100,
-                             t = 1826,
-                             tp.pred = tp.pred,
-                             curve.type = "rcs",
-                             CI = 95,
-                             data.pred.plot = NULL, transitions.out = NULL))
-
   ## Request confidence interval for loess, and specify parametric
   expect_error(calib_pv(data.mstate = msebmtcal,
                              data.raw = ebmtcal,

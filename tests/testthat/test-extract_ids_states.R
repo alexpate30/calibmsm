@@ -1,7 +1,7 @@
 test_that("check extract_ids_states assigns correct states for each individual", {
 
-  ### Extract ids in each state at time t.eval
-  states <- lapply(1:6, extract_ids_states, data.mstate = msebmtcal, tmat = attributes(msebmtcal)$trans, t.eval = 1826)
+  ### Extract ids in each state at time t
+  states <- lapply(1:6, extract_ids_states, data.mstate = msebmtcal, tmat = attributes(msebmtcal)$trans, t = 1826)
 
   expect_equal(sum(is.na(states[[1]])), 0)
   expect_equal(sum(is.na(states[[2]])), 0)

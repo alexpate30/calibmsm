@@ -1,4 +1,4 @@
-#' Calculate inverse probability of censoring weights at time `t.eval`.
+#' Calculate inverse probability of censoring weights at time `t`.
 #'
 #' @description
 #' Estimates the inverse probability of censoring weights by fitting a cox-propotinal hazards model
@@ -8,14 +8,14 @@
 #'
 #' @param data.mstate Validation data in msdata format
 #' @param data.raw Validation data in data.frame (one row per individual)
-#' @param t.eval Follow up time at which to calculate weights
+#' @param t Follow up time at which to calculate weights
 #' @param s Landmark time at which predictions were made
 #' @param landmark.type Whether weights are estimated in all individuals uncensored at time s ('all') or only in individuals uncensored and in state j at time s ('state')
 #' @param j Landmark state at which predictions were made (only required in landmark.type = 'state')
 #' @param covs Character vector of variable names to adjust for when calculating inverse probability of censoring weights
 #' @param max.weight Maximum bound for weights
 #' @param stabilised Indicates whether weights should be stabilised or not
-#' @param max.follow Maximum follow up for model calculating inverse probability of censoring weights. Reducing this to `t.eval` + 1 may aid in the proportional hazards assumption being met in this model.
+#' @param max.follow Maximum follow up for model calculating inverse probability of censoring weights. Reducing this to `t` + 1 may aid in the proportional hazards assumption being met in this model.
 #'
 #' @returns A dataframe with three columns. `id` corresponds to the patient ids from `data.raw`. `ipcw` contains the inverse probability
 #' of censoring weights (specifically the inverse of the probability of being uncesored). `pcw = 1/ipcw`. If `stabilised = TRUE` was specified,
@@ -23,23 +23,23 @@
 #'
 #' @details
 #' Fits a cox proportional hazards model to individuals in a landmark cohort, predicting the probability of being censored
-#' at time `t.eval`. This landmark cohort may either be all individuals uncensored at time `s`, or those uncensored
+#' at time `t`. This landmark cohort may either be all individuals uncensored at time `s`, or those uncensored
 #' and in state `j` at time `s`. All predictors in `w.covs` are assumed to have a linear effect on the hazard.
 #' Weights are estimated for all individuals in `data.raw`, even if they will not be used in the analysis as they do not meet the landmarking
-#' requirements. If an individual enters an absorbing state prior to `t.eval`, we estimate the probability of being censored
-#' before the time of entry into the absorbing state, rather than at `t.eval`. Details on all the above this are provided in
+#' requirements. If an individual enters an absorbing state prior to `t`, we estimate the probability of being censored
+#' before the time of entry into the absorbing state, rather than at `t`. Details on all the above this are provided in
 #' (vignette OVERVIEW-AND-THEORY-XXXX)
 #'
 #'
 #' @examples
 #' # Estimate inverse probability of censoring weights for individual in cohort ebmtcal.
-#' # Specifically the probability of being uncensored at t.eval = 1826 days.
+#' # Specifically the probability of being uncensored at t = 1826 days.
 #' # Weights are estimated using a model fitted in all individuals uncensored at time s = 0.
 #' weights.manual <-
 #' calc_weights(data.mstate = msebmtcal,
 #'   data.raw = ebmtcal,
 #'   covs = c("year", "agecl", "proph", "match"),
-#'   t.eval = 1826,
+#'   t = 1826,
 #'   s = 0,
 #'   landmark.type = "state",
 #'   j = 1)
@@ -47,16 +47,16 @@
 #'   str(weights.manual)
 #'
 #' @export
-calc_weights <- function(data.mstate, data.raw, covs = NULL, t.eval, s, landmark.type = "state", j = NULL, max.weight = 10, stabilised = FALSE, max.follow = NULL){
+calc_weights <- function(data.mstate, data.raw, covs = NULL, t, s, landmark.type = "state", j = NULL, max.weight = 10, stabilised = FALSE, max.follow = NULL){
 
-  ### Modify everybody to be censored after time t.eval, if a max.follow has been specified
+  ### Modify everybody to be censored after time t, if a max.follow has been specified
   if(!is.null(max.follow)){
-    if (max.follow == "t.eval"){
+    if (max.follow == "t"){
       data.raw <- dplyr::mutate(data.raw,
-                                dtcens.s = dplyr::case_when(dtcens < t.eval + 2 ~ dtcens.s,
-                                                            dtcens >= t.eval + 2 ~ 0),
-                                dtcens = dplyr::case_when(dtcens < t.eval + 2 ~ dtcens,
-                                                          dtcens >= t.eval + 2 ~ t.eval + 2))
+                                dtcens.s = dplyr::case_when(dtcens < t + 2 ~ dtcens.s,
+                                                            dtcens >= t + 2 ~ 0),
+                                dtcens = dplyr::case_when(dtcens < t + 2 ~ dtcens,
+                                                          dtcens >= t + 2 ~ t + 2))
     } else {
       data.raw <- dplyr::mutate(data.raw,
                                 dtcens.s = dplyr::case_when(dtcens < max.follow + 2 ~ dtcens.s,
@@ -131,13 +131,13 @@ calc_weights <- function(data.mstate, data.raw, covs = NULL, t.eval, s, landmark
   ## Add lp to data.raw.save
   data.raw.save$lp <- stats::predict(cens.model, newdata = data.raw.save, type = "lp", reference = "zero")
 
-  ### Create weights for the cohort at time t.eval - s
+  ### Create weights for the cohort at time t - s
   ### Note for individuals who reached an absorbing state, we take the probability of them being uncensored at the time of reached the
-  ### abosrbing state. For individuals still alive, we take the probability of being uncensored at time t.eval - s.
+  ### abosrbing state. For individuals still alive, we take the probability of being uncensored at time t - s.
 
   ### Get location of individuals who entered absorbing states or were censored prior to evaluation time
-  obs.absorbed.prior <- which(data.raw.save$dtcens <= t.eval & data.raw.save$dtcens.s == 0)
-  obs.censored.prior <- which(data.raw.save$dtcens <= t.eval & data.raw.save$dtcens.s == 1)
+  obs.absorbed.prior <- which(data.raw.save$dtcens <= t & data.raw.save$dtcens.s == 0)
+  obs.censored.prior <- which(data.raw.save$dtcens <= t & data.raw.save$dtcens.s == 1)
 
   ###
   ### Now create unstabilised probability of (un)censoring weights
@@ -145,9 +145,9 @@ calc_weights <- function(data.mstate, data.raw, covs = NULL, t.eval, s, landmark
   ### the inervse of this will be big, weighting them strongly
   ###
 
-  ### First assign all individuals a weight of the probability of being uncensored at time t.eval
-  ### This is the linear predictor times the cumulative hazard at time t.eval, and appropriate transformation to get a risk
-  data.raw.save$pcw <- as.numeric(exp(-exp(data.raw.save$lp)*data.weights$hazard[max(which(data.weights$time <= t.eval - s))]))
+  ### First assign all individuals a weight of the probability of being uncensored at time t
+  ### This is the linear predictor times the cumulative hazard at time t, and appropriate transformation to get a risk
+  data.raw.save$pcw <- as.numeric(exp(-exp(data.raw.save$lp)*data.weights$hazard[max(which(data.weights$time <= t - s))]))
 
   ## Write a function which will extract the uncensored probability for an individual with linear predictor lp at a given time t
   prob.uncens.func <- function(input){
@@ -174,7 +174,7 @@ calc_weights <- function(data.mstate, data.raw, covs = NULL, t.eval, s, landmark
   ### Apply this function to all the times at which individuals have entered an absorbing state prior to censoring
   data.raw.save$pcw[obs.absorbed.prior] <- apply(data.raw.save[obs.absorbed.prior, c("dtcens.modified", "lp")], 1, FUN = prob.uncens.func)
 
-  ### For individuals who were censored prior to t.eval, assign the weight as NA
+  ### For individuals who were censored prior to t, assign the weight as NA
   data.raw.save$pcw[obs.censored.prior] <- NA
 
   ### Invert these
@@ -188,8 +188,8 @@ calc_weights <- function(data.mstate, data.raw, covs = NULL, t.eval, s, landmark
     ## Extract baseline hazard
     data.weights.numer <- survival::basehaz(cens.model.int, centered = TRUE)
 
-    ### Assign all individuals a weight of the probability of being uncesored at time t.eval
-    data.raw.save$pcw.numer <- as.numeric(exp(-data.weights.numer$hazard[max(which(data.weights.numer$time <= t.eval - s))]))
+    ### Assign all individuals a weight of the probability of being uncesored at time t
+    data.raw.save$pcw.numer <- as.numeric(exp(-data.weights.numer$hazard[max(which(data.weights.numer$time <= t - s))]))
 
     ### Create stabilised weight
     data.raw.save$ipcw.stab <- data.raw.save$pcw.numer*data.raw.save$ipcw

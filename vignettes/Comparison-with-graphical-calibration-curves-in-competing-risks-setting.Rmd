@@ -47,7 +47,7 @@ dat.calib.blr <-
                  data.raw = ebmtcal,
                  j=1,
                  s=0,
-                 t.eval = 1826,
+                 t = 1826,
                  tp.pred = tp.cmprsk.j0 |>
                    dplyr::select(any_of(paste("pstate", 1:6, sep = ""))),
                  curve.type = "rcs",
@@ -75,7 +75,7 @@ dat.calib.pv <-
                  data.raw = ebmtcal,
                  j=1,
                  s=0,
-                 t.eval = 1826,
+                 t = 1826,
                  tp.pred = tp.cmprsk.j0 |>
                    dplyr::select(any_of(paste("pstate", 1:6, sep = ""))),
                  curve.type = "rcs",
@@ -97,14 +97,14 @@ plot.calibmsm.pv
 Finally we assess the calibration of this competing risks model using the graphical calibration curves approach of @Austin2022. A custom function is written to do this, which estimates the calibration curves and returns a list of plots using `ggplot2`.
 
 ```{r, echo = FALSE}
-calc.calib.gcc.mod <- function(data.mstate, data.raw, j, s, t.eval, p.est, nk = 3){
+calc.calib.gcc.mod <- function(data.mstate, data.raw, j, s, t, p.est, nk = 3){
 
         # data.mstate <- msebmtcal.cmprsk
         # data.raw <- ebmtcal
         # p.est <- tp.cmprsk.j0[,paste("pstate", 1:6, sep = "")]
         # j <- 1
         # s <- 0
-        # t.eval <- 1826
+        # t <- 1826
         # nk <- 3
 
   ### Assign colnames to p.est
@@ -182,9 +182,9 @@ calc.calib.gcc.mod <- function(data.mstate, data.raw, j, s, t.eval, p.est, nk = 
     model.calibrate.fg <- rms::cph(eq,weights=weight.cens,x=T,y=T,surv=T,data=valid.df.crprep)
 
     ### Generate predicted probabilities and standard errors
-    valid.df$obs.fg <- 1-rms::survest(model.calibrate.fg,newdata=valid.df.crprep,time=t.eval-s)$surv
-    valid.df$obs.fg.upper<-1-rms::survest(model.calibrate.fg,newdata=valid.df.crprep,time=t.eval-s)$lower
-    valid.df$obs.fg.lower<-1-rms::survest(model.calibrate.fg,newdata=valid.df.crprep,time=t.eval-s)$upper
+    valid.df$obs.fg <- 1-rms::survest(model.calibrate.fg,newdata=valid.df.crprep,time=t-s)$surv
+    valid.df$obs.fg.upper<-1-rms::survest(model.calibrate.fg,newdata=valid.df.crprep,time=t-s)$lower
+    valid.df$obs.fg.lower<-1-rms::survest(model.calibrate.fg,newdata=valid.df.crprep,time=t-s)$upper
 
     ### Produce plots for each and store in a list
 
@@ -228,7 +228,7 @@ plot.gcc.rcs.list <- calc.calib.gcc.mod(data.mstate = msebmtcal.cmprsk,
                                     data.raw = ebmtcal,
                                     j = 1,
                                     s = 0,
-                                    t.eval = 1826,
+                                    t = 1826,
                                     p.est = tp.cmprsk.j0[,paste("pstate", 1:6, sep = "")],
                                     nk = 3)
 

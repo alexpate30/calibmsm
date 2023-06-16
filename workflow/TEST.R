@@ -29,8 +29,9 @@ head(ebmtcal)
 head(tps0)
 ?dplyr::mutate
 devtools::document()
+smallchange <- 2
 
-
+c(1,2,3) == c(3,2,1)
 ### Want to submit to GitHub to test building of package
 
 

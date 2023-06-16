@@ -2,7 +2,7 @@
 #'
 #' @description
 #' Creates the underlying data for the calibration plots. Observed event
-#' probabilities at time `t.eval` are estimated for inputted predicted
+#' probabilities at time `t` are estimated for inputted predicted
 #' transition probabilities `tp.pred` out of state `j` at time `s`.
 #' `calib_mlr` estimates calibration scatter plots using a multinomial logistic
 #' framework in combination with landmarking and inverse probability of
@@ -22,8 +22,8 @@
 #' @param data.raw Validation data in `data.frame` (one row per individual)
 #' @param j Landmark state at which predictions were made
 #' @param s Landmark time at which predictions were made
-#' @param t.eval Follow up time at which calibration is to be assessed
-#' @param tp.pred Vector of predicted transition probabilities at time t.eval
+#' @param t Follow up time at which calibration is to be assessed
+#' @param tp.pred Vector of predicted transition probabilities at time t
 #' @param s.df degrees of freedom of vector spline (see \code{\link[VGAM]{s}})
 #' @param smoother.type Type of smoothing applied. Takes values `s` (see \code{\link[VGAM]{s}}), `sm.ps` (see \code{\link[VGAM]{sm.ps}}) or `sm.os` (see \code{\link[VGAM]{sm.os}}).
 #' @param ps.int the number of equally-spaced B spline intervals in the vector spline smoother (see \code{\link[VGAM]{sm.ps}})
@@ -35,11 +35,11 @@
 #' @param w.landmark.type Whether weights are estimated in all individuals uncensored at time s ('all') or only in individuals uncensored and in state j at time s ('state')
 #' @param w.max Maximum bound for inverse probability of censoring weights
 #' @param w.stabilised Indicates whether inverse probability of censoring weights should be stabilised or not
-#' @param w.max.follow Maximum follow up for model calculating inverse probability of censoring weights. Reducing this to `t.eval` + 1 may aid in the proportional hazards assumption being met in this model.
+#' @param w.max.follow Maximum follow up for model calculating inverse probability of censoring weights. Reducing this to `t` + 1 may aid in the proportional hazards assumption being met in this model.
 #' @param ... Extra arguments to be passed to w.function (custom function for estimating weights)
 #'
 #' @details
-#' Observed event probabilities at time `t.eval` are estimated for predicted
+#' Observed event probabilities at time `t` are estimated for predicted
 #' transition probabilities `tp.pred` out of state `j` at time `s`.
 #' `calib_mlr` estimates calibration scatter plots uses a technique for assessing the calibration of multinomial logistic
 #' regression models, namely the nominal calibration framework of #' van Hoorde et al. (2014, 2015).
@@ -81,7 +81,7 @@
 #' @examples
 #'
 #' # Estimate calibration scatter plots for the predicted transition
-#' # probabilities at time t.eval = 1826, when predictions were made at time
+#' # probabilities at time t = 1826, when predictions were made at time
 #' # s = 0 in state j = 1. These predicted transition probabilities are stored in tps0.
 #'
 #' # Extract the predicted transition probabilities out of state j = 1
@@ -94,7 +94,7 @@
 #'  data.raw = ebmtcal,
 #'  j=1,
 #'  s=0,
-#'  t.eval = 1826,
+#'  t = 1826,
 #'  tp.pred = tp.pred,
 #'  w.covs = c("year", "agecl", "proph", "match"))
 #'
@@ -104,14 +104,30 @@
 #'
 
 #' @export
-calib_mlr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, smoother.type = "sm.ps", ps.int = 4, degree = 3, s.df = 4, niknots = 4,
-                           weights = NULL, w.function = NULL, w.covs = NULL, w.landmark.type = "state", w.max = 10, w.stabilised = FALSE, w.max.follow = NULL, ...){
+calib_mlr <- function(data.mstate,
+                      data.raw,
+                      j,
+                      s,
+                      t,
+                      tp.pred,
+                      smoother.type = "sm.ps",
+                      ps.int = 4,
+                      degree = 3,
+                      s.df = 4,
+                      niknots = 4,
+                      weights = NULL,
+                      w.function = NULL,
+                      w.covs = NULL,
+                      w.landmark.type = "state",
+                      w.max = 10,
+                      w.stabilised = FALSE,
+                      w.max.follow = NULL, ...){
 
   # data.mstate <- msebmtcal
   # data.raw <- ebmtcal
   # j<-1
   # s<-0
-  # t.eval <- 1826
+  # t <- 1826
   # tp.pred = tps0 |> dplyr::filter(j == 1) |> dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
   # ps.int <- 4
   # degree <- 3
@@ -121,6 +137,16 @@ calib_mlr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, smoother.typ
   # w.max = 10
   # w.stabilised = FALSE
   # smoother.type <- "sm.ps"
+
+  ### Stop if patients in data.raw are not in data.mstate
+  if (!base::all(unique(data.raw$id) %in% unique(data.mstate$id))){
+    stop("All patients in data.raw are not contained in data.mstate. Landmarking cannot be applied.")
+  }
+
+  ### Warning if patients in data.mstate are not in data.raw
+  if (!base::all(unique(data.mstate$id) %in% unique(data.raw$id))){
+    warning("All patients in data.mstate are not contained in data.raw. Landmarking can still be applied, but potential mismatch in these two datasets?")
+  }
 
   ### If vector of weights and custom function for specifying weights both inputted, give error
   if (!is.null(weights) & !is.null(w.function)){
@@ -160,10 +186,10 @@ calib_mlr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, smoother.typ
   ### Add to data frame
   data.raw <- data.frame(data.raw, tp.pred, tp.pred.mlr)
 
-  ### Extract which state individuals are in at time t.eval
+  ### Extract which state individuals are in at time t
   ids.state.list <- vector("list", max.state)
   for (k in valid.transitions){
-    ids.state.list[[k]] <- extract_ids_states(data.mstate, tmat, k, t.eval)
+    ids.state.list[[k]] <- extract_ids_states(data.mstate, tmat, k, t)
   }
 
   ### Create a variable to say which state an individual was in at the time of interest
@@ -186,7 +212,7 @@ calib_mlr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, smoother.typ
     dplyr::distinct(id) |>
     dplyr::pull(id)
 
-  ### Reduce data.raw to landmarked dataset of individuals who are uncensored at time t.eval,
+  ### Reduce data.raw to landmarked dataset of individuals who are uncensored at time t,
   ### this is the set of predicted risks over which we plot calibration curves
   data.raw.lmk.js.uncens <- data.raw |> base::subset(id %in% ids.state.js) |> base::subset(!is.na(state.poly))
 
@@ -206,7 +232,7 @@ calib_mlr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, smoother.typ
     weights <- calc_weights(data.mstate = data.mstate,
                             data.raw = data.raw,
                             covs = w.covs,
-                            t.eval = t.eval,
+                            t = t,
                             s = s,
                             landmark.type = w.landmark.type,
                             j = j,
@@ -280,7 +306,7 @@ calib_mlr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, smoother.typ
   metadata <- list("valid.transitions" = valid.transitions,
                    "j" = j,
                    "s" = s,
-                   "t.eval" = t.eval)
+                   "t" = t)
 
   ### Crate a combined output object with metadata, as well as plot data
   output.object.comb <- list("plotdata" = output.object2, "metadata" = metadata)
@@ -298,7 +324,7 @@ summary.calib_mlr <- function(object, ...) {
   cat("There were non-zero predicted transition probabilities into states ",
       paste(object[["metadata"]]$valid.transitions, collapse = ","),  sep = " ")
 
-  cat("\n\nCalibration was assessed at time ", object[["metadata"]]$t.eval, " and calibration was assessed in a landmarked cohort of individuals in state j = ", object[["metadata"]]$j,
+  cat("\n\nCalibration was assessed at time ", object[["metadata"]]$t, " and calibration was assessed in a landmarked cohort of individuals in state j = ", object[["metadata"]]$j,
       " at time s = ", object[["metadata"]]$s, sep = "")
 
   cat("\n\nThe estimated calibration scatter plots are stored in list element `plotdata`:\n\n")

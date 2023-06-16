@@ -10,8 +10,8 @@
 #' @param data.raw Validation data in `data.frame` (one row per individual)
 #' @param j Landmark state at which predictions were made
 #' @param s Landmark time at which predictions were made
-#' @param t.eval Follow up time at which calibration is to be assessed
-#' @param tp.pred Matrix of predicted transition probabilities at time t.eval, if in state j at time s. There must be a seperate column for the predicted transition probabilities into every state, even if these predicted transition probabilities are 0.
+#' @param t Follow up time at which calibration is to be assessed
+#' @param tp.pred Matrix of predicted transition probabilities at time t, if in state j at time s. There must be a seperate column for the predicted transition probabilities into every state, even if these predicted transition probabilities are 0.
 #' @param curve.type Whether calibration curves are estimated using restricted cubic splines ('rcs') or loess smoothers ('loess')
 #' @param rcs.nk Number of knots when curves are estimated using restricted cubic splines
 #' @param loess.span Span when curves are estimated using loess smoothers
@@ -22,15 +22,16 @@
 #' @param w.landmark.type Whether weights are estimated in all individuals uncensored at time s ('all') or only in individuals uncensored and in state j at time s ('state')
 #' @param w.max Maximum bound for inverse probability of censoring weights
 #' @param w.stabilised Indicates whether inverse probability of censoring weights should be stabilised or not
-#' @param w.max.follow Maximum follow up for model calculating inverse probability of censoring weights. Reducing this to `t.eval` + 1 may aid in the proportional hazards assumption being met in this model.
+#' @param w.max.follow Maximum follow up for model calculating inverse probability of censoring weights. Reducing this to `t` + 1 may aid in the proportional hazards assumption being met in this model.
 #' @param CI Size of confidence intervals as a %
+#' @param CI.type Method for estimating confidence interval (currently restricted to `bootstrap`)
 #' @param CI.R.boot Number of bootstrap replicates when estimating the confidence interval for the calibration curve
 #' @param data.pred.plot Data frame or matrix of predicted risks for each possible transition over which to plot the calibration curves. Must have one column for every possible transition.
 #' @param transitions.out Transitions for which to calculate calibration curves. Will do all possible transitions if left as NULL.
 #' @param ... Extra arguments to be passed to w.function (custom function for estimating weights)
 #'
 #' @details
-#' Observed event probabilities at time `t.eval` are estimated for predicted
+#' Observed event probabilities at time `t` are estimated for predicted
 #' transition probabilities `tp.pred` out of state `j` at time `s`.
 #' `calib_blr` estimates calibration curves using techniques for assessing the calibration of binary logistic
 #' regression models. A choice between restricted cubic splines and loess
@@ -74,7 +75,7 @@
 #'
 #' @examples
 #' # Estimate calibration curves for the predicted transition
-#' # probabilities at time t.eval = 1826, when predictions were made at time
+#' # probabilities at time t = 1826, when predictions were made at time
 #' # s = 0 in state j = 1. These predicted transition probabilities are stored in tps0.
 #'
 #' # Extract the predicted transition probabilities out of state j = 1
@@ -89,7 +90,7 @@
 #'  data.raw = ebmtcal,
 #'  j=1,
 #'  s=0,
-#'  t.eval = 1826,
+#'  t = 1826,
 #'  tp.pred = tp.pred,
 #'  w.covs = c("year", "agecl", "proph", "match"),
 #'  CI = 95,
@@ -100,27 +101,48 @@
 #' str(dat.calib.blr)
 #'
 #' @export
-calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.type = "rcs", rcs.nk = 3, loess.span = 0.75, loess.degree = 2,
-                           weights = NULL, w.function = NULL, w.covs = NULL, w.landmark.type = "state", w.max = 10, w.stabilised = FALSE, w.max.follow = NULL, CI = FALSE, CI.R.boot = NULL,
-                           data.pred.plot = NULL, transitions.out = NULL, ...){
+calib_blr <- function(data.mstate,
+                      data.raw,
+                      j,
+                      s,
+                      t,
+                      tp.pred,
+                      curve.type = "rcs",
+                      rcs.nk = 3,
+                      loess.span = 0.75,
+                      loess.degree = 2,
+                      weights = NULL,
+                      w.function = NULL,
+                      w.covs = NULL,
+                      w.landmark.type = "state",
+                      w.max = 10,
+                      w.stabilised = FALSE,
+                      w.max.follow = NULL,
+                      CI = FALSE,
+                      CI.type = "bootstrap",
+                      CI.R.boot = NULL,
+                      data.pred.plot = NULL,
+                      transitions.out = NULL, ...){
 
-#   load_all()
+# load_all()
 # data.mstate <- msebmtcal
 # data.raw <- ebmtcal
 # j <- 1
 # j.in <- 1
 # s<-0
-# t.eval <- 1826
+# t <- 1826
 # tp.pred = tps100 |> dplyr::filter(j == 1) |> dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
 # curve.type = "rcs"
 # rcs.nk = 3
-# weights <- weights.manual
+# weights <- NULL
+# # weights <- weights.manual
 # w.covs = c("year", "agecl", "proph", "match")
 # w.landmark.type = "state"
 # w.max = 10
 # w.stabilised = FALSE
 # w.max.follow = NULL
-# CI = FALSE
+# CI = 95
+# CI.type = "parametric"
 # str(data.pred.plot)
 # data.pred.plot <- tps0 |> dplyr::filter(j == j.in) |> dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
 # data.pred.plot$id <- 1:nrow(data.pred.plot)
@@ -129,14 +151,28 @@ calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.type =
   ### Warnings and errors
   ###
 
+  ### Stop if patients in data.raw are not in data.mstate
+  if (!base::all(unique(data.raw$id) %in% unique(data.mstate$id))){
+    stop("All patients in data.raw are not contained in data.mstate. Landmarking cannot be applied.")
+  }
+
+  ### Warning if patients in data.mstate are not in data.raw
+  if (!base::all(unique(data.mstate$id) %in% unique(data.raw$id))){
+    warning("All patients in data.mstate are not contained in data.raw. Landmarking can still be applied, but potential mismatch in these two datasets?")
+  }
+
   ### Warning if weights inputted manually, and confidence interval requested internally
   if ((CI != FALSE) & !is.null(weights)){
     stop("Estimation of confidence interval using internal bootstrapping procedure was requested. This is not possible with user-inputted weights.")
   }
 
-  ### Warning if weights inputted manually, and confidence interval requested internally
-  if ((CI != FALSE) & is.null(CI.R.boot)){
-    stop("Estimation of confidence interval requested but number of bootstrap replicates not specified")
+  ### Stop if CI.type = "bootstrap" but CI.R.boot not specified
+  if (!(CI.type %in% c("parametric", "bootstrap"))){
+    stop("CI.type takes values in 'parametric' and 'bootstrap'")
+  } else {
+    if (CI.type == "bootstrap" & is.null(CI.R.boot)){
+      stop("Must specify number of bootstrap replicates for confidence interval using CI.R.boot.")
+    }
   }
 
   ### Check if transitions.out is only specified for non-zero columns
@@ -197,10 +233,10 @@ calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.type =
 
   }
 
-  ### Extract which state individuals are in at time t.eval
+  ### Extract which state individuals are in at time t
   ids.state.list <- vector("list", max.state)
   for (k in valid.transitions){
-    ids.state.list[[k]] <- extract_ids_states(data.mstate, tmat, k, t.eval)
+    ids.state.list[[k]] <- extract_ids_states(data.mstate, tmat, k, t)
   }
 
   ### Create a variable to say which state an individual was in at the time of interest
@@ -240,7 +276,7 @@ calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.type =
     dplyr::distinct(id) |>
     dplyr::pull(id)
 
-  ### Reduce data.raw to landmarked dataset of individuals who are uncensored at time t.eval,
+  ### Reduce data.raw to landmarked dataset of individuals who are uncensored at time t,
   ### this is the set of predicted risks over which we plot calibration curves
   data.raw.lmk.js.uncens <- data.raw |> base::subset(id %in% ids.state.js) |> base::subset(!is.na(state.poly))
 
@@ -253,7 +289,7 @@ calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.type =
   ### Arg1: data.in = dataset which we want to assess calibration in
   ### Arg2: indices = vector of indices to sample dataset
   ### Arg3: state we want to assess calibration for
-  ### Arg4: data.in.uncens = dataset of uncensored individuals at time t.eval, it is these we will generate the predicted observed risks for
+  ### Arg4: data.in.uncens = dataset of uncensored individuals at time t, it is these we will generate the predicted observed risks for
 
   ###
   ### Function 1 uses loess smoothers
@@ -273,7 +309,7 @@ calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.type =
     weights <- calc_weights(data.mstate = data.mstate,
                             data.raw = data.boot,
                             covs = w.covs,
-                            t.eval = t.eval,
+                            t = t,
                             s = s,
                             landmark.type = w.landmark.type,
                             j = j,
@@ -285,7 +321,7 @@ calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.type =
     ## Add to data.boot
     data.boot.lmk.js <- dplyr::left_join(data.boot.lmk.js, dplyr::distinct(weights), by = dplyr::join_by(id))
 
-    ## Reduce data.boot to individuals who are uncensored at time t.eval
+    ## Reduce data.boot to individuals who are uncensored at time t
     data.boot.lmk.js.uncens <- base::subset(data.boot.lmk.js, !is.na(state.poly))
 
     ## Define equation
@@ -334,7 +370,7 @@ calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.type =
     weights <- calc_weights(data.mstate = data.mstate,
                             data.raw = data.boot,
                             covs = w.covs,
-                            t.eval = t.eval,
+                            t = t,
                             s = s,
                             landmark.type = w.landmark.type,
                             j = j,
@@ -346,7 +382,7 @@ calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.type =
     ## Add to data.boot
     data.boot.lmk.js <- dplyr::left_join(data.boot.lmk.js, dplyr::distinct(weights), by = dplyr::join_by(id))
 
-    ## Reduce data.boot to individuals who are uncensored at time t.eval
+    ## Reduce data.boot to individuals who are uncensored at time t
     data.boot.lmk.js.uncens <- base::subset(data.boot.lmk.js, !is.na(state.poly))
 
     ## Create restricted cubic splines for the cloglog of the linear predictor for the state of interst
@@ -423,7 +459,7 @@ calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.type =
     ## Create landmarked dataset
     data.boot.lmk.js <-  data.boot |> base::subset(id %in% ids.state.js)
 
-    ## Reduce data.boot to individuals who are uncensored at time t.eval
+    ## Reduce data.boot to individuals who are uncensored at time t
     data.boot.lmk.js.uncens <- base::subset(data.boot.lmk.js, !is.na(state.poly))
 
     ## Define equation
@@ -437,7 +473,7 @@ calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.type =
                                 degree = loess.degree)
 
     ## Create predictions for the vector of predicted probabilities for people included in original the calibration curve (this is the individuals
-    ## who are in the unbootstrapped dataset, and are uncensored at time t.eval. This would be the vector of predicted probabilities for the
+    ## who are in the unbootstrapped dataset, and are uncensored at time t. This would be the vector of predicted probabilities for the
     ## calibration curve if no bootstrapping was done)
 
     ## Create predicted observed risks
@@ -446,7 +482,6 @@ calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.type =
     } else {
       loess.pred.obs <- predict(loess.model, newdata = data.pred.plot)
     }
-
 
     return(loess.pred.obs)
   }
@@ -464,7 +499,7 @@ calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.type =
     ## Create landmarked dataset
     data.boot.lmk.js <-  data.boot |> base::subset(id %in% ids.state.js)
 
-    ## Reduce data.boot to individuals who are uncensored at time t.eval
+    ## Reduce data.boot to individuals who are uncensored at time t
     data.boot.lmk.js.uncens <- base::subset(data.boot.lmk.js, !is.na(state.poly))
 
     ## Create restricted cubic splines for the cloglog of the linear predictor for the state of interst
@@ -543,7 +578,6 @@ calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.type =
     }
   }
 
-
   ### Create object to store output
   if (is.null(transitions.out)){
     transitions.out <- valid.transitions
@@ -573,11 +607,10 @@ calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.type =
                                        "obs" = rcs.pred.obs)
     }
 
-
-
     ### Calculate confidence intervals (only if user-specifies them, and user didn't input their own weights, which would lead to incorrect confidence intervals)
     #     if (CI != FALSE & (is.null(weights))){
-    if (CI != FALSE ){
+    if (CI != FALSE & CI.type == "bootstrap"){
+
       ### Define alpha for CI's
       alpha <- (1-CI/100)/2
 
@@ -616,6 +649,9 @@ calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.type =
                                          "obs.upper" = upper)
       }
 
+    } else if (CI != FALSE & CI.type == "parametric"){
+
+    ### PLACE HOLDER FOR FUTURE INCLUSION OF PARAMETRIC CONFIDENCE INTERVALS
 
     }
   }
@@ -628,7 +664,7 @@ calib_blr <- function(data.mstate, data.raw, j, s, t.eval, tp.pred, curve.type =
                    "curve.type" = curve.type,
                    "j" = j,
                    "s" = s,
-                   "t.eval" = t.eval)
+                   "t" = t)
 
   ### Crate a combined output object with metadata, as well as plot data
   output.object.comb <- list("plotdata" = output.object, "metadata" = metadata)
@@ -648,7 +684,7 @@ summary.calib_blr <- function(object, ...) {
   cat("\n\nCalibration curves have been estimated for transitions into states ",
       paste(object[["metadata"]]$assessed.transitions, collapse = ","), sep = " ")
 
-  cat("\n\nCalibration was assessed at time ", object[["metadata"]]$t.eval, " and calibration was assessed in a landmarked cohort of individuals in state j = ", object[["metadata"]]$j,
+  cat("\n\nCalibration was assessed at time ", object[["metadata"]]$t, " and calibration was assessed in a landmarked cohort of individuals in state j = ", object[["metadata"]]$j,
       " at time s = ", object[["metadata"]]$s, sep = "")
 
   if (isFALSE(object[["metadata"]]$CI)){

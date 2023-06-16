@@ -9,7 +9,7 @@ calib_mlr(
   data.raw,
   j,
   s,
-  t.eval,
+  t,
   tp.pred,
   smoother.type = "sm.ps",
   ps.int = 4,
@@ -35,9 +35,9 @@ calib_mlr(
 
 \item{s}{Landmark time at which predictions were made}
 
-\item{t.eval}{Follow up time at which calibration is to be assessed}
+\item{t}{Follow up time at which calibration is to be assessed}
 
-\item{tp.pred}{Vector of predicted transition probabilities at time t.eval}
+\item{tp.pred}{Vector of predicted transition probabilities at time t}
 
 \item{smoother.type}{Type of smoothing applied. Takes values \code{s} (see \code{\link[VGAM]{s}}), \code{sm.ps} (see \code{\link[VGAM]{sm.ps}}) or \code{sm.os} (see \code{\link[VGAM]{sm.os}}).}
 
@@ -61,13 +61,13 @@ calib_mlr(
 
 \item{w.stabilised}{Indicates whether inverse probability of censoring weights should be stabilised or not}
 
-\item{w.max.follow}{Maximum follow up for model calculating inverse probability of censoring weights. Reducing this to \code{t.eval} + 1 may aid in the proportional hazards assumption being met in this model.}
+\item{w.max.follow}{Maximum follow up for model calculating inverse probability of censoring weights. Reducing this to \code{t} + 1 may aid in the proportional hazards assumption being met in this model.}
 
 \item{...}{Extra arguments to be passed to w.function (custom function for estimating weights)}
 }
 \description{
 Creates the underlying data for the calibration plots. Observed event
-probabilities at time \code{t.eval} are estimated for inputted predicted
+probabilities at time \code{t} are estimated for inputted predicted
 transition probabilities \code{tp.pred} out of state \code{j} at time \code{s}.
 \code{calib_mlr} estimates calibration scatter plots using a multinomial logistic
 framework in combination with landmarking and inverse probability of
@@ -84,7 +84,7 @@ the calibration scatter plots cannot be produced as it is currently unclear how
 to present such data.
 }
 \details{
-Observed event probabilities at time \code{t.eval} are estimated for predicted
+Observed event probabilities at time \code{t} are estimated for predicted
 transition probabilities \code{tp.pred} out of state \code{j} at time \code{s}.
 \code{calib_mlr} estimates calibration scatter plots uses a technique for assessing the calibration of multinomial logistic
 regression models, namely the nominal calibration framework of #' van Hoorde et al. (2014, 2015).
@@ -126,7 +126,7 @@ including a vector of the possible transitions and other user specified informat
 \examples{
 
 # Estimate calibration scatter plots for the predicted transition
-# probabilities at time t.eval = 1826, when predictions were made at time
+# probabilities at time t = 1826, when predictions were made at time
 # s = 0 in state j = 1. These predicted transition probabilities are stored in tps0.
 
 # Extract the predicted transition probabilities out of state j = 1
@@ -139,7 +139,7 @@ calib_mlr(data.mstate = msebmtcal,
  data.raw = ebmtcal,
  j=1,
  s=0,
- t.eval = 1826,
+ t = 1826,
  tp.pred = tp.pred,
  w.covs = c("year", "agecl", "proph", "match"))
 

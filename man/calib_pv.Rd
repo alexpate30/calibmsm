@@ -9,7 +9,7 @@ calib_pv(
   data.raw,
   j,
   s,
-  t.eval,
+  t,
   tp.pred,
   curve.type = "rcs",
   rcs.nk = 3,
@@ -18,7 +18,7 @@ calib_pv(
   group.vars = NULL,
   n.pctls = NULL,
   CI = FALSE,
-  CI.type = NULL,
+  CI.type = "parametric",
   CI.R.boot = NULL,
   data.pred.plot = NULL,
   transitions.out = NULL
@@ -33,9 +33,9 @@ calib_pv(
 
 \item{s}{Landmark time at which predictions were made}
 
-\item{t.eval}{Follow up time at which calibration is to be assessed}
+\item{t}{Follow up time at which calibration is to be assessed}
 
-\item{tp.pred}{Matrix of predicted transition probabilities at time t.eval, if in state j at time s. There must be a seperate column for the predicted transition probabilities into every state, even if these predicted transition probabilities are 0.}
+\item{tp.pred}{Matrix of predicted transition probabilities at time t, if in state j at time s. There must be a seperate column for the predicted transition probabilities into every state, even if these predicted transition probabilities are 0.}
 
 \item{curve.type}{Whether calibration curves are estimated using restricted cubic splines ('rcs') or loess smoothers ('loess')}
 
@@ -51,7 +51,7 @@ calib_pv(
 
 \item{CI}{Size of confidence intervals as a \%}
 
-\item{CI.type}{Way confidence interval is calculated (\code{bootstrap} or \code{parametric})}
+\item{CI.type}{Method for estimating confidence interval (\code{bootstrap} or \code{parametric})}
 
 \item{CI.R.boot}{Number of bootstrap replicates when estimating the confidence interval for the calibration curve using bootstrapping}
 
@@ -82,7 +82,7 @@ in a cohort of interest. This is done using techniques for assessing calibration
 in combination with inverse probability of censoring weights and landmarking.
 }
 \details{
-Observed event probabilities at time \code{t.eval} are estimated for predicted
+Observed event probabilities at time \code{t} are estimated for predicted
 transition probabilities \code{tp.pred} out of state \code{j} at time \code{s}.
 \code{calib_pv} estimates the observed event probabilities using pseudo-values.
 Calibraiton curves are generatd by regression the pseudo-values for the transition
@@ -101,7 +101,7 @@ The calibration curves can be plotted using \code{\link{plot.calib_pv}}.
 }
 \examples{
 # Estimate calibration curves for the predicted transition
-# probabilities at time t.eval = 1826, when predictions were made at time
+# probabilities at time t = 1826, when predictions were made at time
 # s = 100 in state j = 3. These predicted transition probabilities are stored in tps100.
 
 # Extract the predicted transition probabilities out of state j = 1
@@ -113,7 +113,7 @@ dat.calib.pseudo <- calib_pv(data.mstate = msebmtcal,
   data.raw = ebmtcal,
   j = 3,
   s = 100,
-  t.eval = 1826,
+  t = 1826,
   tp.pred = tp.pred,
   group.vars = c("year"),
   n.pctls = 2,

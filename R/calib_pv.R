@@ -2,16 +2,16 @@
 #'
 #' @description
 #' Estimates Aalen-Johansen estimatorfor the transition probabilities in cohort data.mstate.
-#' Estimatestransition probabilities at time t.eval if in state j at time 0
+#' Estimatestransition probabilities at time t if in state j at time 0
 #' The Aalen-Johansen estimator for the entire cohort (including individual person_id.eval)
 #' is inputted manually (obs.aj), to speed up computaitonal time if calculating pseudo-values
 #' for multiple individuals from the same cohort.
 #'
 #' @param data.mstate Validation data in `msdata` format
 #' @param tmat Transition probability matrix
-#' @param t.eval Follow up time at which calibration is to be assessed
+#' @param t Follow up time at which calibration is to be assessed
 #' @param j Landmark state at which predictions were made
-calc_aj <- function(data.mstate, tmat, t.eval, j){
+calc_aj <- function(data.mstate, tmat, t, j){
 
   ### Assign max state number
   max.state <- ncol(tmat)
@@ -38,13 +38,13 @@ calc_aj <- function(data.mstate, tmat, t.eval, j){
   ### A) is correct, and B) we aren't interested in those states anyway
 
   ### Extract the closest time in the data to the time we want to evaluate at
-  t.eval.dat <- pt.aj[[j]]$time[max(which(pt.aj[[j]]$time <= t.eval))]
+  t.dat <- pt.aj[[j]]$time[max(which(pt.aj[[j]]$time <= t))]
 
   ### Extract AJ estimator at this time point
-  obs.aj <- pt.aj[[j]][pt.aj[[j]]$time == t.eval.dat, paste("pstate", 1:max.state, sep = "")]
+  obs.aj <- pt.aj[[j]][pt.aj[[j]]$time == t.dat, paste("pstate", 1:max.state, sep = "")]
 
   ### Extract AJ standard error  at this time point
-  obs.aj.se <- pt.aj[[j]][pt.aj[[j]]$time == t.eval.dat, paste("se", 1:max.state, sep = "")]
+  obs.aj.se <- pt.aj[[j]][pt.aj[[j]]$time == t.dat, paste("se", 1:max.state, sep = "")]
 
   ### Create output object
   output.object <- list("obs.aj" = obs.aj, "obs.aj.se" = obs.aj.se)
@@ -59,7 +59,7 @@ calc_aj <- function(data.mstate, tmat, t.eval, j){
 #'
 #' @description
 #' Estimates the pseudo-values for an individual (person_id.eval) from cohort data.mstate.
-#' Calculates psuedo-values for transition probabilities at time t.eval if in state j at time 0
+#' Calculates psuedo-values for transition probabilities at time t if in state j at time 0
 #' The Aalen-Johansen estimator for the entire cohort (including individual person_id.eval)
 #' is inputted manually (obs.aj), to speed up computaitonal time if calculating pseudo-values
 #' for multiple individuals from the same cohort.
@@ -69,15 +69,15 @@ calc_aj <- function(data.mstate, tmat, t.eval, j){
 #' @param obs.aj Aalen-Johansen estimator of the transition probabilities in the entire cohort (not excluding person_id.eval)
 #' @param tmat Transition probability matrix
 #' @param n.cohort Size of cohort (number of unique entries in data.mstate)
-#' @param t.eval Follow up time at which calibration is to be assessed
+#' @param t Follow up time at which calibration is to be assessed
 #' @param j Landmark state at which predictions were made
-calc_pv_aj <- function(person_id.eval, data.mstate, obs.aj, tmat, n.cohort, t.eval, j){
+calc_pv_aj <- function(person_id.eval, data.mstate, obs.aj, tmat, n.cohort, t, j){
 
   # person_id.eval <- 3
   # data.mstate <- data.mstate.lmk.js
   # tmat <- tmat.lmk.js
   # obs.aj <- obs.aj.save
-  # t.eval <- 1826 - s
+  # t <- 1826 - s
   # n.cohort <- nrow(data.raw.lmk.js)
   # j <- 3
   # s <- 100
@@ -85,7 +85,7 @@ calc_pv_aj <- function(person_id.eval, data.mstate, obs.aj, tmat, n.cohort, t.ev
   ### Calculate AJ estimate without patient in dataset
   est.drop.pat <- calc_aj(subset(data.mstate, id != person_id.eval),
                           tmat = tmat,
-                          t.eval = t.eval,
+                          t = t,
                           j = j)
 
   ### Retain just the estimate (not the standard error)
@@ -111,8 +111,8 @@ calc_pv_aj <- function(person_id.eval, data.mstate, obs.aj, tmat, n.cohort, t.ev
 #' @param data.raw Validation data in `data.frame` (one row per individual)
 #' @param j Landmark state at which predictions were made
 #' @param s Landmark time at which predictions were made
-#' @param t.eval Follow up time at which calibration is to be assessed
-#' @param tp.pred Matrix of predicted transition probabilities at time t.eval, if in state j at time s. There must be a seperate column for the predicted transition probabilities into every state, even if these predicted transition probabilities are 0.
+#' @param t Follow up time at which calibration is to be assessed
+#' @param tp.pred Matrix of predicted transition probabilities at time t, if in state j at time s. There must be a seperate column for the predicted transition probabilities into every state, even if these predicted transition probabilities are 0.
 #' @param curve.type Whether calibration curves are estimated using restricted cubic splines ('rcs') or loess smoothers ('loess')
 #' @param rcs.nk Number of knots when curves are estimated using restricted cubic splines
 #' @param loess.span Span when curves are estimated using loess smoothers
@@ -120,13 +120,13 @@ calc_pv_aj <- function(person_id.eval, data.mstate, obs.aj, tmat, n.cohort, t.ev
 #' @param group.vars Baseline variables to define groups within which to estimate pseudo-values
 #' @param n.pctls Number of percentiles to group individuals by with respect to predicted transition probabilities when estimating pseudo-values
 #' @param CI Size of confidence intervals as a %
-#' @param CI.type Way confidence interval is calculated (`bootstrap` or `parametric`)
+#' @param CI.type Method for estimating confidence interval (`bootstrap` or `parametric`)
 #' @param CI.R.boot Number of bootstrap replicates when estimating the confidence interval for the calibration curve using bootstrapping
 #' @param data.pred.plot Data frame or matrix of predicted risks for each possible transition over which to plot the calibration curves. Must have one column for every possible transition.
 #' @param transitions.out Transitions for which to calculate calibration curves. Will do all possible transitions if left as NULL.
 #'
 #' @details
-#' Observed event probabilities at time `t.eval` are estimated for predicted
+#' Observed event probabilities at time `t` are estimated for predicted
 #' transition probabilities `tp.pred` out of state `j` at time `s`.
 #' `calib_pv` estimates the observed event probabilities using pseudo-values.
 #' Calibraiton curves are generatd by regression the pseudo-values for the transition
@@ -159,7 +159,7 @@ calc_pv_aj <- function(person_id.eval, data.mstate, obs.aj, tmat, n.cohort, t.ev
 #'
 #' @examples
 #' # Estimate calibration curves for the predicted transition
-#' # probabilities at time t.eval = 1826, when predictions were made at time
+#' # probabilities at time t = 1826, when predictions were made at time
 #' # s = 100 in state j = 3. These predicted transition probabilities are stored in tps100.
 #'
 #' # Extract the predicted transition probabilities out of state j = 1
@@ -171,7 +171,7 @@ calc_pv_aj <- function(person_id.eval, data.mstate, obs.aj, tmat, n.cohort, t.ev
 #'   data.raw = ebmtcal,
 #'   j = 3,
 #'   s = 100,
-#'   t.eval = 1826,
+#'   t = 1826,
 #'   tp.pred = tp.pred,
 #'   group.vars = c("year"),
 #'   n.pctls = 2,
@@ -184,22 +184,22 @@ calc_pv_aj <- function(person_id.eval, data.mstate, obs.aj, tmat, n.cohort, t.ev
 #' #'
 #' @export
 calib_pv <- function(data.mstate,
-                          data.raw,
-                          j,
-                          s,
-                          t.eval,
-                          tp.pred,
-                          curve.type = "rcs",
-                          rcs.nk = 3,
-                          loess.span = 0.75,
-                          loess.degree = 2,
-                          group.vars = NULL,
-                          n.pctls = NULL,
-                          CI = FALSE,
-                          CI.type = NULL,
-                          CI.R.boot = NULL,
-                          data.pred.plot = NULL,
-                          transitions.out = NULL){
+                     data.raw,
+                     j,
+                     s,
+                     t,
+                     tp.pred,
+                     curve.type = "rcs",
+                     rcs.nk = 3,
+                     loess.span = 0.75,
+                     loess.degree = 2,
+                     group.vars = NULL,
+                     n.pctls = NULL,
+                     CI = FALSE,
+                     CI.type = 'parametric',
+                     CI.R.boot = NULL,
+                     data.pred.plot = NULL,
+                     transitions.out = NULL){
 
   # data.mstate <- msebmtcal
   # data.raw <- ebmtcal
@@ -214,12 +214,12 @@ calib_pv <- function(data.mstate,
   # #
   # j <- 3
   # s <- 100
-  # t.eval <- 1826
+  # t <- 1826
   # tp.pred <- tps100 |> dplyr::filter(j == 3) |> dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
   # # id.lmk <- extract_ids_states(data.mstate = data.mstate,
   # #                              tmat = attributes(data.mstate)$trans,
   # #                              j = j,
-  # #                              t.eval = s)
+  # #                              t = s)
   # # data.pred.plot <- tps100 |>
   # #   dplyr::filter(id %in% id.lmk) |>
   # #   dplyr::filter(j == 3) |>
@@ -248,6 +248,16 @@ calib_pv <- function(data.mstate,
   ### Warnings and errors ###
   ###########################
 
+  ### Stop if patients in data.raw are not in data.mstate
+  if (!base::all(unique(data.raw$id) %in% unique(data.mstate$id))){
+    stop("All patients in data.raw are not contained in data.mstate. Landmarking cannot be applied.")
+  }
+
+  ### Warning if patients in data.mstate are not in data.raw
+  if (!base::all(unique(data.mstate$id) %in% unique(data.raw$id))){
+    warning("All patients in data.mstate are not contained in data.raw. Landmarking can still be applied, but potential mismatch in these two datasets?")
+  }
+
   ### Error if CI requested by CI.type ignored
   if (CI != FALSE & is.null(CI.type)){
     stop("Confidence interval requested but CI.type not specified. Choose either 'parametric' or 'bootstrap'.
@@ -269,7 +279,9 @@ calib_pv <- function(data.mstate,
   }
 
   ### Stop if CI.type = "bootstrap" but CI.R.boot not specified
-  if (!is.null(CI.type)){
+  if (!(CI.type %in% c("parametric", "bootstrap"))){
+    stop("CI.type takes values in 'parametric' and 'bootstrap'")
+  } else {
     if (CI.type == "bootstrap" & is.null(CI.R.boot)){
       stop("Must specify number of bootstrap replicates for confidence interval using CI.R.boot.")
     }
@@ -322,7 +334,7 @@ calib_pv <- function(data.mstate,
     id.lmk.js <- extract_ids_states(data.mstate = data.mstate,
                                     tmat = attributes(data.mstate)$trans,
                                     j = j,
-                                    t.eval = s)
+                                    t = s)
 
     ### Extract predicted risks of these individuals
     data.pred.plot <- data.raw |>
@@ -409,7 +421,7 @@ calib_pv <- function(data.mstate,
     rm(data.raw.boot, data.mstate.boot)
 
     ### Identify which individuals are in state j at time s
-    ids.state.js <- extract_ids_states(data.mstate = data.mstate, tmat = tmat, j = j, t.eval = s)
+    ids.state.js <- extract_ids_states(data.mstate = data.mstate, tmat = tmat, j = j, t = s)
 
     ### Apply landmarking to data.raw and data.mstate
     data.raw.lmk.js <- data.raw |> base::subset(id %in% ids.state.js)
@@ -506,7 +518,7 @@ calib_pv <- function(data.mstate,
       ### Calculate the observed Aalen-Johansen once to enable quicker calculation for the pseudo-values
       obs.aj.save <- calc_aj(data.mstate = data.mstate.lmk.js,
                              tmat = tmat.lmk.js,
-                             t.eval = t.eval - s,
+                             t = t - s,
                              j = j)[["obs.aj"]]
 
 
@@ -516,7 +528,7 @@ calib_pv <- function(data.mstate,
                        obs.aj = obs.aj.save,
                        tmat = tmat.lmk.js,
                        n.cohort = nrow(data.raw.lmk.js),
-                       t.eval = t.eval - s,
+                       t = t - s,
                        j = j)
 
       ### Combine into dataset
@@ -542,7 +554,7 @@ calib_pv <- function(data.mstate,
       calc_aj_group <- function(group){
         calc_aj(data.mstate = base::subset(data.mstate.lmk.js, id %in% data.groups[[group]]$id),
                 tmat = tmat.lmk.js,
-                t.eval = t.eval - s,
+                t = t - s,
                 j = j)[["obs.aj"]]
       }
 
@@ -563,7 +575,7 @@ calib_pv <- function(data.mstate,
                                   obs.aj = obs.aj.groups[[group]],
                                   tmat = tmat.lmk.js,
                                   n.cohort = nrow(data.groups[[group]]),
-                                  t.eval = t.eval - s,
+                                  t = t - s,
                                   j = j)
         )
 
@@ -621,7 +633,7 @@ calib_pv <- function(data.mstate,
         calc_aj_pctl <- function(pctl){
           calc_aj(data.mstate = base::subset(data.mstate.lmk.js, id %in% data.pctls[[state]][[pctl]]$id),
                   tmat = tmat.lmk.js,
-                  t.eval = t.eval - s,
+                  t = t - s,
                   j = j)[["obs.aj"]]
         }
 
@@ -639,7 +651,7 @@ calib_pv <- function(data.mstate,
                                     obs.aj = obs.aj.pctls[[state]][[pctl]],
                                     tmat = tmat.lmk.js,
                                     n.cohort = nrow(data.pctls[[state]][[pctl]]),
-                                    t.eval = t.eval - s,
+                                    t = t - s,
                                     j = j)
           )
 
@@ -733,7 +745,7 @@ calib_pv <- function(data.mstate,
             obs.aj.groups.pctls[[state]][[group]][[pctl]] <-
               calc_aj(data.mstate = base::subset(data.mstate.lmk.js, id %in% data.groups.pctls[[state]][[group]][[pctl]]$id),
                       tmat = tmat.lmk.js,
-                      t.eval = t.eval - s,
+                      t = t - s,
                       j = j)[["obs.aj"]]
 
             ### Calculate pseudo-values
@@ -743,7 +755,7 @@ calib_pv <- function(data.mstate,
                                       obs.aj = obs.aj.groups.pctls[[state]][[group]][[pctl]],
                                       tmat = tmat.lmk.js,
                                       n.cohort = nrow(data.groups.pctls[[state]][[group]][[pctl]]),
-                                      t.eval = t.eval - s,
+                                      t = t - s,
                                       j = j)
             )
 
@@ -1031,7 +1043,7 @@ calib_pv <- function(data.mstate,
                    "CI.R.boot" = CI.R.boot,
                    "j" = j,
                    "s" = s,
-                   "t.eval" = t.eval,
+                   "t" = t,
                    "group.vars" = group.vars,
                    "n.pctls" = n.pctls)
 
@@ -1055,7 +1067,7 @@ summary.calib_pv <- function(object, ...) {
   cat("\n\nCalibration curves have been estimated for transitions into states ",
       paste(object[["metadata"]]$assessed.transitions, collapse = ","), sep = " ")
 
-  cat("\n\nCalibration was assessed at time ", object[["metadata"]]$t.eval, " and calibration was assessed in a landmarked cohort of individuals in state j = ", object[["metadata"]]$j,
+  cat("\n\nCalibration was assessed at time ", object[["metadata"]]$t, " and calibration was assessed in a landmarked cohort of individuals in state j = ", object[["metadata"]]$j,
       " at time s = ", object[["metadata"]]$s, sep = "")
 
   if (isFALSE(object[["metadata"]]$CI)){

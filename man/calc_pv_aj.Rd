@@ -4,7 +4,7 @@
 \alias{calc_pv_aj}
 \title{Estimate pseudo-values for the transition probabilities based on the Aalen-Johansen estimator}
 \usage{
-calc_pv_aj(person_id.eval, data.mstate, obs.aj, tmat, n.cohort, t.eval, j)
+calc_pv_aj(person_id.eval, data.mstate, obs.aj, tmat, n.cohort, t, j)
 }
 \arguments{
 \item{person_id.eval}{id of individual to calculate the pseudo-value for}
@@ -17,13 +17,13 @@ calc_pv_aj(person_id.eval, data.mstate, obs.aj, tmat, n.cohort, t.eval, j)
 
 \item{n.cohort}{Size of cohort (number of unique entries in data.mstate)}
 
-\item{t.eval}{Follow up time at which calibration is to be assessed}
+\item{t}{Follow up time at which calibration is to be assessed}
 
 \item{j}{Landmark state at which predictions were made}
 }
 \description{
 Estimates the pseudo-values for an individual (person_id.eval) from cohort data.mstate.
-Calculates psuedo-values for transition probabilities at time t.eval if in state j at time 0
+Calculates psuedo-values for transition probabilities at time t if in state j at time 0
 The Aalen-Johansen estimator for the entire cohort (including individual person_id.eval)
 is inputted manually (obs.aj), to speed up computaitonal time if calculating pseudo-values
 for multiple individuals from the same cohort.

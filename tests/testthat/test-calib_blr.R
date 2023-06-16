@@ -10,7 +10,7 @@ test_that("check calib_blr output, (j = 1, s = 0), curve.type = rcs", {
                    data.raw = ebmtcal,
                    j=1,
                    s=0,
-                   t.eval = 1826,
+                   t = 1826,
                    tp.pred = tp.pred,
                    curve.type = "rcs",
                    rcs.nk = 3,
@@ -32,7 +32,7 @@ test_that("check calib_blr output, (j = 1, s = 0), curve.type = rcs", {
                    data.raw = ebmtcal,
                    j=1,
                    s=0,
-                   t.eval = 1826,
+                   t = 1826,
                    tp.pred = tp.pred,
                    curve.type = "rcs",
                    rcs.nk = 3,
@@ -65,7 +65,7 @@ test_that("check calib_blr output, (j = 1, s = 0), curve.type = loess", {
                    data.raw = ebmtcal,
                    j=1,
                    s=0,
-                   t.eval = 1826,
+                   t = 1826,
                    tp.pred = tp.pred,
                    curve.type = "loess",
                    w.covs = c("year", "agecl", "proph", "match"))
@@ -85,7 +85,7 @@ test_that("check calib_blr output, (j = 1, s = 0), curve.type = loess", {
                    data.raw = ebmtcal,
                    j=1,
                    s=0,
-                   t.eval = 1826,
+                   t = 1826,
                    tp.pred = tp.pred,
                    curve.type = "loess",
                    w.covs = c("year", "agecl", "proph", "match"),
@@ -109,7 +109,7 @@ test_that("check calib_blr output, (j = 1, s = 0), curve.type = loess", {
                    data.raw = ebmtcal,
                    j=1,
                    s=0,
-                   t.eval = 1826,
+                   t = 1826,
                    tp.pred = tp.pred,
                    curve.type = "loess",
                    w.function = calc_weights,
@@ -142,7 +142,7 @@ test_that("check calib_blr output, (j = 1, s = 0), with CI", {
                    data.raw = ebmtcal,
                    j=1,
                    s=0,
-                   t.eval = 1826,
+                   t = 1826,
                    tp.pred = tp.pred,
                    curve.type = "rcs",
                    rcs.nk = 3,
@@ -175,7 +175,7 @@ test_that("check calib_blr output, (j = 3, s = 100)", {
                    data.raw = ebmtcal,
                    j=3,
                    s=100,
-                   t.eval = 1826,
+                   t = 1826,
                    tp.pred = tp.pred,
                    curve.type = "rcs",
                    rcs.nk = 3,
@@ -206,7 +206,7 @@ test_that("check calib_blr output, (j = 1, s = 0), null covs", {
                    data.raw = ebmtcal,
                    j=1,
                    s=0,
-                   t.eval = 1826,
+                   t = 1826,
                    tp.pred = tp.pred,
                    curve.type = "rcs",
                    rcs.nk = 3)
@@ -226,7 +226,7 @@ test_that("check calib_blr output, (j = 1, s = 0), null covs", {
                    data.raw = ebmtcal,
                    j=1,
                    s=0,
-                   t.eval = 1826,
+                   t = 1826,
                    tp.pred = tp.pred,
                    curve.type = "rcs",
                    rcs.nk = 3,
@@ -253,12 +253,12 @@ test_that("check calib_blr output, (j = 1, s = 0),
   ## Extract relevant predicted risks from tps0
   tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
 
-  ## Define t.eval
-  t.eval <- 1826
+  ## Define t
+  t <- 1826
 
   ## Extract data for plot manually
   ids.uncens <- ebmtcal |>
-    subset(dtcens > t.eval | (dtcens < t.eval & dtcens.s == 0)) |>
+    subset(dtcens > t | (dtcens < t & dtcens.s == 0)) |>
     dplyr::pull(id)
   data.pred.plot <- tps0 |>
     dplyr::filter(j == 1 & id %in% ids.uncens) |>
@@ -268,7 +268,7 @@ test_that("check calib_blr output, (j = 1, s = 0),
   weights.manual <-
     calc_weights(data.mstate = msebmtcal,
                  data.raw = ebmtcal,
-                 t.eval = 1826,
+                 t = 1826,
                  s = 0,
                  landmark.type = "state",
                  j = 1,
@@ -281,7 +281,7 @@ test_that("check calib_blr output, (j = 1, s = 0),
                    data.raw = ebmtcal,
                    j=1,
                    s=0,
-                   t.eval = 1826,
+                   t = 1826,
                    tp.pred = tp.pred,
                    curve.type = "rcs",
                    rcs.nk = 3,
@@ -309,12 +309,12 @@ test_that("check calib_blr output, (j = 1, s = 0),
             ## Extract relevant predicted risks from tps0
             tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
 
-            ## Define t.eval
-            t.eval <- 1826
+            ## Define t
+            t <- 1826
 
             ## Extract data for plot manually
             ids.uncens <- ebmtcal |>
-              subset(dtcens > t.eval | (dtcens < t.eval & dtcens.s == 0)) |>
+              subset(dtcens > t | (dtcens < t & dtcens.s == 0)) |>
               dplyr::pull(id)
             data.pred.plot <- tps0 |>
               dplyr::filter(j == 1 & id %in% ids.uncens) |>
@@ -326,7 +326,7 @@ test_that("check calib_blr output, (j = 1, s = 0),
                              data.raw = ebmtcal,
                              j=1,
                              s=0,
-                             t.eval = 1826,
+                             t = 1826,
                              tp.pred = tp.pred,
                              curve.type = "rcs",
                              rcs.nk = 3,
@@ -361,7 +361,7 @@ test_that("check calib_blr output, (j = 1, s = 0),
                              data.raw = ebmtcal,
                              j=1,
                              s=0,
-                             t.eval = 1826,
+                             t = 1826,
                              tp.pred = tp.pred,
                              curve.type = "rcs",
                              rcs.nk = 3,
@@ -373,7 +373,7 @@ test_that("check calib_blr output, (j = 1, s = 0),
               calc_weights(data.mstate = msebmtcal,
                            data.raw = ebmtcal,
                            covs =  c("year", "agecl", "proph", "match"),
-                           t.eval = 1826,
+                           t = 1826,
                            s = 0,
                            landmark.type = "state",
                            j = 1,
@@ -387,7 +387,7 @@ test_that("check calib_blr output, (j = 1, s = 0),
                              data.raw = ebmtcal,
                              j=1,
                              s=0,
-                             t.eval = 1826,
+                             t = 1826,
                              tp.pred = tp.pred,
                              curve.type = "rcs",
                              rcs.nk = 3,
@@ -402,7 +402,7 @@ test_that("check calib_blr output, (j = 1, s = 0),
                              data.raw = ebmtcal,
                              j=1,
                              s=0,
-                             t.eval = 1826,
+                             t = 1826,
                              tp.pred = tp.pred,
                              curve.type = "rcs",
                              rcs.nk = 3,
@@ -419,7 +419,7 @@ test_that("check calib_blr output, (j = 1, s = 0),
                              data.raw = ebmtcal,
                              j=1,
                              s=0,
-                             t.eval = 1826,
+                             t = 1826,
                              tp.pred = tp.pred,
                              curve.type = "rcs",
                              rcs.nk = 3,
@@ -441,16 +441,16 @@ test_that("check calib_blr output, (j = 1, s = 0),
 
             ###
             ### Redefine calc_weights, but change order of all the input arguments (this shouldn't make a difference)
-            calc_weights_manual <- function(stabilised = FALSE, max.follow = NULL, data.mstate, covs = NULL, landmark.type = "state", j = NULL, t.eval, s, max.weight = 10, data.raw){
+            calc_weights_manual <- function(stabilised = FALSE, max.follow = NULL, data.mstate, covs = NULL, landmark.type = "state", j = NULL, t, s, max.weight = 10, data.raw){
 
-              ### Modify everybody to be censored after time t.eval, if a max.follow has been specified
+              ### Modify everybody to be censored after time t, if a max.follow has been specified
               if(!is.null(max.follow)){
-                if (max.follow == "t.eval"){
+                if (max.follow == "t"){
                   data.raw <- dplyr::mutate(data.raw,
-                                            dtcens.s = dplyr::case_when(dtcens < t.eval + 2 ~ dtcens.s,
-                                                                        dtcens >= t.eval + 2 ~ 0),
-                                            dtcens = dplyr::case_when(dtcens < t.eval + 2 ~ dtcens,
-                                                                      dtcens >= t.eval + 2 ~ t.eval + 2))
+                                            dtcens.s = dplyr::case_when(dtcens < t + 2 ~ dtcens.s,
+                                                                        dtcens >= t + 2 ~ 0),
+                                            dtcens = dplyr::case_when(dtcens < t + 2 ~ dtcens,
+                                                                      dtcens >= t + 2 ~ t + 2))
                 } else {
                   data.raw <- dplyr::mutate(data.raw,
                                             dtcens.s = dplyr::case_when(dtcens < max.follow + 2 ~ dtcens.s,
@@ -525,13 +525,13 @@ test_that("check calib_blr output, (j = 1, s = 0),
               ## Add lp to data.raw.save
               data.raw.save$lp <- stats::predict(cens.model, newdata = data.raw.save, type = "lp", reference = "zero")
 
-              ### Create weights for the cohort at time t.eval - s
+              ### Create weights for the cohort at time t - s
               ### Note for individuals who reached an absorbing state, we take the probability of them being uncensored at the time of reached the
-              ### abosrbing state. For individuals still alive, we take the probability of being uncensored at time t.eval - s.
+              ### abosrbing state. For individuals still alive, we take the probability of being uncensored at time t - s.
 
               ### Get location of individuals who entered absorbing states or were censored prior to evaluation time
-              obs.absorbed.prior <- which(data.raw.save$dtcens <= t.eval & data.raw.save$dtcens.s == 0)
-              obs.censored.prior <- which(data.raw.save$dtcens <= t.eval & data.raw.save$dtcens.s == 1)
+              obs.absorbed.prior <- which(data.raw.save$dtcens <= t & data.raw.save$dtcens.s == 0)
+              obs.censored.prior <- which(data.raw.save$dtcens <= t & data.raw.save$dtcens.s == 1)
 
               ###
               ### Now create unstabilised probability of (un)censoring weights
@@ -539,9 +539,9 @@ test_that("check calib_blr output, (j = 1, s = 0),
               ### the inervse of this will be big, weighting them strongly
               ###
 
-              ### First assign all individuals a weight of the probability of being uncensored at time t.eval
-              ### This is the linear predictor times the cumulative hazard at time t.eval, and appropriate transformation to get a risk
-              data.raw.save$pcw <- as.numeric(exp(-exp(data.raw.save$lp)*data.weights$hazard[max(which(data.weights$time <= t.eval - s))]))
+              ### First assign all individuals a weight of the probability of being uncensored at time t
+              ### This is the linear predictor times the cumulative hazard at time t, and appropriate transformation to get a risk
+              data.raw.save$pcw <- as.numeric(exp(-exp(data.raw.save$lp)*data.weights$hazard[max(which(data.weights$time <= t - s))]))
 
               ## Write a function which will extract the uncensored probability for an individual with linear predictor lp at a given time t
               prob.uncens.func <- function(input){
@@ -568,7 +568,7 @@ test_that("check calib_blr output, (j = 1, s = 0),
               ### Apply this function to all the times at which individuals have entered an absorbing state prior to censoring
               data.raw.save$pcw[obs.absorbed.prior] <- apply(data.raw.save[obs.absorbed.prior, c("dtcens.modified", "lp")], 1, FUN = prob.uncens.func)
 
-              ### For individuals who were censored prior to t.eval, assign the weight as NA
+              ### For individuals who were censored prior to t, assign the weight as NA
               data.raw.save$pcw[obs.censored.prior] <- NA
 
               ### Invert these
@@ -582,8 +582,8 @@ test_that("check calib_blr output, (j = 1, s = 0),
                 ## Extract baseline hazard
                 data.weights.numer <- survival::basehaz(cens.model.int, centered = TRUE)
 
-                ### Assign all individuals a weight of the probability of being uncesored at time t.eval
-                data.raw.save$pcw.numer <- as.numeric(exp(-data.weights.numer$hazard[max(which(data.weights.numer$time <= t.eval - s))]))
+                ### Assign all individuals a weight of the probability of being uncesored at time t
+                data.raw.save$pcw.numer <- as.numeric(exp(-data.weights.numer$hazard[max(which(data.weights.numer$time <= t - s))]))
 
                 ### Create stabilised weight
                 data.raw.save$ipcw.stab <- data.raw.save$pcw.numer*data.raw.save$ipcw
@@ -611,7 +611,7 @@ test_that("check calib_blr output, (j = 1, s = 0),
                              data.raw = ebmtcal,
                              j=1,
                              s=0,
-                             t.eval = 1826,
+                             t = 1826,
                              tp.pred = tp.pred,
                              curve.type = "rcs",
                              rcs.nk = 3,
@@ -635,16 +635,16 @@ test_that("check calib_blr output, (j = 1, s = 0),
             ###
             ### Repeat this process (manual definition of calc_weights), again arguments are in different order, but this time an extra argument is added, which adds 10 to every weight.
             ### This extra arguments is something that could be inputted by user, and want to check it does actually change the answer. It should no longer agree with dat.calb.blr.
-            calc_weights_manual <- function(stabilised = FALSE, max.follow = NULL, data.mstate, covs = NULL, landmark.type = "state", j = NULL, t.eval, s, max.weight = 10, data.raw, extra.arg = NULL){
+            calc_weights_manual <- function(stabilised = FALSE, max.follow = NULL, data.mstate, covs = NULL, landmark.type = "state", j = NULL, t, s, max.weight = 10, data.raw, extra.arg = NULL){
 
-              ### Modify everybody to be censored after time t.eval, if a max.follow has been specified
+              ### Modify everybody to be censored after time t, if a max.follow has been specified
               if(!is.null(max.follow)){
-                if (max.follow == "t.eval"){
+                if (max.follow == "t"){
                   data.raw <- dplyr::mutate(data.raw,
-                                            dtcens.s = dplyr::case_when(dtcens < t.eval + 2 ~ dtcens.s,
-                                                                        dtcens >= t.eval + 2 ~ 0),
-                                            dtcens = dplyr::case_when(dtcens < t.eval + 2 ~ dtcens,
-                                                                      dtcens >= t.eval + 2 ~ t.eval + 2))
+                                            dtcens.s = dplyr::case_when(dtcens < t + 2 ~ dtcens.s,
+                                                                        dtcens >= t + 2 ~ 0),
+                                            dtcens = dplyr::case_when(dtcens < t + 2 ~ dtcens,
+                                                                      dtcens >= t + 2 ~ t + 2))
                 } else {
                   data.raw <- dplyr::mutate(data.raw,
                                             dtcens.s = dplyr::case_when(dtcens < max.follow + 2 ~ dtcens.s,
@@ -719,13 +719,13 @@ test_that("check calib_blr output, (j = 1, s = 0),
               ## Add lp to data.raw.save
               data.raw.save$lp <- stats::predict(cens.model, newdata = data.raw.save, type = "lp", reference = "zero")
 
-              ### Create weights for the cohort at time t.eval - s
+              ### Create weights for the cohort at time t - s
               ### Note for individuals who reached an absorbing state, we take the probability of them being uncensored at the time of reached the
-              ### abosrbing state. For individuals still alive, we take the probability of being uncensored at time t.eval - s.
+              ### abosrbing state. For individuals still alive, we take the probability of being uncensored at time t - s.
 
               ### Get location of individuals who entered absorbing states or were censored prior to evaluation time
-              obs.absorbed.prior <- which(data.raw.save$dtcens <= t.eval & data.raw.save$dtcens.s == 0)
-              obs.censored.prior <- which(data.raw.save$dtcens <= t.eval & data.raw.save$dtcens.s == 1)
+              obs.absorbed.prior <- which(data.raw.save$dtcens <= t & data.raw.save$dtcens.s == 0)
+              obs.censored.prior <- which(data.raw.save$dtcens <= t & data.raw.save$dtcens.s == 1)
 
               ###
               ### Now create unstabilised probability of (un)censoring weights
@@ -733,9 +733,9 @@ test_that("check calib_blr output, (j = 1, s = 0),
               ### the inervse of this will be big, weighting them strongly
               ###
 
-              ### First assign all individuals a weight of the probability of being uncensored at time t.eval
-              ### This is the linear predictor times the cumulative hazard at time t.eval, and appropriate transformation to get a risk
-              data.raw.save$pcw <- as.numeric(exp(-exp(data.raw.save$lp)*data.weights$hazard[max(which(data.weights$time <= t.eval - s))]))
+              ### First assign all individuals a weight of the probability of being uncensored at time t
+              ### This is the linear predictor times the cumulative hazard at time t, and appropriate transformation to get a risk
+              data.raw.save$pcw <- as.numeric(exp(-exp(data.raw.save$lp)*data.weights$hazard[max(which(data.weights$time <= t - s))]))
 
               ## Write a function which will extract the uncensored probability for an individual with linear predictor lp at a given time t
               prob.uncens.func <- function(input){
@@ -762,7 +762,7 @@ test_that("check calib_blr output, (j = 1, s = 0),
               ### Apply this function to all the times at which individuals have entered an absorbing state prior to censoring
               data.raw.save$pcw[obs.absorbed.prior] <- apply(data.raw.save[obs.absorbed.prior, c("dtcens.modified", "lp")], 1, FUN = prob.uncens.func)
 
-              ### For individuals who were censored prior to t.eval, assign the weight as NA
+              ### For individuals who were censored prior to t, assign the weight as NA
               data.raw.save$pcw[obs.censored.prior] <- NA
 
               ### Invert these
@@ -776,8 +776,8 @@ test_that("check calib_blr output, (j = 1, s = 0),
                 ## Extract baseline hazard
                 data.weights.numer <- survival::basehaz(cens.model.int, centered = TRUE)
 
-                ### Assign all individuals a weight of the probability of being uncesored at time t.eval
-                data.raw.save$pcw.numer <- as.numeric(exp(-data.weights.numer$hazard[max(which(data.weights.numer$time <= t.eval - s))]))
+                ### Assign all individuals a weight of the probability of being uncesored at time t
+                data.raw.save$pcw.numer <- as.numeric(exp(-data.weights.numer$hazard[max(which(data.weights.numer$time <= t - s))]))
 
                 ### Create stabilised weight
                 data.raw.save$ipcw.stab <- data.raw.save$pcw.numer*data.raw.save$ipcw
@@ -808,7 +808,7 @@ test_that("check calib_blr output, (j = 1, s = 0),
                              data.raw = ebmtcal,
                              j=1,
                              s=0,
-                             t.eval = 1826,
+                             t = 1826,
                              tp.pred = tp.pred,
                              curve.type = "rcs",
                              rcs.nk = 3,
@@ -841,7 +841,7 @@ test_that("test warnings and errors", {
                    data.raw = ebmtcal,
                    j=1,
                    s=0,
-                   t.eval = 1826,
+                   t = 1826,
                    tp.pred = tp.pred,
                    curve.type = "rcs",
                    rcs.nk = 3,
@@ -853,7 +853,7 @@ test_that("test warnings and errors", {
   weights.manual <-
     calc_weights(data.mstate = msebmtcal,
                  data.raw = ebmtcal,
-                 t.eval = 1826,
+                 t = 1826,
                  s = 0,
                  landmark.type = "state",
                  j = 1,
@@ -865,7 +865,7 @@ test_that("test warnings and errors", {
                    data.raw = ebmtcal,
                    j=1,
                    s=0,
-                   t.eval = 1826,
+                   t = 1826,
                    tp.pred = tp.pred,
                    curve.type = "rcs",
                    rcs.nk = 3,
@@ -873,7 +873,7 @@ test_that("test warnings and errors", {
   )
 
   ## Write a weights function with the wrong variable names
-  calc_weights_error <- function(data.mstate, data.raw, covs = NULL, t.eval, s, j = NULL, max.weight = 10, stabilised = FALSE, max.follow = NULL){
+  calc_weights_error <- function(data.mstate, data.raw, covs = NULL, t, s, j = NULL, max.weight = 10, stabilised = FALSE, max.follow = NULL){
     return(data.mstate)
   }
   expect_error(
@@ -881,7 +881,7 @@ test_that("test warnings and errors", {
                    data.raw = ebmtcal,
                    j=1,
                    s=0,
-                   t.eval = 1826,
+                   t = 1826,
                    tp.pred = tp.pred,
                    curve.type = "rcs",
                    rcs.nk = 3,

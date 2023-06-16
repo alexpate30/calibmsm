@@ -9,7 +9,7 @@ calib_blr(
   data.raw,
   j,
   s,
-  t.eval,
+  t,
   tp.pred,
   curve.type = "rcs",
   rcs.nk = 3,
@@ -23,6 +23,7 @@ calib_blr(
   w.stabilised = FALSE,
   w.max.follow = NULL,
   CI = FALSE,
+  CI.type = "bootstrap",
   CI.R.boot = NULL,
   data.pred.plot = NULL,
   transitions.out = NULL,
@@ -38,9 +39,9 @@ calib_blr(
 
 \item{s}{Landmark time at which predictions were made}
 
-\item{t.eval}{Follow up time at which calibration is to be assessed}
+\item{t}{Follow up time at which calibration is to be assessed}
 
-\item{tp.pred}{Matrix of predicted transition probabilities at time t.eval, if in state j at time s. There must be a seperate column for the predicted transition probabilities into every state, even if these predicted transition probabilities are 0.}
+\item{tp.pred}{Matrix of predicted transition probabilities at time t, if in state j at time s. There must be a seperate column for the predicted transition probabilities into every state, even if these predicted transition probabilities are 0.}
 
 \item{curve.type}{Whether calibration curves are estimated using restricted cubic splines ('rcs') or loess smoothers ('loess')}
 
@@ -62,9 +63,11 @@ calib_blr(
 
 \item{w.stabilised}{Indicates whether inverse probability of censoring weights should be stabilised or not}
 
-\item{w.max.follow}{Maximum follow up for model calculating inverse probability of censoring weights. Reducing this to \code{t.eval} + 1 may aid in the proportional hazards assumption being met in this model.}
+\item{w.max.follow}{Maximum follow up for model calculating inverse probability of censoring weights. Reducing this to \code{t} + 1 may aid in the proportional hazards assumption being met in this model.}
 
 \item{CI}{Size of confidence intervals as a \%}
+
+\item{CI.type}{Method for estimating confidence interval (currently restricted to \code{bootstrap})}
 
 \item{CI.R.boot}{Number of bootstrap replicates when estimating the confidence interval for the calibration curve}
 
@@ -97,7 +100,7 @@ in a cohort of interest. This is done using techniques for assessing calibration
 in combination with inverse probability of censoring weights and landmarking.
 }
 \details{
-Observed event probabilities at time \code{t.eval} are estimated for predicted
+Observed event probabilities at time \code{t} are estimated for predicted
 transition probabilities \code{tp.pred} out of state \code{j} at time \code{s}.
 \code{calib_blr} estimates calibration curves using techniques for assessing the calibration of binary logistic
 regression models. A choice between restricted cubic splines and loess
@@ -127,7 +130,7 @@ The calibration curves can be plotted using \code{\link{plot.calib_blr}}.
 }
 \examples{
 # Estimate calibration curves for the predicted transition
-# probabilities at time t.eval = 1826, when predictions were made at time
+# probabilities at time t = 1826, when predictions were made at time
 # s = 0 in state j = 1. These predicted transition probabilities are stored in tps0.
 
 # Extract the predicted transition probabilities out of state j = 1
@@ -142,7 +145,7 @@ calib_blr(data.mstate = msebmtcal,
  data.raw = ebmtcal,
  j=1,
  s=0,
- t.eval = 1826,
+ t = 1826,
  tp.pred = tp.pred,
  w.covs = c("year", "agecl", "proph", "match"),
  CI = 95,

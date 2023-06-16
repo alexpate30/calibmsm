@@ -94,15 +94,7 @@ devtools::build_readme()
 ## r-lib/actions/setup-renv@v2. I have removed for now.
 ## If reinstating, you need to remove the git pre-commit hooks which require .Rmd
 ## and .md files to be the same.
-usethis::use_github_action("render-rmarkdown")
-
-# if [[ README.Rmd -nt README.md ]]; then
-#   echo -e "README.md is out of date; please re-knit README.Rmd\n$MSG"
-#   exit 1
-# elif [[ ${#README[@]} -lt 2 ]]; then
-#   echo -e "README.Rmd and README.md should be both staged\n$MSG"
-#   exit 1
-# fi
+# usethis::use_github_action("render-rmarkdown")
 
 
 ###

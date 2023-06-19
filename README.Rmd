@@ -58,9 +58,6 @@ dat.calib.blr <-
                  CI = 95,
                  CI.R.boot = 200)
 
-## Produce summary
-summary(dat.calib.blr)
-
 ## Plot calibration plots
 plot(dat.calib.blr, combine = TRUE, nrow = 2, ncol = 3)
 ```

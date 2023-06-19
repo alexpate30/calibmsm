@@ -7,9 +7,9 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-Please click the link below to access the *overview* vignette, which is rendered as a pdf and therefore cannot be directly viewed through the Github created website. Please ignore the tex error.
+Please click the link below to access the *overview* vignette, which is rendered as a pdf and therefore cannot be directly viewed through this GitHub created website, which only supports html files.
 
-<!--- <iframe src="overview_vignettte_manual.pdf"/> -->
+<!--- <iframe src="overview_vignette_manual.pdf"/> -->
 
-[Vignette: overview](overview_vignettte_manual.pdf){target="_blank"}
+[Vignette: overview](overview_vignette_manual.pdf){target="_blank"}
 

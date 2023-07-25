@@ -156,11 +156,6 @@ calib_blr <- function(data.mstate,
     stop("All patients in data.raw are not contained in data.mstate. Landmarking cannot be applied.")
   }
 
-  ### Warning if patients in data.mstate are not in data.raw
-  if (!base::all(unique(data.mstate$id) %in% unique(data.raw$id))){
-    warning("All patients in data.mstate are not contained in data.raw. Landmarking can still be applied, but potential mismatch in these two datasets?")
-  }
-
   ### Warning if weights inputted manually, and confidence interval requested internally
   if ((CI != FALSE) & !is.null(weights)){
     stop("Estimation of confidence interval using internal bootstrapping procedure was requested. This is not possible with user-inputted weights.")

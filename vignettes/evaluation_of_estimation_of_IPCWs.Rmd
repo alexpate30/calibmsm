@@ -1,5 +1,5 @@
 ---
-  title: "evaluation-of-estimation-of-IPCWs"
+title: "evaluation-of-estimation-of-IPCWs"
 output: rmarkdown::html_vignette
 bibliography: refs.bib
 vignette: >

@@ -119,9 +119,9 @@ that the <code>ebmtcal</code> dataset can still be used as the argument
 for <code>data.raw</code>, but a new dataset for the
 <code>data.mstate</code> argument is required, which reflects the fact
 this is now a competing risks data structure. Please refer to the
-<strong>Overview</strong> vignette for more details about how these
-datasets should be formatted. We assess calibration at 5 years (1826
-days) for all methods.</p>
+<em>Overview</em> vignette for more details about how these datasets
+should be formatted. We assess calibration at 5 years (1826 days) for
+all methods.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://alexpate30.github.io/calibmsm/">calibmsm</a></span><span class="op">)</span></span>
 <span></span>
@@ -223,11 +223,11 @@ the pseudo-value approach, implemented through
 <span>                 n.pctls <span class="op">=</span> <span class="fl">9</span>,</span>
 <span>                 CI <span class="op">=</span> <span class="fl">95</span>,</span>
 <span>                 CI.type <span class="op">=</span> <span class="st">"parametric"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "Calculate pseudo values for state =  1 2023-07-25 16:53:43.926396"</span></span>
-<span><span class="co">#&gt; [1] "Calculate pseudo values for state =  2 2023-07-25 16:57:44.012418"</span></span>
-<span><span class="co">#&gt; [1] "Calculate pseudo values for state =  3 2023-07-25 17:01:44.342974"</span></span>
-<span><span class="co">#&gt; [1] "Calculate pseudo values for state =  5 2023-07-25 17:05:47.313907"</span></span>
-<span><span class="co">#&gt; [1] "Calculate pseudo values for state =  6 2023-07-25 17:09:37.099662"</span></span>
+<span><span class="co">#&gt; [1] "Calculate pseudo values for state =  1 2023-07-25 17:30:06.201427"</span></span>
+<span><span class="co">#&gt; [1] "Calculate pseudo values for state =  2 2023-07-25 17:34:43.727005"</span></span>
+<span><span class="co">#&gt; [1] "Calculate pseudo values for state =  3 2023-07-25 17:39:14.478007"</span></span>
+<span><span class="co">#&gt; [1] "Calculate pseudo values for state =  5 2023-07-25 17:43:41.61289"</span></span>
+<span><span class="co">#&gt; [1] "Calculate pseudo values for state =  6 2023-07-25 17:48:05.58268"</span></span>
 <span></span>
 <span><span class="co">### Turn into plot and print</span></span>
 <span><span class="va">plot.calibmsm.pv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat.calib.pv</span>, combine <span class="op">=</span> <span class="cn">TRUE</span>, nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
@@ -281,7 +281,7 @@ transition probabilities into all other states is very similar
 irrespecive of the method used to assess calibration. This is with the
 exception of the calibration of the transition probabilities into state
 3 when using the BLR-IPCW approach. Possible reasons for this are
-discussed in the <strong>Overview</strong> vignette.</p>
+discussed in the <em>Overview</em> vignette.</p>
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-Austin2022" class="csl-entry">
 Austin, Peter C., Hein Putter, Daniele Giardiello, and David van

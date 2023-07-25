@@ -84,9 +84,8 @@ of censoring weights. We start by reminding ourselves of the EBMT <span class="c
 transition probabilities from a multistate model out of state
 <code>j = 1</code> made a time <code>s = 0</code> (<code>tps0</code>).
 We also set the time at which we want to evaluate the transition
-probabilities <code>t</code>. Please refer to the
-<strong>Overview</strong> vignette for a more detailed description of
-this data.</p>
+probabilities <code>t</code>. Please refer to the <em>Overview</em>
+vignette for a more detailed description of this data.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">101</span><span class="op">)</span></span>
 <span></span>
@@ -145,7 +144,7 @@ procedure<a class="anchor" aria-label="anchor" href="#confidence-intervals-for-b
 <p>We now remind ourselves of the procedure for generating a confidence
 interval, and estimate a confidence interval for a BLR-IPCW calibration
 curve using the internal bootstrapping procedure, as in done in the
-<strong>Overview</strong> vignette.</p>
+<em>Overview</em> vignette.</p>
 <ol style="list-style-type: decimal">
 <li>Resample validation dataset with replacement</li>
 <li>Landmark the dataset for assessment of calibration</li>
@@ -194,8 +193,8 @@ model (Cox model) or the functional form of the predictor variables
 variables are assumed to have linear effects on the hazard, and there
 are no interaction terms. We encourage users to explore their data and
 produce a more suitable model to estimate the weights. Please see the
-<strong>Overview</strong> vignette for a definition of the weights and
-how to estimate them.</p>
+<em>Overview</em> vignette for a definition of the weights and how to
+estimate them.</p>
 <p>The internal bootstrapping procedure can then be utilised with your
 own function for estimating the weights, specified through the
 <code>w.function</code> argument. This function must have the same

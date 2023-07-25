@@ -248,7 +248,8 @@ test_that("check calib_blr output, (j = 1, s = 0), null covs", {
 test_that("check calib_blr output, (j = 1, s = 0),
           manual weights,
           manually define vector of predicted probabilities,
-          manually define transition out", {
+          manually define transition out,
+          estimate curves using rcs", {
 
   ## Extract relevant predicted risks from tps0
   tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
@@ -300,6 +301,61 @@ test_that("check calib_blr output, (j = 1, s = 0),
 
 })
 
+test_that("check calib_blr output, (j = 1, s = 0),
+          manual weights,
+          manually define vector of predicted probabilities,
+          manually define transition out,
+          estimate curves using loess", {
+
+            ## Extract relevant predicted risks from tps0
+            tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
+
+            ## Define t
+            t <- 1826
+
+            ## Extract data for plot manually
+            ids.uncens <- ebmtcal |>
+              subset(dtcens > t | (dtcens < t & dtcens.s == 0)) |>
+              dplyr::pull(id)
+            data.pred.plot <- tps0 |>
+              dplyr::filter(j == 1 & id %in% ids.uncens) |>
+              dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
+
+            ## Calculate manual weights
+            weights.manual <-
+              calc_weights(data.mstate = msebmtcal,
+                           data.raw = ebmtcal,
+                           t = 1826,
+                           s = 0,
+                           landmark.type = "state",
+                           j = 1,
+                           max.weight = 10,
+                           stabilised = FALSE)
+
+            ## Calculate observed event probabilities using weights.manual
+            dat.calib.blr.w.manual <-
+              calib_blr(data.mstate = msebmtcal,
+                        data.raw = ebmtcal,
+                        j=1,
+                        s=0,
+                        t = 1826,
+                        tp.pred = tp.pred,
+                        curve.type = "loess",
+                        rcs.nk = 3,
+                        weights = weights.manual$ipcw,
+                        data.pred.plot = data.pred.plot,
+                        transitions.out = c(1,2,3,4,5,6))
+
+            expect_type(dat.calib.blr.w.manual, "list")
+            expect_equal(class(dat.calib.blr.w.manual), "calib_blr")
+            expect_length(dat.calib.blr.w.manual, 2)
+            expect_length(dat.calib.blr.w.manual[["plotdata"]], 6)
+            expect_length(dat.calib.blr.w.manual[["plotdata"]][[1]]$pred, 1778)
+            expect_length(dat.calib.blr.w.manual[["plotdata"]][[6]]$pred, 1778)
+            expect_length(dat.calib.blr.w.manual[["metadata"]], 8)
+            expect_false(dat.calib.blr.w.manual[["metadata"]]$CI)
+
+})
 
 test_that("check calib_blr output, (j = 1, s = 0),
           with CI,
@@ -891,3 +947,47 @@ test_that("test warnings and errors", {
 
 })
 
+test_that("test summary", {
+
+  ## Extract relevant predicted risks from tps0
+  tp.pred <- dplyr::select(dplyr::filter(tps0, j == 3), any_of(paste("pstate", 1:6, sep = "")))
+
+  ##
+  ## Calculate observed event probabilities
+  dat.calib.blr <-
+    calib_blr(data.mstate = msebmtcal,
+              data.raw = ebmtcal,
+              j=1,
+              s=0,
+              t = 1826,
+              tp.pred = tp.pred,
+              curve.type = "rcs",
+              rcs.nk = 3,
+              w.covs = c("year", "agecl", "proph", "match"))
+
+  ## Calculate observed event probabilities
+  expect_no_error(
+    summary(dat.calib.blr)
+  )
+
+  ##
+  ## Calculate observed event probabilities
+  dat.calib.blr <-
+    calib_blr(data.mstate = msebmtcal,
+              data.raw = ebmtcal,
+              j=1,
+              s=0,
+              t = 1826,
+              tp.pred = tp.pred,
+              curve.type = "rcs",
+              rcs.nk = 3,
+              w.covs = c("year", "agecl", "proph", "match")  ,
+              CI = 95,
+              CI.R.boot = 5)
+
+  ## Calculate observed event probabilities
+  expect_no_error(
+    summary(dat.calib.blr)
+  )
+
+})

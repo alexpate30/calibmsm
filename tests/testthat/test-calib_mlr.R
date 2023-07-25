@@ -5,24 +5,24 @@ test_that("check calib_mlr output", {
 
   ## Expect error if generate with CI
   expect_error(calib_mlr(data.mstate = msebmtcal,
-                              data.raw = ebmtcal,
-                              j=3,
-                              s=100,
-                              t = 1826,
-                              tp.pred = tp.pred,
-                              w.covs = c("year", "agecl", "proph", "match"),
-                              CI = 95,
-                              CI.R.boot = 5))
+                         data.raw = ebmtcal,
+                         j=3,
+                         s=100,
+                         t = 1826,
+                         tp.pred = tp.pred,
+                         w.covs = c("year", "agecl", "proph", "match"),
+                         CI = 95,
+                         CI.R.boot = 5))
 
   ## Calculate observed event probabilities (run it on j = 3 and s = 100 so its a bit quicker, as smaller number of individuals)
   dat.calib.mlr <-
     calib_mlr(data.mstate = msebmtcal,
-                   data.raw = ebmtcal,
-                   j=3,
-                   s=100,
-                   t = 1826,
-                   tp.pred = tp.pred,
-                   w.covs = c("year", "agecl", "proph", "match"))
+              data.raw = ebmtcal,
+              j=3,
+              s=100,
+              t = 1826,
+              tp.pred = tp.pred,
+              w.covs = c("year", "agecl", "proph", "match"))
 
   expect_type(dat.calib.mlr, "list")
   expect_equal(class(dat.calib.mlr), "calib_mlr")
@@ -45,12 +45,12 @@ test_that("check calib_mlr output, (j = 3, s = 100),
             ### Calculate observed event probabilities
             dat.calib.mlr <-
               calib_mlr(data.mstate = msebmtcal,
-                             data.raw = ebmtcal,
-                             j = 3,
-                             s = 100,
-                             t = 1826,
-                             tp.pred = tp.pred,
-                             w.covs = c("year", "agecl", "proph", "match"))
+                        data.raw = ebmtcal,
+                        j = 3,
+                        s = 100,
+                        t = 1826,
+                        tp.pred = tp.pred,
+                        w.covs = c("year", "agecl", "proph", "match"))
 
             ###
             ### Calculate manual weights
@@ -69,12 +69,12 @@ test_that("check calib_mlr output, (j = 3, s = 100),
             ### Calculate observed event probabilities same function as internal procedure, and check it agrees with dat.calib.mlr
             dat.calib.mlr.w.manual <-
               calib_mlr(data.mstate = msebmtcal,
-                             data.raw = ebmtcal,
-                             j = 3,
-                             s = 100,
-                             t = 1826,
-                             tp.pred = tp.pred,
-                             weights = weights.manual$ipcw)
+                        data.raw = ebmtcal,
+                        j = 3,
+                        s = 100,
+                        t = 1826,
+                        tp.pred = tp.pred,
+                        weights = weights.manual$ipcw)
 
             expect_equal(dat.calib.mlr[["plotdata"]][[1]], dat.calib.mlr.w.manual[["plotdata"]][[1]])
 
@@ -82,12 +82,12 @@ test_that("check calib_mlr output, (j = 3, s = 100),
             ### Calculate observed event probabilities using an incorrect vector of weights, and see if its different from dat.calib.mlr
             dat.calib.mlr.w.manual <-
               calib_mlr(data.mstate = msebmtcal,
-                             data.raw = ebmtcal,
-                             j = 3,
-                             s = 100,
-                             t = 1826,
-                             tp.pred = tp.pred,
-                             weights = rep(1,nrow(weights.manual)))
+                        data.raw = ebmtcal,
+                        j = 3,
+                        s = 100,
+                        t = 1826,
+                        tp.pred = tp.pred,
+                        weights = rep(1,nrow(weights.manual)))
 
             expect_false(any(dat.calib.mlr[["plotdata"]][[1]]$obs == dat.calib.mlr.w.manual[["plotdata"]][[1]]$obs))
 
@@ -97,13 +97,13 @@ test_that("check calib_mlr output, (j = 3, s = 100),
 
             dat.calib.mlr.w.function <-
               calib_mlr(data.mstate = msebmtcal,
-                             data.raw = ebmtcal,
-                             j = 3,
-                             s = 100,
-                             t = 1826,
-                             tp.pred = tp.pred,
-                             w.function = calc_weights_manual,
-                             w.covs = c("year", "agecl", "proph", "match"))
+                        data.raw = ebmtcal,
+                        j = 3,
+                        s = 100,
+                        t = 1826,
+                        tp.pred = tp.pred,
+                        w.function = calc_weights_manual,
+                        w.covs = c("year", "agecl", "proph", "match"))
 
             expect_type(dat.calib.mlr.w.function, "list")
             expect_equal(class(dat.calib.mlr.w.function), "calib_mlr")
@@ -286,13 +286,13 @@ test_that("check calib_mlr output, (j = 3, s = 100),
             ### Calculate observed event probabilities with new w.function
             dat.calib.mlr.w.function <-
               calib_mlr(data.mstate = msebmtcal,
-                             data.raw = ebmtcal,
-                             j = 3,
-                             s = 100,
-                             t = 1826,
-                             tp.pred = tp.pred,
-                             w.function = calc_weights_manual,
-                             w.covs = c("year", "agecl", "proph", "match"))
+                        data.raw = ebmtcal,
+                        j = 3,
+                        s = 100,
+                        t = 1826,
+                        tp.pred = tp.pred,
+                        w.function = calc_weights_manual,
+                        w.covs = c("year", "agecl", "proph", "match"))
 
             expect_type(dat.calib.mlr.w.function, "list")
             expect_equal(class(dat.calib.mlr.w.function), "calib_mlr")
@@ -479,14 +479,14 @@ test_that("check calib_mlr output, (j = 3, s = 100),
             ### Calculate observed event probabilities with new w.function
             dat.calib.mlr.w.function <-
               calib_mlr(data.mstate = msebmtcal,
-                             data.raw = ebmtcal,
-                             j = 3,
-                             s = 100,
-                             t = 1826,
-                             tp.pred = tp.pred,
-                             w.function = calc_weights_manual,
-                             w.covs = c("year", "agecl", "proph", "match"),
-                             extra.arg = 10)
+                        data.raw = ebmtcal,
+                        j = 3,
+                        s = 100,
+                        t = 1826,
+                        tp.pred = tp.pred,
+                        w.function = calc_weights_manual,
+                        w.covs = c("year", "agecl", "proph", "match"),
+                        extra.arg = 10)
 
             expect_type(dat.calib.mlr.w.function, "list")
             expect_equal(class(dat.calib.mlr.w.function), "calib_mlr")
@@ -499,5 +499,30 @@ test_that("check calib_mlr output, (j = 3, s = 100),
             ## Check answer is same whether w.function used or not
             expect_false(any(dat.calib.mlr[["plotdata"]][[1]]$obs == dat.calib.mlr.w.function[["plotdata"]][[1]]$obs))
 
-          })
+})
+
+test_that("test summary", {
+
+  ## Extract relevant predicted risks from tps0
+  tp.pred <- dplyr::select(dplyr::filter(tps0, j == 3), any_of(paste("pstate", 1:6, sep = "")))
+
+  ##
+  ## Calculate observed event probabilities
+  dat.calib.mlr <-
+    calib_mlr(data.mstate = msebmtcal,
+              data.raw = ebmtcal,
+              j=1,
+              s=0,
+              t = 1826,
+              tp.pred = tp.pred,
+              curve.type = "rcs",
+              rcs.nk = 3,
+              w.covs = c("year", "agecl", "proph", "match"))
+
+  ## Calculate observed event probabilities
+  expect_no_error(
+    summary(dat.calib.mlr)
+  )
+
+})
 

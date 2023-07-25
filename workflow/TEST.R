@@ -1,6 +1,7 @@
 ###
 ### Testing package functionality
 ###
+test.new.github.token <- 1
 install.packages()
 testchange <- 1
 a <- 3

@@ -1,0 +1,47 @@
+---
+  title: "evaluation-of-estimation-of-IPCWs"
+output: rmarkdown::html_vignette
+bibliography: refs.bib
+vignette: >
+  %\VignetteIndexEntry{evaluation-of-estimation-of-IPCWs}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This code will showcase that the assumptions for estimating the weights for the model are wrong.
+
+```{r}
+set.seed(101)
+
+library(calibmsm)
+
+data("ebmtcal")
+head(ebmtcal)
+```
+
+Fit a cox model to estimate the weights.
+
+```{r}
+model.ipcw <- survival::coxph(survival::Surv(dtcens, dtcens.s) ~ year + agecl + proph + match, data = ebmtcal)
+model.ipcw
+```
+
+The coefficient for year is very big, so lets explore whether proportional hazards holds. Plotting survival function on the log scale to ascertain whether the proportional hazards assumption holds.
+
+```{r}
+kmfit <- survival::survfit(survival::Surv(dtcens, dtcens.s) ~ year, data = ebmtcal)
+plot(kmfit, log = TRUE)
+```
+Clearly the proportional hazards assumption does not hold here. Note that $H(t)=-ln(S(t))$, so we are plotting the negative of the hazard here, and the hazard does actually increase as time moves forward.
+
+
+
+
+

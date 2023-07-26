@@ -123,21 +123,6 @@ calib_mlr <- function(data.mstate,
                       w.stabilised = FALSE,
                       w.max.follow = NULL, ...){
 
-  # data.mstate <- msebmtcal
-  # data.raw <- ebmtcal
-  # j<-1
-  # s<-0
-  # t <- 1826
-  # tp.pred = tps0 |> dplyr::filter(j == 1) |> dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
-  # ps.int <- 4
-  # degree <- 3
-  # weights <- NULL
-  # w.covs = c("year", "agecl", "proph", "match")
-  # w.landmark.type = "all"
-  # w.max = 10
-  # w.stabilised = FALSE
-  # smoother.type <- "sm.ps"
-
   ### Stop if patients in data.raw are not in data.mstate
   if (!base::all(unique(data.raw$id) %in% unique(data.mstate$id))){
     stop("All patients in data.raw are not contained in data.mstate. Landmarking cannot be applied.")

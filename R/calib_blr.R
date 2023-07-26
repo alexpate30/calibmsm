@@ -124,29 +124,6 @@ calib_blr <- function(data.mstate,
                       data.pred.plot = NULL,
                       transitions.out = NULL, ...){
 
-# load_all()
-# data.mstate <- msebmtcal
-# data.raw <- ebmtcal
-# j <- 1
-# j.in <- 1
-# s<-0
-# t <- 1826
-# tp.pred = tps100 |> dplyr::filter(j == 1) |> dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
-# curve.type = "rcs"
-# rcs.nk = 3
-# weights <- NULL
-# # weights <- weights.manual
-# w.covs = c("year", "agecl", "proph", "match")
-# w.landmark.type = "state"
-# w.max = 10
-# w.stabilised = FALSE
-# w.max.follow = NULL
-# CI = 95
-# CI.type = "parametric"
-# str(data.pred.plot)
-# data.pred.plot <- tps0 |> dplyr::filter(j == j.in) |> dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
-# data.pred.plot$id <- 1:nrow(data.pred.plot)
-
   ###
   ### Warnings and errors
   ###

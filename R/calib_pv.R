@@ -200,49 +200,6 @@ calib_pv <- function(data.mstate,
                      data.pred.plot = NULL,
                      transitions.out = NULL){
 
-  # data.mstate <- msebmtcal
-  # data.raw <- ebmtcal
-  # #
-  # # indices <- sample(1:nrow(data.raw), nrow(data.raw), replace = TRUE)
-  # # data.raw.boot <- data.raw[indices, ]
-  # # data.mstate.boot <-
-  # #   do.call("rbind", lapply(
-  # #     data.raw.boot$id, function(x) {base::subset(data.mstate, id == x)})
-  # #   )
-  # # attributes(data.mstate.boot)$trans <- attributes(data.mstate)$trans
-  # #
-  # j <- 3
-  # s <- 100
-  # t <- 1826
-  # tp.pred <- tps100 |> dplyr::filter(j == 3) |> dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
-  # # id.lmk <- extract_ids_states(data.mstate = data.mstate,
-  # #                              tmat = attributes(data.mstate)$trans,
-  # #                              j = j,
-  # #                              t = s)
-  # # data.pred.plot <- tps100 |>
-  # #   dplyr::filter(id %in% id.lmk) |>
-  # #   dplyr::filter(j == 3) |>
-  # #   dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
-  # data.pred.plot <- NULL
-  # transitions.out <- NULL
-  # group.vars <- "year"
-  # n.pctls <- 2
-  # loess.span <- 0.75
-  # loess.degree <- 2
-  # CI <- FALSE
-  # CI.type <- parametric
-  # CI.R.boot <- 2
-  # rcs.nk <- 3
-  # curve.type <- "rcs"
-
-  #
-  # data.mstate <- data.mstate.boot
-  # data.raw <- data.raw.boot
-  #
-  #   ###
-  #   ### apply a bootstrap temporarily
-  #   data.raw <- data.raw[sample(1:nrow(data.raw), nrow(data.raw), replace = TRUE),]
-
   ###########################
   ### Warnings and errors ###
   ###########################

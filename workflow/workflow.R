@@ -128,8 +128,8 @@ devtools::install()
 usethis::use_cran_comments()
 
 ###
-### Set release issue
+### Run R-CMD-CHECK to be checked with CRANs win-builder service. Check email response for this.
 ###
-usethis::use_version()
+devtools::check_win_devel()
 
 

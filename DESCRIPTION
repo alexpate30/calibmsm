@@ -5,7 +5,7 @@ Authors@R:
   c(
   person("Alexander", "Pate", , "alexander.pate@manchester.ac.uk", role = c("aut", "cre", "cph"),
          comment = c(ORCID = "0000-0002-0849-3458")),
-  person("Glen", "Martin", , "alexander.pate@manchester.ac.uk", role = c("fnd", "rev"),
+  person("Glen", "Martin", , "glen.martin@manchester.ac.uk", role = c("fnd", "rev"),
          comment = c(ORCID = "0000-0002-3410-9472"))
          )
 Description: Calibration plots for the transition

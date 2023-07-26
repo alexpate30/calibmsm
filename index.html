@@ -5,24 +5,34 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="A toolbox to aid in the estimation of calibration plots for 
-  multistate models which have been developed. Calibration of the transition 
-  probabilities at time t when in state j at time s are assessed. This is done 
-  using a combination of landmarking, calibration methods for binary logistic 
-  and multinomaial logistic regression models and inverse probability of 
-  censoring weights.">
-<title>Calibration plots for the transition probabilities from multistate models • calibmsm</title>
+<meta name="description" content="Calibration plots for the transition
+  probabilities from a multistate model. Calibration plots can also be produced for
+  predicted risks from survival models, competing risks models, predicted risks 
+  made at landmark follow up times, and predicted risks from landmark super models.
+  Calibration is assessed using one of three methods. 1) Calibration methods for 
+  binary logistic regression models applied at a fixed time point in conjunction 
+  with inverse probability of censoring weights. 2) Calibration methods for 
+  multinomial logistic regression models applied at a fixed time point in conjunction 
+  with inverse probability of censoring weights. 3) Pseudo-values estimated using 
+  the Aalen-Johansen estimator of observed risk. All methods are applied in conjunction
+  with landmarking when required.">
+<title>Calibration Plots for the Transition Probabilities from Multistate Models • calibmsm</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Calibration plots for the transition probabilities from multistate models">
-<meta property="og:description" content="A toolbox to aid in the estimation of calibration plots for 
-  multistate models which have been developed. Calibration of the transition 
-  probabilities at time t when in state j at time s are assessed. This is done 
-  using a combination of landmarking, calibration methods for binary logistic 
-  and multinomaial logistic regression models and inverse probability of 
-  censoring weights.">
+<!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Calibration Plots for the Transition Probabilities from Multistate Models">
+<meta property="og:description" content="Calibration plots for the transition
+  probabilities from a multistate model. Calibration plots can also be produced for
+  predicted risks from survival models, competing risks models, predicted risks 
+  made at landmark follow up times, and predicted risks from landmark super models.
+  Calibration is assessed using one of three methods. 1) Calibration methods for 
+  binary logistic regression models applied at a fixed time point in conjunction 
+  with inverse probability of censoring weights. 2) Calibration methods for 
+  multinomial logistic regression models applied at a fixed time point in conjunction 
+  with inverse probability of censoring weights. 3) Pseudo-values estimated using 
+  the Aalen-Johansen estimator of observed risk. All methods are applied in conjunction
+  with landmarking when required.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -57,6 +67,9 @@
     <a class="dropdown-item" href="articles/overview.html">Overview</a>
   </div>
 </li>
+<li class="nav-item">
+  <a class="nav-link" href="news/index.html">Changelog</a>
+</li>
       </ul>
 <form class="form-inline my-2 my-lg-0" role="search">
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="search.json" id="search-input" placeholder="Search for" autocomplete="off">
@@ -78,17 +91,20 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install the development version of calibmsm from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<p>The package can be installed from CRAN as follows:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"calibmsm"</span><span class="op">)</span></span></code></pre></div>
+<p>You can install the development version of calibmsm from <a href="https://github.com/alexpate30/calibmsm" class="external-link">GitHub</a> with:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"alexpate30/calibmsm"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
-<p>This is a basic example which shows you how to assess the calibration of the transition probabilities at 5 years follow up for individuals out of state <code>j = 1</code> at time <code>s = 0</code> using the BLR-IPCW approach. Please see the <em>overview</em> vignette for examples of how to assess calibration using the pseudo-value and MLR-IPCW approaches, as well as details of the methodology.</p>
+<p>This is a basic example which shows you how to assess the calibration of the transition probabilities at 5 years follow up for individuals out of state <code>j = 1</code> at time <code>s = 0</code> using the BLR-IPCW approach. Please see the <em>Overview</em> vignette for examples of how to assess calibration using the pseudo-value and MLR-IPCW approaches, as well as details of the methodology.</p>
 <p>The predicted transition probabilities are stored in <code>tps0</code>, the individuals data are stored in <code>ebmtcal</code>, and the data in <code>msdata</code> format are stored in <code>msebmtcal</code>. Calibration curves are estimated using <code>calib_blr</code>. Inverse probability of censoring weights are calculated based on variables <code>year</code>, <code>age</code>, <code>prophylaxis</code> and donor gender <code>match</code>. The calibration curves are estimated using restricted cubic splines with 3 knots. A 95% confidence interval is calculated using bootstrapping with 200 bootstrap replicates.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Load calibmsm</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://alexpate30.github.io/calibmsm/">calibmsm</a></span><span class="op">)</span></span>
 <span></span>
@@ -138,7 +154,8 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Alexander Pate <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-0849-3458" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Alexander Pate <br><small class="roles"> Author, maintainer, copyright holder </small> <a href="https://orcid.org/0000-0002-0849-3458" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Glen Martin <br><small class="roles"> Funder, reviewer </small> <a href="https://orcid.org/0000-0002-3410-9472" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 </ul>
 </div>
 
@@ -156,7 +173,7 @@
 
     <footer><div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by Alexander Pate.</p>
+<p>Developed by Alexander Pate, Glen Martin.</p>
 </div>
 
 <div class="pkgdown-footer-right">

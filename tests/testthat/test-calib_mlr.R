@@ -32,6 +32,7 @@ test_that("check calib_mlr output", {
   expect_length(dat.calib.mlr[["plotdata"]][["state6"]]$id, 359)
   expect_error(dat.calib.mlr[["plotdata"]][[6]])
   expect_length(dat.calib.mlr[["metadata"]], 4)
+  expect_no_error(summary(dat.calib.mlr))
 
 })
 
@@ -498,29 +499,6 @@ test_that("check calib_mlr output, (j = 3, s = 100),
 
             ## Check answer is same whether w.function used or not
             expect_false(any(dat.calib.mlr[["plotdata"]][[1]]$obs == dat.calib.mlr.w.function[["plotdata"]][[1]]$obs))
-
-})
-
-test_that("test summary", {
-
-  ## Extract relevant predicted risks from tps0
-  tp.pred <- dplyr::select(dplyr::filter(tps0, j == 3), any_of(paste("pstate", 1:6, sep = "")))
-
-  ##
-  ## Calculate observed event probabilities
-  dat.calib.mlr <-
-    calib_mlr(data.mstate = msebmtcal,
-              data.raw = ebmtcal,
-              j=1,
-              s=0,
-              t = 1826,
-              tp.pred = tp.pred,
-              w.covs = c("year", "agecl", "proph", "match"))
-
-  ## Calculate observed event probabilities
-  expect_no_error(
-    summary(dat.calib.mlr)
-  )
 
 })
 

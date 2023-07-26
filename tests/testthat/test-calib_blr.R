@@ -24,6 +24,7 @@ test_that("check calib_blr output, (j = 1, s = 0), curve.type = rcs", {
   expect_length(dat.calib.blr[["plotdata"]][[6]]$id, 1778)
   expect_length(dat.calib.blr[["metadata"]], 8)
   expect_false(dat.calib.blr[["metadata"]]$CI)
+  expect_no_error(summary(dat.calib.blr))
 
   ###
   ### Calculate observed event probabilities with stabilised weights
@@ -78,6 +79,7 @@ test_that("check calib_blr output, (j = 1, s = 0), curve.type = loess", {
   expect_length(dat.calib.blr[["plotdata"]][[6]]$id, 1778)
   expect_length(dat.calib.blr[["metadata"]], 8)
   expect_false(dat.calib.blr[["metadata"]]$CI)
+  expect_no_error(summary(dat.calib.blr))
 
   ## Calculate observed event probabilities
   dat.calib.blr.stab <-
@@ -160,6 +162,7 @@ test_that("check calib_blr output, (j = 1, s = 0), with CI", {
   expect_length(dat.calib.blr[["plotdata"]][[6]]$id, 1778)
   expect_length(dat.calib.blr[["metadata"]], 8)
   expect_equal(dat.calib.blr[["metadata"]]$CI, 95)
+  expect_no_error(summary(dat.calib.blr))
 
 })
 
@@ -943,51 +946,6 @@ test_that("test warnings and errors", {
                    rcs.nk = 3,
                    w.function = calc_weights_error,
                    w.covs = c("year", "agecl", "proph", "match"))
-  )
-
-})
-
-test_that("test summary", {
-
-  ## Extract relevant predicted risks from tps0
-  tp.pred <- dplyr::select(dplyr::filter(tps0, j == 3), any_of(paste("pstate", 1:6, sep = "")))
-
-  ##
-  ## Calculate observed event probabilities
-  dat.calib.blr <-
-    calib_blr(data.mstate = msebmtcal,
-              data.raw = ebmtcal,
-              j=1,
-              s=0,
-              t = 1826,
-              tp.pred = tp.pred,
-              curve.type = "rcs",
-              rcs.nk = 3,
-              w.covs = c("year", "agecl", "proph", "match"))
-
-  ## Calculate observed event probabilities
-  expect_no_error(
-    summary(dat.calib.blr)
-  )
-
-  ##
-  ## Calculate observed event probabilities
-  dat.calib.blr <-
-    calib_blr(data.mstate = msebmtcal,
-              data.raw = ebmtcal,
-              j=1,
-              s=0,
-              t = 1826,
-              tp.pred = tp.pred,
-              curve.type = "rcs",
-              rcs.nk = 3,
-              w.covs = c("year", "agecl", "proph", "match")  ,
-              CI = 95,
-              CI.R.boot = 5)
-
-  ## Calculate observed event probabilities
-  expect_no_error(
-    summary(dat.calib.blr)
   )
 
 })

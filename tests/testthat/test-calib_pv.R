@@ -30,6 +30,7 @@ test_that("check calib_pv output, (j = 3, s = 100), curve.type = loess", {
 
   expect_equal(dat.calib.pv.1[["metadata"]][["curve.type"]], "loess")
   expect_equal(ncol(dat.calib.pv.1[["plotdata"]][[1]]), 3)
+  expect_no_error(summary(dat.calib.pv.1))
   # expect_equal(ncol(dat.calib.pv.2[["plotdata"]][[1]]), 3)
   # expect_equal(dat.calib.pv.1[["plotdata"]][[1]], dat.calib.pv.2[["plotdata"]][[1]])
 
@@ -68,6 +69,8 @@ test_that("check calib_pv output, (j = 3, s = 100), curve.type = loess", {
 
   expect_equal(dat.calib.pv.1[["plotdata"]][[4]]$obs, dat.calib.pv.4[["plotdata"]][[4]]$obs)
   expect_equal(dat.calib.pv.1[["plotdata"]][[4]]$pred, dat.calib.pv.4[["plotdata"]][[4]]$pred)
+
+  expect_no_error(summary(dat.calib.pv.4))
 
   # ## Calculate observed event probabilities with a confidence interval using bootstrapping and transitions.out = c(3,4,5,6)
   # dat.calib.pv.5 <- calib_pv(data.mstate = msebmtcal,
@@ -166,6 +169,8 @@ test_that("check calib_pv output, (j = 3, s = 100), curve.type = loess", {
   expect_equal(dat.calib.pv.1[["plotdata"]][[1]]$obs, dat.calib.pv.9[["plotdata"]][[1]]$obs)
   expect_equal(dat.calib.pv.1[["plotdata"]][[1]]$pred, dat.calib.pv.9[["plotdata"]][[1]]$pred)
 
+  expect_no_error(summary(dat.calib.pv.9))
+
   ## With confidence interval
   dat.calib.pv.10 <- calib_pv(data.mstate = msebmtcal,
                                   data.raw = ebmtcal,
@@ -182,6 +187,8 @@ test_that("check calib_pv output, (j = 3, s = 100), curve.type = loess", {
   expect_equal(ncol(dat.calib.pv.10[["plotdata"]][[1]]), 4)
   expect_equal(dat.calib.pv.1[["plotdata"]][[1]]$obs, dat.calib.pv.10[["plotdata"]][[1]]$obs)
   expect_equal(dat.calib.pv.1[["plotdata"]][[1]]$pred, dat.calib.pv.10[["plotdata"]][[1]]$pred)
+
+  expect_no_error(summary(dat.calib.pv.10))
 
 })
 
@@ -209,6 +216,7 @@ test_that("check calib_pv output, (j = 3, s = 100), curve.type = rcs, CI.type = 
 
   expect_equal(dat.calib.pv.1[["metadata"]][["curve.type"]], "rcs")
   expect_equal(ncol(dat.calib.pv.1[["plotdata"]][[1]]), 3)
+  expect_no_error(summary(dat.calib.pv.1))
 
   ## Calculate observed event probabilities with a confidence interval using bootstrapping
   dat.calib.pv.4 <- calib_pv(data.mstate = msebmtcal,
@@ -231,6 +239,8 @@ test_that("check calib_pv output, (j = 3, s = 100), curve.type = rcs, CI.type = 
   expect_equal(dat.calib.pv.1[["plotdata"]][[4]]$obs, dat.calib.pv.4[["plotdata"]][[4]]$obs)
   expect_equal(dat.calib.pv.1[["plotdata"]][[4]]$pred, dat.calib.pv.4[["plotdata"]][[4]]$pred)
 
+  expect_no_error(summary(dat.calib.pv.4))
+
   ## Calculate observed event probabilities with a confidence interval using parametric approach
   dat.calib.pv.4 <- calib_pv(data.mstate = msebmtcal,
                                   data.raw = ebmtcal,
@@ -251,6 +261,8 @@ test_that("check calib_pv output, (j = 3, s = 100), curve.type = rcs, CI.type = 
 
   expect_equal(dat.calib.pv.1[["plotdata"]][[4]]$obs, dat.calib.pv.4[["plotdata"]][[4]]$obs)
   expect_equal(dat.calib.pv.1[["plotdata"]][[4]]$pred, dat.calib.pv.4[["plotdata"]][[4]]$pred)
+
+  expect_no_error(summary(dat.calib.pv.4))
 
 })
 

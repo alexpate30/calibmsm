@@ -2,10 +2,12 @@ Package: calibmsm
 Title: Calibration Plots for the Transition Probabilities from Multistate Models
 Version: 0.0.0.9000
 Authors@R:
+  c(
   person("Alexander", "Pate", , "alexander.pate@manchester.ac.uk", role = c("aut", "cre", "cph"),
-         comment = c(ORCID = "0000-0002-0849-3458"))
+         comment = c(ORCID = "0000-0002-0849-3458")),
   person("Glen", "Martin", , "alexander.pate@manchester.ac.uk", role = c("fnd", "rev"),
          comment = c(ORCID = "0000-0002-3410-9472"))
+         )
 Description: Calibration plots for the transition
   probabilities from a multistate model. Calibration plots can also be produced for
   predicted risks from survival models, competing risks models, predicted risks 

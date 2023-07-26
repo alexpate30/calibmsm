@@ -53,7 +53,7 @@ calc_weights <- function(data.mstate, data.raw, covs = NULL, t, s, landmark.type
   if(!is.null(max.follow)){
 
     ### Stop if max follow is smaller than t
-    if (t < max.follow){
+    if (max.follow < t){
       stop("Max follow cannot be smaller than t")
     } else {
       data.raw <- dplyr::mutate(data.raw,

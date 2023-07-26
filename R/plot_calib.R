@@ -15,6 +15,28 @@
 #' as all ggplots have been combined into one object. If `combine = FALSE`, returns an object of
 #' class `list`, each element containing an object of class `gg` and `ggplot`.
 #'
+#' @examples
+#' # Estimate and plot BLR-IPCW calibration curves for the predicted transition
+#' # probabilities at time t = 1826, when predictions were made at time
+#' # s = 0 in state j = 1. These predicted transition probabilities are stored in tps0.
+#'
+#' # Extract the predicted transition probabilities out of state j = 1
+#' tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
+#'
+#' # Now estimate the observed event probabilities for each possible transition.
+#'
+#' dat.calib.blr <-
+#' calib_blr(data.mstate = msebmtcal,
+#'  data.raw = ebmtcal,
+#'  j=1,
+#'  s=0,
+#'  t = 1826,
+#'  tp.pred = tp.pred,
+#'  w.covs = c("year", "agecl", "proph", "match"))
+#'
+#'  # These are then plotted
+#'  plot(dat.calib.blr, combine = TRUE, nrow = 2, ncol = 3)
+#'
 #' @importFrom graphics plot
 #' @export
 plot.calib_blr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, transparency.rug = 0.1){
@@ -119,6 +141,28 @@ plot.calib_blr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, tra
 #' as all ggplots have been combined into one object. If `combine = FALSE`, returns an object of
 #' class `list`, each element containing an object of class `gg` and `ggplot`.
 #'
+#' @examples
+#' # Estimate and plot MLR-IPCW calibration scatter plots for the predicted transition
+#' # probabilities at time t = 1826, when predictions were made at time
+#' # s = 0 in state j = 1. These predicted transition probabilities are stored in tps0.
+#'
+#' # Extract the predicted transition probabilities out of state j = 1
+#' tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
+#'
+#' # Now estimate the observed event probabilities for each possible transition.
+#'
+#' dat.calib.mlr <-
+#' calib_mlr(data.mstate = msebmtcal,
+#'  data.raw = ebmtcal,
+#'  j=1,
+#'  s=0,
+#'  t = 1826,
+#'  tp.pred = tp.pred,
+#'  w.covs = c("year", "agecl", "proph", "match"))
+#'
+#'  # These are then plotted
+#'  plot(dat.calib.mlr, combine = TRUE, nrow = 2, ncol = 3)
+#'
 #' @importFrom graphics plot
 #' @export
 plot.calib_mlr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, transparency.plot = 0.25, transparency.rug = 0.1){
@@ -186,6 +230,27 @@ plot.calib_mlr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, tra
 #' @returns If `combine = TRUE`, returns an object of classes `gg`, `ggplot`, and `ggarrange`,
 #' as all ggplots have been combined into one object. If `combine = FALSE`, returns an object of
 #' class `list`, each element containing an object of class `gg` and `ggplot`.
+#'
+#' @examples
+#' # Estimate and plot pseudo-value calibration curves for the predicted transition
+#' # probabilities at time t = 1826, when predictions were made at time
+#' # s = 0 in state j = 1. These predicted transition probabilities are stored in tps0.
+#'
+#' # Extract the predicted transition probabilities out of state j = 1
+#' tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
+#'
+#' # Now estimate the observed event probabilities for each possible transition.
+#' dat.calib.pv <- calib_pv(data.mstate = msebmtcal,
+#'   data.raw = ebmtcal,
+#'   j = 3,
+#'   s = 100,
+#'   t = 1826,
+#'   tp.pred = tp.pred,
+#'   group.vars = c("year"),
+#'   n.pctls = 2)
+#'
+#'  # These are then plotted
+#'  plot(dat.calib.pv, combine = TRUE, nrow = 2, ncol = 3)
 #'
 #' @importFrom graphics plot
 #' @export

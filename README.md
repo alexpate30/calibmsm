@@ -16,8 +16,14 @@ developed) multistate model.
 
 ## Installation
 
+The package can be installed from CRAN as follows:
+
+``` r
+install.packages("calibmsm")
+```
+
 You can install the development version of calibmsm from
-[GitHub](https://github.com/) with:
+[GitHub](https://github.com/alexpate30/calibmsm) with:
 
 ``` r
 # install.packages("devtools")
@@ -29,7 +35,7 @@ devtools::install_github("alexpate30/calibmsm")
 This is a basic example which shows you how to assess the calibration of
 the transition probabilities at 5 years follow up for individuals out of
 state `j = 1` at time `s = 0` using the BLR-IPCW approach. Please see
-the *overview* vignette for examples of how to assess calibration using
+the *Overview* vignette for examples of how to assess calibration using
 the pseudo-value and MLR-IPCW approaches, as well as details of the
 methodology.
 

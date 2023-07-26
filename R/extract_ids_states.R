@@ -1,7 +1,13 @@
-###
-### Function to extract all individuals in state j, at time t, from a dataset in mstate format
-### Used in other functions which assess calibration using blr/mlr at specific time points (3.4 and 3.5)
-###
+#' Identify patids for individuals in state j at time t
+#'
+#' @description
+#' Extract patids for individuals in state j at time t from a dataset in 'msdata'
+#' format. Used internally in calib_blr, calib_mlr and calib_pv.
+#'
+#' @param data.mstate Validation data in `msdata` format
+#' @param tmat Transition probability matrix
+#' @param j State j
+#' @param t Follow up time
 extract_ids_states <- function(data.mstate, tmat, j, t){
 
   ### Define maximum state number

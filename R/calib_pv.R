@@ -1,10 +1,10 @@
 #' Estimate Aalen-Johansen estimator for a cohort of individuals
 #'
 #' @description
-#' Estimates Aalen-Johansen estimatorfor the transition probabilities in cohort data.mstate.
-#' Estimatestransition probabilities at time t if in state j at time 0
+#' Estimates Aalen-Johansen estimator for the transition probabilities in cohort data.mstate.
+#' Estimates transition probabilities at time t if in state j at time 0
 #' The Aalen-Johansen estimator for the entire cohort (including individual person_id.eval)
-#' is inputted manually (obs.aj), to speed up computaitonal time if calculating pseudo-values
+#' is inputted manually (obs.aj), to speed up computational time if calculating pseudo-values
 #' for multiple individuals from the same cohort.
 #'
 #' @param data.mstate Validation data in `msdata` format
@@ -174,8 +174,7 @@ calc_pv_aj <- function(person_id.eval, data.mstate, obs.aj, tmat, n.cohort, t, j
 #'   t = 1826,
 #'   tp.pred = tp.pred,
 #'   group.vars = c("year"),
-#'   n.pctls = 2,
-#'   loess.span = 0.75, loess.degree = 2)
+#'   n.pctls = 2)
 #'
 #' # The data for each calibration curve are stored in the "plotdata" list
 #' # element.

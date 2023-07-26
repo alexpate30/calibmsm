@@ -68,6 +68,12 @@ usethis::use_data(tps100, overwrite = TRUE)
 usethis::use_testthat(3)
 
 ###
+### Create readme and news
+###
+usethis::use_readme_rmd()
+usethis::use_news_md()
+
+###
 ### Add GitHub actions
 ###
 
@@ -77,7 +83,6 @@ usethis::create_github_token()
 gitcreds::gitcreds_set()
 
 ### R-CMD-check action
-usethis::use_readme_rmd()
 usethis::use_github_action_check_standard()
 
 ### Test coverage
@@ -105,7 +110,7 @@ devtools::build_readme()
 usethis::use_pkgdown()
 pkgdown::build_site()
 usethis::use_pkgdown_github_pages()
-
+?person
 ###
 ### Set ghostscript location
 ### If this causes issues with CRAN, just remove all .pdf vignettes
@@ -116,5 +121,15 @@ Sys.setenv(R_GSCMD = "C:\\Program Files\\gs\\gs10.01.1\\bin\\gswin64c.exe")
 ### Install package
 ###
 devtools::install()
+
+###
+### Add CRAN comments
+###
+usethis::use_cran_comments()
+
+###
+### Set release issue
+###
+usethis::use_version()
 
 

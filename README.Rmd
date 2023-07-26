@@ -24,7 +24,13 @@ The goal of **calibmsm** is to provide a set of tools for estimating calibration
 
 ## Installation
 
-You can install the development version of calibmsm from [GitHub](https://github.com/) with:
+The package can be installed from CRAN as follows:
+
+```{r, eval = FALSE}
+install.packages("calibmsm")
+```
+
+You can install the development version of calibmsm from [GitHub](https://github.com/alexpate30/calibmsm) with:
 
 ```{r, eval = FALSE}
 # install.packages("devtools")
@@ -33,7 +39,7 @@ devtools::install_github("alexpate30/calibmsm")
 
 ## Example
 
-This is a basic example which shows you how to assess the calibration of the transition probabilities at 5 years follow up for individuals out of state `j = 1` at time `s = 0` using the BLR-IPCW approach. Please see the *overview* vignette for examples of how to assess calibration using the pseudo-value and MLR-IPCW approaches, as well as details of the methodology. 
+This is a basic example which shows you how to assess the calibration of the transition probabilities at 5 years follow up for individuals out of state `j = 1` at time `s = 0` using the BLR-IPCW approach. Please see the *Overview* vignette for examples of how to assess calibration using the pseudo-value and MLR-IPCW approaches, as well as details of the methodology. 
 
 The predicted transition probabilities are stored in `tps0`, the individuals data are stored in `ebmtcal`, and the data in `msdata` format are stored in `msebmtcal`. Calibration curves are estimated using `calib_blr`. Inverse probability of censoring weights are calculated based on variables `year`, `age`, `prophylaxis` and donor gender `match`. The calibration curves are estimated using restricted cubic splines with 3 knots. A 95% confidence interval is calculated using bootstrapping with 200 bootstrap replicates.
 

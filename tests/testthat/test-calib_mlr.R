@@ -515,8 +515,6 @@ test_that("test summary", {
               s=0,
               t = 1826,
               tp.pred = tp.pred,
-              curve.type = "rcs",
-              rcs.nk = 3,
               w.covs = c("year", "agecl", "proph", "match"))
 
   ## Calculate observed event probabilities

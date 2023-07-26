@@ -95,7 +95,7 @@ test_that("check weights, stabilised == FALSE, add max.follow", {
                  j = 1,
                  max.weight = 10,
                  stabilised = FALSE,
-                 max.follow = 1826)
+                 max.follow = 1827)
 
   ### This should be of legnth 2279
   expect_equal(length(weights.manual$ipcw), 2279)
@@ -114,7 +114,8 @@ test_that("check weights, stabilised == FALSE, add max.follow", {
                  landmark.type = "state",
                  j = 3,
                  max.weight = 10,
-                 stabilised = FALSE)
+                 stabilised = FALSE,
+                 max.follow = 1827)
 
   ### This should be of legnth 2279
   expect_equal(length(weights.manual$ipcw), 2279)
@@ -122,6 +123,20 @@ test_that("check weights, stabilised == FALSE, add max.follow", {
   ### There should be 501 NA's
   expect_equal(sum(is.na(weights.manual$ipcw)), 802)
   expect_equal(sum(is.na(weights.manual$pcw)), 802)
+
+  ### Expect error if max.follow < t
+  expect_error(
+      calc_weights(data.mstate = msebmtcal,
+                   data.raw = ebmtcal,
+                   covs = c("year", "agecl", "proph", "match"),
+                   t = 1826,
+                   s = 0,
+                   landmark.type = "state",
+                   j = 1,
+                   max.weight = 10,
+                   stabilised = FALSE,
+                   max.follow = 1825)
+      )
 
 })
 

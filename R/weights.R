@@ -51,12 +51,10 @@ calc_weights <- function(data.mstate, data.raw, covs = NULL, t, s, landmark.type
 
   ### Modify everybody to be censored after time t, if a max.follow has been specified
   if(!is.null(max.follow)){
-    if (max.follow == "t"){
-      data.raw <- dplyr::mutate(data.raw,
-                                dtcens.s = dplyr::case_when(dtcens < t + 2 ~ dtcens.s,
-                                                            dtcens >= t + 2 ~ 0),
-                                dtcens = dplyr::case_when(dtcens < t + 2 ~ dtcens,
-                                                          dtcens >= t + 2 ~ t + 2))
+
+    ### Stop if max follow is smaller than t
+    if (t < max.follow){
+      stop("Max follow cannot be smaller than t")
     } else {
       data.raw <- dplyr::mutate(data.raw,
                                 dtcens.s = dplyr::case_when(dtcens < max.follow + 2 ~ dtcens.s,

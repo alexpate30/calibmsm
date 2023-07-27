@@ -4,9 +4,9 @@
 \name{calibmsm-package}
 \alias{calibmsm}
 \alias{calibmsm-package}
-\title{calibmsm: Calibration plots for the transition probabilities from multistate models}
+\title{calibmsm: Calibration Plots for the Transition Probabilities from Multistate Models}
 \description{
-A toolbox to aid in the estimation of calibration plots for multistate models which have been developed. Calibration of the transition probabilities at time t when in state j at time s are assessed. This is done using a combination of landmarking, calibration methods for binary logistic and multinomaial logistic regression models and inverse probability of censoring weights.
+Calibration plots for the transition probabilities from a multistate model. Calibration plots can also be produced for predicted risks from survival models, competing risks models, predicted risks made at landmark follow up times, and predicted risks from landmark super models. Calibration is assessed using one of three methods. 1) Calibration methods for binary logistic regression models applied at a fixed time point in conjunction with inverse probability of censoring weights. 2) Calibration methods for multinomial logistic regression models applied at a fixed time point in conjunction with inverse probability of censoring weights. 3) Pseudo-values estimated using the Aalen-Johansen estimator of observed risk. All methods are applied in conjunction with landmarking when required.
 }
 \seealso{
 Useful links:
@@ -16,7 +16,12 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Alexander Pate \email{alexander.pate@manchester.ac.uk} (\href{https://orcid.org/0000-0002-0849-3458}{ORCID})
+\strong{Maintainer}: Alexander Pate \email{alexander.pate@manchester.ac.uk} (\href{https://orcid.org/0000-0002-0849-3458}{ORCID}) [copyright holder]
+
+Other contributors:
+\itemize{
+  \item Glen P Martin \email{glen.martin@manchester.ac.uk} (\href{https://orcid.org/0000-0002-3410-9472}{ORCID}) [funder, reviewer]
+}
 
 }
 \keyword{internal}

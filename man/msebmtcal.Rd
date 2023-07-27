@@ -7,7 +7,7 @@
 \format{
 \subsection{'msebmtcal'}{
 
-A data frame with 15,512 rows and 8 columns:
+A data frame in \code{msdata} format (see \code{\link[mstate]{msprep}}) with 15,512 rows and 8 columns:
 \describe{
 \item{id}{Patient indentifier}
 \item{from}{transition from state}
@@ -24,6 +24,7 @@ A data frame with 15,512 rows and 8 columns:
 msebmtcal
 }
 \description{
-ebmt data in 'msdata' format, derived from the ebmt dataset using software from the mstate package
+The \code{\link[mstate]{ebmt4}} data converted into \code{msdata} format (see \code{\link[mstate]{msprep}}),
+using the processes implemented in the \code{mstate} package.
 }
 \keyword{datasets}

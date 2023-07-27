@@ -3,11 +3,11 @@
 \docType{data}
 \name{tps100}
 \alias{tps100}
-\title{Predicted transition probabilities out of every state at time s = 100}
+\title{Predicted transition probabilities out of every state made at time s = 100}
 \format{
 \subsection{'tps100'}{
 
-A data frame with 13,674 rows and 14 columns:
+A data frame with 13,674 (CHANGE) rows and 14 columns:
 \describe{
 \item{id}{Patient indentifier}
 \item{pstate1, pstate2, pstate3, pstate4, pstate5, pstate6}{Predicted transition probabilities of transitions into states 1 to 6}
@@ -20,6 +20,10 @@ A data frame with 13,674 rows and 14 columns:
 tps100
 }
 \description{
-Predicted transition probabilities out of every state at time s = 100
+Data frame containing the predicted transition probabilities out of states 1 (transplant),
+2 (adverse event), 3 (recovery) and 4 (adverse event + recovery), made at time s = 100.
+The predicted transition probabilities were estimated by fitting a multistate model
+to the \code{\link[mstate]{ebmt4}} data using a leave-one-out approach. Code for deriving
+this dataset is provided in the source code for \code{calibmsm}.
 }
 \keyword{datasets}

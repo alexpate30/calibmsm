@@ -21,5 +21,10 @@ tp.cmprsk.j0
 \description{
 Used in vignette: Comparison-with-graphical-calibration-curves-in-competing-risks-setting. The predicted transition probabilities
 are made at out of state j = 1 at time s = 0, and treat all states as absorbing states.
+Data frame containing the predicted transition probabilities out of state j = 1
+made at time s = 0, for a competing risks model out of the initial state (see \code{\link{msebmtcal.cmprsk}}).
+The predicted transition probabilities were estimated by fitting
+a competing risks model to the \code{\link{msebmtcal.cmprsk}} data using a leave-one-out approach.
+Code for deriving this dataset is provided in the source code for \code{calibmsm}.
 }
 \keyword{datasets}

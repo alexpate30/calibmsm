@@ -3,11 +3,11 @@
 \docType{data}
 \name{tps0}
 \alias{tps0}
-\title{Predicted transition probabilities out of every state at time s = 0}
+\title{Predicted transition probabilities out of transplant state made at time s = 0}
 \format{
 \subsection{'tps0'}{
 
-A data frame with 13,674 rows and 14 columns:
+A data frame with 13,674 (CHANGE) rows and 14 columns:
 \describe{
 \item{id}{Patient indentifier}
 \item{pstate1, pstate2, pstate3, pstate4, pstate5, pstate6}{Predicted transition probabilities of transitions into states 1 to 6}
@@ -20,6 +20,9 @@ A data frame with 13,674 rows and 14 columns:
 tps0
 }
 \description{
-Predicted transition probabilities out of every state at time s = 0
+Data frame containing the predicted transition probabilities out of state j = 1
+made at time s = 0. The predicted transition probabilities were estimated by fitting
+a multistate model to the \code{\link[mstate]{ebmt4}} data using a leave-one-out approach.
+Code for deriving this dataset is provided in the source code for \code{calibmsm}.
 }
 \keyword{datasets}

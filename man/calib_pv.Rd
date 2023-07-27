@@ -116,8 +116,7 @@ dat.calib.pseudo <- calib_pv(data.mstate = msebmtcal,
   t = 1826,
   tp.pred = tp.pred,
   group.vars = c("year"),
-  n.pctls = 2,
-  loess.span = 0.75, loess.degree = 2)
+  n.pctls = 2)
 
 # The data for each calibration curve are stored in the "plotdata" list
 # element.

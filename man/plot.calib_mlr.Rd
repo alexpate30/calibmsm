@@ -38,3 +38,26 @@ class \code{list}, each element containing an object of class \code{gg} and \cod
 Plots calibration scatter plots for the transition probabilities of a multistate model
 using data estimated from \code{\link{calib_mlr}}.
 }
+\examples{
+# Estimate and plot MLR-IPCW calibration scatter plots for the predicted transition
+# probabilities at time t = 1826, when predictions were made at time
+# s = 0 in state j = 1. These predicted transition probabilities are stored in tps0.
+
+# Extract the predicted transition probabilities out of state j = 1
+tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
+
+# Now estimate the observed event probabilities for each possible transition.
+
+dat.calib.mlr <-
+calib_mlr(data.mstate = msebmtcal,
+ data.raw = ebmtcal,
+ j=1,
+ s=0,
+ t = 1826,
+ tp.pred = tp.pred,
+ w.covs = c("year", "agecl", "proph", "match"))
+
+ # These are then plotted
+ plot(dat.calib.mlr, combine = TRUE, nrow = 2, ncol = 3)
+
+}

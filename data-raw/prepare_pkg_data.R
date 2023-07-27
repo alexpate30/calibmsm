@@ -94,10 +94,14 @@ for (id.iter in 1:nrow(ebmt)){
 ### Combine into one dataset
 tps0 <- do.call("rbind", tps0_temp)
 
+### The predicted transition probabilities out of state j != 1 are not well defined,
+### as individuals cannot be in states j != 1 at time s = 0. So delete these.
+tps0 <- tps0 |> dplyr::filter(j == 1)
 
-###################
+
+#####################
 ### Create tps100 ###
-###################
+#####################
 
 ### Assign parameters
 s <- 100

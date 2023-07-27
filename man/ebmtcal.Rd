@@ -25,12 +25,22 @@ A data frame with 2,279 rows and 17 columns:
 }
 }
 \source{
-\url{https://search.r-project.org/CRAN/refmans/mstate/html/EBMT-data.htmlE}
+This dataset was derived from data made available within the \code{mstate} package, see \code{\link[mstate]{ebmt4}}.
+The data was originally provided by the European Group for Blood and Marrow Transplantation (https://www.ebmt.org/).
+We reiterate the source statement given by the developers of \code{mstate}:
+"We acknowledge the European Society for Blood and Marrow Transplantation (EBMT)
+for making available these data. Disclaimer: these data were simplified for the
+purpose of illustration of the analysis of competing risks and multi-state models
+and do not reflect any real life situation. No clinical conclusions should be
+drawn from these data."
 }
 \usage{
 ebmtcal
 }
 \description{
-ebmt data in format ready to assess calibration
+A data frame of 2,279 individuals with blood cancer who have undergone a transplant.
+This data is identical to the \code{\link[mstate]{ebmt4}} data, except two extra variables have
+been derived, time until censoring and a censoring indicator, which are required
+to assess calibration using some of the methods in \code{calibmsm}.
 }
 \keyword{datasets}

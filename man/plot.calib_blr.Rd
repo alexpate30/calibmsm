@@ -28,3 +28,26 @@ class \code{list}, each element containing an object of class \code{gg} and \cod
 Plots calibration curves for the transition probabilities of a multistate model
 using data estimated from \code{\link{calib_blr}}.
 }
+\examples{
+# Estimate and plot BLR-IPCW calibration curves for the predicted transition
+# probabilities at time t = 1826, when predictions were made at time
+# s = 0 in state j = 1. These predicted transition probabilities are stored in tps0.
+
+# Extract the predicted transition probabilities out of state j = 1
+tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
+
+# Now estimate the observed event probabilities for each possible transition.
+
+dat.calib.blr <-
+calib_blr(data.mstate = msebmtcal,
+ data.raw = ebmtcal,
+ j=1,
+ s=0,
+ t = 1826,
+ tp.pred = tp.pred,
+ w.covs = c("year", "agecl", "proph", "match"))
+
+ # These are then plotted
+ plot(dat.calib.blr, combine = TRUE, nrow = 2, ncol = 3)
+
+}

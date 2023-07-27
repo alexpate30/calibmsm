@@ -16,9 +16,9 @@ calc_aj(data.mstate, tmat, t, j)
 \item{j}{Landmark state at which predictions were made}
 }
 \description{
-Estimates Aalen-Johansen estimatorfor the transition probabilities in cohort data.mstate.
-Estimatestransition probabilities at time t if in state j at time 0
+Estimates Aalen-Johansen estimator for the transition probabilities in cohort data.mstate.
+Estimates transition probabilities at time t if in state j at time 0
 The Aalen-Johansen estimator for the entire cohort (including individual person_id.eval)
-is inputted manually (obs.aj), to speed up computaitonal time if calculating pseudo-values
+is inputted manually (obs.aj), to speed up computational time if calculating pseudo-values
 for multiple individuals from the same cohort.
 }

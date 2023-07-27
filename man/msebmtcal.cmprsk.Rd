@@ -25,7 +25,8 @@ msebmtcal.cmprsk
 }
 \description{
 Used in vignette: Comparison-with-graphical-calibration-curves-in-competing-risks-setting.
-This is the ebmt data in 'msdata' format, derived from the ebmt dataset using software from the mstate package.
-However, only transitions out of the initial state are considered, making this data for competing risks model out of the initial state.
+The \code{\link[mstate]{ebmt4}} data converted into \code{msdata} format (see \code{\link[mstate]{msprep}}),
+where all subsequent states are considered absorbing states. i.e. only transitions out of the initial state are considered,
+meaning this data constitutes a competing risks model out of the initial state.
 }
 \keyword{datasets}

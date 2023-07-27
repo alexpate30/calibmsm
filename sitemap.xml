@@ -10,7 +10,7 @@
     <loc>https://alexpate30.github.io/calibmsm/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://alexpate30.github.io/calibmsm/articles/BLR-IPCW-manual-bootstrap-with-custom-function-for-estimating-the-weights.html</loc>
+    <loc>https://alexpate30.github.io/calibmsm/articles/BLR-IPCW-manual-bootstrap.html</loc>
   </url>
   <url>
     <loc>https://alexpate30.github.io/calibmsm/articles/Comparison-with-graphical-calibration-curves-in-competing-risks-setting.html</loc>
@@ -56,6 +56,9 @@
   </url>
   <url>
     <loc>https://alexpate30.github.io/calibmsm/reference/ebmtcal.html</loc>
+  </url>
+  <url>
+    <loc>https://alexpate30.github.io/calibmsm/reference/extract_ids_states.html</loc>
   </url>
   <url>
     <loc>https://alexpate30.github.io/calibmsm/reference/index.html</loc>

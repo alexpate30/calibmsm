@@ -1,4 +1,12 @@
 ###
+### Required packages for system setup
+###
+install.packages("devtools")
+install.packages("roxygen2")
+install.packages("knitr")
+install.packages("testthat")
+
+###
 ### Install
 ###
 devtools::install()

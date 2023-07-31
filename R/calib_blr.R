@@ -92,9 +92,7 @@
 #'  s=0,
 #'  t = 1826,
 #'  tp.pred = tp.pred,
-#'  w.covs = c("year", "agecl", "proph", "match"),
-#'  CI = 95,
-#'  CI.R.boot = 200)
+#'  w.covs = c("year", "agecl", "proph", "match"))
 #'
 #' # The data for each calibration curve are stored in the "plotdata" list
 #' # element.

@@ -38,7 +38,7 @@
 #' smoothers for estimating the calibration curve can be made using `curve.type`.
 #' Landmarking is applied to only assess calibration in individuals who are uncensored
 #' and in state `j` at time `s`. Censoring is dealt with using inverse probability of
-#' censoring weights (Hernan M, Robins J, 2020)
+#' censoring weights (Hernan M, Robins J, 2020).
 #'
 #' Two datasets for the same cohort of inidividuals must be provided. Firstly `data.mstate` must be a dataset of class `msdata`,
 #' generated using the \code{[mstate]} package. This dataset is used to apply the landmarking. Secondly, `data.raw` must be

@@ -22,14 +22,18 @@
 #' a fourth variable `ipcw.stab` will be returned, which is the stabilised inverse probability of censoring weights.
 #'
 #' @details
+#' Estimates inverse probability of censoring weights (Hernan M, Robins J, 2020).
 #' Fits a cox proportional hazards model to individuals in a landmark cohort, predicting the probability of being censored
 #' at time `t`. This landmark cohort may either be all individuals uncensored at time `s`, or those uncensored
 #' and in state `j` at time `s`. All predictors in `w.covs` are assumed to have a linear effect on the hazard.
 #' Weights are estimated for all individuals in `data.raw`, even if they will not be used in the analysis as they do not meet the landmarking
 #' requirements. If an individual enters an absorbing state prior to `t`, we estimate the probability of being censored
 #' before the time of entry into the absorbing state, rather than at `t`. Details on all the above this are provided in
-#' (vignette OVERVIEW-AND-THEORY-XXXX)
+#' vignette \emph{overview}.
 #'
+#' @references
+#' Hernan M, Robins J (2020). “12.2 Estimating IP weights via modeling.” In \emph{Causal Inference:
+#' What If}, chapter 12.2. Chapman Hall/CRC, Boca Raton.
 #'
 #' @examples
 #' # Estimate inverse probability of censoring weights for individual in cohort ebmtcal.

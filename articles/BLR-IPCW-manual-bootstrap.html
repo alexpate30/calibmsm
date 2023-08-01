@@ -79,16 +79,17 @@
 <div class="section level2">
 <h2 id="data-preperation">Data preperation<a class="anchor" aria-label="anchor" href="#data-preperation"></a>
 </h2>
-<p>This vignette compares showcases how to manually apply to bootstrap
+<p>This vignette compares showcases how to manually apply a bootstrap
 procedure to estimate a confidence interval for the BLR-IPCW calibration
-curve when using a custom function to estimtae the inverse probability
-of censoring weights. We start by reminding ourselves of the EBMT <span class="citation">EBMT (2023)</span> validation datasets
-<code>ebmtcal</code> and <code>msebmtcal</code>, and the predicted
-transition probabilities from a multistate model out of state
-<code>j = 1</code> made a time <code>s = 0</code> (<code>tps0</code>).
-We also set the time at which we want to evaluate the transition
-probabilities <code>t</code>. Please refer to the <em>Overview</em>
-vignette for a more detailed description of this data.</p>
+curves when using a custom function to estimate the inverse probability
+of censoring weights. We start by reminding ourselves of the EBMT <span class="citation">(Wreede, Fiocco, and Putter 2011; EBMT 2023)</span>
+validation datasets <code>ebmtcal</code> and <code>msebmtcal</code>, and
+the predicted transition probabilities out of state <code>j = 1</code>
+made at time <code>s = 0</code> from the multistate model
+(<code>tps0</code>). We also set the time at which we want to evaluate
+the transition probabilities <code>t</code>. Please refer to the
+<em>Overview</em> vignette for a more detailed description of this
+data.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">101</span><span class="op">)</span></span>
 <span></span>
@@ -194,28 +195,28 @@ model for the weights given the user has no control over the choice of
 model (Cox model) or the functional form of the predictor variables
 <span class="math inline">\(\textbf{Z}\)</span>, where all continuous
 variables are assumed to have linear effects on the hazard, and there
-are no interaction terms. We encourage users to explore their data and
-produce a more suitable model to estimate the weights. Please see the
-<em>Overview</em> vignette for a definition of the weights and how to
-estimate them.</p>
-<p>The internal bootstrapping procedure can then be utilised with your
-own function for estimating the weights, specified through the
-<code>w.function</code> argument. This function must have the same
-parameters as the function from the internal procedure
-<code>calc_weights</code>, even if you do not plan to use these
-parameters. These parameters are then called through arguments with the
-<code>w.</code> prefix in <code>calib_blr</code>. Specification of extra
-parameters not in <code>calc_weights</code> is also allowed. These
-parameters are called through the <code>...</code> argument in
+are no interaction terms. Potential issues with using the internal
+process for estimating the weights is exemplified in
+<em>Evaluation-of-estimation-of-IPCWs</em> vignette. We therefore
+encourage users to explore their data and produce a more suitable model
+to estimate the weights. Please see the <em>Overview</em> vignette for a
+definition of the estimand for the weights and how to estimate them.</p>
+<p>Once a function for estimating the weights has been defined, the
+internal bootstrapping procedure can then be utilised withthis function,
+specified through the <code>w.function</code> argument. This function
+must contain the parameters present in the <code>calc_weights</code>
+function, even if you do not plan to use these parameters. These
+parameters are then specified through arguments with the <code>w.</code>
+prefix in <code>calib_blr</code>. Specification of extra parameters not
+in <code>calc_weights</code> is also allowed. These parameters are
+specified through the <code>...</code> argument in
 <code>calc_clib_blr</code>. We showcase this by defining a new function
 <code>calc_weights_manual</code>. For this example, we specify this to
-be the same as <code>calc_weights</code>, which is the function used to
-estimate the weights in the internal procedure, as the aim of this
-vignette is to exemplify how to use the package. In practice, the reason
-for this option is for the user to specify their own function for
-estimating the weights. Given our choice of function to estimate the
-weights, the calibration curve is the same as that from Figure 1, and
-the confidence interval is a similar size.</p>
+be the same as <code>calc_weights</code>. In practice, we do not
+recommend this, as this option to allow the user to specify their own
+function for estimating the weights. Given our choice of function to
+estimate the weights, the calibration curve is the same as that from
+Figure 1, and the confidence interval is a similar size.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">calc_weights_manual</span> <span class="op">&lt;-</span> <span class="fu">calibmsm</span><span class="fu">::</span><span class="va"><a href="../reference/calc_weights.html">calc_weights</a></span></span>
 <span></span>
@@ -250,13 +251,11 @@ of function to estimate the weights
 procedure with custom function for estimating the weights<a class="anchor" aria-label="anchor" href="#confidence-intervals-for-blr-ipcw-by-manually-running-bootstrapping-procedure-with-custom-function-for-estimating-the-weights"></a>
 </h2>
 <p>Finally, we showcase how to run the bootstrapping procedure manually.
-This will allow users to specify functions to estimate the weights with
-arguments that differ from those in <code>calc_weights</code>, and also
-allow users to parallelise their code to reduce computational runtime.
-This is done by using the package <em>boot</em><span class="citation">(Canty and Ripley 2022)</span> in conjunction with
+This allows users to parallelise their code to reduce computational
+time. This is done by using the package <em>boot</em> <span class="citation">(Canty and Ripley 2022)</span> in conjunction with
 <code>calib_blr</code>.</p>
 <p>We start by creating a permanent object with the predicted risks of
-each individual. When the validation cohort <code>code</code> is
+each individual. When the validation cohort <code>ebmtcal</code> is
 resampled, the appropriate predicted transition probabilities must also
 be resampled from this object.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -317,9 +316,10 @@ argument.</p>
 <p>It is now time to estimate the confidence interval for this curve. We
 define a function <code>calc_obs_boot</code> to generate a bootstrapped
 calibration curve which is compatible with the <code>boot</code>
-function from the <em>boot</em> package. Within each bootstrapped
-dataset, weights are calculated and then a calibration curve is
-estimated using <code>calib_blr</code>. The use of the argument
+function from the <em>boot</em> <span class="citation">(Canty and Ripley
+2022)</span> package. Within each bootstrapped dataset, weights are
+calculated and then a calibration curve is estimated using
+<code>calib_blr</code>. The use of the argument
 <code>data.pred.plot</code> in <code>calib_blr</code> is essential here,
 to ensure the bootstrapped observed event probabilities are generated
 for the same vectors of predicted transition probabilities. The function

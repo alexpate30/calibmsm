@@ -65,6 +65,16 @@ calib_mlr(
 
 \item{...}{Extra arguments to be passed to w.function (custom function for estimating weights)}
 }
+\value{
+\code{\link{calib_mlr}} returns a list containing two elements:
+\code{plotdata} and \code{metadata}. The \code{plotdata} element contains the
+data for the calibration scatter plots This will itself be a list with each element
+containing the data for the transition probabilities into each of the possible
+states. Each list element contains patient ids (\code{id}), the predicted
+transition probabilities (\code{pred}) and the estimated observed event
+probabilities (\code{obs}). The \code{metadata} element contains metadata
+including a vector of the possible transitions and other user specified information.
+}
 \description{
 Creates the underlying data for the calibration plots. Observed event
 probabilities at time \code{t} are estimated for inputted predicted
@@ -87,10 +97,10 @@ to present such data.
 Observed event probabilities at time \code{t} are estimated for predicted
 transition probabilities \code{tp.pred} out of state \code{j} at time \code{s}.
 \code{calib_mlr} estimates calibration scatter plots uses a technique for assessing the calibration of multinomial logistic
-regression models, namely the nominal calibration framework of #' van Hoorde et al. (2014, 2015).
-Landmarking is applied to only assess calibration in individuals who are uncensored
+regression models, namely the nominal calibration framework of van Hoorde et al. (2014, 2015).
+Landmarking (van Houwelingen HC, 2007) is applied to only assess calibration in individuals who are uncensored
 and in state \code{j} at time \code{s}. Censoring is dealt with using inverse probability of
-censoring weights.
+censoring weights (Hernan M, Robins J, 2020).
 
 Two datasets for the same cohort of inidividuals must be provided. Firstly \code{data.mstate} must be a dataset of class \code{msdata},
 generated using the \code{[mstate]} package. This dataset is used to apply the landmarking. Secondly, \code{data.raw} must be
@@ -113,15 +123,6 @@ in \code{\link{calib_blr}}) because the nominal calibration framework (van Hoord
 the calibration of all states simultaneously.
 
 The calibration scatter plots can be plotted using \code{\link{plot.calib_mlr}}.
-
-#' @returns \code{\link{calib_mlr}} returns a list containing two elements:
-\code{plotdata} and \code{metadata}. The \code{plotdata} element contains the
-data for the calibration scatter plots This will itself be a list with each element
-containing the data for the transition probabilities into each of the possible
-states. Each list element contains patient ids (\code{id}), the predicted
-transition probabilities (\code{pred}) and the estimated observed event
-probabilities (\code{obs}). The \code{metadata} element contains metadata
-including a vector of the possible transitions and other user specified information.
 }
 \examples{
 # Using competing risks data out of initial state (see vignette: ... -in-competing-risk-setting).
@@ -139,7 +140,6 @@ ebmtcal <- ebmtcal |> dplyr::filter(id \%in\% 1:150)
 # Reduce msebmtcal.cmprsk to first 150 individuals
 msebmtcal.cmprsk <- msebmtcal.cmprsk |> dplyr::filter(id \%in\% 1:150)
 
-
 # Now estimate the observed event probabilities for each possible transition.
 dat.calib.mlr <-
 calib_mlr(data.mstate = msebmtcal.cmprsk,
@@ -156,4 +156,24 @@ calib_mlr(data.mstate = msebmtcal.cmprsk,
 # list element.
 str(dat.calib.mlr)
 
+}
+\references{
+Hernan M, Robins J (2020). “12.2 Estimating IP weights via modeling.” In \emph{Causal Inference:
+What If}, chapter 12.2. Chapman Hall/CRC, Boca Raton.
+
+Van Hoorde K, Vergouwe Y, Timmerman D, Van Huffel S, Steyerberg W, Van Calster B
+(2014). “Assessing calibration of multinomial risk prediction models.” \emph{Statistics in Medicine},
+33(15), 2585–2596. doi:10.1002/sim.6114.
+
+Van Hoorde K, Van Huffel S, Timmerman D, Bourne T, Van Calster B (2015).
+“A spline-based tool to assess and visualize the calibration of multiclass risk predictions.”
+\emph{Journal of Biomedical Informatics}, 54, 283–293. ISSN 15320464. doi:10.1016/j.jbi.2014.12.016.
+URL http://dx.doi.org/10.1016/j.jbi.2014.12.016.
+
+van Houwelingen HC (2007). “Dynamic Prediction by Landmarking in Event History Analysis.”
+\emph{Scandinavian Journal of Statistics}, 34(1), 70–85.
+
+Yee TW (2015). \emph{Vector Generalized Linear and Additive Models}. 1 edition.
+Springer New, NY. ISBN 978-1-4939-4198-8. doi:10.1007/978-1-4939-2818-7.
+URL https://link.springer.com/book/10.1007/978-1-4939-2818-7.
 }

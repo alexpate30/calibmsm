@@ -168,7 +168,8 @@ calc_pv_aj <- function(person_id.eval, data.mstate, obs.aj, tmat, n.cohort, t, j
 #' \emph{Scandinavian Journal of Statistics}, 34(1), 70–85.
 #'
 #' @examples
-#' # Using competing risks data out of initial state (see vignette: comparison-with-graphical-calibration-curves-in-competing-risk-setting).
+#' # Using competing risks data out of initial state
+#' (see vignette: comparison-with-graphical-calibration-curves-in-competing-risk-setting).
 #' # Estimate pseudo-value calibration curves for the predicted transition
 #' # probabilities at time t = 1826, when predictions were made at time
 #' # s = 0 in state j = 1. These predicted transition probabilities are stored in tp.cmprsk.j0.

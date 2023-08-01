@@ -56,6 +56,8 @@ dat.calib.pv <- calib_pv(data.mstate = msebmtcal.cmprsk,
   loess.degree = 1)
 
  # These are then plotted
+ \dontrun{
  plot(dat.calib.pv, combine = TRUE, nrow = 2, ncol = 3)
+ }
 
 }

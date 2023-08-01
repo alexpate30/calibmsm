@@ -67,6 +67,8 @@ calib_mlr(data.mstate = msebmtcal.cmprsk,
  degree = 2)
 
  # These are then plotted
+ \dontrun{
  plot(dat.calib.mlr, combine = TRUE, nrow = 2, ncol = 3)
+ }
 
 }

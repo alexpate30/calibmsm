@@ -47,6 +47,8 @@ calib_blr(data.mstate = msebmtcal,
  w.covs = c("year", "agecl", "proph", "match"))
 
  # These are then plotted
+ \dontrun{
  plot(dat.calib.blr, combine = TRUE, nrow = 2, ncol = 3)
+ }
 
 }

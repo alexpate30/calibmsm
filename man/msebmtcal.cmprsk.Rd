@@ -20,13 +20,33 @@ A data frame with 9,116 rows and 8 columns:
 }
 }
 }
+\source{
+This dataset was derived from data made available within the \code{mstate} package, see \code{\link[mstate]{ebmt4}}.
+The data was originally provided by the European Group for Blood and Marrow Transplantation (https://www.ebmt.org/).
+We reiterate the source statement given by the developers of \code{mstate}:
+"We acknowledge the European Society for Blood and Marrow Transplantation (EBMT)
+for making available these data. Disclaimer: these data were simplified for the
+purpose of illustration of the analysis of competing risks and multi-state models
+and do not reflect any real life situation. No clinical conclusions should be
+drawn from these data."
+}
 \usage{
 msebmtcal.cmprsk
 }
 \description{
 Used in vignette: Comparison-with-graphical-calibration-curves-in-competing-risks-setting.
+}
+\details{
 The \code{\link[mstate]{ebmt4}} data converted into \code{msdata} format (see \code{\link[mstate]{msprep}}),
 where all subsequent states are considered absorbing states. i.e. only transitions out of the initial state are considered,
-meaning this data constitutes a competing risks model out of the initial state.
+meaning this data constitutes a competing risks model out of the initial state. Code for the derivation
+of this dataset is provided in the source code for the package.
+}
+\references{
+EBMT (2023). “Data from the European Society for Blood and Marrow Transplantation.”
+URL https://search.r-project.org/CRAN/refmans/mstate/html/EBMT-data.html.
+
+de Wreede LC, Fiocco M, Putter H (2011). “mstate: An R Package for the Analysis of
+Competing Risks and Multi-State Models.” \emph{Journal of Statistical Software}, 38(7).
 }
 \keyword{datasets}

@@ -15,16 +15,33 @@ A data frame with 2,279 rows and 13 columns:
 }
 }
 }
+\source{
+This dataset was derived from data made available within the \code{mstate} package, see \code{\link[mstate]{ebmt4}}.
+The data was originally provided by the European Group for Blood and Marrow Transplantation (https://www.ebmt.org/).
+We reiterate the source statement given by the developers of \code{mstate}:
+"We acknowledge the European Society for Blood and Marrow Transplantation (EBMT)
+for making available these data. Disclaimer: these data were simplified for the
+purpose of illustration of the analysis of competing risks and multi-state models
+and do not reflect any real life situation. No clinical conclusions should be
+drawn from these data."
+}
 \usage{
 tp.cmprsk.j0
 }
 \description{
-Used in vignette: Comparison-with-graphical-calibration-curves-in-competing-risks-setting. The predicted transition probabilities
-are made at out of state j = 1 at time s = 0, and treat all states as absorbing states.
+Used in vignette: Comparison-with-graphical-calibration-curves-in-competing-risks-setting.
 Data frame containing the predicted transition probabilities out of state j = 1
 made at time s = 0, for a competing risks model out of the initial state (see \code{\link{msebmtcal.cmprsk}}).
 The predicted transition probabilities were estimated by fitting
 a competing risks model to the \code{\link{msebmtcal.cmprsk}} data using a leave-one-out approach.
-Code for deriving this dataset is provided in the source code for \code{calibmsm}.
+Code for deriving this dataset is provided in the source code for \code{calibmsm}. Code for the derivation
+of this dataset is provided in the source code for the package.
+}
+\references{
+EBMT (2023). “Data from the European Society for Blood and Marrow Transplantation.”
+URL https://search.r-project.org/CRAN/refmans/mstate/html/EBMT-data.html.
+
+de Wreede LC, Fiocco M, Putter H (2011). “mstate: An R Package for the Analysis of
+Competing Risks and Multi-State Models.” \emph{Journal of Statistical Software}, 38(7).
 }
 \keyword{datasets}

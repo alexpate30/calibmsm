@@ -41,6 +41,14 @@ ebmtcal
 A data frame of 2,279 individuals with blood cancer who have undergone a transplant.
 This data is identical to the \code{\link[mstate]{ebmt4}} data, except two extra variables have
 been derived, time until censoring and a censoring indicator, which are required
-to assess calibration using some of the methods in \code{calibmsm}.
+to assess calibration using some of the methods in \code{calibmsm}. Code for the derivation
+of this dataset is provided in the source code for the package.
+}
+\references{
+EBMT (2023). “Data from the European Society for Blood and Marrow Transplantation.”
+URL https://search.r-project.org/CRAN/refmans/mstate/html/EBMT-data.html.
+
+de Wreede LC, Fiocco M, Putter H (2011). “mstate: An R Package for the Analysis of
+Competing Risks and Multi-State Models.” \emph{Journal of Statistical Software}, 38(7).
 }
 \keyword{datasets}

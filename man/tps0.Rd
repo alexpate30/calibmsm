@@ -16,6 +16,16 @@ A data frame with 13,674 (CHANGE) rows and 14 columns:
 }
 }
 }
+\source{
+This dataset was derived from data made available within the \code{mstate} package, see \code{\link[mstate]{ebmt4}}.
+The data was originally provided by the European Group for Blood and Marrow Transplantation (https://www.ebmt.org/).
+We reiterate the source statement given by the developers of \code{mstate}:
+"We acknowledge the European Society for Blood and Marrow Transplantation (EBMT)
+for making available these data. Disclaimer: these data were simplified for the
+purpose of illustration of the analysis of competing risks and multi-state models
+and do not reflect any real life situation. No clinical conclusions should be
+drawn from these data."
+}
 \usage{
 tps0
 }
@@ -23,6 +33,14 @@ tps0
 Data frame containing the predicted transition probabilities out of state j = 1
 made at time s = 0. The predicted transition probabilities were estimated by fitting
 a multistate model to the \code{\link[mstate]{ebmt4}} data using a leave-one-out approach.
-Code for deriving this dataset is provided in the source code for \code{calibmsm}.
+Code for deriving this dataset is provided in the source code for \code{calibmsm}. Code for the derivation
+of this dataset is provided in the source code for the package.
+}
+\references{
+EBMT (2023). “Data from the European Society for Blood and Marrow Transplantation.”
+URL https://search.r-project.org/CRAN/refmans/mstate/html/EBMT-data.html.
+
+de Wreede LC, Fiocco M, Putter H (2011). “mstate: An R Package for the Analysis of
+Competing Risks and Multi-State Models.” \emph{Journal of Statistical Software}, 38(7).
 }
 \keyword{datasets}

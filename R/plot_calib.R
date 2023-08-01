@@ -24,7 +24,6 @@
 #' tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
 #'
 #' # Now estimate the observed event probabilities for each possible transition.
-#'
 #' dat.calib.blr <-
 #' calib_blr(data.mstate = msebmtcal,
 #'  data.raw = ebmtcal,
@@ -75,7 +74,7 @@ plot.calib_blr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, tra
         ggplot2::geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
         ggplot2::xlab("Predicted risk") + ggplot2::ylab("Observed risk") +
         ggplot2::xlim(c(0, max(plot.data.k.longer$pred))) +
-        ggplot2::ylim(c(0, max(plot.data.k.longer$value))) +
+        ggplot2::ylim(c(min(plot.data.k.longer$value), max(plot.data.k.longer$value))) +
         ggplot2::geom_rug(data = plot.data.k.longer |> dplyr::arrange(pred) |> dplyr::select(pred, line.group, value, mapping) |> subset(line.group == "Calibration"),
                           ggplot2::aes(x = pred, y = value), col = grDevices::rgb(1, 0, 0, alpha = transparency.rug)) +
         ggplot2::ggtitle(paste("State ", state.k, sep = ""))
@@ -97,7 +96,7 @@ plot.calib_blr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, tra
         ggplot2::geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
         ggplot2::xlab("Predicted risk") + ggplot2::ylab("Observed risk") +
         ggplot2::xlim(c(0, max(plot.data.k$pred))) +
-        ggplot2::ylim(c(0, max(plot.data.k$obs))) +
+        ggplot2::ylim(c(min(plot.data.k$obs), max(plot.data.k$obs))) +
         ggplot2::geom_rug(ggplot2::aes(x = pred, y = obs), col = grDevices::rgb(1, 0, 0, alpha = transparency.rug)) +
         ggplot2::theme(legend.position = "none") +
         ggplot2::ggtitle(paste("State ", state.k, sep = ""))
@@ -142,23 +141,32 @@ plot.calib_blr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, tra
 #' class `list`, each element containing an object of class `gg` and `ggplot`.
 #'
 #' @examples
+#' # Using competing risks data out of initial state (see vignette: ... -in-competing-risk-setting).
 #' # Estimate and plot MLR-IPCW calibration scatter plots for the predicted transition
 #' # probabilities at time t = 1826, when predictions were made at time
-#' # s = 0 in state j = 1. These predicted transition probabilities are stored in tps0.
+#' # s = 0 in state j = 1. These predicted transition probabilities are stored in tp.cmprsk.j0.
 #'
-#' # Extract the predicted transition probabilities out of state j = 1
-#' tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
+#' # To minimise example time we reduce the datasets to 150 individuals.
+#' # Extract the predicted transition probabilities out of state j = 1 for first 150 individuals
+#' tp.pred <- tp.cmprsk.j0 |>
+#'  dplyr::filter(id %in% 1:150) |>
+#'  dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
+#' # Reduce ebmtcal to first 150 individuals
+#' ebmtcal <- ebmtcal |> dplyr::filter(id %in% 1:150)
+#' # Reduce msebmtcal.cmprsk to first 150 individuals
+#' msebmtcal.cmprsk <- msebmtcal.cmprsk |> dplyr::filter(id %in% 1:150)
 #'
 #' # Now estimate the observed event probabilities for each possible transition.
-#'
 #' dat.calib.mlr <-
-#' calib_mlr(data.mstate = msebmtcal,
+#' calib_mlr(data.mstate = msebmtcal.cmprsk,
 #'  data.raw = ebmtcal,
 #'  j=1,
 #'  s=0,
 #'  t = 1826,
 #'  tp.pred = tp.pred,
-#'  w.covs = c("year", "agecl", "proph", "match"))
+#'  w.covs = c("year", "agecl", "proph", "match"),
+#'  ps.int = 2,
+#'  degree = 2)
 #'
 #'  # These are then plotted
 #'  plot(dat.calib.mlr, combine = TRUE, nrow = 2, ncol = 3)
@@ -188,7 +196,7 @@ plot.calib_mlr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, tra
       ggplot2::geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
       ggplot2::xlab("Predicted risk") + ggplot2::ylab("Observed risk") +
       ggplot2::xlim(c(0, max(plot.data.k$pred))) +
-      ggplot2::ylim(c(0, max(plot.data.k$obs))) +
+      ggplot2::ylim(c(min(plot.data.k$obs), max(plot.data.k$obs))) +
       ggplot2::geom_rug(ggplot2::aes(x = pred, y = obs), col = grDevices::rgb(1, 0, 0, alpha = .3), alpha = transparency.rug) +
       ggplot2::theme(legend.position = "none") +
       ggplot2::ggtitle(paste("State ", state.k, sep = ""))
@@ -232,22 +240,31 @@ plot.calib_mlr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, tra
 #' class `list`, each element containing an object of class `gg` and `ggplot`.
 #'
 #' @examples
+#' # Using competing risks data out of initial state (see vignette: ... -in-competing-risk-setting).
 #' # Estimate and plot pseudo-value calibration curves for the predicted transition
 #' # probabilities at time t = 1826, when predictions were made at time
-#' # s = 0 in state j = 1. These predicted transition probabilities are stored in tps0.
+#' # s = 0 in state j = 1. These predicted transition probabilities are stored in tp.cmprsk.j0.
 #'
-#' # Extract the predicted transition probabilities out of state j = 1
-#' tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
+#' # To minimise example time we reduce the datasets to 50 individuals.
+#' # Extract the predicted transition probabilities out of state j = 1 for first 50 individuals
+#' tp.pred <- tp.cmprsk.j0 |>
+#'  dplyr::filter(id %in% 1:50) |>
+#'  dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
+#' # Reduce ebmtcal to first 50 individuals
+#' ebmtcal <- ebmtcal |> dplyr::filter(id %in% 1:50)
+#' # Reduce msebmtcal.cmprsk to first 50 individuals
+#' msebmtcal.cmprsk <- msebmtcal.cmprsk |> dplyr::filter(id %in% 1:50)
 #'
 #' # Now estimate the observed event probabilities for each possible transition.
-#' dat.calib.pv <- calib_pv(data.mstate = msebmtcal,
+#' dat.calib.pv <- calib_pv(data.mstate = msebmtcal.cmprsk,
 #'   data.raw = ebmtcal,
-#'   j = 3,
-#'   s = 100,
+#'   j = 1,
+#'   s = 0,
 #'   t = 1826,
 #'   tp.pred = tp.pred,
-#'   group.vars = c("year"),
-#'   n.pctls = 2)
+#'   curve.type = "loess",
+#'   loess.span = 1,
+#'   loess.degree = 1)
 #'
 #'  # These are then plotted
 #'  plot(dat.calib.pv, combine = TRUE, nrow = 2, ncol = 3)
@@ -290,7 +307,7 @@ plot.calib_pv <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, tran
         ggplot2::geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
         ggplot2::xlab("Predicted risk") + ggplot2::ylab("Observed risk") +
         ggplot2::xlim(c(0, max(plot.data.k.longer$pred))) +
-        ggplot2::ylim(c(0, max(plot.data.k.longer$value))) +
+        ggplot2::ylim(c(min(plot.data.k.longer$value), max(plot.data.k.longer$value))) +
         ggplot2::geom_rug(data = plot.data.k.longer |> dplyr::arrange(pred) |> dplyr::select(pred, line.group, value, mapping) |> subset(line.group == "Calibration"),
                           ggplot2::aes(x = pred, y = value), col = grDevices::rgb(1, 0, 0, alpha = transparency.rug)) +
         ggplot2::ggtitle(paste("State ", state.k, sep = ""))
@@ -312,7 +329,7 @@ plot.calib_pv <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, tran
         ggplot2::geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
         ggplot2::xlab("Predicted risk") + ggplot2::ylab("Observed risk") +
         ggplot2::xlim(c(0, max(plot.data.k$pred))) +
-        ggplot2::ylim(c(0, max(plot.data.k$obs))) +
+        ggplot2::ylim(c(min(plot.data.k$obs), max(plot.data.k$obs))) +
         ggplot2::geom_rug(ggplot2::aes(x = pred, y = obs), col = grDevices::rgb(1, 0, 0, alpha = transparency.rug)) +
         ggplot2::theme(legend.position = "none") +
         ggplot2::ggtitle(paste("State ", state.k, sep = ""))

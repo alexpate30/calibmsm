@@ -29,22 +29,31 @@ Plots calibration curves for the transition probabilities of a multistate model
 using data estimated from \code{\link{calib_pv}}.
 }
 \examples{
+# Using competing risks data out of initial state (see vignette: ... -in-competing-risk-setting).
 # Estimate and plot pseudo-value calibration curves for the predicted transition
 # probabilities at time t = 1826, when predictions were made at time
-# s = 0 in state j = 1. These predicted transition probabilities are stored in tps0.
+# s = 0 in state j = 1. These predicted transition probabilities are stored in tp.cmprsk.j0.
 
-# Extract the predicted transition probabilities out of state j = 1
-tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
+# To minimise example time we reduce the datasets to 50 individuals.
+# Extract the predicted transition probabilities out of state j = 1 for first 50 individuals
+tp.pred <- tp.cmprsk.j0 |>
+ dplyr::filter(id \%in\% 1:50) |>
+ dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
+# Reduce ebmtcal to first 50 individuals
+ebmtcal <- ebmtcal |> dplyr::filter(id \%in\% 1:50)
+# Reduce msebmtcal.cmprsk to first 50 individuals
+msebmtcal.cmprsk <- msebmtcal.cmprsk |> dplyr::filter(id \%in\% 1:50)
 
 # Now estimate the observed event probabilities for each possible transition.
-dat.calib.pv <- calib_pv(data.mstate = msebmtcal,
+dat.calib.pv <- calib_pv(data.mstate = msebmtcal.cmprsk,
   data.raw = ebmtcal,
-  j = 3,
-  s = 100,
+  j = 1,
+  s = 0,
   t = 1826,
   tp.pred = tp.pred,
-  group.vars = c("year"),
-  n.pctls = 2)
+  curve.type = "loess",
+  loess.span = 1,
+  loess.degree = 1)
 
  # These are then plotted
  plot(dat.calib.pv, combine = TRUE, nrow = 2, ncol = 3)

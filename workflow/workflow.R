@@ -118,7 +118,7 @@ devtools::build_readme()
 usethis::use_pkgdown()
 pkgdown::build_site()
 usethis::use_pkgdown_github_pages()
-?person
+
 ###
 ### Set ghostscript location
 ### If this causes issues with CRAN, just remove all .pdf vignettes

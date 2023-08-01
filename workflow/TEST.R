@@ -1,9 +1,11 @@
 ###
 ### Testing package functionality
 ###
+rm(list=ls())
+devtools::run_examples()
 str(mstate::ebmt)
 devtools::install()
-load_all()
+devtools::load_all()
 ?ebmtcal
 test.new.github.token <- 1
 install.packages()

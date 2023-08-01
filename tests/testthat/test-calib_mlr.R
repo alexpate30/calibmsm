@@ -1,57 +1,77 @@
 test_that("check calib_mlr output", {
 
-  ## Extract relevant predicted risks from tps0
-  tp.pred <- dplyr::select(dplyr::filter(tps100, j == 3), dplyr::any_of(paste("pstate", 1:6, sep = "")))
+  ## Reduce to 150 individuals
+  # Extract the predicted transition probabilities out of state j = 1 for first 150 individuals
+  tp.pred <- tp.cmprsk.j0 |>
+    dplyr::filter(id %in% 1:150) |>
+    dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
+  # Reduce ebmtcal to first 150 individuals
+  ebmtcal <- ebmtcal |> dplyr::filter(id %in% 1:150)
+  # Reduce msebmtcal.cmprsk to first 150 individuals
+  msebmtcal <- msebmtcal.cmprsk |> dplyr::filter(id %in% 1:150)
 
   ## Expect error if generate with CI
   expect_error(calib_mlr(data.mstate = msebmtcal,
                          data.raw = ebmtcal,
-                         j=3,
-                         s=100,
+                         j=1,
+                         s=0,
                          t = 1826,
                          tp.pred = tp.pred,
                          w.covs = c("year", "agecl", "proph", "match"),
+                         ps.int = 2,
+                         degree = 2,
                          CI = 95,
                          CI.R.boot = 5))
 
-  ## Calculate observed event probabilities (run it on j = 3 and s = 100 so its a bit quicker, as smaller number of individuals)
+  ## Calculate observed event probabilities
   dat.calib.mlr <-
     calib_mlr(data.mstate = msebmtcal,
               data.raw = ebmtcal,
-              j=3,
-              s=100,
+              j=1,
+              s=0,
               t = 1826,
               tp.pred = tp.pred,
-              w.covs = c("year", "agecl", "proph", "match"))
+              w.covs = c("year", "agecl", "proph", "match"),
+              ps.int = 2,
+              degree = 2)
 
   expect_type(dat.calib.mlr, "list")
   expect_equal(class(dat.calib.mlr), "calib_mlr")
   expect_length(dat.calib.mlr, 2)
-  expect_length(dat.calib.mlr[["plotdata"]], 4)
-  expect_length(dat.calib.mlr[["plotdata"]][["state3"]]$id, 359)
-  expect_length(dat.calib.mlr[["plotdata"]][["state6"]]$id, 359)
+  expect_length(dat.calib.mlr[["plotdata"]], 5)
+  expect_length(dat.calib.mlr[["plotdata"]][["state3"]]$id, 150)
+  expect_length(dat.calib.mlr[["plotdata"]][["state6"]]$id, 150)
   expect_error(dat.calib.mlr[["plotdata"]][[6]])
   expect_length(dat.calib.mlr[["metadata"]], 4)
   expect_no_error(summary(dat.calib.mlr))
 
 })
 
-test_that("check calib_mlr output, (j = 3, s = 100),
+test_that("check calib_mlr output, (j = 1, s = 0),
           Manually define function to estimate weights", {
 
-            ## Extract relevant predicted risks from tps0
-            tp.pred <- dplyr::select(dplyr::filter(tps100, j == 3), dplyr::any_of(paste("pstate", 1:6, sep = "")))
+            ## Reduce to 150 individuals
+            # Extract the predicted transition probabilities out of state j = 1 for first 150 individuals
+            tp.pred <- tp.cmprsk.j0 |>
+              dplyr::filter(id %in% 1:150) |>
+              dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
+            # Reduce ebmtcal to first 150 individuals
+            ebmtcal <- ebmtcal |> dplyr::filter(id %in% 1:150)
+            # Reduce msebmtcal.cmprsk to first 150 individuals
+            msebmtcal <- msebmtcal.cmprsk |> dplyr::filter(id %in% 1:150)
 
             ###
             ### Calculate observed event probabilities
             dat.calib.mlr <-
               calib_mlr(data.mstate = msebmtcal,
                         data.raw = ebmtcal,
-                        j = 3,
-                        s = 100,
+                        j = 1,
+                        s = 0,
                         t = 1826,
                         tp.pred = tp.pred,
-                        w.covs = c("year", "agecl", "proph", "match"))
+                        w.covs = c("year", "agecl", "proph", "match"),
+                        ps.int = 2,
+                        degree = 2)
 
             ###
             ### Calculate manual weights
@@ -60,9 +80,9 @@ test_that("check calib_mlr output, (j = 3, s = 100),
                            data.raw = ebmtcal,
                            covs =  c("year", "agecl", "proph", "match"),
                            t = 1826,
-                           s = 100,
+                           s = 0,
                            landmark.type = "state",
-                           j = 3,
+                           j = 1,
                            max.weight = 10,
                            stabilised = FALSE)
 
@@ -71,11 +91,13 @@ test_that("check calib_mlr output, (j = 3, s = 100),
             dat.calib.mlr.w.manual <-
               calib_mlr(data.mstate = msebmtcal,
                         data.raw = ebmtcal,
-                        j = 3,
-                        s = 100,
+                        j = 1,
+                        s = 0,
                         t = 1826,
                         tp.pred = tp.pred,
-                        weights = weights.manual$ipcw)
+                        weights = weights.manual$ipcw,
+                        ps.int = 2,
+                        degree = 2)
 
             expect_equal(dat.calib.mlr[["plotdata"]][[1]], dat.calib.mlr.w.manual[["plotdata"]][[1]])
 
@@ -84,11 +106,13 @@ test_that("check calib_mlr output, (j = 3, s = 100),
             dat.calib.mlr.w.manual <-
               calib_mlr(data.mstate = msebmtcal,
                         data.raw = ebmtcal,
-                        j = 3,
-                        s = 100,
+                        j = 1,
+                        s = 0,
                         t = 1826,
                         tp.pred = tp.pred,
-                        weights = rep(1,nrow(weights.manual)))
+                        weights = rep(1,nrow(weights.manual)),
+                        ps.int = 2,
+                        degree = 2)
 
             expect_false(any(dat.calib.mlr[["plotdata"]][[1]]$obs == dat.calib.mlr.w.manual[["plotdata"]][[1]]$obs))
 
@@ -99,19 +123,21 @@ test_that("check calib_mlr output, (j = 3, s = 100),
             dat.calib.mlr.w.function <-
               calib_mlr(data.mstate = msebmtcal,
                         data.raw = ebmtcal,
-                        j = 3,
-                        s = 100,
+                        j = 1,
+                        s = 0,
                         t = 1826,
                         tp.pred = tp.pred,
                         w.function = calc_weights_manual,
-                        w.covs = c("year", "agecl", "proph", "match"))
+                        w.covs = c("year", "agecl", "proph", "match"),
+                        ps.int = 2,
+                        degree = 2)
 
             expect_type(dat.calib.mlr.w.function, "list")
             expect_equal(class(dat.calib.mlr.w.function), "calib_mlr")
             expect_length(dat.calib.mlr.w.function, 2)
-            expect_length(dat.calib.mlr.w.function[["plotdata"]], 4)
-            expect_length(dat.calib.mlr.w.function[["plotdata"]][[1]]$id, 359)
-            expect_length(dat.calib.mlr.w.function[["plotdata"]][[4]]$id, 359)
+            expect_length(dat.calib.mlr.w.function[["plotdata"]], 5)
+            expect_length(dat.calib.mlr.w.function[["plotdata"]][[1]]$id, 150)
+            expect_length(dat.calib.mlr.w.function[["plotdata"]][[4]]$id, 150)
             expect_length(dat.calib.mlr.w.function[["metadata"]], 4)
 
             ## Check answer is same whether w.function used or not
@@ -288,19 +314,21 @@ test_that("check calib_mlr output, (j = 3, s = 100),
             dat.calib.mlr.w.function <-
               calib_mlr(data.mstate = msebmtcal,
                         data.raw = ebmtcal,
-                        j = 3,
-                        s = 100,
+                        j = 1,
+                        s = 0,
                         t = 1826,
                         tp.pred = tp.pred,
                         w.function = calc_weights_manual,
-                        w.covs = c("year", "agecl", "proph", "match"))
+                        w.covs = c("year", "agecl", "proph", "match"),
+                        ps.int = 2,
+                        degree = 2)
 
             expect_type(dat.calib.mlr.w.function, "list")
             expect_equal(class(dat.calib.mlr.w.function), "calib_mlr")
             expect_length(dat.calib.mlr.w.function, 2)
-            expect_length(dat.calib.mlr.w.function[["plotdata"]], 4)
-            expect_length(dat.calib.mlr.w.function[["plotdata"]][[1]]$id, 359)
-            expect_length(dat.calib.mlr.w.function[["plotdata"]][[4]]$id, 359)
+            expect_length(dat.calib.mlr.w.function[["plotdata"]], 5)
+            expect_length(dat.calib.mlr.w.function[["plotdata"]][[1]]$id, 150)
+            expect_length(dat.calib.mlr.w.function[["plotdata"]][[4]]$id, 150)
             expect_length(dat.calib.mlr.w.function[["metadata"]], 4)
 
             ## Check answer is same whether w.function used or not
@@ -308,7 +336,7 @@ test_that("check calib_mlr output, (j = 3, s = 100),
             expect_equal(dat.calib.mlr[["plotdata"]][[4]], dat.calib.mlr.w.function[["plotdata"]][[4]])
 
             ###
-            ### Repeat this process (manual definition of calc_weights), again arguments are in different order, but this time an extra argument is added, which adds 10 to every weight.
+            ### Repeat this process (manual definition of calc_weights), again arguments are in different order, but this time an extra argument is added, which adds 'extra.arg' to every weight.
             ### This extra arguments is something that could be inputted by user, and want to check it does actually change the answer. It should no longer agree with dat.calb.mlr.
             calc_weights_manual <- function(stabilised = FALSE, max.follow = NULL, data.mstate, covs = NULL, landmark.type = "state", j = NULL, t, s, max.weight = 10, data.raw, extra.arg = NULL){
 
@@ -481,20 +509,22 @@ test_that("check calib_mlr output, (j = 3, s = 100),
             dat.calib.mlr.w.function <-
               calib_mlr(data.mstate = msebmtcal,
                         data.raw = ebmtcal,
-                        j = 3,
-                        s = 100,
+                        j = 1,
+                        s = 0,
                         t = 1826,
                         tp.pred = tp.pred,
                         w.function = calc_weights_manual,
                         w.covs = c("year", "agecl", "proph", "match"),
-                        extra.arg = 10)
+                        ps.int = 2,
+                        degree = 2,
+                        extra.arg = 0.1)
 
             expect_type(dat.calib.mlr.w.function, "list")
             expect_equal(class(dat.calib.mlr.w.function), "calib_mlr")
             expect_length(dat.calib.mlr.w.function, 2)
-            expect_length(dat.calib.mlr.w.function[["plotdata"]], 4)
-            expect_length(dat.calib.mlr.w.function[["plotdata"]][[1]]$id, 359)
-            expect_length(dat.calib.mlr.w.function[["plotdata"]][[4]]$id, 359)
+            expect_length(dat.calib.mlr.w.function[["plotdata"]], 5)
+            expect_length(dat.calib.mlr.w.function[["plotdata"]][[1]]$id, 150)
+            expect_length(dat.calib.mlr.w.function[["plotdata"]][[4]]$id, 150)
             expect_length(dat.calib.mlr.w.function[["metadata"]], 4)
 
             ## Check answer is same whether w.function used or not

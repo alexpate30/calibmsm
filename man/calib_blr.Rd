@@ -129,7 +129,7 @@ in the vignette XXXX.
 The calibration curves can be plotted using \code{\link{plot.calib_blr}}.
 }
 \examples{
-# Estimate calibration curves for the predicted transition
+# Estimate BLR-IPCW calibration curves for the predicted transition
 # probabilities at time t = 1826, when predictions were made at time
 # s = 0 in state j = 1. These predicted transition probabilities are stored in tps0.
 
@@ -139,7 +139,6 @@ tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6
 # Now estimate the observed event probabilities for each possible transition.
 # 95\% confidence intervals are estimated using bootstrapping with 200
 # bootstrap repicates. In practice we recommend using a higher number.
-
 dat.calib.blr <-
 calib_blr(data.mstate = msebmtcal,
  data.raw = ebmtcal,
@@ -147,9 +146,7 @@ calib_blr(data.mstate = msebmtcal,
  s=0,
  t = 1826,
  tp.pred = tp.pred,
- w.covs = c("year", "agecl", "proph", "match"),
- CI = 95,
- CI.R.boot = 200)
+ w.covs = c("year", "agecl", "proph", "match"))
 
 # The data for each calibration curve are stored in the "plotdata" list
 # element.

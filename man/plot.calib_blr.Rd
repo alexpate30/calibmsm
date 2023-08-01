@@ -37,7 +37,6 @@ using data estimated from \code{\link{calib_blr}}.
 tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
 
 # Now estimate the observed event probabilities for each possible transition.
-
 dat.calib.blr <-
 calib_blr(data.mstate = msebmtcal,
  data.raw = ebmtcal,

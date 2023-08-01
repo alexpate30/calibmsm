@@ -71,6 +71,6 @@ calc_weights(data.mstate = msebmtcal,
   landmark.type = "state",
   j = 1)
 
-  str(weights.manual)
+ str(weights.manual)
 
 }

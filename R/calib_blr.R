@@ -74,7 +74,7 @@
 #' and other user specified information.
 #'
 #' @examples
-#' # Estimate calibration curves for the predicted transition
+#' # Estimate BLR-IPCW calibration curves for the predicted transition
 #' # probabilities at time t = 1826, when predictions were made at time
 #' # s = 0 in state j = 1. These predicted transition probabilities are stored in tps0.
 #'
@@ -84,7 +84,6 @@
 #' # Now estimate the observed event probabilities for each possible transition.
 #' # 95% confidence intervals are estimated using bootstrapping with 200
 #' # bootstrap repicates. In practice we recommend using a higher number.
-#'
 #' dat.calib.blr <-
 #' calib_blr(data.mstate = msebmtcal,
 #'  data.raw = ebmtcal,

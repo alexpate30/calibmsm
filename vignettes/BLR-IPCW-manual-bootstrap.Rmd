@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 
 # Data preperation
 
-This vignette compares showcases how to manually apply to bootstrap procedure to estimate a confidence interval for the BLR-IPCW calibration curve when using a custom function to estimtae the inverse probability of censoring weights. We start by reminding ourselves of the EBMT [@DeWreede2011, @EBMT2023] validation datasets `ebmtcal` and `msebmtcal`, and the predicted transition probabilities from a multistate model out of state `j = 1` made a time `s = 0` (`tps0`). We also set the time at which we want to evaluate the transition probabilities `t`. Please refer to the *Overview* vignette for a more detailed description of this data.
+This vignette compares showcases how to manually apply a bootstrap procedure to estimate a confidence interval for the BLR-IPCW calibration curves when using a custom function to estimate the inverse probability of censoring weights. We start by reminding ourselves of the EBMT [@DeWreede2011; @EBMT2023] validation datasets `ebmtcal` and `msebmtcal`, and the predicted transition probabilities out of state `j = 1` made at time `s = 0` from the multistate model (`tps0`). We also set the time at which we want to evaluate the transition probabilities `t`. Please refer to the *Overview* vignette for a more detailed description of this data.
 
 ```{r}
 set.seed(101)
@@ -71,9 +71,9 @@ plot(dat.calib.blr, combine = TRUE)
 
 # Confidence intervals for BLR-IPCW by inputting custom weights funciton into calib_blr
 
-While the above approach is accessible, it may lead to a misspecified model for the weights given the user has no control over the choice of model (Cox model) or the functional form of the predictor variables $\textbf{Z}$, where all continuous variables are assumed to have linear effects on the hazard, and there are no interaction terms. We encourage users to explore their data and produce a more suitable model to estimate the weights. Please see the *Overview* vignette for a definition of the weights and how to estimate them. 
+While the above approach is accessible, it may lead to a misspecified model for the weights given the user has no control over the choice of model (Cox model) or the functional form of the predictor variables $\textbf{Z}$, where all continuous variables are assumed to have linear effects on the hazard, and there are no interaction terms. Potential issues with using the internal process for estimating the weights is exemplified in *Evaluation-of-estimation-of-IPCWs* vignette. We therefore encourage users to explore their data and produce a more suitable model to estimate the weights. Please see the *Overview* vignette for a definition of the estimand for the weights and how to estimate them. 
 
-The internal bootstrapping procedure can then be utilised with your own function for estimating the weights, specified through the `w.function` argument. This function must have the same parameters as the function from the internal procedure `calc_weights`, even if you do not plan to use these parameters. These parameters are then called through arguments with the `w.` prefix in `calib_blr`. Specification of extra parameters not in `calc_weights` is also allowed. These parameters are called through the `...` argument in `calc_clib_blr`. We showcase this by defining a new function `calc_weights_manual`. For this example, we specify this to be the same as `calc_weights`, which is the function used to estimate the weights in the internal procedure, as the aim of this vignette is to exemplify how to use the package. In practice, the reason for this option is for the user to specify their own function for estimating the weights. Given our choice of function to estimate the weights, the calibration curve is the same as that from Figure 1, and the confidence interval is a similar size.
+Once a function for estimating the weights has been defined, the internal bootstrapping procedure can then be utilised withthis function, specified through the `w.function` argument. This function must contain the parameters present in the `calc_weights` function, even if you do not plan to use these parameters. These parameters are then specified through arguments with the `w.` prefix in `calib_blr`. Specification of extra parameters not in `calc_weights` is also allowed. These parameters are specified through the `...` argument in `calc_clib_blr`. We showcase this by defining a new function `calc_weights_manual`. For this example, we specify this to be the same as `calc_weights`. In practice, we do not recommend this, as this option to allow the user to specify their own function for estimating the weights. Given our choice of function to estimate the weights, the calibration curve is the same as that from Figure 1, and the confidence interval is a similar size.
 
 ```{r}
 calc_weights_manual <- calibmsm::calc_weights
@@ -101,9 +101,9 @@ plot(dat.calib.blr.w.function, combine = TRUE, nrow = 2, ncol = 3)
 
 # Confidence intervals for BLR-IPCW by manually running bootstrapping procedure with custom function for estimating the weights
 
-Finally, we showcase how to run the bootstrapping procedure manually. This will allow users to specify functions to estimate the weights with arguments that differ from those in `calc_weights`, and also allow users to parallelise their code to reduce computational runtime. This is done by using the package *boot*[@Canty2022] in conjunction with `calib_blr`.
+Finally, we showcase how to run the bootstrapping procedure manually. This allows users to parallelise their code to reduce computational time. This is done by using the package *boot* [@Canty2022] in conjunction with `calib_blr`.
 
-We start by creating a permanent object with the predicted risks of each individual. When the validation cohort `code` is resampled, the appropriate predicted transition probabilities must also be resampled from this object.
+We start by creating a permanent object with the predicted risks of each individual. When the validation cohort `ebmtcal` is resampled, the appropriate predicted transition probabilities must also be resampled from this object.
 
 ```{r}
 tp.pred <- tps0 |>
@@ -155,7 +155,7 @@ dat.calib.boot.manual <-
                  weights = weights.manual)
 ```
 
-It is now time to estimate the confidence interval for this curve. We define a function `calc_obs_boot` to generate a bootstrapped calibration curve which is compatible with the `boot` function from the *boot* package. Within each bootstrapped dataset, weights are calculated and then a calibration curve is estimated using `calib_blr`. The use of the argument `data.pred.plot` in `calib_blr` is essential here, to ensure the bootstrapped observed event probabilities are generated for the same vectors of predicted transition probabilities. The function is also written to estimate a curve for the transition probabilities into a specific state $k$, as the output for `boot` must be a vector, rather than a matrix. This is done by utilising the `transitions.out` argument in `calib_blr`.
+It is now time to estimate the confidence interval for this curve. We define a function `calc_obs_boot` to generate a bootstrapped calibration curve which is compatible with the `boot` function from the *boot* [@Canty2022] package. Within each bootstrapped dataset, weights are calculated and then a calibration curve is estimated using `calib_blr`. The use of the argument `data.pred.plot` in `calib_blr` is essential here, to ensure the bootstrapped observed event probabilities are generated for the same vectors of predicted transition probabilities. The function is also written to estimate a curve for the transition probabilities into a specific state $k$, as the output for `boot` must be a vector, rather than a matrix. This is done by utilising the `transitions.out` argument in `calib_blr`.
 
 ```{r}
 calc_obs_boot <- function(data, indices, tp.pred, state.k){

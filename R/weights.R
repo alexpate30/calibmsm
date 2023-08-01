@@ -44,7 +44,7 @@
 #'   landmark.type = "state",
 #'   j = 1)
 #'
-#'   str(weights.manual)
+#'  str(weights.manual)
 #'
 #' @export
 calc_weights <- function(data.mstate, data.raw, covs = NULL, t, s, landmark.type = "state", j = NULL, max.weight = 10, stabilised = FALSE, max.follow = NULL){

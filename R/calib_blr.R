@@ -34,11 +34,11 @@
 #' Observed event probabilities at time `t` are estimated for predicted
 #' transition probabilities `tp.pred` out of state `j` at time `s`.
 #' `calib_blr` estimates calibration curves using techniques for assessing the calibration of binary logistic
-#' regression models. A choice between restricted cubic splines and loess
+#' regression models (Van Calster et al., 2016). A choice between restricted cubic splines and loess
 #' smoothers for estimating the calibration curve can be made using `curve.type`.
 #' Landmarking is applied to only assess calibration in individuals who are uncensored
 #' and in state `j` at time `s`. Censoring is dealt with using inverse probability of
-#' censoring weights.
+#' censoring weights (Hernan M, Robins J, 2020)
 #'
 #' Two datasets for the same cohort of inidividuals must be provided. Firstly `data.mstate` must be a dataset of class `msdata`,
 #' generated using the \code{[mstate]} package. This dataset is used to apply the landmarking. Secondly, `data.raw` must be
@@ -55,7 +55,7 @@
 #' uses the internal method for estimating weights, we therefore encourage
 #' users to specify their own bootstrapping procedure, which incorporates their
 #' own model for estimating the weights. Details on how to do this are provided
-#' in the vignette XXXX.
+#' in the vignette \emph{BLR-IPCW-manual-bootstrap}.
 #'
 #' The calibration curves can be plotted using \code{\link{plot.calib_blr}}.
 #'
@@ -72,6 +72,15 @@
 #' a vector of which transitions calibration curves have been estimated for, the
 #' size of the confidence interval, the method for estimating the calibration curve
 #' and other user specified information.
+#'
+#' @references
+#' Hernan M, Robins J (2020). “12.2 Estimating IP weights via modeling.” In \emph{Causal Inference:
+#' What If}, chapter 12.2. Chapman Hall/CRC, Boca Raton.
+#'
+#' Van Calster B, Nieboer D, Vergouwe Y, De Cock B, Pencina MJ, Steyerberg EW (2016). “A
+#' calibration hierarchy for risk models was defined: From utopia to empirical data.” \emph{Journal
+#' of Clinical Epidemiology}, 74, 167–176. ISSN 18785921. doi:10.1016/j.jclinepi.2015.
+#' 12.005. URL http://dx.doi.org/10.1016/j.jclinepi.2015.12.005
 #'
 #' @examples
 #' # Estimate BLR-IPCW calibration curves for the predicted transition

@@ -198,14 +198,27 @@ to present such data.</p>
 
 </dl></div>
     <div class="section level2">
+    <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
+    
+
+<p><code>calib_mlr</code> returns a list containing two elements:
+<code>plotdata</code> and <code>metadata</code>. The <code>plotdata</code> element contains the
+data for the calibration scatter plots This will itself be a list with each element
+containing the data for the transition probabilities into each of the possible
+states. Each list element contains patient ids (<code>id</code>), the predicted
+transition probabilities (<code>pred</code>) and the estimated observed event
+probabilities (<code>obs</code>). The <code>metadata</code> element contains metadata
+including a vector of the possible transitions and other user specified information.</p>
+    </div>
+    <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Observed event probabilities at time <code>t</code> are estimated for predicted
 transition probabilities <code>tp.pred</code> out of state <code>j</code> at time <code>s</code>.
 <code>calib_mlr</code> estimates calibration scatter plots uses a technique for assessing the calibration of multinomial logistic
-regression models, namely the nominal calibration framework of #' van Hoorde et al. (2014, 2015).
-Landmarking is applied to only assess calibration in individuals who are uncensored
+regression models, namely the nominal calibration framework of van Hoorde et al. (2014, 2015).
+Landmarking (van Houwelingen HC, 2007) is applied to only assess calibration in individuals who are uncensored
 and in state <code>j</code> at time <code>s</code>. Censoring is dealt with using inverse probability of
-censoring weights.</p>
+censoring weights (Hernan M, Robins J, 2020).</p>
 <p>Two datasets for the same cohort of inidividuals must be provided. Firstly <code>data.mstate</code> must be a dataset of class <code>msdata</code>,
 generated using the <code>[mstate]</code> package. This dataset is used to apply the landmarking. Secondly, <code>data.raw</code> must be
 a <code>data.frame</code> with one row per individual, containing the desired variables for estimating the weights, and variables for the time
@@ -224,14 +237,23 @@ these would be plotted cohesively.</p>
 in <code><a href="calib_blr.html">calib_blr</a></code>) because the nominal calibration framework (van Hoorde et al., 2014, 2015) assesses
 the calibration of all states simultaneously.</p>
 <p>The calibration scatter plots can be plotted using <code><a href="plot.calib_mlr.html">plot.calib_mlr</a></code>.</p>
-<p>#' @returns <code>calib_mlr</code> returns a list containing two elements:
-<code>plotdata</code> and <code>metadata</code>. The <code>plotdata</code> element contains the
-data for the calibration scatter plots This will itself be a list with each element
-containing the data for the transition probabilities into each of the possible
-states. Each list element contains patient ids (<code>id</code>), the predicted
-transition probabilities (<code>pred</code>) and the estimated observed event
-probabilities (<code>obs</code>). The <code>metadata</code> element contains metadata
-including a vector of the possible transitions and other user specified information.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+    <p>Hernan M, Robins J (2020). “12.2 Estimating IP weights via modeling.” In <em>Causal Inference:
+What If</em>, chapter 12.2. Chapman Hall/CRC, Boca Raton.</p>
+<p>Van Hoorde K, Vergouwe Y, Timmerman D, Van Huffel S, Steyerberg W, Van Calster B
+(2014). “Assessing calibration of multinomial risk prediction models.” <em>Statistics in Medicine</em>,
+33(15), 2585–2596. doi:10.1002/sim.6114.</p>
+<p>Van Hoorde K, Van Huffel S, Timmerman D, Bourne T, Van Calster B (2015).
+“A spline-based tool to assess and visualize the calibration of multiclass risk predictions.”
+<em>Journal of Biomedical Informatics</em>, 54, 283–293. ISSN 15320464. doi:10.1016/j.jbi.2014.12.016.
+URL http://dx.doi.org/10.1016/j.jbi.2014.12.016.</p>
+<p>van Houwelingen HC (2007). “Dynamic Prediction by Landmarking in Event History Analysis.”
+<em>Scandinavian Journal of Statistics</em>, 34(1), 70–85.</p>
+<p>Yee TW (2015). <em>Vector Generalized Linear and Additive Models</em>. 1 edition.
+Springer New, NY. ISBN 978-1-4939-4198-8. doi:10.1007/978-1-4939-2818-7.
+URL https://link.springer.com/book/10.1007/978-1-4939-2818-7.</p>
     </div>
 
     <div class="section level2">
@@ -250,7 +272,6 @@ including a vector of the possible transitions and other user specified informat
 <span class="r-in"><span><span class="va">ebmtcal</span> <span class="op">&lt;-</span> <span class="va">ebmtcal</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fl">1</span><span class="op">:</span><span class="fl">150</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># Reduce msebmtcal.cmprsk to first 150 individuals</span></span></span>
 <span class="r-in"><span><span class="va">msebmtcal.cmprsk</span> <span class="op">&lt;-</span> <span class="va">msebmtcal.cmprsk</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fl">1</span><span class="op">:</span><span class="fl">150</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Now estimate the observed event probabilities for each possible transition.</span></span></span>
 <span class="r-in"><span><span class="va">dat.calib.mlr</span> <span class="op">&lt;-</span></span></span>

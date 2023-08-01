@@ -129,13 +129,19 @@ a fourth variable <code>ipcw.stab</code> will be returned, which is the stabilis
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>Fits a cox proportional hazards model to individuals in a landmark cohort, predicting the probability of being censored
+    <p>Estimates inverse probability of censoring weights (Hernan M, Robins J, 2020).
+Fits a cox proportional hazards model to individuals in a landmark cohort, predicting the probability of being censored
 at time <code>t</code>. This landmark cohort may either be all individuals uncensored at time <code>s</code>, or those uncensored
 and in state <code>j</code> at time <code>s</code>. All predictors in <code>w.covs</code> are assumed to have a linear effect on the hazard.
 Weights are estimated for all individuals in <code>data.raw</code>, even if they will not be used in the analysis as they do not meet the landmarking
 requirements. If an individual enters an absorbing state prior to <code>t</code>, we estimate the probability of being censored
 before the time of entry into the absorbing state, rather than at <code>t</code>. Details on all the above this are provided in
-(vignette OVERVIEW-AND-THEORY-XXXX)</p>
+vignette <em>overview</em>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+    <p>Hernan M, Robins J (2020). “12.2 Estimating IP weights via modeling.” In <em>Causal Inference:
+What If</em>, chapter 12.2. Chapman Hall/CRC, Boca Raton.</p>
     </div>
 
     <div class="section level2">

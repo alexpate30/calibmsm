@@ -100,7 +100,8 @@ Confidence intervals for the calibration curves can be estimated using bootstrap
 The calibration curves can be plotted using \code{\link{plot.calib_pv}}.
 }
 \examples{
-# Using competing risks data out of initial state (see vignette: comparison-with-graphical-calibration-curves-in-competing-risk-setting).
+# Using competing risks data out of initial state
+# (see vignette: comparison-with-graphical-calibration-curves-in-competing-risk-setting).
 # Estimate pseudo-value calibration curves for the predicted transition
 # probabilities at time t = 1826, when predictions were made at time
 # s = 0 in state j = 1. These predicted transition probabilities are stored in tp.cmprsk.j0.

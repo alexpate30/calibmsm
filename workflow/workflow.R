@@ -56,10 +56,10 @@ usethis::use_import_from("VGAM", "s")
 ### Create first vignette
 ###
 usethis::use_vignette("overview")
-usethis::use_vignette("vigtest")
 usethis::use_vignette("Comparison-with-graphical-calibration-curves-in-competing-risks-setting")
+usethis::use_article("testarticle")
 devtools::install(build_vignettes = TRUE)
-browseVignettes()
+browseVignettes("calibmsm")
 
 ###
 ### Add file for creation of data

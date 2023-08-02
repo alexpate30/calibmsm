@@ -44,6 +44,7 @@
     <a class="dropdown-item" href="../articles/BLR-IPCW-manual-bootstrap.html">BLR-IPCW-manual-bootstrap</a>
     <a class="dropdown-item" href="../articles/Comparison-with-graphical-calibration-curves-in-competing-risks-setting.html">Comparison-with-graphical-calibration-curves-in-competing-risks-setting</a>
     <a class="dropdown-item" href="../articles/Evaluation-of-estimation-of-IPCWs.html">Evaluation-of-estimation-of-IPCWs</a>
+    <a class="dropdown-item" href="../articles/testarticle.html">testarticle</a>
     <a class="dropdown-item" href="../articles/overview.html">Overview</a>
   </div>
 </li>
@@ -197,20 +198,20 @@ model (Cox model) or the functional form of the predictor variables
 variables are assumed to have linear effects on the hazard, and there
 are no interaction terms. Potential issues with using the internal
 process for estimating the weights is exemplified in
-<code><a href="../articles/Evaluation-of-estimation-of-IPCWs.html">vignette("Evaluation-of-estimation-of-IPCWs")</a></code>. We therefore
+<code>article("Evaluation-of-estimation-of-IPCWs")</code>. We therefore
 encourage users to explore their data and produce a more suitable model
 to estimate the weights. Please see <code>vignette("Overview")</code>
 for a definition of the estimand for the weights and how to estimate
 them.</p>
 <p>Once a function for estimating the weights has been defined, the
-internal bootstrapping procedure can then be utilised withthis function,
-specified through the <code>w.function</code> argument. This function
-must contain the parameters present in the <code>calc_weights</code>
-function, even if you do not plan to use these parameters. These
-parameters are then specified through arguments with the <code>w.</code>
-prefix in <code>calib_blr</code>. Specification of extra parameters not
-in <code>calc_weights</code> is also allowed. These parameters are
-specified through the <code>...</code> argument in
+internal bootstrapping procedure can then be utilised with this
+function, specified through the <code>w.function</code> argument. This
+function must contain the parameters present in the
+<code>calc_weights</code> function, even if you do not plan to use these
+parameters. These parameters are then specified through arguments with
+the <code>w.</code> prefix in <code>calib_blr</code>. Specification of
+extra parameters not in <code>calc_weights</code> is also allowed. These
+parameters are specified through the <code>...</code> argument in
 <code>calc_clib_blr</code>. We showcase this by defining a new function
 <code>calc_weights_manual</code>. For this example, we specify this to
 be the same as <code>calc_weights</code>. In practice, we do not

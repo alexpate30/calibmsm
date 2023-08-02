@@ -9,7 +9,7 @@ vignette: >
 
 Please click the link below to access the *Overview* vignette, which is a pdf document and therefore cannot be directly viewed through this html vignette.
 
-<!--- <iframe src="overview_vignette_manual.pdf"/> -->
+<!--- <iframe src="overview_vignette.pdf"/> -->
 
 [Vignette: Overview](overview_vignette.pdf){target="_blank"}
 

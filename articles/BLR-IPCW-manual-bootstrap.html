@@ -88,9 +88,8 @@ validation datasets <code>ebmtcal</code> and <code>msebmtcal</code>, and
 the predicted transition probabilities out of state <code>j = 1</code>
 made at time <code>s = 0</code> from the multistate model
 (<code>tps0</code>). We also set the time at which we want to evaluate
-the transition probabilities <code>t</code>. Please refer to
-<code>article("Overview")</code> for a more detailed description of this
-data.</p>
+the transition probabilities <code>t</code>. Please refer to the <a href="https://alexpate30.github.io/calibmsm/articles/overview.html">Overview
+vignette</a> for a more detailed description of this data.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">101</span><span class="op">)</span></span>
 <span></span>
@@ -148,8 +147,8 @@ procedure<a class="anchor" aria-label="anchor" href="#confidence-intervals-for-b
 </h2>
 <p>We now remind ourselves of the procedure for generating a confidence
 interval, and estimate a confidence interval for a BLR-IPCW calibration
-curve using the internal bootstrapping procedure, as in done in
-<code>vignette("Overview")</code>.</p>
+curve using the internal bootstrapping procedure, as in done in the <a href="https://alexpate30.github.io/calibmsm/articles/overview.html">Overview
+vignette</a>.</p>
 <ol style="list-style-type: decimal">
 <li>Resample validation dataset with replacement</li>
 <li>Landmark the dataset for assessment of calibration</li>
@@ -200,9 +199,9 @@ are no interaction terms. Potential issues with using the internal
 process for estimating the weights is exemplified in
 <code>article("Evaluation-of-estimation-of-IPCWs")</code>. We therefore
 encourage users to explore their data and produce a more suitable model
-to estimate the weights. Please see <code>vignette("Overview")</code>
-for a definition of the estimand for the weights and how to estimate
-them.</p>
+to estimate the weights. Please see the <a href="https://alexpate30.github.io/calibmsm/articles/overview.html">Overview
+vignette</a> for a definition of the estimand for the weights and how to
+estimate them.</p>
 <p>Once a function for estimating the weights has been defined, the
 internal bootstrapping procedure can then be utilised with this
 function, specified through the <code>w.function</code> argument. This

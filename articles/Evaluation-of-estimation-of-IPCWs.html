@@ -81,15 +81,16 @@
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
 <p>When assessing calibration using the BLR-IPCW and pseudo-value
-approaches (see <code>vignette("Overview")</code>), we found
-predominately good agreement between the calibration curves except when
-assessing the calibration of the transition probabilities from state
-<span class="math inline">\(j = 1\)</span> into state <span class="math inline">\(k = 3\)</span>. Given we do not know the true
-calibration of these transition probabilities we cannot say for sure
-which calibration curve is correct. However, we can take steps to test
-the assumptions made by each of the methods, which may help guide which
-method of assessing calibration should be used in this particular
-clinical example.</p>
+approaches (see the <a href="https://alexpate30.github.io/calibmsm/articles/overview.html">Overview
+vignette</a>), we found predominately good agreement between the
+calibration curves except when assessing the calibration of the
+transition probabilities from state <span class="math inline">\(j =
+1\)</span> into state <span class="math inline">\(k = 3\)</span>. Given
+we do not know the true calibration of these transition probabilities we
+cannot say for sure which calibration curve is correct. However, we can
+take steps to test the assumptions made by each of the methods, which
+may help guide which method of assessing calibration should be used in
+this particular clinical example.</p>
 </div>
 <div class="section level2">
 <h2 id="methods-and-results">Methods and Results<a class="anchor" aria-label="anchor" href="#methods-and-results"></a>
@@ -103,10 +104,10 @@ transplant more recently have a shorter administrative censoring time,
 given they have a shorter maximum follow up.</p>
 <p>When calculating pseudo-values, we can completely remove the impact
 of this variable by calculating pseudo-values within subgroups defined
-by this variable. In <code>vignette("Overview")</code> we also further
-group patients by their predicted risk in a further three subgroups. We
-therefore believe the assumption for the pseudo-value approach is likely
-to hold.</p>
+by this variable. In the <a href="https://alexpate30.github.io/calibmsm/articles/overview.html">Overview
+vignette</a> we also further group patients by their predicted risk in a
+further three subgroups. We therefore believe the assumption for the
+pseudo-value approach is likely to hold.</p>
 <p>When implementing the BLR-IPCW approach, the most important step is
 estimation of the weights. In <code>calibmsm</code> this is done
 internally using a cox proportional hazards model. We fit this model to
@@ -193,10 +194,11 @@ this model in practice, we would recommend assessing calibration using
 the pseudo-value approach. This is not a fundamental problem with the
 BLR-IPCW approach, but an issue with estimating the IPCWs, which if
 estimated correctly should result in unbiased calibration curves. As
-suggested in <code>vignette("Overview")</code>, more simulation studies
-are required to rigorously test the robustness of each method when their
-assumptions do not hold, and in what scenario each method is most likely
-to give biased calibration curves.</p>
+suggested in the <a href="https://alexpate30.github.io/calibmsm/articles/overview.html">Overview
+vignette</a>, more simulation studies are required to rigorously test
+the robustness of each method when their assumptions do not hold, and in
+what scenario each method is most likely to give biased calibration
+curves.</p>
 <p>This vignette has also highlighted the limitations of using a cox
 proportional hazards model to estimate the IPCWs. The
 <code>calibmsm</code> package has been developed to provide a set of
@@ -205,13 +207,16 @@ focused package for estimating IPCWs. We urge users to develop better
 models for estimating the IPCWs and specify them using the
 <code>weights</code> argument. A process for estimating confidence
 intervals using bootstrapping when manually estimating the IPCWs is
-exemplified in <code>vignette("BLR-IPCW-manual-boostrap")</code>.</p>
+exemplified in the <a href="BLR-IPCW-manual-boostrap.html">BLR-IPCW-manual-boostrap
+vignette</a>.</p>
 <p>One final point, it is peculiar that this issue only causes
 discordance between the calibration plots out of state <span class="math inline">\(j = 0\)</span> into state <span class="math inline">\(k = 3\)</span>, whereas for all other states <span class="math inline">\(k\)</span> there is closer agreement between the
-BLR-IPCW and pseudo-value calibration curves (see Figures 2 and 3 in
-<code>vignette("Overview")</code>). We hypothesise that this may be due
-to the fact no individuals move into state <span class="math inline">\(3\)</span> after <span class="math inline">\(100\)</span> days. We believe this is likely due
-to the definition of an adverse event needing to happen within <span class="math inline">\(100\)</span> days post transplant, but cannot be
+BLR-IPCW and pseudo-value calibration curves (see Figures 2 and 3 in the
+<a href="https://alexpate30.github.io/calibmsm/articles/overview.html">Overview
+vignette</a>). We hypothesise that this may be due to the fact no
+individuals move into state <span class="math inline">\(3\)</span> after
+<span class="math inline">\(100\)</span> days. We believe this is likely
+due to the definition of an adverse event needing to happen within <span class="math inline">\(100\)</span> days post transplant, but cannot be
 sure as the authors of this package had no involvement in data
 collection. It is possible that the application of incorrectly estimated
 weights, in combination with predicted risks of the outcome state which

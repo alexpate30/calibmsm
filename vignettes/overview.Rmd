@@ -11,5 +11,5 @@ Please click the link below to access the *overview* vignette, which is rendered
 
 <!--- <iframe src="overview_vignette_manual.pdf"/> -->
 
-[Vignette: overview](overview_vignette_manual.pdf){target="_blank"}
+[Vignette: Overview](overview_vignette_manual.pdf){target="_blank"}
 

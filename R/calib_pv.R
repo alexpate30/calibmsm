@@ -73,15 +73,6 @@ calc_aj <- function(data.mstate, tmat, t, j){
 #' @param j Landmark state at which predictions were made
 calc_pv_aj <- function(person_id.eval, data.mstate, obs.aj, tmat, n.cohort, t, j){
 
-  # person_id.eval <- 3
-  # data.mstate <- data.mstate.lmk.js
-  # tmat <- tmat.lmk.js
-  # obs.aj <- obs.aj.save
-  # t <- 1826 - s
-  # n.cohort <- nrow(data.raw.lmk.js)
-  # j <- 3
-  # s <- 100
-
   ### Calculate AJ estimate without patient in dataset
   est.drop.pat <- calc_aj(subset(data.mstate, id != person_id.eval),
                           tmat = tmat,
@@ -169,7 +160,7 @@ calc_pv_aj <- function(person_id.eval, data.mstate, obs.aj, tmat, n.cohort, t, j
 #'
 #' @examples
 #' # Using competing risks data out of initial state
-#' (see vignette: comparison-with-graphical-calibration-curves-in-competing-risk-setting).
+#' # (see vignette: comparison-with-graphical-calibration-curves-in-competing-risk-setting).
 #' # Estimate pseudo-value calibration curves for the predicted transition
 #' # probabilities at time t = 1826, when predictions were made at time
 #' # s = 0 in state j = 1. These predicted transition probabilities are stored in tp.cmprsk.j0.

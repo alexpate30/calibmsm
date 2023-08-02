@@ -10,3 +10,4 @@
 ^codecov\.yml$
 ^data-raw$
 ^cran-comments\.md$
+^vignettes/articles$

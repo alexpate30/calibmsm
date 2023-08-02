@@ -2,10 +2,6 @@
 title: "Comparison-with-graphical-calibration-curves-in-competing-risks-setting"
 output: rmarkdown::html_vignette
 bibliography: refs.bib
-vignette: >
-  %\VignetteIndexEntry{Comparison-with-graphical-calibration-curves-in-competing-risks-setting}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
@@ -54,7 +50,7 @@ dat.calib.blr <-
                  rcs.nk = 3,
                  w.covs = c("year", "agecl", "proph", "match"),
                  CI = 95,
-                 CI.R.boot = 20)
+                 CI.R.boot = 200)
 
 ### Turn into plot and print
 plot.calibmsm.blr <- plot(dat.calib.blr, combine = TRUE, nrow = 2, ncol = 3)
@@ -99,14 +95,6 @@ Finally we assess the calibration of this competing risks model using the graphi
 ```{r, echo = FALSE}
 calc.calib.gcc.mod <- function(data.mstate, data.raw, j, s, t, p.est, nk = 3){
 
-        # data.mstate <- msebmtcal.cmprsk
-        # data.raw <- ebmtcal
-        # p.est <- tp.cmprsk.j0[,paste("pstate", 1:6, sep = "")]
-        # j <- 1
-        # s <- 0
-        # t <- 1826
-        # nk <- 3
-
   ### Assign colnames to p.est
   colnames(p.est) <- paste("p.est", 1:ncol(p.est), sep = "")
 
@@ -133,7 +121,7 @@ calc.calib.gcc.mod <- function(data.mstate, data.raw, j, s, t, p.est, nk = 3){
   data.raw <- cbind(data.raw, p.est[,valid.transitions], p.est.cll)
 
   ### Finally, identify individuals which are censored before experiencing any events (used to maniuplate data for Fine-Gray regression later)
-  ids.cens  <- data.mstate |> base::subset(from == j) |> dplyr::group_by(id) |> dplyr::summarize(sum = sum(status)) |> base::subset(sum == 0) |> dplyr::pull(id)
+  ids.cens  <- data.mstate |> base::subset(from == j) |> dplyr::group_by(id) |> dplyr::summarize(sum = sum(status)) |> base::subset(sum == 0) |>     dplyr::pull(id)
 
   ###
   ### Produce calibration plots for each possible transition

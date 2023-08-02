@@ -141,4 +141,9 @@ usethis::use_cran_comments()
 devtools::check(remote = TRUE, manual = TRUE)
 devtools::check_win_devel()
 
+###
+### Update version
+###
+usethis::use_release_issue()
+usethis::use_version('major')
 

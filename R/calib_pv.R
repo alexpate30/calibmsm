@@ -578,7 +578,6 @@ calib_pv <- function(data.mstate,
 
         ### Assign the state of interest
         state.k <- as.numeric(transitions.out[state])
-        print(paste("Calculate pseudo values for state = ", state.k, Sys.time()))
 
         ### Split data by predicted risk of state k
         data.pctls[[state]] <- base::split(data.raw.lmk.js,

@@ -13,4 +13,16 @@ knitr::opts_chunk$set(
 library(calibmsm)
 ```
 
-PRINT TEST!!!
+Test link to [companion vignette](BLR-IPCW-manual-bootstrap.html).
+
+Test link to [overview vignette](Overview.html).
+
+Test link to [overview vignette 2](library/calibmsm/doc/Overview.html).
+
+Test link to [overview vignette 3](library/calibmsm/html/Overview.html).
+
+Test link to [overview vignette 4](library/calibmsm/doc/overview_vignette.pdf).
+
+Test link to [overview vignette 5](library/calibmsm/html/overview_vignette.pdf).
+
+Test link to [overview vignette 6](https://github.com/alexpate30/calibmsm/blob/master/vignettes/overview_vignette.pdf).

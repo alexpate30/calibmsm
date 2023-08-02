@@ -44,7 +44,6 @@
     <a class="dropdown-item" href="../articles/BLR-IPCW-manual-bootstrap.html">BLR-IPCW-manual-bootstrap</a>
     <a class="dropdown-item" href="../articles/Comparison-with-graphical-calibration-curves-in-competing-risks-setting.html">Comparison-with-graphical-calibration-curves-in-competing-risks-setting</a>
     <a class="dropdown-item" href="../articles/Evaluation-of-estimation-of-IPCWs.html">Evaluation-of-estimation-of-IPCWs</a>
-    <a class="dropdown-item" href="../articles/testarticle.html">testarticle</a>
     <a class="dropdown-item" href="../articles/overview.html">Overview</a>
   </div>
 </li>
@@ -83,7 +82,17 @@
 <p>This vignette showcases how to manually apply a bootstrap procedure
 to estimate a confidence interval for the BLR-IPCW calibration curves
 when using a custom function to estimate the inverse probability of
-censoring weights. We start by reminding ourselves of the EBMT <span class="citation">(Wreede, Fiocco, and Putter 2011; EBMT 2023)</span>
+censoring weights. We use data from the European Society for Blood and
+Marrow Transplantation <span class="citation">(EBMT 2023)</span>, which
+contains multistate survival data after a transplant for patients with
+blood cancer. The start of follow up is the day of the transplant and
+the initial state is alive and in remission. There are three
+intermediate events (<span class="math inline">\(2\)</span>: recovery,
+<span class="math inline">\(3\)</span>: adverse event, or <span class="math inline">\(4\)</span>: recovery + adverse event), and two
+absorbing states (<span class="math inline">\(5\)</span>: relapse and
+<span class="math inline">\(6\)</span>: death). This data was originally
+made available from the <code>mstate</code> package <span class="citation">(Wreede, Fiocco, and Putter 2011)</span>.</p>
+<p>We start by reminding ourselves of the EBMT <span class="citation">(Wreede, Fiocco, and Putter 2011; EBMT 2023)</span>
 validation datasets <code>ebmtcal</code> and <code>msebmtcal</code>, and
 the predicted transition probabilities out of state <code>j = 1</code>
 made at time <code>s = 0</code> from the multistate model

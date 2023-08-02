@@ -44,7 +44,6 @@
     <a class="dropdown-item" href="../articles/BLR-IPCW-manual-bootstrap.html">BLR-IPCW-manual-bootstrap</a>
     <a class="dropdown-item" href="../articles/Comparison-with-graphical-calibration-curves-in-competing-risks-setting.html">Comparison-with-graphical-calibration-curves-in-competing-risks-setting</a>
     <a class="dropdown-item" href="../articles/Evaluation-of-estimation-of-IPCWs.html">Evaluation-of-estimation-of-IPCWs</a>
-    <a class="dropdown-item" href="../articles/testarticle.html">testarticle</a>
     <a class="dropdown-item" href="../articles/overview.html">Overview</a>
   </div>
 </li>
@@ -80,21 +79,37 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p>When assessing calibration using the BLR-IPCW and pseudo-value
-approaches (see the <a href="https://alexpate30.github.io/calibmsm/articles/overview.html">Overview
-vignette</a>), we found predominately good agreement between the
-calibration curves except when assessing the calibration of the
-transition probabilities from state <span class="math inline">\(j =
-1\)</span> into state <span class="math inline">\(k = 3\)</span>. Given
-we do not know the true calibration of these transition probabilities we
-cannot say for sure which calibration curve is correct. However, we can
-take steps to test the assumptions made by each of the methods, which
-may help guide which method of assessing calibration should be used in
-this particular clinical example.</p>
+<p>This vignette explores whether the assumptions of the BLR-IPCW and
+psuedo-value methods for assessing calibration are met in the
+illustrative example in the <a href="https://alexpate30.github.io/calibmsm/articles/overview.html">Overview
+vignette</a>. We use data from the European Society for Blood and Marrow
+Transplantation <span class="citation">(EBMT 2023)</span>, which
+contains multistate survival data after a transplant for patients with
+blood cancer. The start of follow up is the day of the transplant and
+the initial state is alive and in remission. There are three
+intermediate events (<span class="math inline">\(2\)</span>: recovery,
+<span class="math inline">\(3\)</span>: adverse event, or <span class="math inline">\(4\)</span>: recovery + adverse event), and two
+absorbing states (<span class="math inline">\(5\)</span>: relapse and
+<span class="math inline">\(6\)</span>: death). This data was originally
+made available from the <code>mstate</code> package <span class="citation">(Wreede, Fiocco, and Putter 2011)</span>.</p>
+<p>In the illustrative example in the <a href="https://alexpate30.github.io/calibmsm/articles/overview.html">Overview
+vignette</a>, we found predominately good agreement between the BLR-IPCW
+and pseudo-value calibration curves, except when assessing the
+calibration of the transition probabilities from state <span class="math inline">\(j = 1\)</span> into state <span class="math inline">\(k = 3\)</span>. Given we do not know the true
+calibration of these transition probabilities we cannot say for sure
+which calibration curve is correct. However, we can take steps to test
+the assumptions made by each of the methods, which may help guide which
+method of assessing calibration should be used in this particular
+clinical example. We suggest package users take similar steps to explore
+which method may be most appropriate in their particular clinical
+context.</p>
 </div>
 <div class="section level2">
 <h2 id="methods-and-results">Methods and Results<a class="anchor" aria-label="anchor" href="#methods-and-results"></a>
 </h2>
+<p>We start by reminding ourselves of the EBMT <span class="citation">(Wreede, Fiocco, and Putter 2011; EBMT 2023)</span>
+validation dataset <code>ebmtcal</code>. Please refer to the <a href="https://alexpate30.github.io/calibmsm/articles/overview.html">Overview
+vignette</a> for a more detailed description of this data.</p>
 <p>BLR-IPCW requires that the outcome, <span class="math inline">\(I_{k}(t)\)</span>, is independent from the
 censoring mechanism in the re-weighted population. Psuedo-values require
 non-informative censoring within the subgroups within which they are
@@ -105,14 +120,14 @@ given they have a shorter maximum follow up.</p>
 <p>When calculating pseudo-values, we can completely remove the impact
 of this variable by calculating pseudo-values within subgroups defined
 by this variable. In the <a href="https://alexpate30.github.io/calibmsm/articles/overview.html">Overview
-vignette</a> we also further group patients by their predicted risk in a
-further three subgroups. We therefore believe the assumption for the
+vignette</a> we also further grouped patients by their predicted risk in
+a further three subgroups. We therefore believe the assumption for the
 pseudo-value approach is likely to hold.</p>
 <p>When implementing the BLR-IPCW approach, the most important step is
-estimation of the weights. In <code>calibmsm</code> this is done
-internally using a cox proportional hazards model. We fit this model to
-the <code>ebmtcal</code> data manually to assess how well it has been
-specified.</p>
+estimation of the inverse probability of censoring weights (IPCWs). In
+<code>calibmsm</code> this is done internally using a cox proportional
+hazards model. We fit this model to the <code>ebmtcal</code> data again
+here to assess how well it has been specified.</p>
 <p>We start by loading the <code>ebmtcal</code> data.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">101</span><span class="op">)</span></span>
@@ -136,9 +151,8 @@ specified.</p>
 <span><span class="co">#&gt; 5    no    gender mismatch    114        0</span></span>
 <span><span class="co">#&gt; 6    no no gender mismatch   1427        1</span></span></code></pre></div>
 <p>This is followed by fitting a cox model to predict probability of
-being censored. This is the model used to estimate the inverse
-probability of censoring weights (IPCWs) when implementing the BLR-IPCW
-method using <code>calib_blr</code> and setting
+being censored. This below code chunk is what happens internally in
+<code>calib_blr</code> if one sets
 <code>w.covs = c("year", "agecl", "proph", "match")</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model.ipcw</span> <span class="op">&lt;-</span> <span class="fu">survival</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html" class="external-link">coxph</a></span><span class="op">(</span><span class="fu">survival</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">dtcens</span>, <span class="va">dtcens.s</span><span class="op">)</span> <span class="op">~</span> <span class="va">year</span> <span class="op">+</span> <span class="va">agecl</span> <span class="op">+</span> <span class="va">proph</span> <span class="op">+</span> <span class="va">match</span>, data <span class="op">=</span> <span class="va">ebmtcal</span><span class="op">)</span></span>
@@ -180,20 +194,24 @@ of transplant
 <div class="section level2">
 <h2 id="discussion">Discussion<a class="anchor" aria-label="anchor" href="#discussion"></a>
 </h2>
-<p>Clearly the proportional hazards assumption does not hold. This means
-the model for estimating the weights is misspecified and the estimated
-IPCWs are likely to be wrong. While the variable year of transplant
-could be removed from the model for estimating the weights to help
-ensure the proportional hazards assumption is met, we know this variable
-is highly predictive of being censored, and therefore omitting this key
-predictor would also result in a misspecified model and incorrect
-weights. We would therefore conclude that it is unlikely that the
-assumptions hold for the BLR-IPCW method, which could be resulting in
-biased calibration curves in this particular scenario. If developing
+<p>For the proportional hazards assumption to hold, the Kaplan-Meier
+survival curves within in each group should be proprtional to eachother
+over every follow up time. Clearly the proportional hazards assumption
+does not hold. This means the model for estimating the weights is
+misspecified and the estimated IPCWs may be wrong. While the variable
+year of transplant could be removed from the model for estimating the
+weights to help ensure the proportional hazards assumption is met, we
+know this variable is highly predictive of being censored, and therefore
+omitting this key predictor would also result in a misspecified model
+and incorrect weights.</p>
+<p>We would therefore conclude that it is unlikely that the assumptions
+hold for the BLR-IPCW method, which could be resulting in biased
+calibration curves in this particular clinical example. If developing
 this model in practice, we would recommend assessing calibration using
 the pseudo-value approach. This is not a fundamental problem with the
-BLR-IPCW approach, but an issue with estimating the IPCWs, which if
-estimated correctly should result in unbiased calibration curves. As
+BLR-IPCW approach, but an issue with estimating the IPCWs under the
+censoring mechanism in this example. If the IPCWs can be estimated
+correctly, this should result in unbiased calibration curves. As
 suggested in the <a href="https://alexpate30.github.io/calibmsm/articles/overview.html">Overview
 vignette</a>, more simulation studies are required to rigorously test
 the robustness of each method when their assumptions do not hold, and in
@@ -215,14 +233,25 @@ BLR-IPCW and pseudo-value calibration curves (see Figures 2 and 3 in the
 <a href="https://alexpate30.github.io/calibmsm/articles/overview.html">Overview
 vignette</a>). We hypothesise that this may be due to the fact no
 individuals move into state <span class="math inline">\(3\)</span> after
-<span class="math inline">\(100\)</span> days. We believe this is likely
-due to the definition of an adverse event needing to happen within <span class="math inline">\(100\)</span> days post transplant, but cannot be
+<span class="math inline">\(100\)</span> days. We believe this is due to
+the definition of an adverse event needing to happen within <span class="math inline">\(100\)</span> days post transplant, but cannot be
 sure as the authors of this package had no involvement in data
 collection. It is possible that the application of incorrectly estimated
 weights, in combination with predicted risks of the outcome state which
 behaves differently to all others, is the reason behind this behaviour.
 However, further exploration of this is beyond the scope of this
 vignette.</p>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-EBMT2023" class="csl-entry">
+EBMT. 2023. <span>“<span class="nocase">Data from the European Society
+for Blood and Marrow Transplantation</span>.”</span> <a href="https://search.r-project.org/CRAN/refmans/mstate/html/EBMT-data.html" class="external-link">https://search.r-project.org/CRAN/refmans/mstate/html/EBMT-data.html</a>.
+</div>
+<div id="ref-DeWreede2011" class="csl-entry">
+Wreede, Liesbeth C de, Marta Fiocco, and Hein Putter. 2011. <span>“<span class="nocase">mstate: An R Package for the Analysis of Competing Risks
+and Multi-State Models</span>.”</span> <em>Journal of Statistical
+Software</em> 38 (7). <a href="https://cran.r-project.org/package=mstate" class="external-link">https://cran.r-project.org/package=mstate</a>.
+</div>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

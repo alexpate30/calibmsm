@@ -76,7 +76,8 @@ dat.calib.pv <-
                    dplyr::select(any_of(paste("pstate", 1:6, sep = ""))),
                  curve.type = "rcs",
                  rcs.nk = 3,
-                 n.pctls = 9,
+                 group.vars = c("year"),
+                 n.pctls = 3,
                  CI = 95,
                  CI.type = "parametric")
 
@@ -92,7 +93,7 @@ plot.calibmsm.pv
 
 Finally we assess the calibration of this competing risks model using the graphical calibration curves approach of @Austin2022. A custom function is written to do this, which estimates the calibration curves and returns a list of plots using `ggplot2`.
 
-```{r, echo = FALSE}
+```{r}
 calc.calib.gcc.mod <- function(data.mstate, data.raw, j, s, t, p.est, nk = 3){
 
   ### Assign colnames to p.est
@@ -206,6 +207,7 @@ calc.calib.gcc.mod <- function(data.mstate, data.raw, j, s, t, p.est, nk = 3){
   ### Return plots
   return(plots.list)
 }
+
 ```
 
 This function is then applied to estimate the calibration curves and create the plots.
@@ -224,10 +226,10 @@ plot.gcc.rcs.list <- calc.calib.gcc.mod(data.mstate = msebmtcal.cmprsk,
 plot.gcc.rcs <- ggpubr::ggarrange(plotlist = plot.gcc.rcs.list)
 ```
 
-```{r, fig.width = 7.5, fig.height = 5, fig.fullwidth = TRUE, fig.cap = "Figure 3: Calibration plots for competing risks model out of the starting state when using graphical calibration curves", fig.topcaption = TRUE}
+```{r, fig.width = 7.5, fig.height = 5, fig.fullwidth = TRUE, fig.cap = "Figure 3: Calibration plots for competing risks model out of the starting state when using graphical calibration curves"}
 plot.gcc.rcs
 ```
 
 # Comarpsion of results
 
-The calibration of the transition probabilities is similar irrespective of the method used to assess calibration. This is with the exception of the calibration of the transition probabilities into state 3 when using the BLR-IPCW approach. Possible reasons for this are discussed in the [Evaluation-of-estimation-of-IPCWs vignette](Evaluation-of-estimation-of-IPCWs.html). Note that the graphical calibration curves approach does not provide a way to assess the calibration of state 1. 
+The calibration of the transition probabilities is similar irrespective of the method used to assess calibration. This is with the exception of the calibration of the transition probabilities into state 3 when using the BLR-IPCW approach. Possible reasons for this are discussed in the [Evaluation-of-estimation-of-IPCWs vignette](Evaluation-of-estimation-of-IPCWs.html). In practice, it could be worth assessing calibration using a variety of approaches. If agreement is found, this would provide reassurance over the assessment of calibration. Note that the graphical calibration curves approach does not provide a way to assess the calibration of state 1, hence the difference in the number of plots.

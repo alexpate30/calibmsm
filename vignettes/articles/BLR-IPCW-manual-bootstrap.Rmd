@@ -13,7 +13,9 @@ knitr::opts_chunk$set(
 
 # Data preperation
 
-This vignette showcases how to manually apply a bootstrap procedure to estimate a confidence interval for the BLR-IPCW calibration curves when using a custom function to estimate the inverse probability of censoring weights. We start by reminding ourselves of the EBMT [@DeWreede2011; @EBMT2023] validation datasets `ebmtcal` and `msebmtcal`, and the predicted transition probabilities out of state `j = 1` made at time `s = 0` from the multistate model (`tps0`). We also set the time at which we want to evaluate the transition probabilities `t`. Please refer to the [Overview vignette](https://alexpate30.github.io/calibmsm/articles/overview.html) for a more detailed description of this data.
+This vignette showcases how to manually apply a bootstrap procedure to estimate a confidence interval for the BLR-IPCW calibration curves when using a custom function to estimate the inverse probability of censoring weights.  We use data from the European Society for Blood and Marrow Transplantation [@EBMT2023], which contains multistate survival data after a transplant for patients with blood cancer. The start of follow up is the day of the transplant and the initial state is alive and in remission. There are three intermediate events ($2$: recovery, $3$: adverse event, or $4$: recovery + adverse event), and two absorbing states ($5$: relapse and $6$: death). This data was originally made available from the `mstate` package [@DeWreede2011].
+
+We start by reminding ourselves of the EBMT [@DeWreede2011; @EBMT2023] validation datasets `ebmtcal` and `msebmtcal`, and the predicted transition probabilities out of state `j = 1` made at time `s = 0` from the multistate model (`tps0`). We also set the time at which we want to evaluate the transition probabilities `t`. Please refer to the [Overview vignette](https://alexpate30.github.io/calibmsm/articles/overview.html) for a more detailed description of this data.
 
 ```{r}
 set.seed(101)

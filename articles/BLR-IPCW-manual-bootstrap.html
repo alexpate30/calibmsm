@@ -80,10 +80,10 @@
 <div class="section level2">
 <h2 id="data-preperation">Data preperation<a class="anchor" aria-label="anchor" href="#data-preperation"></a>
 </h2>
-<p>This vignette compares showcases how to manually apply a bootstrap
-procedure to estimate a confidence interval for the BLR-IPCW calibration
-curves when using a custom function to estimate the inverse probability
-of censoring weights. We start by reminding ourselves of the EBMT <span class="citation">(Wreede, Fiocco, and Putter 2011; EBMT 2023)</span>
+<p>This vignette showcases how to manually apply a bootstrap procedure
+to estimate a confidence interval for the BLR-IPCW calibration curves
+when using a custom function to estimate the inverse probability of
+censoring weights. We start by reminding ourselves of the EBMT <span class="citation">(Wreede, Fiocco, and Putter 2011; EBMT 2023)</span>
 validation datasets <code>ebmtcal</code> and <code>msebmtcal</code>, and
 the predicted transition probabilities out of state <code>j = 1</code>
 made at time <code>s = 0</code> from the multistate model
@@ -146,8 +146,8 @@ vignette</a> for a more detailed description of this data.</p>
 procedure<a class="anchor" aria-label="anchor" href="#confidence-intervals-for-blr-ipcw-using-internal-bootstrapping-procedure"></a>
 </h2>
 <p>We now remind ourselves of the procedure for generating a confidence
-interval, and estimate a confidence interval for a BLR-IPCW calibration
-curve using the internal bootstrapping procedure, as in done in the <a href="https://alexpate30.github.io/calibmsm/articles/overview.html">Overview
+interval, and estimate confidence intervals for the BLR-IPCW calibration
+curves using the internal bootstrapping procedure, as is done in the <a href="https://alexpate30.github.io/calibmsm/articles/overview.html">Overview
 vignette</a>.</p>
 <ol style="list-style-type: decimal">
 <li>Resample validation dataset with replacement</li>
@@ -160,7 +160,8 @@ predicted transition probabilities (specifically the predicted
 transition probabilities from the non-bootstrapped landmark validation
 dataset)</li>
 </ol>
-<p>The code to produce the confidence interval is as follows:</p>
+<p>The code to produce the calibration curves with confidence intervals
+is as follows:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dat.calib.blr</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="../reference/calib_blr.html">calib_blr</a></span><span class="op">(</span>data.mstate <span class="op">=</span> <span class="va">msebmtcal</span>,</span>
@@ -179,11 +180,10 @@ dataset)</li>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat.calib.blr</span>, combine <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
-<p class="caption">
+<img src="BLR-IPCW-manual-bootstrap_files/figure-html/unnamed-chunk-4-1.png" alt="Figure 2: Calibration plots using BLR-IPCW, confidence interval estimated using manual bootstrap procedure" width="720"><p class="caption">
 Figure 2: Calibration plots using BLR-IPCW, confidence interval
 estimated using manual bootstrap procedure
 </p>
-<img src="BLR-IPCW-manual-bootstrap_files/figure-html/unnamed-chunk-4-1.png" alt="Figure 2: Calibration plots using BLR-IPCW, confidence interval estimated using manual bootstrap procedure" width="720">
 </div>
 </div>
 <div class="section level2">
@@ -196,28 +196,27 @@ model (Cox model) or the functional form of the predictor variables
 <span class="math inline">\(\textbf{Z}\)</span>, where all continuous
 variables are assumed to have linear effects on the hazard, and there
 are no interaction terms. Potential issues with using the internal
-process for estimating the weights is exemplified in
-<code>article("Evaluation-of-estimation-of-IPCWs")</code>. We therefore
-encourage users to explore their data and produce a more suitable model
-to estimate the weights. Please see the <a href="https://alexpate30.github.io/calibmsm/articles/overview.html">Overview
-vignette</a> for a definition of the estimand for the weights and how to
+process for estimating the weights is exemplified in the <a href="Evaluation-of-estimation-of-IPCWs.html">Evaluation-of-estimation-of-IPCWs
+vignette</a>. We therefore encourage users to explore their data and
+produce a more suitable model to estimate the weights. Please see the <a href="https://alexpate30.github.io/calibmsm/articles/overview.html">Overview
+vignette</a> for a definition of the estimand of the weights and how to
 estimate them.</p>
 <p>Once a function for estimating the weights has been defined, the
-internal bootstrapping procedure can then be utilised with this
-function, specified through the <code>w.function</code> argument. This
-function must contain the parameters present in the
-<code>calc_weights</code> function, even if you do not plan to use these
-parameters. These parameters are then specified through arguments with
-the <code>w.</code> prefix in <code>calib_blr</code>. Specification of
-extra parameters not in <code>calc_weights</code> is also allowed. These
-parameters are specified through the <code>...</code> argument in
-<code>calc_clib_blr</code>. We showcase this by defining a new function
-<code>calc_weights_manual</code>. For this example, we specify this to
-be the same as <code>calc_weights</code>. In practice, we do not
-recommend this, as this option to allow the user to specify their own
-function for estimating the weights. Given our choice of function to
-estimate the weights, the calibration curve is the same as that from
-Figure 1, and the confidence interval is a similar size.</p>
+internal bootstrapping procedure can then be applied with this function
+to estimate the weights. This function must contain the parameters that
+are in the <code>calc_weights</code> function, even if you do not plan
+to use these parameters. These parameters are then specified through
+arguments with the <code>w.</code> prefix in <code>calib_blr</code>. The
+user specified function may also contain extra parameters not in
+<code>calc_weights</code>, and these are specified through the
+<code>...</code> argument in <code>clib_blr</code>. We showcase this by
+defining a new function <code>calc_weights_manual</code>. For this
+example, we define it to be the same as <code>calc_weights</code>
+function. In practice, we do not recommend this, as this option is to
+allow the user to specify their own function for estimating the weights.
+Given our choice of function to estimate the weights, the calibration
+curve is the same as that from Figure 1, and the confidence interval is
+a similar size.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">calc_weights_manual</span> <span class="op">&lt;-</span> <span class="fu">calibmsm</span><span class="fu">::</span><span class="va"><a href="../reference/calc_weights.html">calc_weights</a></span></span>
 <span></span>
@@ -239,12 +238,11 @@ Figure 1, and the confidence interval is a similar size.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat.calib.blr.w.function</span>, combine <span class="op">=</span> <span class="cn">TRUE</span>, nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
-<p class="caption">
+<img src="BLR-IPCW-manual-bootstrap_files/figure-html/unnamed-chunk-6-1.png" alt="Figure 2: Calibration plots using BLR-IPCW, confidence interval estimated using internal bootstrap procedure with custom specification of function to estimate the weights" width="720"><p class="caption">
 Figure 2: Calibration plots using BLR-IPCW, confidence interval
 estimated using internal bootstrap procedure with custom specification
 of function to estimate the weights
 </p>
-<img src="BLR-IPCW-manual-bootstrap_files/figure-html/unnamed-chunk-6-1.png" alt="Figure 2: Calibration plots using BLR-IPCW, confidence interval estimated using internal bootstrap procedure with custom specification of function to estimate the weights" width="720">
 </div>
 </div>
 <div class="section level2">
@@ -430,12 +428,14 @@ successful.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat.calib.blr.manual</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
-<p class="caption">
+<img src="BLR-IPCW-manual-bootstrap_files/figure-html/unnamed-chunk-15-1.png" alt="Figure 3: Calibration plots using BLR-IPCW, confidence interval estimated using manual bootstrap procedure" width="720"><p class="caption">
 Figure 3: Calibration plots using BLR-IPCW, confidence interval
 estimated using manual bootstrap procedure
 </p>
-<img src="BLR-IPCW-manual-bootstrap_files/figure-html/unnamed-chunk-15-1.png" alt="Figure 3: Calibration plots using BLR-IPCW, confidence interval estimated using manual bootstrap procedure" width="720">
 </div>
+<p>Code from these examples can be re-utilised, all that is required is
+to specify a function to estimate the inverse probability of censoring
+weights.</p>
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-Canty2022" class="csl-entry">
 Canty, Angelo, and Brian Ripley. 2022. <span>“<span class="nocase">boot:

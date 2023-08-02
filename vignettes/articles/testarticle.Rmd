@@ -23,6 +23,6 @@ Test link to [overview vignette 3](library/calibmsm/html/Overview.html).
 
 Test link to [overview vignette 4](library/calibmsm/doc/overview_vignette.pdf).
 
-Test link to [overview vignette 5](library/calibmsm/html/overview_vignette.pdf).
+Test link to [overview vignette 5](https://alexpate30.github.io/calibmsm/articles/overview.html).
 
 Test link to [overview vignette 6](https://github.com/alexpate30/calibmsm/blob/master/vignettes/overview_vignette.pdf).

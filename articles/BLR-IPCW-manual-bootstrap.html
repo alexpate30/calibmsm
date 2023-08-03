@@ -97,7 +97,7 @@ validation datasets <code>ebmtcal</code> and <code>msebmtcal</code>, and
 the predicted transition probabilities out of state <code>j = 1</code>
 made at time <code>s = 0</code> from the multistate model
 (<code>tps0</code>). We also set the time at which we want to evaluate
-the transition probabilities <code>t</code>. Please refer to the <a href="https://alexpate30.github.io/calibmsm/articles/overview.html">Overview
+the transition probabilities <code>t</code>. Please refer to the <a href="https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf">Overview
 vignette</a> for a more detailed description of this data.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">101</span><span class="op">)</span></span>
@@ -156,7 +156,7 @@ procedure<a class="anchor" aria-label="anchor" href="#confidence-intervals-for-b
 </h2>
 <p>We now remind ourselves of the procedure for generating a confidence
 interval, and estimate confidence intervals for the BLR-IPCW calibration
-curves using the internal bootstrapping procedure, as is done in the <a href="https://alexpate30.github.io/calibmsm/articles/overview.html">Overview
+curves using the internal bootstrapping procedure, as is done in the <a href="https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf">Overview
 vignette</a>.</p>
 <ol style="list-style-type: decimal">
 <li>Resample validation dataset with replacement</li>
@@ -207,7 +207,7 @@ variables are assumed to have linear effects on the hazard, and there
 are no interaction terms. Potential issues with using the internal
 process for estimating the weights is exemplified in the <a href="Evaluation-of-estimation-of-IPCWs.html">Evaluation-of-estimation-of-IPCWs
 vignette</a>. We therefore encourage users to explore their data and
-produce a more suitable model to estimate the weights. Please see the <a href="https://alexpate30.github.io/calibmsm/articles/overview.html">Overview
+produce a more suitable model to estimate the weights. Please see the <a href="https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf">Overview
 vignette</a> for a definition of the estimand of the weights and how to
 estimate them.</p>
 <p>Once a function for estimating the weights has been defined, the

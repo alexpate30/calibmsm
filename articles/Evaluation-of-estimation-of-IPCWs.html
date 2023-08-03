@@ -92,7 +92,7 @@ intermediate events (<span class="math inline">\(2\)</span>: recovery,
 absorbing states (<span class="math inline">\(5\)</span>: relapse and
 <span class="math inline">\(6\)</span>: death). This data was originally
 made available from the <code>mstate</code> package <span class="citation">(Wreede, Fiocco, and Putter 2011)</span>.</p>
-<p>In the illustrative example in the <a href="https://alexpate30.github.io/calibmsm/articles/overview.html">Overview
+<p>In the illustrative example in the <a href="https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf">Overview
 vignette</a>, we found predominately good agreement between the BLR-IPCW
 and pseudo-value calibration curves, except when assessing the
 calibration of the transition probabilities from state <span class="math inline">\(j = 1\)</span> into state <span class="math inline">\(k = 3\)</span>. Given we do not know the true
@@ -108,7 +108,7 @@ context.</p>
 <h2 id="methods-and-results">Methods and Results<a class="anchor" aria-label="anchor" href="#methods-and-results"></a>
 </h2>
 <p>We start by reminding ourselves of the EBMT <span class="citation">(Wreede, Fiocco, and Putter 2011; EBMT 2023)</span>
-validation dataset <code>ebmtcal</code>. Please refer to the <a href="https://alexpate30.github.io/calibmsm/articles/overview.html">Overview
+validation dataset <code>ebmtcal</code>. Please refer to the <a href="https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf">Overview
 vignette</a> for a more detailed description of this data.</p>
 <p>BLR-IPCW requires that the outcome, <span class="math inline">\(I_{k}(t)\)</span>, is independent from the
 censoring mechanism in the re-weighted population. Psuedo-values require
@@ -119,7 +119,7 @@ transplant more recently have a shorter administrative censoring time,
 given they have a shorter maximum follow up.</p>
 <p>When calculating pseudo-values, we can completely remove the impact
 of this variable by calculating pseudo-values within subgroups defined
-by this variable. In the <a href="https://alexpate30.github.io/calibmsm/articles/overview.html">Overview
+by this variable. In the <a href="https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf">Overview
 vignette</a> we also further grouped patients by their predicted risk in
 a further three subgroups. We therefore believe the assumption for the
 pseudo-value approach is likely to hold.</p>
@@ -212,7 +212,7 @@ the pseudo-value approach. This is not a fundamental problem with the
 BLR-IPCW approach, but an issue with estimating the IPCWs under the
 censoring mechanism in this example. If the IPCWs can be estimated
 correctly, this should result in unbiased calibration curves. As
-suggested in the <a href="https://alexpate30.github.io/calibmsm/articles/overview.html">Overview
+suggested in the <a href="https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf">Overview
 vignette</a>, more simulation studies are required to rigorously test
 the robustness of each method when their assumptions do not hold, and in
 what scenario each method is most likely to give biased calibration
@@ -230,7 +230,7 @@ vignette</a>.</p>
 <p>One final point, it is peculiar that this issue only causes
 discordance between the calibration plots out of state <span class="math inline">\(j = 0\)</span> into state <span class="math inline">\(k = 3\)</span>, whereas for all other states <span class="math inline">\(k\)</span> there is closer agreement between the
 BLR-IPCW and pseudo-value calibration curves (see Figures 2 and 3 in the
-<a href="https://alexpate30.github.io/calibmsm/articles/overview.html">Overview
+<a href="https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf">Overview
 vignette</a>). We hypothesise that this may be due to the fact no
 individuals move into state <span class="math inline">\(3\)</span> after
 <span class="math inline">\(100\)</span> days. We believe this is due to

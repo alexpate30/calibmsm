@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 
 This vignette showcases how to manually apply a bootstrap procedure to estimate a confidence interval for the BLR-IPCW calibration curves when using a custom function to estimate the inverse probability of censoring weights.  We use data from the European Society for Blood and Marrow Transplantation [@EBMT2023], which contains multistate survival data after a transplant for patients with blood cancer. The start of follow up is the day of the transplant and the initial state is alive and in remission. There are three intermediate events ($2$: recovery, $3$: adverse event, or $4$: recovery + adverse event), and two absorbing states ($5$: relapse and $6$: death). This data was originally made available from the `mstate` package [@DeWreede2011].
 
-We start by reminding ourselves of the EBMT [@DeWreede2011; @EBMT2023] validation datasets `ebmtcal` and `msebmtcal`, and the predicted transition probabilities out of state `j = 1` made at time `s = 0` from the multistate model (`tps0`). We also set the time at which we want to evaluate the transition probabilities `t`. Please refer to the [Overview vignette](https://alexpate30.github.io/calibmsm/articles/overview.html) for a more detailed description of this data.
+We start by reminding ourselves of the EBMT [@DeWreede2011; @EBMT2023] validation datasets `ebmtcal` and `msebmtcal`, and the predicted transition probabilities out of state `j = 1` made at time `s = 0` from the multistate model (`tps0`). We also set the time at which we want to evaluate the transition probabilities `t`. Please refer to the [Overview vignette](https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf) for a more detailed description of this data.
 
 ```{r}
 set.seed(101)
@@ -36,7 +36,7 @@ t <- 1826
 
 # Confidence intervals for BLR-IPCW using internal bootstrapping procedure
 
-We now remind ourselves of the procedure for generating a confidence interval, and estimate confidence intervals for the BLR-IPCW calibration curves using the internal bootstrapping procedure, as is done in the [Overview vignette](https://alexpate30.github.io/calibmsm/articles/overview.html).
+We now remind ourselves of the procedure for generating a confidence interval, and estimate confidence intervals for the BLR-IPCW calibration curves using the internal bootstrapping procedure, as is done in the [Overview vignette](https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf).
 
 1. Resample validation dataset with replacement
 2. Landmark the dataset for assessment of calibration
@@ -69,7 +69,7 @@ plot(dat.calib.blr, combine = TRUE)
 
 # Confidence intervals for BLR-IPCW by inputting custom weights funciton into calib_blr
 
-While the above approach is accessible, it may lead to a misspecified model for the weights given the user has no control over the choice of model (Cox model) or the functional form of the predictor variables $\textbf{Z}$, where all continuous variables are assumed to have linear effects on the hazard, and there are no interaction terms. Potential issues with using the internal process for estimating the weights is exemplified in the [Evaluation-of-estimation-of-IPCWs vignette](Evaluation-of-estimation-of-IPCWs.html). We therefore encourage users to explore their data and produce a more suitable model to estimate the weights. Please see the [Overview vignette](https://alexpate30.github.io/calibmsm/articles/overview.html) for a definition of the estimand of the weights and how to estimate them. 
+While the above approach is accessible, it may lead to a misspecified model for the weights given the user has no control over the choice of model (Cox model) or the functional form of the predictor variables $\textbf{Z}$, where all continuous variables are assumed to have linear effects on the hazard, and there are no interaction terms. Potential issues with using the internal process for estimating the weights is exemplified in the [Evaluation-of-estimation-of-IPCWs vignette](Evaluation-of-estimation-of-IPCWs.html). We therefore encourage users to explore their data and produce a more suitable model to estimate the weights. Please see the [Overview vignette](https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf) for a definition of the estimand of the weights and how to estimate them. 
 
 Once a function for estimating the weights has been defined, the internal bootstrapping procedure can then be applied with this function to estimate the weights. This function must contain the parameters that are in the `calc_weights` function, even if you do not plan to use these parameters. These parameters are then specified through arguments with the `w.` prefix in `calib_blr`. The user specified function may also contain extra parameters not in `calc_weights`, and these are specified through the `...` argument in `clib_blr`. We showcase this by defining a new function `calc_weights_manual`. For this example, we define it to be the same as `calc_weights` function. In practice, we do not recommend this, as this option is to allow the user to specify their own function for estimating the weights. Given our choice of function to estimate the weights, the calibration curve is the same as that from Figure 1, and the confidence interval is a similar size.
 

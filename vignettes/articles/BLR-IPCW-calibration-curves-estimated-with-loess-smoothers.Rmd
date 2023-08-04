@@ -59,19 +59,19 @@ dat.calib.blr <-
             data.raw = ebmtcal,
             j=1,
             s=0,
-            t.eval = t.eval,
+            t = t.eval,
             tp.pred = tp.pred.s0,
             curve.type = "loess",
             w.covs = c("year", "agecl", "proph", "match"),
             CI = 95,
-          CI.R.boot = 200)
+           CI.R.boot = 200)
 
 dat.calib.pv <-
   calib_pv(data.mstate = msebmtcal,
            data.raw = ebmtcal,
            j=1,
            s=0,
-           t.eval = t.eval,
+           t = t.eval,
            tp.pred = tp.pred.s0,
            curve.type = "loess",
            w.covs = c("year", "agecl", "proph", "match"),

@@ -18,7 +18,11 @@ Description: Calibration plots for the transition
   multinomial logistic regression models applied at a fixed time point in conjunction 
   with inverse probability of censoring weights. 3) Pseudo-values estimated using 
   the Aalen-Johansen estimator of observed risk. All methods are applied in conjunction
-  with landmarking when required.
+  with landmarking when required. While package development has focused on multistate 
+  models, calibration plots can be produced for any model which utilises information 
+  post baseline to update predictions (e.g. dynamic models); competing risks models; 
+  or standard single outcome survival models, where predictions can be made at 
+  any landmark time.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

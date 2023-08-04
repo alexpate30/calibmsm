@@ -77,7 +77,7 @@ dat.calib.pv <-
            group.vars = c("year"),
            n.pctls = 3,
            CI = 95,
-           CI.type = 'parametric',)
+           CI.type = 'parametric')
 ```
 
 We now produce calibration plots using the \code{plot} function.

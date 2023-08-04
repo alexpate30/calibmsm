@@ -230,13 +230,6 @@ calib_pv <- function(data.mstate,
     }
   }
 
-  ### Stop if curve.type = "loess" and CI requested but CI.type not specified to be 'bootstrap'.
-  if (curve.type == "loess" & CI != FALSE & !is.null(CI.type)){
-    if (CI.type != "bootstrap"){
-      stop("For curve.type = 'loess', CI.type must be 'bootstrap'.")
-    }
-  }
-
   ### Stop if CI.type = "bootstrap" but CI.R.boot not specified
   if (!(CI.type %in% c("parametric", "bootstrap"))){
     stop("CI.type takes values in 'parametric' and 'bootstrap'")

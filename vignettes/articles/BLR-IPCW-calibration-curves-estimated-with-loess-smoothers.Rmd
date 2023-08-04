@@ -1,5 +1,7 @@
 ---
 title: "BLR-IPCW-calibration-curves-estimated-with-loess-smoothers"
+output: rmarkdown::html_vignette
+bibliography: refs.bib
 ---
 
 ```{r, include = FALSE}
@@ -11,7 +13,7 @@ knitr::opts_chunk$set(
 
 # Data preperation
 
-This vignette showcases how to estimate BLR-IPCW and pseudo-value calibration curves when using loess smoothers for the model to estimate the observed event probabilities. This is in contrast to using restricted cubic splines, which was done so in the [Overview vignette](https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf). Both approaches are viable and we refer to the literature for a discussion of each method REF XXXX. We mimic exactly the analysis from the [Overview vignette](https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf), specifying loess smoother rather than restricted cubic splines, and assess whether the conclusions would be any different. This is primarily to showcase the utility of the package.
+This vignette showcases how to estimate BLR-IPCW and pseudo-value calibration curves when using loess smoothers for the model to estimate the observed event probabilities. This is in contrast to using restricted cubic splines, which was done so in the [Overview vignette](https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf). Both approaches are viable and we refer to the literature for a discussion of each method [@Austin2020; @Harrel2015]. We mimic exactly the analysis from the [Overview vignette](https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf), specifying loess smoother rather than restricted cubic splines, and assess whether the conclusions would be any different. This is primarily to showcase the utility of the package.
 
 We use data from the European Society for Blood and Marrow Transplantation [@EBMT2023], which contains multistate survival data after a transplant for patients with blood cancer. The start of follow up is the day of the transplant and the initial state is alive and in remission. There are three intermediate events ($2$: recovery, $3$: adverse event, or $4$: recovery + adverse event), and two absorbing states ($5$: relapse and $6$: death). This data was originally made available from the `mstate` package [@DeWreede2011].
 
@@ -38,6 +40,8 @@ head(tps0)
 
 t.eval <- 1826
 ```
+
+# Estimation of calibration curves using loess smoothers
 
 We now produce calibration curves for the predicted transition probabilities out of state $j = 1$ at time $s = 0$. Given all individuals start in state $1$, there is no need to consider the transition probabilities out of states $j \neq 1$ at $s = 0$. Calibration is assessed at follow up time ($t = 1826$ days). We start by extracting the predicted transition probabilities from state $j = 1$ at time $s = 0$ from the object \code{tps0}. These are the transition probabilities we aim to assess the calibration of.
 

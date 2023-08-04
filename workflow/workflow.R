@@ -56,8 +56,8 @@ usethis::use_import_from("VGAM", "s")
 ### Create first vignette
 ###
 usethis::use_vignette("overview")
-usethis::use_vignette("Comparison-with-graphical-calibration-curves-in-competing-risks-setting")
-usethis::use_article("testarticle")
+usethis::use_article("Comparison-with-graphical-calibration-curves-in-competing-risks-setting")
+usethis::use_article("BLR-IPCW-calibration-curves-estimated-with-loess-smoothers")
 devtools::install(build_vignettes = TRUE)
 browseVignettes("calibmsm")
 

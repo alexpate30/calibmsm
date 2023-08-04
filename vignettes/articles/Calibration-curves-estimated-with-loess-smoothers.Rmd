@@ -1,7 +1,9 @@
 ---
-title: "BLR-IPCW-calibration-curves-estimated-with-loess-smoothers"
+title: "Calibration-curves-estimated-with-loess-smoothers"
 output: rmarkdown::html_vignette
 bibliography: refs.bib
+vignette: >
+  %\VignetteIndexEntry{Calibration-curves-estimated-with-loess-smoothers}
 ---
 
 ```{r, include = FALSE}

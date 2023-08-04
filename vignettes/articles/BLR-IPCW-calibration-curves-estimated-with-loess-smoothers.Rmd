@@ -74,7 +74,8 @@ dat.calib.pv <-
            t = t.eval,
            tp.pred = tp.pred.s0,
            curve.type = "loess",
-           w.covs = c("year", "agecl", "proph", "match"),
+           group.vars = c("year"),
+           n.pctls = 3,
            CI = 95,
            CI.type = 'parametric',)
 ```

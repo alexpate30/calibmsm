@@ -1,5 +1,5 @@
 ---
-title: "Comparison-with-graphical-calibration-curves-in-competing-risks-setting"
+title: "Comparison-in-competing-risks-setting"
 output: rmarkdown::html_vignette
 bibliography: refs.bib
 ---

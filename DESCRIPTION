@@ -10,8 +10,8 @@ Authors@R:
          )
 Description: Calibration plots for the transition
   probabilities from a multistate model. Calibration plots can also be produced for
-  predicted risks from survival models, competing risks models, predicted risks 
-  made at landmark follow up times, and predicted risks from landmark super models.
+  predicted risks from dynamic models, landmark super models, competing risks models
+  and standard single outcome survival models, where predictions can be made at any landmark time.
   Calibration is assessed using one of three methods. 1) Calibration methods for 
   binary logistic regression models applied at a fixed time point in conjunction 
   with inverse probability of censoring weights. 2) Calibration methods for 

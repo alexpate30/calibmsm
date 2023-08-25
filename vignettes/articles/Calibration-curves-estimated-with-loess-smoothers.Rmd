@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 
 # Data preperation
 
-This vignette showcases how to estimate BLR-IPCW and pseudo-value calibration curves when using loess smoothers for the model to estimate the observed event probabilities. This is in contrast to using restricted cubic splines, which was done so in the [Overview vignette](https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf). Both approaches are viable and we refer to the literature for a discussion of each method [@Austin2020; @Harrel2015]. We mimic exactly the analysis from the [Overview vignette](https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf), specifying loess smoother rather than restricted cubic splines, and assess whether the conclusions would be any different. This is primarily to showcase the utility of the package.
+This vignette showcases how to estimate BLR-IPCW and pseudo-value calibration curves when using loess smoothers for the model to estimate the observed event probabilities. This is in contrast to using restricted cubic splines, which was done so in the [Overview vignette](https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf). Both approaches are viable and we refer to the literature for a discussion of each method [@Austin2020; @Harrell2015]. We mimic exactly the analysis from the [Overview vignette](https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf), specifying loess smoother rather than restricted cubic splines, and assess whether the conclusions would be any different. This is primarily to showcase the utility of the package.
 
 We use data from the European Society for Blood and Marrow Transplantation [@EBMT2023], which contains multistate survival data after a transplant for patients with blood cancer. The start of follow up is the day of the transplant and the initial state is alive and in remission. There are three intermediate events ($2$: recovery, $3$: adverse event, or $4$: recovery + adverse event), and two absorbing states ($5$: relapse and $6$: death). This data was originally made available from the `mstate` package [@DeWreede2011].
 
@@ -66,7 +66,8 @@ dat.calib.blr <-
             curve.type = "loess",
             w.covs = c("year", "agecl", "proph", "match"),
             CI = 95,
-           CI.R.boot = 200)
+            CI.type = "bootstrap",
+            CI.R.boot = 200)
 
 dat.calib.pv <-
   calib_pv(data.mstate = msebmtcal,
@@ -98,7 +99,7 @@ Write a short comparison...
 
 # Estimation of calibration curves out of state j = 1 at time s = 100 using loess smoothers
 
-We now produce calibration curves for the predicted transition probabilities out of state $j = 1$ at time $s = 100$. Given all individuals start in state $1$, there is no need to consider the transition probabilities out of states $j \neq 1$ at $s = 100$. Calibration is assessed at follow up time ($t = 1826$ days). We start by extracting the predicted transition probabilities from state $j = 1$ at time $s = 100$ from the object \code{tps0}. These are the transition probabilities we aim to assess the calibration of.
+We now produce calibration curves for the predicted transition probabilities out of state $j = 1$ at time $s = 100$. Calibration is assessed at follow up time ($t = 1826$ days). We start by extracting the predicted transition probabilities from state $j = 1$ at time $s = 100$ from the object \code{tps0}. These are the transition probabilities we aim to assess the calibration of.
 
 ```{r}
 tp.pred.s0 <- tps0 |>
@@ -112,14 +113,15 @@ We now produce calibration curves using loess smoothers for the regression model
 dat.calib.blr <-
   calib_blr(data.mstate = msebmtcal,
             data.raw = ebmtcal,
-           j = 1,
-           s = 100,
+            j = 1,
+            s = 100,
             t = t.eval,
             tp.pred = tp.pred.s0,
             curve.type = "loess",
             w.covs = c("year", "agecl", "proph", "match"),
             CI = 95,
-           CI.R.boot = 200)
+            CI.type = "bootstrap",
+            CI.R.boot = 200)
 
 dat.calib.pv <-
   calib_pv(data.mstate = msebmtcal,
@@ -130,7 +132,6 @@ dat.calib.pv <-
            tp.pred = tp.pred.s0,
            curve.type = "loess",
            group.vars = c("year"),
-           n.pctls = 3,
            CI = 95,
            CI.type = 'parametric')
 ```
@@ -145,13 +146,13 @@ plot(dat.calib.blr)
 plot(dat.calib.pv)
 ```
 
-The equivalent Figures from the [Overview vignette](https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf), produced using restricted cubic splines, are Figures XXXX and XXXX.
+The equivalent Figures from the [Overview vignette](https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf), produced using restricted cubic splines, are Figures 5 and 6.
 
 Write a short comparison...
 
 # Estimation of calibration curves out of state j = 3 at time s = 100 using loess smoothers
 
-We now produce calibration curves for the predicted transition probabilities out of state $j = 3$ at time $s = 100$. Given all individuals start in state $1$, there is no need to consider the transition probabilities out of states $j \neq 1$ at $s = 100$. Calibration is assessed at follow up time ($t = 1826$ days). We start by extracting the predicted transition probabilities from state $j = 3$ at time $s = 100$ from the object \code{tps0}. These are the transition probabilities we aim to assess the calibration of.
+We now produce calibration curves for the predicted transition probabilities out of state $j = 3$ at time $s = 100$. Calibration is assessed at follow up time ($t = 1826$ days). We start by extracting the predicted transition probabilities from state $j = 3$ at time $s = 100$ from the object \code{tps0}. These are the transition probabilities we aim to assess the calibration of.
 
 ```{r}
 tp.pred.s0 <- tps0 |>
@@ -165,14 +166,15 @@ We now produce calibration curves using loess smoothers for the regression model
 dat.calib.blr <-
   calib_blr(data.mstate = msebmtcal,
             data.raw = ebmtcal,
-           j = 3,
-           s = 100,
+            j = 3,
+            s = 100,
             t = t.eval,
             tp.pred = tp.pred.s0,
             curve.type = "loess",
             w.covs = c("year", "agecl", "proph", "match"),
             CI = 95,
-           CI.R.boot = 200)
+            CI.type = "bootstrap",
+            CI.R.boot = 200)
 
 dat.calib.pv <-
   calib_pv(data.mstate = msebmtcal,
@@ -183,7 +185,6 @@ dat.calib.pv <-
            tp.pred = tp.pred.s0,
            curve.type = "loess",
            group.vars = c("year"),
-           n.pctls = 3,
            CI = 95,
            CI.type = 'parametric')
 ```
@@ -198,6 +199,10 @@ plot(dat.calib.blr)
 plot(dat.calib.pv)
 ```
 
-The equivalent Figures from the [Overview vignette](https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf), produced using restricted cubic splines, are Figures XXXX and XXXX.
+The equivalent Figures from the [Overview vignette](https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf), produced using restricted cubic splines, are Figures 7 and 8.
 
 Write a short comparison...
+
+# A note on the fact that confidence intervals may be lower than 0 or bigger than 1
+
+Given the standard error is calculated on the probability scale here, as opposed to the logit scale, the confidence intervals may exceed 0 and 1. I have checked and the confidence intervals are calculated in the same way in the CalibrationCurves package: https://cran.r-project.org/web/packages/CalibrationCurves/CalibrationCurves.pdf . In particular see code for val.prob.ci.2: https://github.com/BavoDC/CalibrationCurves/blob/master/R/val.prob.ci.2.R . There parametric confidence intervals are calculated in the same way we calculate parametric confidence intervals for the pseudo value approach.  I am therefore confident this is correct, but is something i'd like to come back to and consider the implications of. It's also intriguing that even for the bootstrapped BLR-IPCW confidence intervals, we are seeing confidence intervals well outside 0 and 1. I thought this would be an issue for the pseudo-value parametric confidence intervals as we are just adding on 1.96*se on the probability scale. However, I didnt actually think that would be possible for the bootstrapped confidence intervals, as in any given bootstrapped dataset, predicted-observed values would still lie between 0 and 1, so this is something to explore in more detail.

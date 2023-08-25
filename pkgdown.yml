@@ -3,10 +3,11 @@ pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
   BLR-IPCW-manual-bootstrap: BLR-IPCW-manual-bootstrap.html
-  Comparison-with-graphical-calibration-curves-in-competing-risks-setting: Comparison-with-graphical-calibration-curves-in-competing-risks-setting.html
+  Calibration-curves-estimated-with-loess-smoothers: Calibration-curves-estimated-with-loess-smoothers.html
+  Comparison-in-competing-risks-setting: Comparison-in-competing-risks-setting.html
   Evaluation-of-estimation-of-IPCWs: Evaluation-of-estimation-of-IPCWs.html
   overview: overview.html
-last_built: 2023-08-03T11:35Z
+last_built: 2023-08-25T11:03Z
 urls:
   reference: https://alexpate30.github.io/calibmsm/reference
   article: https://alexpate30.github.io/calibmsm/articles

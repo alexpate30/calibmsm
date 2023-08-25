@@ -138,6 +138,7 @@ usethis::use_cran_comments()
 ###
 ### Run R-CMD-CHECK to be checked with CRANs win-builder service. Check email response for this.
 ###
+devtools::check()
 devtools::check(remote = TRUE, manual = TRUE)
 devtools::check_win_devel()
 

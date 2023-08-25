@@ -342,18 +342,6 @@ test_that("check calib_pv output, (j = 1, s = 0), cause errors", {
   # Reduce msebmtcal.cmprsk to first 100 individuals
   msebmtcal <- msebmtcal |> dplyr::filter(id %in% 1:50)
 
-  ## Request confidence interval for loess, and specify parametric
-  expect_error(calib_pv(data.mstate = msebmtcal,
-                             data.raw = ebmtcal,
-                             j = 1,
-                             s = 0,
-                             t = 1826,
-                             tp.pred = tp.pred,
-                             curve.type = "loess",
-                             CI = 95,
-                             CI.type = "parametric",
-                             data.pred.plot = NULL, transitions.out = NULL))
-
   ## Request bootstrap confidence interval and don't give number of bootstrap replicates (for either rcs or parametric)
   expect_error(calib_pv(data.mstate = msebmtcal,
                              data.raw = ebmtcal,

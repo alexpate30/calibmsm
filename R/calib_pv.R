@@ -761,9 +761,30 @@ calib_pv <- function(data.mstate,
                                   span = loess.span,
                                   degree = loess.degree)
 
-      ### Created observed event probabilities for each individual
-      obs <- predict(loess.model, newdata = plotdat)
-      obs.data <- data.frame("obs" = obs)
+      ## Calculate predicted observed probabilities (and confidence intervals if requested using parametric approach)
+      ## Note we do not calculate standard errors if confidence interval has been requested using the bootstrap
+      if (CI == FALSE){
+        ## Predict observed
+        obs <- predict(loess.model, newdata = plotdat)
+        ## Put into dataframe
+        obs.data <- data.frame("obs" = obs)
+      } else if (CI != FALSE){
+        if (CI.type == "bootstrap"){
+          ## Predict observed
+          obs <- predict(loess.model, newdata = plotdat)
+          ## Put into dataframe
+          obs.data <- data.frame("obs" = obs)
+        } else if (CI.type == "parametric"){
+          ## Predict observed
+          obs <- predict(loess.model, newdata = plotdat, se = TRUE)
+          ## Define alpha for CIs
+          alpha <- (1-CI/100)/2
+          ## Put into dataframe
+          obs.data <- data.frame("obs" = obs$fit,
+                                 "obs.lower" = obs$fit - stats::qnorm(1-alpha)*obs$se,
+                                 "obs.upper" = obs$fit + stats::qnorm(1-alpha)*obs$se)
+        }
+      }
 
       ### Return obs.data
       return(obs.data)

@@ -1,6 +1,45 @@
 ###
 ### Testing package functionality
 ###
+load_all()
+## Reduce to 50 individuals
+# Extract the predicted transition probabilities out of state j = 1 for first 100 individuals
+tp.pred <- tps0 |>
+  dplyr::filter(id %in% 1:50) |>
+  dplyr::filter(j == 1) |>
+  dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
+# Reduce ebmtcal to first 50 individuals
+ebmtcal <- ebmtcal |> dplyr::filter(id %in% 1:50)
+# Reduce msebmtcal.cmprsk to first 100 individuals
+msebmtcal <- msebmtcal |> dplyr::filter(id %in% 1:50)
+test <- calib_pv(data.mstate = msebmtcal,
+                 data.raw = ebmtcal,
+                 j = 1,
+                 s = 0,
+                 t = 1826,
+                 tp.pred = tp.pred,
+                 curve.type = "loess",
+                 CI = 95,
+                 CI.type = "parametric",
+                 data.pred.plot = NULL, transitions.out = NULL)
+
+test2 <- calib_pv(data.mstate = msebmtcal,
+                 data.raw = ebmtcal,
+                 j = 1,
+                 s = 0,
+                 t = 1826,
+                 tp.pred = tp.pred,
+                 curve.type = "rcs",
+                 rcs.nk = 3,
+                 CI = 95,
+                 CI.type = "parametric",
+                 data.pred.plot = NULL, transitions.out = NULL)
+
+
+str(test[[1]])
+str(test2[[1]])
+
+
 rm(list=ls())
 devtools::run_examples()
 str(mstate::ebmt)

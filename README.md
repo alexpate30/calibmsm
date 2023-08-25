@@ -12,7 +12,15 @@ coverage](https://codecov.io/gh/alexpate30/calibmsm/branch/master/graph/badge.sv
 
 The goal of **calibmsm** is to provide a set of tools for estimating
 calibration plots when validating an existing (i.e. previously
-developed) multistate model.
+developed) multistate model. While the vignettes and articles for this
+package focus on assessing the calibration of a multistate model,
+calibration plots can also be produced for predicted risks from dynamic
+models, landmark super models, competing risks models and standard
+single outcome survival models, where predictions can be made at any
+landmark time.
+
+For a detailed guide on how to use **calibmsm** please see the [Overview
+vignette](https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf).
 
 ## Installation
 

@@ -100,6 +100,8 @@ usethis::use_github_action_check_standard()
 usethis::use_coverage(type = "codecov")
 # covr::codecov(token = "INSERT TOKEN HERE")
 use_github_action("test-coverage")
+
+### Build readme
 devtools::build_readme()
 
 ### Automatically render .Rmd

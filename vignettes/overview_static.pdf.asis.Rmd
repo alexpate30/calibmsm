@@ -1,0 +1,4 @@
+%\VignetteIndexEntry{Static PDF vignettes}
+%\VignetteEngine{R.rsp::asis}
+%\VignetteKeyword{PDF}
+%\VignetteKeyword{vignette}

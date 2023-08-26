@@ -55,6 +55,7 @@ usethis::use_import_from("VGAM", "s")
 ###
 ### Create first vignette
 ###
+install.packages("R.rsp")
 usethis::use_vignette("overview")
 usethis::use_article("Comparison-with-graphical-calibration-curves-in-competing-risks-setting")
 usethis::use_article("BLR-IPCW-calibration-curves-estimated-with-loess-smoothers")

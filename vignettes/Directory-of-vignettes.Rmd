@@ -9,7 +9,7 @@ vignette: >
 
 All vignettes can be found as articles on the website [https://alexpate30.github.io/calibmsm/index.html](https://alexpate30.github.io/calibmsm/index.html).
 
-The [Overview](https://alexpate30.github.io/calibmsm/articles/overview.html) vignette gives a detailed guide on how to use the package by running through a clinical example.
+The [Overview](https://alexpate30.github.io/calibmsm/articles/Overview.html) vignette gives a detailed guide on how to use the package by running through a clinical example.
 
 The [BLR-IPCW-manual-bootstrap](https://alexpate30.github.io/calibmsm/articles/BLR-IPCW-manual-bootstrap.html) vignette showcases how to estimate a confidence interval manually using bootstrapping, and how to manually specify a function for estimating the inverse probability of censoring weights.
 

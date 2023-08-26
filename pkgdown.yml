@@ -2,12 +2,13 @@ pandoc: 2.19.2
 pkgdown: 2.0.7
 pkgdown_sha: ~
 articles:
+  Directory-of-vignettes: Directory-of-vignettes.html
   BLR-IPCW-manual-bootstrap: BLR-IPCW-manual-bootstrap.html
   Calibration-curves-estimated-with-loess-smoothers: Calibration-curves-estimated-with-loess-smoothers.html
   Comparison-in-competing-risks-setting: Comparison-in-competing-risks-setting.html
   Evaluation-of-estimation-of-IPCWs: Evaluation-of-estimation-of-IPCWs.html
-  overview: overview.html
-last_built: 2023-08-26T11:06Z
+  Overview: Overview.html
+last_built: 2023-08-26T15:29Z
 urls:
   reference: https://alexpate30.github.io/calibmsm/reference
   article: https://alexpate30.github.io/calibmsm/articles

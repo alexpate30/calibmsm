@@ -1,0 +1,15 @@
+---
+title: "Directory-of-vignettes"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Directory-of-vignettes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+All vignettes can be found as articles on the website: [https://alexpate30.github.io/calibmsm/index.html](https://alexpate30.github.io/calibmsm/index.html)
+
+The [Overview vignette](https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf) gives a detailed guide on how to use **calibmsm**, and is the recommended vignette for learning how to use the package.
+
+The [BLR-IPCW-manual-bootstrap](https://alexpate30.github.io/calibmsm/articles/BLR-IPCW-manual-bootstrap.html) showcases how to manually apply a bootstrapping procedure to estimate confidence intervals when using a custom function for estimating the inverse probability of censoring weights.
+

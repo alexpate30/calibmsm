@@ -102,7 +102,7 @@ Write a short comparison...
 We now produce calibration curves for the predicted transition probabilities out of state $j = 1$ at time $s = 100$. Calibration is assessed at follow up time ($t = 1826$ days). We start by extracting the predicted transition probabilities from state $j = 1$ at time $s = 100$ from the object \code{tps0}. These are the transition probabilities we aim to assess the calibration of.
 
 ```{r}
-tp.pred.s0 <- tps0 |>
+tp.pred.s100 <- tps100 |>
                dplyr::filter(j == 1) |>
                dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
 ```
@@ -116,7 +116,7 @@ dat.calib.blr <-
             j = 1,
             s = 100,
             t = t.eval,
-            tp.pred = tp.pred.s0,
+            tp.pred = tp.pred.s100,
             curve.type = "loess",
             w.covs = c("year", "agecl", "proph", "match"),
             CI = 95,
@@ -129,7 +129,7 @@ dat.calib.pv <-
            j = 1,
            s = 100,
            t = t.eval,
-           tp.pred = tp.pred.s0,
+           tp.pred = tp.pred.s100,
            curve.type = "loess",
            group.vars = c("year"),
            CI = 95,
@@ -155,7 +155,7 @@ Write a short comparison...
 We now produce calibration curves for the predicted transition probabilities out of state $j = 3$ at time $s = 100$. Calibration is assessed at follow up time ($t = 1826$ days). We start by extracting the predicted transition probabilities from state $j = 3$ at time $s = 100$ from the object \code{tps0}. These are the transition probabilities we aim to assess the calibration of.
 
 ```{r}
-tp.pred.s0 <- tps0 |>
+tp.pred.s100 <- tps100 |>
                dplyr::filter(j == 3) |>
                dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
 ```
@@ -169,7 +169,7 @@ dat.calib.blr <-
             j = 3,
             s = 100,
             t = t.eval,
-            tp.pred = tp.pred.s0,
+            tp.pred = tp.pred.s100,
             curve.type = "loess",
             w.covs = c("year", "agecl", "proph", "match"),
             CI = 95,
@@ -182,7 +182,7 @@ dat.calib.pv <-
            j = 3,
            s = 100,
            t = t.eval,
-           tp.pred = tp.pred.s0,
+           tp.pred = tp.pred.s100,
            curve.type = "loess",
            group.vars = c("year"),
            CI = 95,

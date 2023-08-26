@@ -3,7 +3,7 @@ title: "Overview"
 output: rmarkdown::html_vignette
 ---
 
-Please click the link below to access the *Overview* vignette, which is a pdf document and therefore cannot be directly viewed through this html webpage.
+Please click the link below to access the **Overview** vignette, which is a static pdf document which cannot be directly viewed through this html webpage.
 
 <!--- <iframe src="overview_vignette.pdf"/> -->
 

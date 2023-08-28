@@ -15,6 +15,8 @@ The [BLR-IPCW-manual-bootstrap](https://alexpate30.github.io/calibmsm/articles/B
 
 The [Calibration-curves-estimated-with-loess-smoothers](https://alexpate30.github.io/calibmsm/articles/Calibration-curves-estimated-with-loess-smoothers.html) vignette repeats the analyses from the [Overview](https://alexpate30.github.io/calibmsm/articles/Overview.html) vignette using loess smoothers to estimate the calibration curves instead of restricted cubic splines.
 
+The [Evaluation-of-estimation-of-IPCWs](https://alexpate30.github.io/calibmsm/articles/Evaluation-of-estimation-of-IPCWs.html) vignette explores whether the assumptions of the BLR-IPCW and psuedo-value methods are met in the illustrative example in the [Overview](https://alexpate30.github.io/calibmsm/articles/Overview.html) vignette. In particular, the validity of the inverse probability of censoring weights when estimated using the internal procedures in **calibmsm** is evaluated.
+
 
 
 

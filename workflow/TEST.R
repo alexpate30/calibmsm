@@ -2,6 +2,7 @@
 ### Testing package functionality
 ###
 load_all()
+add_test
 ## Reduce to 50 individuals
 # Extract the predicted transition probabilities out of state j = 1 for first 100 individuals
 tp.pred <- tps0 |>

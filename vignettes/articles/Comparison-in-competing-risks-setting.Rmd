@@ -2,6 +2,8 @@
 title: "Comparison-in-competing-risks-setting"
 output: rmarkdown::html_vignette
 bibliography: refs.bib
+vignette: >
+  %\VignetteIndexEntry{Comparison-in-competing-risks-settin}
 ---
 
 ```{r, include = FALSE}

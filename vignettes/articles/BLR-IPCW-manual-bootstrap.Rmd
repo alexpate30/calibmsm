@@ -2,6 +2,8 @@
 title: "BLR-IPCW-manual-bootstrap"
 output: rmarkdown::html_vignette
 bibliography: refs.bib
+vignette: >
+  %\VignetteIndexEntry{BLR-IPCW-manual-bootstrap}
 ---
 
 ```{r, include = FALSE}

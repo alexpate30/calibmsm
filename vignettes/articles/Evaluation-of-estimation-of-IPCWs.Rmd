@@ -2,6 +2,8 @@
 title: "Evaluation-of-estimation-of-IPCWs"
 output: rmarkdown::html_vignette
 bibliography: refs.bib
+vignette: >
+  %\VignetteIndexEntry{Evaluation-of-estimation-of-IPCWs}
 ---
 
 ```{r, include = FALSE}

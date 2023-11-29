@@ -135,6 +135,8 @@ test_that("check calib_blr output, (j = 1, s = 0), curve.type = loess", {
 
 test_that("check calib_blr output, (j = 1, s = 0), with CI", {
 
+  skip_on_cran()
+
   ## Extract relevant predicted risks from tps0
   tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
 
@@ -364,6 +366,8 @@ test_that("check calib_blr output, (j = 1, s = 0),
           with CI,
           manually define vector of predicted probabilities,
           manually define transition out", {
+
+            skip_on_cran()
 
             ## Extract relevant predicted risks from tps0
             tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))

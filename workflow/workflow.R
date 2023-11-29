@@ -5,6 +5,7 @@ install.packages("devtools")
 install.packages("roxygen2")
 install.packages("knitr")
 install.packages("testthat")
+install.packages("rhub")
 
 ###
 ### Install
@@ -144,10 +145,17 @@ usethis::use_cran_comments()
 devtools::check()
 devtools::check(remote = TRUE, manual = TRUE)
 devtools::check_win_devel()
+devtools::check_mac_release()
+rhub::check_for_cran()
 
 ###
 ### Update version
 ###
 usethis::use_release_issue()
 usethis::use_version('major')
+
+###
+### Submit to CRAN
+###
+devtools::submit_cran()
 

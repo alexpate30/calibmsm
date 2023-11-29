@@ -44,15 +44,15 @@ using data estimated from \code{\link{calib_mlr}}.
 # probabilities at time t = 1826, when predictions were made at time
 # s = 0 in state j = 1. These predicted transition probabilities are stored in tp.cmprsk.j0.
 
-# To minimise example time we reduce the datasets to 125 individuals.
-# Extract the predicted transition probabilities out of state j = 1 for first 125 individuals
+# To minimise example time we reduce the datasets to 150 individuals.
+# Extract the predicted transition probabilities out of state j = 1 for first 150 individuals
 tp.pred <- tp.cmprsk.j0 |>
- dplyr::filter(id \%in\% 1:125) |>
+ dplyr::filter(id \%in\% 1:150) |>
  dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
-# Reduce ebmtcal to first 125 individuals
-ebmtcal <- ebmtcal |> dplyr::filter(id \%in\% 1:125)
-# Reduce msebmtcal.cmprsk to first 125 individuals
-msebmtcal.cmprsk <- msebmtcal.cmprsk |> dplyr::filter(id \%in\% 1:125)
+# Reduce ebmtcal to first 150 individuals
+ebmtcal <- ebmtcal |> dplyr::filter(id \%in\% 1:150)
+# Reduce msebmtcal.cmprsk to first 150 individuals
+msebmtcal.cmprsk <- msebmtcal.cmprsk |> dplyr::filter(id \%in\% 1:150)
 
 # Now estimate the observed event probabilities for each possible transition.
 dat.calib.mlr <-

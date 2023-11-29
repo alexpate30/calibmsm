@@ -1045,7 +1045,12 @@ summary.calib_pv <- function(object, ...) {
   if (isFALSE(object[["metadata"]]$CI)){
     cat("\n\nA confidence interval was not estimated")
   } else {
-    cat("\n\nA ",  object[["metadata"]]$CI, "% confidence interval was estimated with", object[["metadata"]]$CI.R.boot, " bootstrap replicates", sep = "")
+    if (object[["metadata"]]$CI.type == 'parametric'){
+      cat("\n\nA ",  object[["metadata"]]$CI, "% confidence interval was estimated using parametric approaches", sep = "")
+    } else if (object[["metadata"]]$CI.type == 'bootstrap'){
+      cat("\n\nA ",  object[["metadata"]]$CI, "% confidence interval was estimated with ", object[["metadata"]]$CI.R.boot, " bootstrap replicates", sep = "")
+    }
+
   }
 
   if (!is.null(object[["metadata"]]$group.vars)){

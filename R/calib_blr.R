@@ -670,7 +670,7 @@ summary.calib_blr <- function(object, ...) {
   if (isFALSE(object[["metadata"]]$CI)){
     cat("\n\nA confidence interval was not estimated")
   } else {
-    cat("\n\nA ",  object[["metadata"]]$CI, "% confidence interval was estimated withb", object[["metadata"]]$CI.R.boot, " bootstrap replicates", sep = "")
+    cat("\n\nA ",  object[["metadata"]]$CI, "% confidence interval was estimated with ", object[["metadata"]]$CI.R.boot, " bootstrap replicates", sep = "")
   }
 
   cat("\n\nThe estimated calibration curves are stored in list element `plotdata`:\n\n")

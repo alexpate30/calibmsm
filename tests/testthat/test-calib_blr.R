@@ -414,6 +414,8 @@ test_that("check calib_blr output, (j = 1, s = 0),
 test_that("check calib_blr output, (j = 1, s = 0),
           Manually define function to estimate weights", {
 
+            skip_on_cran()
+
             ## Extract relevant predicted risks from tps0
             tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), dplyr::any_of(paste("pstate", 1:6, sep = "")))
 

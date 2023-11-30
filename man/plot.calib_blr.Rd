@@ -26,7 +26,7 @@ class \code{list}, each element containing an object of class \code{gg} and \cod
 }
 \description{
 Plots calibration curves for the transition probabilities of a multistate model
-using data estimated from \code{\link{calib_blr}}.
+estimated using \code{\link{calib_blr}}.
 }
 \examples{
 # Estimate and plot BLR-IPCW calibration curves for the predicted transition
@@ -47,8 +47,6 @@ calib_blr(data.mstate = msebmtcal,
  w.covs = c("year", "agecl", "proph", "match"))
 
  # These are then plotted
- \dontrun{
  plot(dat.calib.blr, combine = TRUE, nrow = 2, ncol = 3)
- }
 
 }

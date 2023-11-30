@@ -2,7 +2,7 @@
 #'
 #' @description
 #' Plots calibration curves for the transition probabilities of a multistate model
-#' using data estimated from \code{\link{calib_blr}}.
+#' estimated using \code{\link{calib_blr}}.
 #'
 #' @param x Object of class 'calib_blr' generated from \code{\link{calib_blr}}.
 #' @param ... Other
@@ -34,9 +34,7 @@
 #'  w.covs = c("year", "agecl", "proph", "match"))
 #'
 #'  # These are then plotted
-#'  \dontrun{
 #'  plot(dat.calib.blr, combine = TRUE, nrow = 2, ncol = 3)
-#'  }
 #'
 #' @importFrom graphics plot
 #' @export
@@ -128,7 +126,7 @@ plot.calib_blr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, tra
 #'
 #' @description
 #' Plots calibration scatter plots for the transition probabilities of a multistate model
-#' using data estimated from \code{\link{calib_mlr}}.
+#' estimated using \code{\link{calib_mlr}}.
 #'
 #' @param x Object of class 'calib_mlr' generated from \code{\link{calib_mlr}}
 #' @param ... Other
@@ -171,9 +169,7 @@ plot.calib_blr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, tra
 #'  degree = 2)
 #'
 #'  # These are then plotted
-#'  \dontrun{
 #'  plot(dat.calib.mlr, combine = TRUE, nrow = 2, ncol = 3)
-#'  }
 #'
 #' @importFrom graphics plot
 #' @export
@@ -230,7 +226,7 @@ plot.calib_mlr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, tra
 #'
 #' @description
 #' Plots calibration curves for the transition probabilities of a multistate model
-#' using data estimated from \code{\link{calib_pv}}.
+#' estimated using \code{\link{calib_pv}}.
 #'
 #' @param x Object of class 'calib_pseudo' generated from \code{\link{calib_pv}}.
 #' @param ... Other
@@ -271,9 +267,7 @@ plot.calib_mlr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, tra
 #'   loess.degree = 1)
 #'
 #'  # These are then plotted
-#'  \dontrun{
 #'  plot(dat.calib.pv, combine = TRUE, nrow = 2, ncol = 3)
-#'  }
 #'
 #' @importFrom graphics plot
 #' @export

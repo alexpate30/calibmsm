@@ -26,7 +26,7 @@ class \code{list}, each element containing an object of class \code{gg} and \cod
 }
 \description{
 Plots calibration curves for the transition probabilities of a multistate model
-using data estimated from \code{\link{calib_pv}}.
+estimated using \code{\link{calib_pv}}.
 }
 \examples{
 # Using competing risks data out of initial state (see vignette: ... -in-competing-risk-setting).
@@ -56,8 +56,6 @@ dat.calib.pv <- calib_pv(data.mstate = msebmtcal.cmprsk,
   loess.degree = 1)
 
  # These are then plotted
- \dontrun{
  plot(dat.calib.pv, combine = TRUE, nrow = 2, ncol = 3)
- }
 
 }

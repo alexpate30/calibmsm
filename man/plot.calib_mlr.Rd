@@ -36,7 +36,7 @@ class \code{list}, each element containing an object of class \code{gg} and \cod
 }
 \description{
 Plots calibration scatter plots for the transition probabilities of a multistate model
-using data estimated from \code{\link{calib_mlr}}.
+estimated using \code{\link{calib_mlr}}.
 }
 \examples{
 # Using competing risks data out of initial state (see vignette: ... -in-competing-risk-setting).
@@ -67,8 +67,6 @@ calib_mlr(data.mstate = msebmtcal.cmprsk,
  degree = 2)
 
  # These are then plotted
- \dontrun{
  plot(dat.calib.mlr, combine = TRUE, nrow = 2, ncol = 3)
- }
 
 }

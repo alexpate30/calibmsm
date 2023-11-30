@@ -94,8 +94,7 @@ and other user specified information.
 }
 \description{
 Creates the underlying data for the calibration curves. \code{calib_blr}
-estimates the
-observed event probabilities for a given set of predicted transition probabilities
+estimates the observed event probabilities for a given set of predicted transition probabilities
 in a cohort of interest. This is done using techniques for assessing calibration of binary logistic regression models,
 in combination with inverse probability of censoring weights and landmarking.
 }

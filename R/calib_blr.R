@@ -1,8 +1,7 @@
 #' Estimate calibration curves for a multistate model using binary logistic regression calibration techniques and inverse probability of censoring weights.'
 #' @description
 #' Creates the underlying data for the calibration curves. `calib_blr`
-#' estimates the
-#' observed event probabilities for a given set of predicted transition probabilities
+#' estimates the observed event probabilities for a given set of predicted transition probabilities
 #' in a cohort of interest. This is done using techniques for assessing calibration of binary logistic regression models,
 #' in combination with inverse probability of censoring weights and landmarking.
 #'

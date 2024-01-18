@@ -34,7 +34,7 @@ drawn from these data."
 msebmtcal.cmprsk
 }
 \description{
-Used in vignette: Comparison-with-graphical-calibration-curves-in-competing-risks-setting.
+Used in vignette/article: Comparison-with-graphical-calibration-curves-in-competing-risks-setting.
 }
 \details{
 The \code{\link[mstate]{ebmt4}} data converted into \code{msdata} format (see \code{\link[mstate]{msprep}}),

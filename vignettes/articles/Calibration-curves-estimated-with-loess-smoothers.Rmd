@@ -49,36 +49,38 @@ We now produce calibration curves for the predicted transition probabilities out
 
 ```{r}
 tp.pred.s0 <- tps0 |>
-               dplyr::filter(j == 1) |>
-               dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
+  dplyr::filter(j == 1) |>
+  dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
 ```
 
 We now produce calibration curves using loess smoothers for the regression model where the observed event probabilities are estimated. This is specified by \code{curve.type = "loess"}. Behaviour of the curve can be controlled using \code{loess.span} and \code{loess.degree}, which we leave as default in this example. Please refere to documentation for the \code{loess} function from the \pkg{loess} package for details of these parameters. A smaller span and/or degree will create a more smoother line. This is done for both the BLR-IPCW and pseudo-value calibration curves.
 
 ```{r}
 dat.calib.blr <-
-  calib_blr(data.mstate = msebmtcal,
-            data.raw = ebmtcal,
-            j = 1,
-            s = 0,
-            t = t.eval,
-            tp.pred = tp.pred.s0,
-            curve.type = "loess",
-            w.covs = c("year", "agecl", "proph", "match"),
-            CI = 95,
-            CI.type = "bootstrap",
-            CI.R.boot = 200)
-
-dat.calib.pv <-
-  calib_pv(data.mstate = msebmtcal,
+  calibmsm(data.mstate = msebmtcal,
            data.raw = ebmtcal,
            j = 1,
            s = 0,
            t = t.eval,
            tp.pred = tp.pred.s0,
+           calib.type = 'blr',
            curve.type = "loess",
-           group.vars = c("year"),
-           n.pctls = 3,
+           w.covs = c("year", "agecl", "proph", "match"),
+           CI = 95,
+           CI.type = "bootstrap",
+           CI.R.boot = 200)
+
+dat.calib.pv <-
+  calibmsm(data.mstate = msebmtcal,
+           data.raw = ebmtcal,
+           j = 1,
+           s = 0,
+           t = t.eval,
+           tp.pred = tp.pred.s0,
+           calib.type = 'pv',
+           curve.type = "loess",
+           pv.group.vars = c("year"),
+           pv.n.pctls = 3,
            CI = 95,
            CI.type = 'parametric')
 ```
@@ -95,7 +97,7 @@ plot(dat.calib.pv)
 
 The equivalent Figures from the [Overview vignette](https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf), produced using restricted cubic splines, are Figures 2 and 3.
 
-Write a short comparison...
+Write a short comparison... XXXX
 
 # Estimation of calibration curves out of state j = 1 at time s = 100 using loess smoothers
 
@@ -103,35 +105,37 @@ We now produce calibration curves for the predicted transition probabilities out
 
 ```{r}
 tp.pred.s100 <- tps100 |>
-               dplyr::filter(j == 1) |>
-               dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
+  dplyr::filter(j == 1) |>
+  dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
 ```
 
 We now produce calibration curves using loess smoothers for the regression model where the observed event probabilities are estimated. This is specified by \code{curve.type = "loess"}. Behaviour of the curve can be controlled using \code{loess.span} and \code{loess.degree}, which we leave as default in this example. Please refere to documentation for the \code{loess} function from the \pkg{loess} package for details of these parameters. A smaller span and/or degree will create a more smoother line. This is done for both the BLR-IPCW and pseudo-value calibration curves.
 
 ```{r}
 dat.calib.blr <-
-  calib_blr(data.mstate = msebmtcal,
-            data.raw = ebmtcal,
-            j = 1,
-            s = 100,
-            t = t.eval,
-            tp.pred = tp.pred.s100,
-            curve.type = "loess",
-            w.covs = c("year", "agecl", "proph", "match"),
-            CI = 95,
-            CI.type = "bootstrap",
-            CI.R.boot = 200)
-
-dat.calib.pv <-
-  calib_pv(data.mstate = msebmtcal,
+  calibmsm(data.mstate = msebmtcal,
            data.raw = ebmtcal,
            j = 1,
            s = 100,
            t = t.eval,
            tp.pred = tp.pred.s100,
+           calib.type = 'blr',
            curve.type = "loess",
-           group.vars = c("year"),
+           w.covs = c("year", "agecl", "proph", "match"),
+           CI = 95,
+           CI.type = "bootstrap",
+           CI.R.boot = 200)
+
+dat.calib.pv <-
+  calibmsm(data.mstate = msebmtcal,
+           data.raw = ebmtcal,
+           j = 1,
+           s = 100,
+           t = t.eval,
+           tp.pred = tp.pred.s100,
+           calib.type = 'pv',
+           curve.type = "loess",
+           pv.group.vars = c("year"),
            CI = 95,
            CI.type = 'parametric')
 ```
@@ -156,35 +160,37 @@ We now produce calibration curves for the predicted transition probabilities out
 
 ```{r}
 tp.pred.s100 <- tps100 |>
-               dplyr::filter(j == 3) |>
-               dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
+  dplyr::filter(j == 3) |>
+  dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
 ```
 
 We now produce calibration curves using loess smoothers for the regression model where the observed event probabilities are estimated. This is specified by \code{curve.type = "loess"}. Behaviour of the curve can be controlled using \code{loess.span} and \code{loess.degree}, which we leave as default in this example. Please refere to documentation for the \code{loess} function from the \pkg{loess} package for details of these parameters. A smaller span and/or degree will create a more smoother line. This is done for both the BLR-IPCW and pseudo-value calibration curves.
 
 ```{r}
 dat.calib.blr <-
-  calib_blr(data.mstate = msebmtcal,
-            data.raw = ebmtcal,
-            j = 3,
-            s = 100,
-            t = t.eval,
-            tp.pred = tp.pred.s100,
-            curve.type = "loess",
-            w.covs = c("year", "agecl", "proph", "match"),
-            CI = 95,
-            CI.type = "bootstrap",
-            CI.R.boot = 200)
-
-dat.calib.pv <-
-  calib_pv(data.mstate = msebmtcal,
+  calibmsm(data.mstate = msebmtcal,
            data.raw = ebmtcal,
            j = 3,
            s = 100,
            t = t.eval,
            tp.pred = tp.pred.s100,
+           calib.type = 'blr',
            curve.type = "loess",
-           group.vars = c("year"),
+           w.covs = c("year", "agecl", "proph", "match"),
+           CI = 95,
+           CI.type = "bootstrap",
+           CI.R.boot = 200)
+
+dat.calib.pv <-
+  calibmsm(data.mstate = msebmtcal,
+           data.raw = ebmtcal,
+           j = 3,
+           s = 100,
+           t = t.eval,
+           tp.pred = tp.pred.s100,
+           calib.type = 'pv',
+           curve.type = "loess",
+           pv.group.vars = c("year"),
            CI = 95,
            CI.type = 'parametric')
 ```
@@ -201,42 +207,44 @@ plot(dat.calib.pv)
 
 The equivalent Figures from the [Overview vignette](https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf), produced using restricted cubic splines, are Figures 7 and 8.
 
-Write a short comparison...
+Write a short comparison... XXXX
 
 # A note on the fact that confidence intervals may be lower than 0 or bigger than 1
 
 Given the standard error is calculated on the probability scale here, as opposed to the logit scale, the confidence intervals may exceed 0 and 1. I have checked and the confidence intervals are calculated in the same way in the CalibrationCurves package: https://cran.r-project.org/web/packages/CalibrationCurves/CalibrationCurves.pdf . In particular see code for val.prob.ci.2: https://github.com/BavoDC/CalibrationCurves/blob/master/R/val.prob.ci.2.R . There parametric confidence intervals are calculated in the same way we calculate parametric confidence intervals for the pseudo value approach.  I am therefore confident this is correct, but is something i'd like to come back to and consider the implications of. It's also intriguing that even for the bootstrapped BLR-IPCW confidence intervals, we are seeing confidence intervals well outside 0 and 1. I thought this would be an issue for the pseudo-value parametric confidence intervals as we are just adding on 1.96*se on the probability scale. However, I didnt actually think that would be possible for the bootstrapped confidence intervals, as in any given bootstrapped dataset, predicted-observed values would still lie between 0 and 1, so this is something to explore in more detail.
 
-Having done a bit more research (see test_loess_bootstrap.R in the test folder), the values below 0 are driven by a small number of individuals with the smallest risks. Lots of their predicted-observed values are NAs, and they have some negative values too. It is evident these small number of individuals are driving all the NA values we are finding in each bootstrap ieration. Going to try increasing the span to see if that helps. Now i know the mechanism, also not something i'm particularly worried about, as seems to be driven by small sample size. 
+Having done a bit more research (see test_loess_bootstrap.R in the test folder), the values below 0 are driven by a small number of individuals with the smallest risks. Lots of their predicted-observed values are NAs, and they have some negative values too. It is evident these small number of individuals are driving all the NA values we are finding in each bootstrap iteration. Going to try increasing the span to see if that helps. Now i know the mechanism, although not something I'm particularly worried about, as seems to be driven by small sample size when assessing calibration at time s = 100. 
 
 Compare the following graphs to figures 1 and 2 above. First do \code{loess.span = 0.9}.
 
 ```{r}
 dat.calib.blr <-
-  calib_blr(data.mstate = msebmtcal,
-            data.raw = ebmtcal,
-            j = 1,
-            s = 0,
-            t = t.eval,
-            tp.pred = tp.pred.s0,
-            curve.type = "loess",
-            loess.span = 0.9,
-            w.covs = c("year", "agecl", "proph", "match"),
-            CI = 95,
-            CI.type = "bootstrap",
-            CI.R.boot = 200)
-
-dat.calib.pv <-
-  calib_pv(data.mstate = msebmtcal,
+  calibmsm(data.mstate = msebmtcal,
            data.raw = ebmtcal,
            j = 1,
            s = 0,
            t = t.eval,
            tp.pred = tp.pred.s0,
+           calib.type = 'blr',
            curve.type = "loess",
            loess.span = 0.9,
-           group.vars = c("year"),
-           n.pctls = 3,
+           w.covs = c("year", "agecl", "proph", "match"),
+           CI = 95,
+           CI.type = "bootstrap",
+           CI.R.boot = 200)
+
+dat.calib.pv <-
+  calibmsm(data.mstate = msebmtcal,
+           data.raw = ebmtcal,
+           j = 1,
+           s = 0,
+           t = t.eval,
+           tp.pred = tp.pred.s0,
+           calib.type = 'pv',
+           curve.type = "loess",
+           loess.span = 0.9,
+           pv.group.vars = c("year"),
+           pv.n.pctls = 3,
            CI = 95,
            CI.type = 'parametric')
 ```
@@ -255,30 +263,32 @@ Then do \code{loess.span = 1}.
 
 ```{r}
 dat.calib.blr <-
-  calib_blr(data.mstate = msebmtcal,
-            data.raw = ebmtcal,
-            j = 1,
-            s = 0,
-            t = t.eval,
-            tp.pred = tp.pred.s0,
-            curve.type = "loess",
-            loess.span = 1,
-            w.covs = c("year", "agecl", "proph", "match"),
-            CI = 95,
-            CI.type = "bootstrap",
-            CI.R.boot = 200)
-
-dat.calib.pv <-
-  calib_pv(data.mstate = msebmtcal,
+  calibmsm(data.mstate = msebmtcal,
            data.raw = ebmtcal,
            j = 1,
            s = 0,
            t = t.eval,
            tp.pred = tp.pred.s0,
+           calib.type = 'blr',
            curve.type = "loess",
            loess.span = 1,
-           group.vars = c("year"),
-           n.pctls = 3,
+           w.covs = c("year", "agecl", "proph", "match"),
+           CI = 95,
+           CI.type = "bootstrap",
+           CI.R.boot = 200)
+
+dat.calib.pv <-
+  calibmsm(data.mstate = msebmtcal,
+           data.raw = ebmtcal,
+           j = 1,
+           s = 0,
+           t = t.eval,
+           tp.pred = tp.pred.s0,
+           calib.type = 'pv',
+           curve.type = "loess",
+           loess.span = 1,
+           pv.group.vars = c("year"),
+           pv.n.pctls = 3,
            CI = 95,
            CI.type = 'parametric')
 ```

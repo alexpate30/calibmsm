@@ -1,5 +1,5 @@
 ---
-title: "Directory-of-vignettes"
+title: "A catalogue of links and descriptions for all the vignettes"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Directory-of-vignettes}

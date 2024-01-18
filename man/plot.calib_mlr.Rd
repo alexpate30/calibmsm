@@ -2,7 +2,8 @@
 % Please edit documentation in R/plot_calib.R
 \name{plot.calib_mlr}
 \alias{plot.calib_mlr}
-\title{Plots calibration scatter plots estimated using \code{\link{calib_mlr}}.}
+\title{Plots calibration scatter plots for objects of class \code{calib_mlr} estimated using
+using \code{\link{calibmsm}}.}
 \usage{
 \method{plot}{calib_mlr}(
   x,
@@ -15,7 +16,7 @@
 )
 }
 \arguments{
-\item{x}{Object of class 'calib_mlr' generated from \code{\link{calib_mlr}}}
+\item{x}{Object of class \code{calib_mlr} generated from \code{\link{calibmsm}}}
 
 \item{...}{Other}
 
@@ -36,7 +37,7 @@ class \code{list}, each element containing an object of class \code{gg} and \cod
 }
 \description{
 Plots calibration scatter plots for the transition probabilities of a multistate model
-estimated using \code{\link{calib_mlr}}.
+estimated using the MLR-IPCW approach.
 }
 \examples{
 # Using competing risks data out of initial state (see vignette: ... -in-competing-risk-setting).
@@ -55,18 +56,19 @@ ebmtcal <- ebmtcal |> dplyr::filter(id \%in\% 1:150)
 msebmtcal.cmprsk <- msebmtcal.cmprsk |> dplyr::filter(id \%in\% 1:150)
 
 # Now estimate the observed event probabilities for each possible transition.
-dat.calib.mlr <-
-calib_mlr(data.mstate = msebmtcal.cmprsk,
+dat.calib <-
+calibmsm(data.mstate = msebmtcal.cmprsk,
  data.raw = ebmtcal,
  j=1,
  s=0,
  t = 1826,
  tp.pred = tp.pred,
+ calib.type = "mlr",
  w.covs = c("year", "agecl", "proph", "match"),
- ps.int = 2,
- degree = 2)
+ mlr.ps.int = 2,
+ mlr.degree = 2)
 
  # These are then plotted
- plot(dat.calib.mlr, combine = TRUE, nrow = 2, ncol = 3)
+ plot(dat.calib, combine = TRUE, nrow = 2, ncol = 3)
 
 }

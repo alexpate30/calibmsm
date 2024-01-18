@@ -202,11 +202,11 @@ calc_weights <- function(data.mstate, data.raw, covs = NULL, t, s, landmark.type
   ### Create output object
   if (stabilised == FALSE){
     data.raw.save$ipcw <- pmin(data.raw.save$ipcw, max.weight)
-    output.weights <- data.frame("id" = data.raw.save$id, "ipcw" = data.raw.save$ipcw, "pcw" = data.raw.save$pcw)
+    output.weights <- data.frame("id" = data.raw.save$id, "ipcw" = data.raw.save$ipcw)
   } else if (stabilised == TRUE){
     data.raw.save$ipcw <- pmin(data.raw.save$ipcw, max.weight)
     data.raw.save$ipcw.stab <- pmin(data.raw.save$ipcw.stab, max.weight)
-    output.weights <- data.frame("id" = data.raw.save$id, "ipcw" = data.raw.save$ipcw, "ipcw.stab" = data.raw.save$ipcw.stab, "pcw" = data.raw.save$pcw)
+    output.weights <- data.frame("id" = data.raw.save$id, "ipcw" = data.raw.save$ipcw.stab)
   }
 
   return(output.weights)

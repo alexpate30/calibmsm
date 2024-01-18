@@ -3,7 +3,7 @@
 \docType{data}
 \name{msebmtcal}
 \alias{msebmtcal}
-\title{European Group for Blood and Marrow Transplantation data}
+\title{European Group for Blood and Marrow Transplantation data in \code{msdata} format.}
 \format{
 \subsection{'msebmtcal'}{
 

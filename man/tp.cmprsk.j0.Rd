@@ -29,7 +29,9 @@ drawn from these data."
 tp.cmprsk.j0
 }
 \description{
-Used in vignette: Comparison-with-graphical-calibration-curves-in-competing-risks-setting.
+Used in vignette/article: Comparison-with-graphical-calibration-curves-in-competing-risks-setting.
+}
+\details{
 Data frame containing the predicted transition probabilities out of state j = 1
 made at time s = 0, for a competing risks model out of the initial state (see \code{\link{msebmtcal.cmprsk}}).
 The predicted transition probabilities were estimated by fitting

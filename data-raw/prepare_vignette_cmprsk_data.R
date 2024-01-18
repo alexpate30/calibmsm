@@ -8,6 +8,7 @@
 ### Load calibmsm
 library(mstate)
 
+
 ### Define state which sub-model is coming out of and landmark time
 j <- 1
 s <- 0
@@ -78,6 +79,14 @@ tp.cmprsk.j0 <- tp.all
 msebmtcal.cmprsk <- dplyr::select(msebmtcal.cmprsk, c("id", "from", "to", "trans", "Tstart", "Tstop", "time", "status"))
 attributes(msebmtcal.cmprsk)$trans <- tmat
 
+### Finally create a new dtcens variable for the competing risk data
+### Having an event of interest stops censoring from being observed, therefore the
+### competing risks data requires a new censoring variable
+ebmtcal.cmprsk <- ebmtcal
+ebmtcal.cmprsk$dtcens <- pmin(ebmtcal.cmprsk$rec, ebmtcal.cmprsk$ae, ebmtcal.cmprsk$rel, ebmtcal.cmprsk$srv)
+ebmtcal.cmprsk$dtcens.s <- 1 - pmax(ebmtcal.cmprsk$rec.s, ebmtcal.cmprsk$ae.s, ebmtcal.cmprsk$rel.s, ebmtcal.cmprsk$srv.s)
+
 ### Use in package
 usethis::use_data(tp.cmprsk.j0, overwrite = TRUE)
 usethis::use_data(msebmtcal.cmprsk, overwrite = TRUE)
+usethis::use_data(ebmtcal.cmprsk, overwrite = TRUE)

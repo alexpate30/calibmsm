@@ -17,7 +17,6 @@ test_that("check weights, stabilised == FALSE", {
 
   ### There should be 501 NA's
   expect_equal(sum(is.na(weights.manual$ipcw)), 501)
-  expect_equal(sum(is.na(weights.manual$pcw)), 501)
 
   ### Create weights for j = 3 and s = 100
   weights.manual <-
@@ -36,7 +35,6 @@ test_that("check weights, stabilised == FALSE", {
 
   ### There should be 501 NA's
   expect_equal(sum(is.na(weights.manual$ipcw)), 802)
-  expect_equal(sum(is.na(weights.manual$pcw)), 802)
 
 })
 
@@ -59,7 +57,7 @@ test_that("check weights, stabilised == TRUE", {
 
   ### There should be 501 NA's
   expect_equal(sum(is.na(weights.manual$ipcw)), 501)
-  expect_equal(sum(is.na(weights.manual$pcw)), 501)
+
 
   ### Create weights for j = 3 and s = 100
   weights.manual <-
@@ -78,7 +76,6 @@ test_that("check weights, stabilised == TRUE", {
 
   ### There should be 501 NA's
   expect_equal(sum(is.na(weights.manual$ipcw)), 802)
-  expect_equal(sum(is.na(weights.manual$pcw)), 802)
 
 })
 
@@ -102,7 +99,7 @@ test_that("check weights, stabilised == FALSE, add max.follow", {
 
   ### There should be 501 NA's
   expect_equal(sum(is.na(weights.manual$ipcw)), 501)
-  expect_equal(sum(is.na(weights.manual$pcw)), 501)
+
 
   ### Create weights for j = 3 and s = 100
   weights.manual <-
@@ -122,7 +119,6 @@ test_that("check weights, stabilised == FALSE, add max.follow", {
 
   ### There should be 501 NA's
   expect_equal(sum(is.na(weights.manual$ipcw)), 802)
-  expect_equal(sum(is.na(weights.manual$pcw)), 802)
 
   ### Expect error if max.follow < t
   expect_error(
@@ -158,7 +154,7 @@ test_that("check weights, stabilised == FALSE, covs = null", {
 
   ### There should be 501 NA's
   expect_equal(sum(is.na(weights.manual$ipcw)), 501)
-  expect_equal(sum(is.na(weights.manual$pcw)), 501)
+
 
   ### Create weights for j = 3 and s = 100
   weights.manual <-
@@ -176,7 +172,6 @@ test_that("check weights, stabilised == FALSE, covs = null", {
 
   ### There should be 501 NA's
   expect_equal(sum(is.na(weights.manual$ipcw)), 802)
-  expect_equal(sum(is.na(weights.manual$pcw)), 802)
 
 })
 
@@ -199,7 +194,6 @@ test_that("check weights at j = 1 and s= 100, landmark.type = state/all", {
 
   ### There should be 501 NA's
   expect_equal(sum(is.na(weights.manual.j1$ipcw)), 802)
-  expect_equal(sum(is.na(weights.manual.j1$pcw)), 802)
 
   ### Create weights for j = 3 and s = 0
   weights.manual.j3 <-
@@ -218,7 +212,6 @@ test_that("check weights at j = 1 and s= 100, landmark.type = state/all", {
 
   ### There should be 501 NA's
   expect_equal(sum(is.na(weights.manual.j3$ipcw)), 802)
-  expect_equal(sum(is.na(weights.manual.j3$pcw)), 802)
 
   ### The weights should not be the same for j = 1 and j = 3, because landmark.type == "state"
   expect_false(sum(weights.manual.j1$ipcw, na.rm = TRUE) - sum(weights.manual.j3$ipcw, na.rm = TRUE) == 0)
@@ -244,7 +237,6 @@ test_that("check weights at j = 1 and s= 100, landmark.type = state/all", {
 
   ### There should be 501 NA's
   expect_equal(sum(is.na(weights.manual.j1$ipcw)), 802)
-  expect_equal(sum(is.na(weights.manual.j1$pcw)), 802)
 
   ### Create weights for j = 3 and s = 0
   suppressWarnings(weights.manual.j3 <-
@@ -263,7 +255,6 @@ test_that("check weights at j = 1 and s= 100, landmark.type = state/all", {
 
   ### There should be 501 NA's
   expect_equal(sum(is.na(weights.manual.j3$ipcw)), 802)
-  expect_equal(sum(is.na(weights.manual.j3$pcw)), 802)
 
   ### The weights should not be the same for j = 1 and j = 3, because landmark.type == "state"
   expect_true(sum(weights.manual.j1$ipcw, na.rm = TRUE) - sum(weights.manual.j3$ipcw, na.rm = TRUE) == 0)

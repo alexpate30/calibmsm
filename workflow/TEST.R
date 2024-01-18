@@ -1,8 +1,31 @@
 ###
 ### Testing package functionality
 ###
-load_all()
-add_test
+rm(list=ls())
+devtools::load_all()
+devtools::document()
+devtools::install()
+help(package = "mstate")
+help(package = "calibmsm")
+install.packages("calibmsm")
+### Lets make some plots using the new inhertance stuff
+
+dat.calib.blr <-
+  calibmsm(data.mstate = msebmtcal,
+            data.raw = ebmtcal,
+            j=1,
+            s=0,
+            t = t.eval,
+            tp.pred = tp.pred.s0,
+            calib.type = "blr",
+            curve.type = "rcs",
+            w.covs = c("year", "agecl", "proph", "match"),
+            CI = 95,
+            CI.R.boot = 10,
+            CI.seed = 1)
+
+
+
 ## Reduce to 50 individuals
 # Extract the predicted transition probabilities out of state j = 1 for first 100 individuals
 tp.pred <- tps0 |>
@@ -58,7 +81,7 @@ devtools::document()
 devtools::check()
 devtools::install()
 small.change <- 1
-devtools::check(vignettes = FALSE, args = c("--no-tests"))
+devtools::check(vignettes = FALSE)
 ?calibmsm::calc_calib_mlr
 testhaschanged <- 1
 whyisntworkflowbeingrecognised <- 3
@@ -289,14 +312,15 @@ library(calibmsm)
 install.packages("rlang")
 devtools::document()
 getwd()
+
+
+
 rm(list=ls())
-load_all()
-calc_calib_mlr
-
-
+devtools::load_all()
 devtools::test()
-.libPaths()
-devtools::install()
+
+
+
 testthat::test_file("tests/testthat/test-calib_blr.R")
 testthat::test_file("tests/testthat/test-calib_mlr.R")
 testthat::test_file("tests/testthat/test-weights.R")

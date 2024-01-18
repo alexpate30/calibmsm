@@ -1,8 +1,8 @@
 #' @keywords internal
+#' @aliases calibmsm-package
 "_PACKAGE"
 
 ## usethis namespace: start
-#' @importFrom magrittr %>%
 #' @importFrom stats predict
 #' @importFrom VGAM s
 #' @importFrom VGAM sm.os

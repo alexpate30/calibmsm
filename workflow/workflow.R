@@ -18,6 +18,11 @@ devtools::install()
 devtools::document()
 
 ###
+### Add help topic
+###
+usethis::use_package_doc()
+
+###
 ### Add license
 ###
 usethis::use_mit_license()
@@ -47,7 +52,7 @@ usethis::use_package("VGAM")
 ###
 ### Add functions to refer to without ::
 ###
-usethis::use_import_from("magrittr", "%>%")
+# usethis::use_import_from("magrittr", "%>%")
 usethis::use_import_from("stats", "predict")
 usethis::use_import_from("VGAM", "sm.ps")
 usethis::use_import_from("VGAM", "sm.os")
@@ -152,7 +157,7 @@ rhub::check_for_cran()
 ### Update version
 ###
 usethis::use_release_issue()
-usethis::use_version('major')
+usethis::use_version('minor')
 
 ###
 ### Submit to CRAN

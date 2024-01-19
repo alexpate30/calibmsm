@@ -43,7 +43,7 @@ devtools::install_github("alexpate30/calibmsm")
 
 This is a basic example which shows you how to assess the calibration of the transition probabilities at 5 years follow up for individuals out of state `j = 1` at time `s = 0` using the BLR-IPCW approach. Please see the *Overview* vignette for examples of how to assess calibration using the pseudo-value and MLR-IPCW approaches, as well as details of the methodology. 
 
-The predicted transition probabilities are stored in `tps0`, the individuals data are stored in `ebmtcal`, and the data in `msdata` format are stored in `msebmtcal`. Calibration curves are estimated using `calib_blr`. Inverse probability of censoring weights are calculated based on variables `year`, `age`, `prophylaxis` and donor gender `match`. The calibration curves are estimated using restricted cubic splines with 3 knots. A 95% confidence interval is calculated using bootstrapping with 200 bootstrap replicates.
+The predicted transition probabilities are stored in `tps0`, the individuals data are stored in `ebmtcal`, and the data in `msdata` format are stored in `msebmtcal`. Calibration curves are estimated using `calibmsm` using the BLR-IPCW method (`calib.type = 'blr'`) with inverse probability of censoring weights are calculated based on variables `year`, `age`, `prophylaxis` and donor gender `match`. The calibration curves are estimated using restricted cubic splines with 3 knots. A 95% confidence interval is calculated using bootstrapping with 200 bootstrap replicates.
 
 ```{r example}
 ## Load calibmsm
@@ -54,17 +54,19 @@ tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6
 
 ## Calculate observed event probabilities
 dat.calib.blr <-
-  calib_blr(data.mstate = msebmtcal,
-                 data.raw = ebmtcal,
-                 j = 1,
-                 s = 0,
-                 t = 1826,
-                 tp.pred = tp.pred,
-                 curve.type = "rcs",
-                 rcs.nk = 3,
-                 w.covs = c("year", "agecl", "proph", "match"),
-                 CI = 95,
-                 CI.R.boot = 200)
+  calibmsm(data.mstate = msebmtcal,
+          data.raw = ebmtcal,
+          j = 1,
+          s = 0,
+          t = 1826,
+          tp.pred = tp.pred,
+          calib.type = "blr",
+          curve.type = "rcs",
+          rcs.nk = 3,
+          w.covs = c("year", "agecl", "proph", "match"),
+          CI = 95,
+          CI.R.boot = 200)
+
 
 ## Plot calibration plots
 plot(dat.calib.blr, combine = TRUE, nrow = 2, ncol = 3)

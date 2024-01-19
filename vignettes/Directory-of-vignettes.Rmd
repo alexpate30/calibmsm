@@ -2,7 +2,7 @@
 title: "A catalogue of links and descriptions for all the vignettes"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Directory-of-vignettes}
+  %\VignetteIndexEntry{A catalogue of links and descriptions for all the vignettes}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

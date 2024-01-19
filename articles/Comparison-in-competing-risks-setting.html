@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">calibmsm</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,7 +41,7 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/Directory-of-vignettes.html">Directory-of-vignettes</a>
+    <a class="dropdown-item" href="../articles/Directory-of-vignettes.html">A catalogue of links and descriptions for all the vignettes</a>
     <a class="dropdown-item" href="../articles/BLR-IPCW-manual-bootstrap.html">BLR-IPCW-manual-bootstrap</a>
     <a class="dropdown-item" href="../articles/Calibration-curves-estimated-with-loess-smoothers.html">Calibration-curves-estimated-with-loess-smoothers</a>
     <a class="dropdown-item" href="../articles/Comparison-in-competing-risks-setting.html">Comparison-in-competing-risks-setting</a>
@@ -119,17 +119,24 @@ used to estimate the predicted risks: year of transplant
 given (<code>proph</code>), and whether the donor was gender matched
 (<code>match</code>).</p>
 <p>The transition probabilities are stored in the object
-<code>tp.cmprsk.j0</code>. Datasets in formats required for functions
-<code>calib_blr</code> and <code>calib_pv</code> are stored in
-<code>ebmtcal</code> (<code>data.raw</code> argument) and
-<code>msebmtcal.cmprsk</code> (<code>data.mstate</code> argument). Note
-that the <code>ebmtcal</code> dataset can still be used as the argument
-for <code>data.raw</code>, but a new dataset for the
-<code>data.mstate</code> argument is required, which reflects the fact
-this is now a competing risks data structure. Please refer to the <a href="https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf">Overview
+<code>tp.cmprsk.j0</code>. Datasets in formats required for function
+<code>calibmsm</code> are stored in <code>ebmtcal.cmprsk</code>
+(<code>data.raw</code> argument) and <code>msebmtcal.cmprsk</code>
+(<code>data.mstate</code> argument). Note that the
+<code>ebmtcal.cmprsk</code> is the same <code>ebmtcal</code> except the
+variables <code>dtcens</code> and <code>dtcens.s</code> have been
+derived in a different manner. Specifically, in this setting entry into
+any state will have the effect of preventing censoring as they are all
+absorbing states, whereas in <code>ebmtcal</code> this was true only for
+entry into states <code>5</code> and <code>6</code>, however this is the
+only difference between the two datasets, A completely new dataset for
+the <code>data.mstate</code> argument was required, which reflects the
+fact this is now a competing risks data structure. Please refer to the
+<a href="https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf">Overview
 vignette</a> for more details about how these datasets should be
-formatted. We assess calibration at 5 years (1826 days) for all
-methods.</p>
+formatted, and refer to the source code for specifically how these two
+datasets were derived. We assess calibration at 5 years (1826 days) for
+all methods.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://alexpate30.github.io/calibmsm/">calibmsm</a></span><span class="op">)</span></span>
 <span></span>
@@ -150,8 +157,8 @@ methods.</p>
 <span><span class="co">#&gt; 5 0.02777129 0.02476595   0 0.009947925 0.012554747</span></span>
 <span><span class="co">#&gt; 6 0.01921355 0.01871733   0 0.006325238 0.007708340</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"ebmtcal"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ebmtcal</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"ebmtcal.cmprsk"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ebmtcal.cmprsk</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   id  rec rec.s   ae ae.s recae recae.s  rel rel.s  srv srv.s      year agecl</span></span>
 <span><span class="co">#&gt; 1  1   22     1  995    0   995       0  995     0  995     0 1995-1998 20-40</span></span>
 <span><span class="co">#&gt; 2  2   29     1   12    1    29       1  422     1  579     1 1995-1998 20-40</span></span>
@@ -160,12 +167,12 @@ methods.</p>
 <span><span class="co">#&gt; 5  5   22     1 1133    0  1133       0  114     1 1133     0 1995-1998   &gt;40</span></span>
 <span><span class="co">#&gt; 6  6   33     1   27    1    33       1 1427     0 1427     0 1995-1998 20-40</span></span>
 <span><span class="co">#&gt;   proph              match dtcens dtcens.s</span></span>
-<span><span class="co">#&gt; 1    no no gender mismatch    995        1</span></span>
-<span><span class="co">#&gt; 2    no no gender mismatch    422        0</span></span>
-<span><span class="co">#&gt; 3    no no gender mismatch   1264        1</span></span>
-<span><span class="co">#&gt; 4    no    gender mismatch     84        0</span></span>
-<span><span class="co">#&gt; 5    no    gender mismatch    114        0</span></span>
-<span><span class="co">#&gt; 6    no no gender mismatch   1427        1</span></span>
+<span><span class="co">#&gt; 1    no no gender mismatch     22        0</span></span>
+<span><span class="co">#&gt; 2    no no gender mismatch     12        0</span></span>
+<span><span class="co">#&gt; 3    no no gender mismatch     27        0</span></span>
+<span><span class="co">#&gt; 4    no    gender mismatch     42        0</span></span>
+<span><span class="co">#&gt; 5    no    gender mismatch     22        0</span></span>
+<span><span class="co">#&gt; 6    no no gender mismatch     27        0</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"msebmtcal.cmprsk"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">msebmtcal.cmprsk</span><span class="op">)</span></span>
@@ -181,22 +188,23 @@ methods.</p>
 <h2 id="assess-calibration-using-blr-ipcw">Assess calibration using BLR-IPCW<a class="anchor" aria-label="anchor" href="#assess-calibration-using-blr-ipcw"></a>
 </h2>
 <p>We first assess the calibration of this competing risks model using
-the BLR-IPCW approach, implemented through <code>calib_blr</code>.</p>
+the BLR-IPCW approach.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### Estimate calibration curves</span></span>
 <span><span class="va">dat.calib.blr</span> <span class="op">&lt;-</span></span>
-<span>  <span class="fu"><a href="../reference/calib_blr.html">calib_blr</a></span><span class="op">(</span>data.mstate <span class="op">=</span> <span class="va">msebmtcal.cmprsk</span>,</span>
-<span>                 data.raw <span class="op">=</span> <span class="va">ebmtcal</span>,</span>
-<span>                 j<span class="op">=</span><span class="fl">1</span>,</span>
-<span>                 s<span class="op">=</span><span class="fl">0</span>,</span>
-<span>                 t <span class="op">=</span> <span class="fl">1826</span>,</span>
-<span>                 tp.pred <span class="op">=</span> <span class="va">tp.cmprsk.j0</span> <span class="op">|&gt;</span></span>
-<span>                   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu">any_of</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"pstate"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>                 curve.type <span class="op">=</span> <span class="st">"rcs"</span>,</span>
-<span>                 rcs.nk <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>                 w.covs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span>, <span class="st">"agecl"</span>, <span class="st">"proph"</span>, <span class="st">"match"</span><span class="op">)</span>,</span>
-<span>                 CI <span class="op">=</span> <span class="fl">95</span>,</span>
-<span>                 CI.R.boot <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../reference/calibmsm.html">calibmsm</a></span><span class="op">(</span>data.mstate <span class="op">=</span> <span class="va">msebmtcal.cmprsk</span>,</span>
+<span>           data.raw <span class="op">=</span> <span class="va">ebmtcal.cmprsk</span>,</span>
+<span>           j<span class="op">=</span><span class="fl">1</span>,</span>
+<span>           s<span class="op">=</span><span class="fl">0</span>,</span>
+<span>           t <span class="op">=</span> <span class="fl">1826</span>,</span>
+<span>           tp.pred <span class="op">=</span> <span class="va">tp.cmprsk.j0</span> <span class="op">|&gt;</span></span>
+<span>             <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu">any_of</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"pstate"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>           calib.type <span class="op">=</span> <span class="st">'blr'</span>,</span>
+<span>           curve.type <span class="op">=</span> <span class="st">"rcs"</span>,</span>
+<span>           rcs.nk <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>           w.covs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span>, <span class="st">"agecl"</span>, <span class="st">"proph"</span>, <span class="st">"match"</span><span class="op">)</span>,</span>
+<span>           CI <span class="op">=</span> <span class="fl">95</span>,</span>
+<span>           CI.R.boot <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">### Turn into plot and print</span></span>
 <span><span class="va">plot.calibmsm.blr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat.calib.blr</span>, combine <span class="op">=</span> <span class="cn">TRUE</span>, nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
@@ -218,19 +226,20 @@ the pseudo-value approach, implemented through
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### Estimate calibration curves</span></span>
 <span><span class="va">dat.calib.pv</span> <span class="op">&lt;-</span></span>
-<span>  <span class="fu"><a href="../reference/calib_pv.html">calib_pv</a></span><span class="op">(</span>data.mstate <span class="op">=</span> <span class="va">msebmtcal.cmprsk</span>,</span>
-<span>                 data.raw <span class="op">=</span> <span class="va">ebmtcal</span>,</span>
-<span>                 j<span class="op">=</span><span class="fl">1</span>,</span>
-<span>                 s<span class="op">=</span><span class="fl">0</span>,</span>
-<span>                 t <span class="op">=</span> <span class="fl">1826</span>,</span>
-<span>                 tp.pred <span class="op">=</span> <span class="va">tp.cmprsk.j0</span> <span class="op">|&gt;</span></span>
-<span>                   <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu">any_of</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"pstate"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>                 curve.type <span class="op">=</span> <span class="st">"rcs"</span>,</span>
-<span>                 rcs.nk <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>                 group.vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span><span class="op">)</span>,</span>
-<span>                 n.pctls <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>                 CI <span class="op">=</span> <span class="fl">95</span>,</span>
-<span>                 CI.type <span class="op">=</span> <span class="st">"parametric"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="../reference/calibmsm.html">calibmsm</a></span><span class="op">(</span>data.mstate <span class="op">=</span> <span class="va">msebmtcal.cmprsk</span>,</span>
+<span>           data.raw <span class="op">=</span> <span class="va">ebmtcal.cmprsk</span>,</span>
+<span>           j<span class="op">=</span><span class="fl">1</span>,</span>
+<span>           s<span class="op">=</span><span class="fl">0</span>,</span>
+<span>           t <span class="op">=</span> <span class="fl">1826</span>,</span>
+<span>           tp.pred <span class="op">=</span> <span class="va">tp.cmprsk.j0</span> <span class="op">|&gt;</span></span>
+<span>             <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu">any_of</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"pstate"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>           calib.type <span class="op">=</span> <span class="st">'pv'</span>,</span>
+<span>           curve.type <span class="op">=</span> <span class="st">"rcs"</span>,</span>
+<span>           rcs.nk <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>           pv.group.vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span><span class="op">)</span>,</span>
+<span>           pv.n.pctls <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>           CI <span class="op">=</span> <span class="fl">95</span>,</span>
+<span>           CI.type <span class="op">=</span> <span class="st">"parametric"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">### Turn into plot and print</span></span>
 <span><span class="va">plot.calibmsm.pv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat.calib.pv</span>, combine <span class="op">=</span> <span class="cn">TRUE</span>, nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
@@ -252,115 +261,115 @@ written to do this, which estimates the calibration curves and returns a
 list of plots using <code>ggplot2</code>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">calc.calib.gcc.mod</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data.mstate</span>, <span class="va">data.raw</span>, <span class="va">j</span>, <span class="va">s</span>, <span class="va">t</span>, <span class="va">p.est</span>, <span class="va">nk</span> <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">{</span></span>
-<span></span>
+<span>  </span>
 <span>  <span class="co">### Assign colnames to p.est</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">p.est</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"p.est"</span>, <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">p.est</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
-<span></span>
+<span>  </span>
 <span>  <span class="co">### Extract what states an individual can move into from state j (states with a non-zero predicted risk)</span></span>
 <span>  <span class="co">### Also drop the staet that an individual is already in, because there is no cmprsk model for staying in the same state</span></span>
 <span>  <span class="va">valid.transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">p.est</span><span class="op">)</span> <span class="op">!=</span> <span class="fl">0</span><span class="op">)</span></span>
 <span>  <span class="va">valid.transitions</span> <span class="op">&lt;-</span> <span class="va">valid.transitions</span><span class="op">[</span><span class="op">-</span><span class="op">(</span><span class="va">valid.transitions</span> <span class="op">==</span> <span class="va">j</span><span class="op">)</span><span class="op">]</span></span>
-<span></span>
+<span>  </span>
 <span>  <span class="co">### Add the predicted risks, and the complementary log log transormation of the predicted risks to data.raw</span></span>
 <span>  <span class="va">p.est.cll</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">p.est</span><span class="op">[</span>,<span class="va">valid.transitions</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">p.est.cll</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"p.est.cll"</span>, <span class="va">valid.transitions</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
-<span></span>
+<span>  </span>
 <span>  <span class="co">### Identify individuals who are in state j at time s</span></span>
 <span>  <span class="va">ids.state.j</span> <span class="op">&lt;-</span> <span class="fu">base</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">data.mstate</span>, <span class="va">from</span> <span class="op">==</span> <span class="va">j</span> <span class="op">&amp;</span> <span class="va">Tstart</span> <span class="op">&lt;=</span> <span class="va">s</span> <span class="op">&amp;</span> <span class="va">s</span> <span class="op">&lt;</span> <span class="va">Tstop</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html" class="external-link">distinct</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
-<span></span>
+<span>  </span>
 <span>  <span class="co">### Subset data.mstate and data.raw to these individuals.</span></span>
 <span>  <span class="va">data.mstate</span> <span class="op">&lt;-</span> <span class="va">data.mstate</span> <span class="op">|&gt;</span> <span class="fu">base</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">ids.state.j</span><span class="op">)</span></span>
 <span>  <span class="va">data.raw</span> <span class="op">&lt;-</span> <span class="va">data.raw</span> <span class="op">|&gt;</span> <span class="fu">base</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">ids.state.j</span><span class="op">)</span></span>
-<span></span>
+<span>  </span>
 <span>  <span class="co">### Add the cloglog risks and predicted risks to the landmark dataset</span></span>
 <span>  <span class="va">data.raw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">data.raw</span>, <span class="va">p.est</span><span class="op">[</span>,<span class="va">valid.transitions</span><span class="op">]</span>, <span class="va">p.est.cll</span><span class="op">)</span></span>
-<span></span>
+<span>  </span>
 <span>  <span class="co">### Finally, identify individuals which are censored before experiencing any events (used to maniuplate data for Fine-Gray regression later)</span></span>
 <span>  <span class="va">ids.cens</span>  <span class="op">&lt;-</span> <span class="va">data.mstate</span> <span class="op">|&gt;</span> <span class="fu">base</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">from</span> <span class="op">==</span> <span class="va">j</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>sum <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">status</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">base</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">sum</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="op">|&gt;</span>     <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html" class="external-link">pull</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span></span>
-<span></span>
+<span>  </span>
 <span>  <span class="co">###</span></span>
 <span>  <span class="co">### Produce calibration plots for each possible transition</span></span>
 <span>  <span class="co">###</span></span>
-<span></span>
+<span>  </span>
 <span>  <span class="co">### Start by creating a list to store the plots</span></span>
 <span>  <span class="va">plots.list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">vector</a></span><span class="op">(</span><span class="st">"list"</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">valid.transitions</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
+<span>  </span>
 <span>  <span class="kw">for</span> <span class="op">(</span><span class="va">k</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">valid.transitions</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
-<span></span>
+<span>    </span>
 <span>    <span class="co">### Assign state.k</span></span>
 <span>    <span class="va">state.k</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">valid.transitions</span><span class="op">[</span><span class="va">k</span><span class="op">]</span><span class="op">)</span></span>
-<span></span>
+<span>    </span>
 <span>    <span class="co">### Create restricted cubic splines for the cloglog of the linear predictor for the state of interst</span></span>
 <span>    <span class="va">rcs.mat</span> <span class="op">&lt;-</span> <span class="fu">Hmisc</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/Hmisc/man/rcspline.eval.html" class="external-link">rcspline.eval</a></span><span class="op">(</span><span class="va">data.raw</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"p.est.cll"</span>, <span class="va">state.k</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">]</span>,nk<span class="op">=</span><span class="va">nk</span>,inclx<span class="op">=</span><span class="cn">T</span><span class="op">)</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">rcs.mat</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"rcs.x"</span>, <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">rcs.mat</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span>
 <span>    <span class="va">knots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">rcs.mat</span>,<span class="st">"knots"</span><span class="op">)</span></span>
-<span></span>
+<span>    </span>
 <span>    <span class="co">### Create a new dataframe for the validation, to avoid recurison with data.raw</span></span>
 <span>    <span class="co">### Add the cubic splines for thecomplementary loglog of the predicted probability, and the predicted probability itself</span></span>
 <span>    <span class="va">valid.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">data.raw</span><span class="op">$</span><span class="va">id</span>, <span class="va">data.raw</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"p.est"</span>, <span class="va">state.k</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">]</span>, <span class="va">rcs.mat</span><span class="op">)</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">valid.df</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"id"</span>, <span class="st">"pred"</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">rcs.mat</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
+<span>    </span>
 <span>    <span class="co">### Want to validate the competing risks model out of state j at time s, into state k, so remove individuals not in state k at time s,</span></span>
 <span>    <span class="co">### and only retain transitions into state k. Also deduct immortal time from time variable</span></span>
 <span>    <span class="va">data.mstate.j.k.s</span> <span class="op">&lt;-</span> <span class="fu">base</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">data.mstate</span>, <span class="va">from</span> <span class="op">==</span> <span class="va">j</span> <span class="op">&amp;</span> <span class="va">to</span> <span class="op">==</span> <span class="va">state.k</span> <span class="op">&amp;</span> <span class="va">Tstart</span> <span class="op">&lt;=</span> <span class="va">s</span> <span class="op">&amp;</span> <span class="va">s</span> <span class="op">&lt;</span> <span class="va">Tstop</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>time <span class="op">=</span> <span class="va">Tstop</span> <span class="op">-</span> <span class="va">s</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>      <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">time</span>, <span class="va">status</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
+<span>    </span>
 <span>    <span class="co">### Add to valid.df</span></span>
 <span>    <span class="va">valid.df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="va">valid.df</span>, <span class="va">data.mstate.j.k.s</span><span class="op">)</span></span>
-<span></span>
+<span>    </span>
 <span>    <span class="co">### For individuals who do not have the event of interest, and also are not censored (i.e. they have a different competing event),</span></span>
 <span>    <span class="co">### set the follow up time to the maximum</span></span>
 <span>    <span class="va">valid.df</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="va">valid.df</span>, time <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span><span class="va">status</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">&amp;</span> <span class="op">!</span><span class="op">(</span><span class="va">id</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">ids.cens</span><span class="op">)</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">time</span><span class="op">)</span>,</span>
-<span>                                                  <span class="cn">TRUE</span> <span class="op">~</span> <span class="va">time</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
+<span>                                                                <span class="cn">TRUE</span> <span class="op">~</span> <span class="va">time</span><span class="op">)</span><span class="op">)</span></span>
+<span>    </span>
 <span>    <span class="co">### Create dataset to fit the recalibration model of Austin et al (Graphical calibration curves, BMC Diagnostic and Prognostic, DOI10.1186/s41512-021-00114-6)</span></span>
 <span>    <span class="va">valid.df.crprep</span> <span class="op">&lt;-</span> <span class="fu">mstate</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mstate/man/crprep.default.html" class="external-link">crprep</a></span><span class="op">(</span>Tstop<span class="op">=</span><span class="st">'time'</span>,status<span class="op">=</span><span class="st">'status'</span>,trans<span class="op">=</span><span class="fl">1</span>,</span>
-<span>                              keep<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">rcs.mat</span><span class="op">)</span>,<span class="va">valid.df</span><span class="op">)</span></span>
-<span></span>
+<span>                                      keep<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">rcs.mat</span><span class="op">)</span>,<span class="va">valid.df</span><span class="op">)</span></span>
+<span>    </span>
 <span>    <span class="co">### Create formula and fit the Fine-Gray recalibration model</span></span>
 <span>    <span class="va">eq.LHS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"survival::Surv(Tstart,Tstop,status==1)~"</span><span class="op">)</span></span>
 <span>    <span class="va">eq.RHS</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"rcs.x"</span>, <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">ncol</a></span><span class="op">(</span><span class="va">rcs.mat</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">""</span>, collapse <span class="op">=</span> <span class="st">"+"</span><span class="op">)</span></span>
 <span>    <span class="va">eq</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/formula.html" class="external-link">formula</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">eq.LHS</span>, <span class="va">eq.RHS</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="va">model.calibrate.fg</span> <span class="op">&lt;-</span> <span class="fu">rms</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rms/man/cph.html" class="external-link">cph</a></span><span class="op">(</span><span class="va">eq</span>,weights<span class="op">=</span><span class="va">weight.cens</span>,x<span class="op">=</span><span class="cn">T</span>,y<span class="op">=</span><span class="cn">T</span>,surv<span class="op">=</span><span class="cn">T</span>,data<span class="op">=</span><span class="va">valid.df.crprep</span><span class="op">)</span></span>
-<span></span>
+<span>    </span>
 <span>    <span class="co">### Generate predicted probabilities and standard errors</span></span>
 <span>    <span class="va">valid.df</span><span class="op">$</span><span class="va">obs.fg</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">-</span><span class="fu">rms</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rms/man/survest.cph.html" class="external-link">survest</a></span><span class="op">(</span><span class="va">model.calibrate.fg</span>,newdata<span class="op">=</span><span class="va">valid.df.crprep</span>,time<span class="op">=</span><span class="va">t</span><span class="op">-</span><span class="va">s</span><span class="op">)</span><span class="op">$</span><span class="va">surv</span></span>
 <span>    <span class="va">valid.df</span><span class="op">$</span><span class="va">obs.fg.upper</span><span class="op">&lt;-</span><span class="fl">1</span><span class="op">-</span><span class="fu">rms</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rms/man/survest.cph.html" class="external-link">survest</a></span><span class="op">(</span><span class="va">model.calibrate.fg</span>,newdata<span class="op">=</span><span class="va">valid.df.crprep</span>,time<span class="op">=</span><span class="va">t</span><span class="op">-</span><span class="va">s</span><span class="op">)</span><span class="op">$</span><span class="va">lower</span></span>
 <span>    <span class="va">valid.df</span><span class="op">$</span><span class="va">obs.fg.lower</span><span class="op">&lt;-</span><span class="fl">1</span><span class="op">-</span><span class="fu">rms</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/rms/man/survest.cph.html" class="external-link">survest</a></span><span class="op">(</span><span class="va">model.calibrate.fg</span>,newdata<span class="op">=</span><span class="va">valid.df.crprep</span>,time<span class="op">=</span><span class="va">t</span><span class="op">-</span><span class="va">s</span><span class="op">)</span><span class="op">$</span><span class="va">upper</span></span>
-<span></span>
+<span>    </span>
 <span>    <span class="co">### Produce plots for each and store in a list</span></span>
-<span></span>
+<span>    </span>
 <span>    <span class="co">### Pivot longer to create data for ggplot and assign appropriate labels</span></span>
 <span>    <span class="va">valid.df.longer</span> <span class="op">&lt;-</span> <span class="fu">tidyr</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html" class="external-link">pivot_longer</a></span><span class="op">(</span><span class="va">valid.df</span>, cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">obs.fg</span>, <span class="va">obs.fg.upper</span>, <span class="va">obs.fg.lower</span><span class="op">)</span>, names_to <span class="op">=</span> <span class="st">"line.group"</span><span class="op">)</span></span>
 <span>    <span class="va">valid.df.longer</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="va">valid.df.longer</span>,</span>
-<span>                              line.group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">line.group</span><span class="op">)</span>,</span>
-<span>                              mapping <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span><span class="va">line.group</span> <span class="op">==</span> <span class="st">"obs.fg"</span> <span class="op">~</span> <span class="fl">1</span>,</span>
-<span>                                                  <span class="va">line.group</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"obs.fg.upper"</span>, <span class="st">"obs.fg.lower"</span><span class="op">)</span> <span class="op">~</span> <span class="fl">2</span><span class="op">)</span>,</span>
-<span>                              mapping <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">mapping</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
+<span>                                     line.group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">line.group</span><span class="op">)</span>,</span>
+<span>                                     mapping <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span><span class="va">line.group</span> <span class="op">==</span> <span class="st">"obs.fg"</span> <span class="op">~</span> <span class="fl">1</span>,</span>
+<span>                                                                <span class="va">line.group</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"obs.fg.upper"</span>, <span class="st">"obs.fg.lower"</span><span class="op">)</span> <span class="op">~</span> <span class="fl">2</span><span class="op">)</span>,</span>
+<span>                                     mapping <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">mapping</span><span class="op">)</span><span class="op">)</span></span>
+<span>    </span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">valid.df.longer</span><span class="op">$</span><span class="va">line.group</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Calibration"</span>, <span class="st">"Upper"</span>, <span class="st">"Lower"</span><span class="op">)</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">valid.df.longer</span><span class="op">$</span><span class="va">mapping</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Calibration"</span>, <span class="st">"95% CI"</span><span class="op">)</span></span>
-<span></span>
+<span>    </span>
 <span>    <span class="co">### Create the plot</span></span>
 <span>    <span class="va">plots.list</span><span class="op">[[</span><span class="va">k</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">valid.df.longer</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">pred</span>, <span class="va">line.group</span>, <span class="va">value</span>, <span class="va">mapping</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>      <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">pred</span>, y <span class="op">=</span> <span class="va">value</span>, group <span class="op">=</span> <span class="va">line.group</span>, color <span class="op">=</span> <span class="va">mapping</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>      <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_abline</a></span><span class="op">(</span>intercept <span class="op">=</span> <span class="fl">0</span>, slope <span class="op">=</span> <span class="fl">1</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>      <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Predicted risk"</span><span class="op">)</span> <span class="op">+</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Observed risk"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>      <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">xlim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">valid.df.longer</span><span class="op">$</span><span class="va">pred</span>,</span>
-<span>                    <span class="va">valid.df.longer</span><span class="op">$</span><span class="va">value</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>                             <span class="va">valid.df.longer</span><span class="op">$</span><span class="va">value</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>      <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">ylim</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">valid.df.longer</span><span class="op">$</span><span class="va">pred</span>,</span>
-<span>                    <span class="va">valid.df.longer</span><span class="op">$</span><span class="va">value</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>                             <span class="va">valid.df.longer</span><span class="op">$</span><span class="va">value</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>      <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_rug.html" class="external-link">geom_rug</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">valid.df.longer</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">pred</span>, <span class="va">line.group</span>, <span class="va">value</span>, <span class="va">mapping</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">base</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">line.group</span> <span class="op">==</span> <span class="st">"Calibration"</span><span class="op">)</span>,</span>
 <span>                        <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">pred</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span>, col <span class="op">=</span> <span class="fu">grDevices</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grDevices/rgb.html" class="external-link">rgb</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span>, alpha <span class="op">=</span> <span class="fl">.1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>      <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>      <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"State "</span>, <span class="va">state.k</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
+<span>    </span>
 <span>  <span class="op">}</span></span>
-<span></span>
+<span>  </span>
 <span>  <span class="co">### Return plots</span></span>
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">plots.list</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
@@ -369,12 +378,12 @@ create the plots.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### Estimate calibration curves and create plots</span></span>
 <span><span class="va">plot.gcc.rcs.list</span> <span class="op">&lt;-</span> <span class="fu">calc.calib.gcc.mod</span><span class="op">(</span>data.mstate <span class="op">=</span> <span class="va">msebmtcal.cmprsk</span>,</span>
-<span>                                    data.raw <span class="op">=</span> <span class="va">ebmtcal</span>,</span>
-<span>                                    j <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>                                    s <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>                                    t <span class="op">=</span> <span class="fl">1826</span>,</span>
-<span>                                    p.est <span class="op">=</span> <span class="va">tp.cmprsk.j0</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"pstate"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">]</span>,</span>
-<span>                                    nk <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span>                                        data.raw <span class="op">=</span> <span class="va">ebmtcal.cmprsk</span>,</span>
+<span>                                        j <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>                                        s <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>                                        t <span class="op">=</span> <span class="fl">1826</span>,</span>
+<span>                                        p.est <span class="op">=</span> <span class="va">tp.cmprsk.j0</span><span class="op">[</span>,<span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"pstate"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">]</span>,</span>
+<span>                                        nk <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co">### Combine into one plot and print</span></span>
 <span><span class="va">plot.gcc.rcs</span> <span class="op">&lt;-</span> <span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html" class="external-link">ggarrange</a></span><span class="op">(</span>plotlist <span class="op">=</span> <span class="va">plot.gcc.rcs.list</span><span class="op">)</span></span></code></pre></div>

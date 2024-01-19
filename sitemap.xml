@@ -40,31 +40,22 @@
     <loc>https://alexpate30.github.io/calibmsm/news/index.html</loc>
   </url>
   <url>
-    <loc>https://alexpate30.github.io/calibmsm/reference/calc_aj.html</loc>
-  </url>
-  <url>
-    <loc>https://alexpate30.github.io/calibmsm/reference/calc_pv_aj.html</loc>
-  </url>
-  <url>
     <loc>https://alexpate30.github.io/calibmsm/reference/calc_weights.html</loc>
   </url>
   <url>
-    <loc>https://alexpate30.github.io/calibmsm/reference/calib_blr.html</loc>
-  </url>
-  <url>
-    <loc>https://alexpate30.github.io/calibmsm/reference/calib_mlr.html</loc>
-  </url>
-  <url>
-    <loc>https://alexpate30.github.io/calibmsm/reference/calib_pv.html</loc>
+    <loc>https://alexpate30.github.io/calibmsm/reference/calib_blr_SAVE.html</loc>
   </url>
   <url>
     <loc>https://alexpate30.github.io/calibmsm/reference/calibmsm-package.html</loc>
   </url>
   <url>
-    <loc>https://alexpate30.github.io/calibmsm/reference/ebmtcal.html</loc>
+    <loc>https://alexpate30.github.io/calibmsm/reference/calibmsm.html</loc>
   </url>
   <url>
-    <loc>https://alexpate30.github.io/calibmsm/reference/extract_ids_states.html</loc>
+    <loc>https://alexpate30.github.io/calibmsm/reference/ebmtcal.cmprsk.html</loc>
+  </url>
+  <url>
+    <loc>https://alexpate30.github.io/calibmsm/reference/ebmtcal.html</loc>
   </url>
   <url>
     <loc>https://alexpate30.github.io/calibmsm/reference/index.html</loc>
@@ -76,13 +67,10 @@
     <loc>https://alexpate30.github.io/calibmsm/reference/msebmtcal.html</loc>
   </url>
   <url>
-    <loc>https://alexpate30.github.io/calibmsm/reference/plot.calib_blr.html</loc>
-  </url>
-  <url>
     <loc>https://alexpate30.github.io/calibmsm/reference/plot.calib_mlr.html</loc>
   </url>
   <url>
-    <loc>https://alexpate30.github.io/calibmsm/reference/plot.calib_pv.html</loc>
+    <loc>https://alexpate30.github.io/calibmsm/reference/plot.calibmsm.html</loc>
   </url>
   <url>
     <loc>https://alexpate30.github.io/calibmsm/reference/tp.cmprsk.j0.html</loc>

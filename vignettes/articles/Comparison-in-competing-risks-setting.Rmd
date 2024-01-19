@@ -3,7 +3,7 @@ title: "Comparison-in-competing-risks-setting"
 output: rmarkdown::html_vignette
 bibliography: refs.bib
 vignette: >
-  %\VignetteIndexEntry{Comparison-in-competing-risks-settin}
+  %\VignetteIndexEntry{Comparison-in-competing-risks-setting}
 ---
 
 ```{r, include = FALSE}
@@ -77,7 +77,7 @@ dat.calib.pv <-
            t = 1826,
            tp.pred = tp.cmprsk.j0 |>
              dplyr::select(any_of(paste("pstate", 1:6, sep = ""))),
-           calib.type = 'blr',
+           calib.type = 'pv',
            curve.type = "rcs",
            rcs.nk = 3,
            pv.group.vars = c("year"),

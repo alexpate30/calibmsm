@@ -5,9 +5,11 @@
 ### This code involves generating predicted transition probabilities for a competing risks sub-model out of the initial state.
 ### All other states are considered absorbing states.
 
+### Clear workspace
+rm(list=ls())
+
 ### Load calibmsm
 library(mstate)
-
 
 ### Define state which sub-model is coming out of and landmark time
 j <- 1

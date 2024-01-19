@@ -17,6 +17,10 @@ calib_mlr_SAVE <- function(data.mstate,
                       w.stabilised = FALSE,
                       w.max.follow = NULL, ...){
 
+  ## Create landmarked dataset
+  data.raw.lmk.js.uncens2 <-  apply_landmark(data.raw = data.raw, data.mstate = data.mstate, j = j, s = s, t = t, exclude.cens.t = TRUE)
+
+
   ### Stop if patients in data.raw are not in data.mstate
   if (!base::all(unique(data.raw$id) %in% unique(data.mstate$id))){
     stop("All patients in data.raw are not contained in data.mstate. Landmarking cannot be applied.")

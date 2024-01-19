@@ -421,7 +421,7 @@ test_that("check calibmsm output, (j = 1, s = 0), cause errors", {
 })
 
 
-test_that("check calibmsm output, (j = 3, s = 100)", {
+test_that("check calibmsm output, (j = 3, s = 100), pv.group.vars defined", {
 
   skip_on_cran()
 
@@ -438,7 +438,72 @@ test_that("check calibmsm output, (j = 3, s = 100)", {
              tp.pred = tp.pred, calib.type = 'pv',
              curve.type = "rcs",
              rcs.nk = 3,
-             ov.group.vars = c("year"))
+             pv.group.vars = c("year"))
+
+  expect_type(dat.calib.pv, "list")
+  expect_equal(class(dat.calib.pv), c("calib_pv", "calibmsm"))
+  expect_length(dat.calib.pv, 2)
+  expect_length(dat.calib.pv[["plotdata"]], 4)
+  expect_length(dat.calib.pv[["plotdata"]][["state3"]]$id, 413)
+  expect_length(dat.calib.pv[["plotdata"]][["state6"]]$id, 413)
+  expect_error(dat.calib.pv[["plotdata"]][[6]])
+  expect_false(dat.calib.pv[["metadata"]]$CI)
+  names(dat.calib.pv[["plotdata"]])
+
+})
+
+
+test_that("check calibmsm output, (j = 3, s = 100), pv.n.pctls defined", {
+
+  skip_on_cran()
+
+  ## Extract relevant predicted risks from tps100
+  tp.pred <- dplyr::select(dplyr::filter(tps100, j == 3), any_of(paste("pstate", 1:6, sep = "")))
+
+  ## Calculate observed event probabilities
+  dat.calib.pv <-
+    calibmsm(data.mstate = msebmtcal,
+             data.raw = ebmtcal,
+             j=3,
+             s=100,
+             t = 1826,
+             tp.pred = tp.pred, calib.type = 'pv',
+             curve.type = "rcs",
+             rcs.nk = 3,
+             pv.n.pctls = 2)
+
+  expect_type(dat.calib.pv, "list")
+  expect_equal(class(dat.calib.pv), c("calib_pv", "calibmsm"))
+  expect_length(dat.calib.pv, 2)
+  expect_length(dat.calib.pv[["plotdata"]], 4)
+  expect_length(dat.calib.pv[["plotdata"]][["state3"]]$id, 413)
+  expect_length(dat.calib.pv[["plotdata"]][["state6"]]$id, 413)
+  expect_error(dat.calib.pv[["plotdata"]][[6]])
+  expect_false(dat.calib.pv[["metadata"]]$CI)
+  names(dat.calib.pv[["plotdata"]])
+
+})
+
+
+test_that("check calibmsm output, (j = 3, s = 100), pv.group.vars and pv.n.pctls defined", {
+
+  skip_on_cran()
+
+  ## Extract relevant predicted risks from tps100
+  tp.pred <- dplyr::select(dplyr::filter(tps100, j == 3), any_of(paste("pstate", 1:6, sep = "")))
+
+  ## Calculate observed event probabilities
+  dat.calib.pv <-
+    calibmsm(data.mstate = msebmtcal,
+             data.raw = ebmtcal,
+             j=3,
+             s=100,
+             t = 1826,
+             tp.pred = tp.pred, calib.type = 'pv',
+             curve.type = "rcs",
+             rcs.nk = 3,
+             pv.group.vars = c("year"),
+             pv.n.pctls = 2)
 
   expect_type(dat.calib.pv, "list")
   expect_equal(class(dat.calib.pv), c("calib_pv", "calibmsm"))

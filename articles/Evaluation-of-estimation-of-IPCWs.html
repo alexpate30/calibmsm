@@ -41,7 +41,7 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/Directory-of-vignettes.html">A catalogue of links and descriptions for all the vignettes</a>
+    <a class="dropdown-item" href="../articles/Directory-of-vignettes.html">A catalogue of links and descriptions for the vignettes/articles</a>
     <a class="dropdown-item" href="../articles/BLR-IPCW-manual-bootstrap.html">BLR-IPCW-manual-bootstrap</a>
     <a class="dropdown-item" href="../articles/Calibration-curves-estimated-with-loess-smoothers.html">Calibration-curves-estimated-with-loess-smoothers</a>
     <a class="dropdown-item" href="../articles/Comparison-in-competing-risks-setting.html">Comparison-in-competing-risks-setting</a>
@@ -127,9 +127,10 @@ a further three subgroups. We therefore believe the assumption for the
 pseudo-value approach is likely to hold.</p>
 <p>When implementing the BLR-IPCW approach, the most important step is
 estimation of the inverse probability of censoring weights (IPCWs). In
-<code>calibmsm</code> this is done internally using a cox proportional
-hazards model. We fit this model to the <code>ebmtcal</code> data again
-here to assess how well it has been specified.</p>
+<strong>calibmsm</strong> this is done internally using a cox
+proportional hazards model. We fit this model to the
+<code>ebmtcal</code> data again here to assess how well it has been
+specified.</p>
 <p>We start by loading the <code>ebmtcal</code> data.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">101</span><span class="op">)</span></span>
@@ -221,7 +222,7 @@ what scenario each method is most likely to give biased calibration
 curves.</p>
 <p>This vignette has also highlighted the limitations of using a cox
 proportional hazards model to estimate the IPCWs. The
-<code>calibmsm</code> package has been developed to provide a set of
+<strong>calibmsm</strong> package has been developed to provide a set of
 tools to assess the calibration of multistate models, but is not a
 focused package for estimating IPCWs. We urge users to develop better
 models for estimating the IPCWs and specify them using the

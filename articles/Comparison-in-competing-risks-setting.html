@@ -41,7 +41,7 @@
 <li class="active nav-item dropdown">
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
-    <a class="dropdown-item" href="../articles/Directory-of-vignettes.html">A catalogue of links and descriptions for all the vignettes</a>
+    <a class="dropdown-item" href="../articles/Directory-of-vignettes.html">A catalogue of links and descriptions for the vignettes/articles</a>
     <a class="dropdown-item" href="../articles/BLR-IPCW-manual-bootstrap.html">BLR-IPCW-manual-bootstrap</a>
     <a class="dropdown-item" href="../articles/Calibration-curves-estimated-with-loess-smoothers.html">Calibration-curves-estimated-with-loess-smoothers</a>
     <a class="dropdown-item" href="../articles/Comparison-in-competing-risks-setting.html">Comparison-in-competing-risks-setting</a>
@@ -82,11 +82,11 @@
 <h2 id="data-preperation">Data preperation<a class="anchor" aria-label="anchor" href="#data-preperation"></a>
 </h2>
 <p>This vignette compares the calibration of a competing risks model
-assessed using the approaches provided in <code>calibmsm</code>, namely
-the BLR-IPCW and pseudo-value approaches, with graphical calibration
-curves developed by <span class="citation">Austin et al. (2022)</span>.
-We use data from the European Society for Blood and Marrow
-Transplantation <span class="citation">(EBMT 2023)</span>, which
+assessed using the approaches provided in <strong>calibmsm</strong>,
+namely the BLR-IPCW and pseudo-value approaches, with graphical
+calibration curves developed by <span class="citation">Austin et al.
+(2022)</span>. We use data from the European Society for Blood and
+Marrow Transplantation <span class="citation">(EBMT 2023)</span>, which
 contains multistate survival data after a transplant for patients with
 blood cancer. The start of follow up is the day of the transplant and
 the initial state is alive and in remission. There are three
@@ -120,7 +120,7 @@ given (<code>proph</code>), and whether the donor was gender matched
 (<code>match</code>).</p>
 <p>The transition probabilities are stored in the object
 <code>tp.cmprsk.j0</code>. Datasets in formats required for function
-<code>calibmsm</code> are stored in <code>ebmtcal.cmprsk</code>
+<code>calib_msm</code> are stored in <code>ebmtcal.cmprsk</code>
 (<code>data.raw</code> argument) and <code>msebmtcal.cmprsk</code>
 (<code>data.mstate</code> argument). Note that the
 <code>ebmtcal.cmprsk</code> is the same <code>ebmtcal</code> except the
@@ -192,7 +192,7 @@ the BLR-IPCW approach.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### Estimate calibration curves</span></span>
 <span><span class="va">dat.calib.blr</span> <span class="op">&lt;-</span></span>
-<span>  <span class="fu"><a href="../reference/calibmsm.html">calibmsm</a></span><span class="op">(</span>data.mstate <span class="op">=</span> <span class="va">msebmtcal.cmprsk</span>,</span>
+<span>  <span class="fu"><a href="../reference/calib_msm.html">calib_msm</a></span><span class="op">(</span>data.mstate <span class="op">=</span> <span class="va">msebmtcal.cmprsk</span>,</span>
 <span>           data.raw <span class="op">=</span> <span class="va">ebmtcal.cmprsk</span>,</span>
 <span>           j<span class="op">=</span><span class="fl">1</span>,</span>
 <span>           s<span class="op">=</span><span class="fl">0</span>,</span>
@@ -226,7 +226,7 @@ the pseudo-value approach, implemented through
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### Estimate calibration curves</span></span>
 <span><span class="va">dat.calib.pv</span> <span class="op">&lt;-</span></span>
-<span>  <span class="fu"><a href="../reference/calibmsm.html">calibmsm</a></span><span class="op">(</span>data.mstate <span class="op">=</span> <span class="va">msebmtcal.cmprsk</span>,</span>
+<span>  <span class="fu"><a href="../reference/calib_msm.html">calib_msm</a></span><span class="op">(</span>data.mstate <span class="op">=</span> <span class="va">msebmtcal.cmprsk</span>,</span>
 <span>           data.raw <span class="op">=</span> <span class="va">ebmtcal.cmprsk</span>,</span>
 <span>           j<span class="op">=</span><span class="fl">1</span>,</span>
 <span>           s<span class="op">=</span><span class="fl">0</span>,</span>

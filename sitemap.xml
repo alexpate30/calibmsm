@@ -43,13 +43,10 @@
     <loc>https://alexpate30.github.io/calibmsm/reference/calc_weights.html</loc>
   </url>
   <url>
-    <loc>https://alexpate30.github.io/calibmsm/reference/calib_blr_SAVE.html</loc>
+    <loc>https://alexpate30.github.io/calibmsm/reference/calib_msm.html</loc>
   </url>
   <url>
     <loc>https://alexpate30.github.io/calibmsm/reference/calibmsm-package.html</loc>
-  </url>
-  <url>
-    <loc>https://alexpate30.github.io/calibmsm/reference/calibmsm.html</loc>
   </url>
   <url>
     <loc>https://alexpate30.github.io/calibmsm/reference/ebmtcal.cmprsk.html</loc>
@@ -70,7 +67,7 @@
     <loc>https://alexpate30.github.io/calibmsm/reference/plot.calib_mlr.html</loc>
   </url>
   <url>
-    <loc>https://alexpate30.github.io/calibmsm/reference/plot.calibmsm.html</loc>
+    <loc>https://alexpate30.github.io/calibmsm/reference/plot.calib_msm.html</loc>
   </url>
   <url>
     <loc>https://alexpate30.github.io/calibmsm/reference/tp.cmprsk.j0.html</loc>

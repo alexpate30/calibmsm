@@ -2,8 +2,8 @@
 % Please edit documentation in R/calibmsm-package.R
 \docType{package}
 \name{calibmsm-package}
+\alias{calibmsm}
 \alias{calibmsm-package}
-\alias{_PACKAGE}
 \title{calibmsm: Calibration Plots for the Transition Probabilities from Multistate Models}
 \description{
 Assess the calibration of an existing (i.e. previously developed) multistate model through calibration plots. Calibration is assessed using one of three methods. 1) Calibration methods for binary logistic regression models applied at a fixed time point in conjunction with inverse probability of censoring weights. 2) Calibration methods for multinomial logistic regression models applied at a fixed time point in conjunction with inverse probability of censoring weights. 3) Pseudo-values estimated using the Aalen-Johansen estimator of observed risk. All methods are applied in conjunction with landmarking when required. These calibration plots evaluate the calibration (in a validation cohort of interest) of the transition probabilities estimated from an existing multistate model. While package development has focused on multistate models, calibration plots can be produced for any model which utilises information post baseline to update predictions (e.g. dynamic models); competing risks models; or standard single outcome survival models, where predictions can be made at any landmark time. The underpinning methodology is currently undergoing peer review; see Pate et al. (2023) \href{https://arxiv.org/abs/2308.13394}{arXiv:2308.13394} and Pate et al. (2023) \url{https://alexpate30.github.io/calibmsm/articles/Overview.html}.

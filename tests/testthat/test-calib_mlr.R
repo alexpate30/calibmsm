@@ -3,7 +3,7 @@
 ###
 
 ### THE ISSUE HERE IS THT I NEED TO RE-DEFINE DTCENS IN THE CMPRSK DATA
-test_that("check calibmsm output", {
+test_that("check calib_msm output", {
 
   ## Reduce to 300 individuals
   # Extract the predicted transition probabilities out of state j = 1 for first 300 individuals
@@ -17,7 +17,7 @@ test_that("check calibmsm output", {
   msebmtcal <- msebmtcal |> dplyr::filter(id %in% 1:300)
 
   ## Expect error if generate with CI
-  expect_error(calibmsm(data.mstate = msebmtcal,
+  expect_error(calib_msm(data.mstate = msebmtcal,
                         data.raw = ebmtcal,
                         j=1,
                         s=0,
@@ -31,7 +31,7 @@ test_that("check calibmsm output", {
 
   ## Calculate observed event probabilities
   dat.calib.mlr <-
-    suppressWarnings(calibmsm(data.mstate = msebmtcal,
+    suppressWarnings(calib_msm(data.mstate = msebmtcal,
                               data.raw = ebmtcal,
                               j=1,
                               s=0,
@@ -42,7 +42,7 @@ test_that("check calibmsm output", {
                               mlr.degree = 2))
 
   expect_type(dat.calib.mlr, "list")
-  expect_equal(class(dat.calib.mlr), c("calib_mlr", "calibmsm"))
+  expect_equal(class(dat.calib.mlr), c("calib_mlr", "calib_msm"))
   expect_length(dat.calib.mlr, 2)
   expect_length(dat.calib.mlr[["plotdata"]], 6)
   expect_length(dat.calib.mlr[["plotdata"]][["state3"]]$id, 265)
@@ -51,7 +51,7 @@ test_that("check calibmsm output", {
 
 })
 
-test_that("check calibmsm output, (j = 1, s = 0),
+test_that("check calib_msm output, (j = 1, s = 0),
           Manually define function to estimate weights", {
 
             ## Reduce to 300 individuals
@@ -68,7 +68,7 @@ test_that("check calibmsm output, (j = 1, s = 0),
             ###
             ### Calculate observed event probabilities
             dat.calib.mlr <-
-              suppressWarnings(calibmsm(data.mstate = msebmtcal,
+              suppressWarnings(calib_msm(data.mstate = msebmtcal,
                                         data.raw = ebmtcal,
                                         j = 1,
                                         s = 0,
@@ -94,7 +94,7 @@ test_that("check calibmsm output, (j = 1, s = 0),
             ###
             ### Calculate observed event probabilities same function as internal procedure, and check it agrees with dat.calib.mlr
             dat.calib.mlr.w.manual <-
-              suppressWarnings(calibmsm(data.mstate = msebmtcal,
+              suppressWarnings(calib_msm(data.mstate = msebmtcal,
                                         data.raw = ebmtcal,
                                         j = 1,
                                         s = 0,
@@ -109,7 +109,7 @@ test_that("check calibmsm output, (j = 1, s = 0),
             ###
             ### Calculate observed event probabilities using an incorrect vector of weights, and see if its different from dat.calib.mlr
             dat.calib.mlr.w.manual <-
-              suppressWarnings(calibmsm(data.mstate = msebmtcal,
+              suppressWarnings(calib_msm(data.mstate = msebmtcal,
                                         data.raw = ebmtcal,
                                         j = 1,
                                         s = 0,
@@ -126,7 +126,7 @@ test_that("check calibmsm output, (j = 1, s = 0),
             calc_weights_manual <- calc_weights
 
             dat.calib.mlr.w.function <-
-              suppressWarnings(calibmsm(data.mstate = msebmtcal,
+              suppressWarnings(calib_msm(data.mstate = msebmtcal,
                                         data.raw = ebmtcal,
                                         j = 1,
                                         s = 0,
@@ -138,7 +138,7 @@ test_that("check calibmsm output, (j = 1, s = 0),
                                         mlr.degree = 2))
 
             expect_type(dat.calib.mlr.w.function, "list")
-            expect_equal(class(dat.calib.mlr.w.function), c("calib_mlr", "calibmsm"))
+            expect_equal(class(dat.calib.mlr.w.function), c("calib_mlr", "calib_msm"))
             expect_length(dat.calib.mlr.w.function, 2)
             expect_length(dat.calib.mlr.w.function[["plotdata"]], 6)
             expect_length(dat.calib.mlr.w.function[["plotdata"]][[1]]$id, 265)
@@ -316,7 +316,7 @@ test_that("check calibmsm output, (j = 1, s = 0),
 
             ### Calculate observed event probabilities with new w.function
             dat.calib.mlr.w.function <-
-              suppressWarnings(calibmsm(data.mstate = msebmtcal,
+              suppressWarnings(calib_msm(data.mstate = msebmtcal,
                        data.raw = ebmtcal,
                        j = 1,
                        s = 0,
@@ -328,7 +328,7 @@ test_that("check calibmsm output, (j = 1, s = 0),
                        mlr.degree = 2))
 
             expect_type(dat.calib.mlr.w.function, "list")
-            expect_equal(class(dat.calib.mlr.w.function), c("calib_mlr", "calibmsm"))
+            expect_equal(class(dat.calib.mlr.w.function), c("calib_mlr", "calib_msm"))
             expect_length(dat.calib.mlr.w.function, 2)
             expect_length(dat.calib.mlr.w.function[["plotdata"]], 6)
             expect_length(dat.calib.mlr.w.function[["plotdata"]][[1]]$id, 265)
@@ -510,7 +510,7 @@ test_that("check calibmsm output, (j = 1, s = 0),
 
             ### Calculate observed event probabilities with new w.function
             dat.calib.mlr.w.function <-
-              suppressWarnings(calibmsm(data.mstate = msebmtcal,
+              suppressWarnings(calib_msm(data.mstate = msebmtcal,
                                         data.raw = ebmtcal,
                                         j = 1,
                                         s = 0,
@@ -523,7 +523,7 @@ test_that("check calibmsm output, (j = 1, s = 0),
                                         extra.arg = 0.1))
 
             expect_type(dat.calib.mlr.w.function, "list")
-            expect_equal(class(dat.calib.mlr.w.function), c("calib_mlr", "calibmsm"))
+            expect_equal(class(dat.calib.mlr.w.function), c("calib_mlr", "calib_msm"))
             expect_length(dat.calib.mlr.w.function, 2)
             expect_length(dat.calib.mlr.w.function[["plotdata"]], 6)
             expect_length(dat.calib.mlr.w.function[["plotdata"]][[1]]$id, 265)

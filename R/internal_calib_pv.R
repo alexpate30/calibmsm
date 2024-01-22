@@ -2,7 +2,7 @@
 
 #' Estimate data for calibration plots using pseudo-values.
 #' @description
-#' Called in calibmsm::calibmsm to apply the pseudo-value method.
+#' Called in calibmsm::calib_msm to apply the pseudo-value method.
 #'
 #' @details
 #' Calls heavily on calibmsm::calc_obs_pv_boot to estimate observed transition probabilities.
@@ -154,7 +154,7 @@ calib_pv <- function(data.mstate,
 #' Calculate pseudo-values and estimate observed event probabilities using pseudo-values.
 #' @description
 #' Estimate observed event probabilities for all states using pseudo-values.
-#' Function is called by calibmsm::calib_pv, which is called by calibmsm::calibmsm.
+#' Function is called by calibmsm::calib_pv, which is called by calibmsm::calib_msm.
 #' This function does the heavy lifting, and has two major steps. First the pseudo-values
 #' are calculated, taking advantage of functions calibmsm::calc_aj and calibmsm::calc_pv_aj.
 #' Secondly, the pseudo-values are regressed on the predicted transition

@@ -50,7 +50,7 @@ The code to produce the calibration curves with confidence intervals is as follo
 
 ```{r}
 dat.calib.blr <-
-  calibmsm(data.mstate = msebmtcal,
+  calib_msm(data.mstate = msebmtcal,
            data.raw = ebmtcal,
            j=1,
            s=0,
@@ -74,13 +74,13 @@ plot(dat.calib.blr, combine = TRUE)
 
 While the above approach is accessible, it may lead to a misspecified model for the weights given the user has no control over the choice of model (Cox model) or the functional form of the predictor variables $\textbf{Z}$, where all continuous variables are assumed to have linear effects on the hazard, and there are no interaction terms. Potential issues with using the internal process for estimating the weights is exemplified in the [Evaluation-of-estimation-of-IPCWs vignette](Evaluation-of-estimation-of-IPCWs.html). We therefore encourage users to explore their data and produce a more suitable model to estimate the weights. Please see the [Overview vignette](https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf) for a definition of the estimand of the weights and how to estimate them. 
 
-Once a function for estimating the weights has been defined, the internal bootstrapping procedure can then be applied with this function to estimate the weights. This function must contain the parameters that are in the `calc_weights` function, even if you do not plan to use these parameters. These parameters are then specified through arguments with the `w.` prefix in `calibmsm`. The user specified function may also contain extra parameters not in `calc_weights`, and these are specified through the `...` argument in `calibmsm`. We showcase this by defining a new function `calc_weights_manual`. For this example, we define it to be the same as `calc_weights` function. In practice, we do not recommend this, as this option is to allow the user to specify their own function for estimating the weights. Given our choice of function to estimate the weights, the calibration curve is the same as that from Figure 1, and the confidence interval is a similar size.
+Once a function for estimating the weights has been defined, the internal bootstrapping procedure can then be applied with this function to estimate the weights. This function must contain the parameters that are in the `calc_weights` function, even if you do not plan to use these parameters. These parameters are then specified through arguments with the `w.` prefix in `calib_msm`. The user specified function may also contain extra parameters not in `calc_weights`, and these are specified through the `...` argument in `calib_msm`. We showcase this by defining a new function `calc_weights_manual`. For this example, we define it to be the same as `calc_weights` function. In practice, we do not recommend this, as this option is to allow the user to specify their own function for estimating the weights. Given our choice of function to estimate the weights, the calibration curve is the same as that from Figure 1, and the confidence interval is a similar size.
 
 ```{r}
 calc_weights_manual <- calibmsm::calc_weights
 
 dat.calib.blr.w.function <-
-  calibmsm(data.mstate = msebmtcal,
+  calib_msm(data.mstate = msebmtcal,
            data.raw = ebmtcal,
            j=1,
            s=0,
@@ -103,7 +103,7 @@ plot(dat.calib.blr.w.function, combine = TRUE, nrow = 2, ncol = 3)
 
 # Confidence intervals for BLR-IPCW by manually running bootstrapping procedure with custom function for estimating the weights
 
-Finally, we showcase how to run the bootstrapping procedure manually. This allows users to parallelise their code to reduce computational time. This is done by using the package *boot* [@Canty2022] in conjunction with `calibmsm`.
+Finally, we showcase how to run the bootstrapping procedure manually. This allows users to parallelise their code to reduce computational time. This is done by using the package *boot* [@Canty2022] in conjunction with `calib_msm`.
 
 We start by creating a permanent object with the predicted risks of each individual. When the validation cohort `ebmtcal` is resampled, the appropriate predicted transition probabilities must also be resampled from this object.
 
@@ -126,7 +126,7 @@ tp.pred.plot <- tps0 |>
   dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
 ```
 
-The calibration curves (with no confidence interval) are now calculated. We utilise the `calc_weights` function from `calibmsm` to estimate the weights, which is the function used internally. However, in practice the point of this exercise is to create a better performing model to estimate the weights than the one from the internal procedure. The vector of weights should have an entry for every row the validation dataset. For individuals who will not be included in the landmark cohort, or who are censored prior to time $t$, these weights can take any value as they will not be included when the calibration model is fitted.
+The calibration curves (with no confidence interval) are now calculated. We utilise the `calc_weights` function from **calibmsm** to estimate the weights, which is the function used internally. However, in practice the point of this exercise is to create a better performing model to estimate the weights than the one from the internal procedure. The vector of weights should have an entry for every row the validation dataset. For individuals who will not be included in the landmark cohort, or who are censored prior to time $t$, these weights can take any value as they will not be included when the calibration model is fitted.
 
 ```{r}
 weights.manual <-
@@ -142,11 +142,11 @@ weights.manual <-
 str(weights.manual)
 ```
 
-The observed event probabilities can then be estimated using `calibmsm` and a call to the `weights` argument.
+The observed event probabilities can then be estimated using `calib_msm` and a call to the `weights` argument.
 
 ```{r}
 dat.calib.boot.manual <-
-  calibmsm(data.mstate = msebmtcal,
+  calib_msm(data.mstate = msebmtcal,
            data.raw = ebmtcal,
            j = 1,
            s = 0,
@@ -158,7 +158,7 @@ dat.calib.boot.manual <-
            weights = weights.manual)
 ```
 
-It is now time to estimate the confidence interval for this curve. We define a function `calc_obs_boot` to generate a bootstrapped calibration curve which is compatible with the `boot` function from the *boot* [@Canty2022] package. Within each bootstrapped dataset, weights are calculated and then a calibration curve is estimated using `calibmsm`. The use of the argument `tp.pred.plot` is essential here, to ensure the bootstrapped observed event probabilities are generated for the same vectors of predicted transition probabilities. The function is also written to estimate a curve for the transition probabilities into a specific state $k$, as the output for `boot` must be a vector, rather than a matrix. This is done by utilising the `transitions.out` argument in `calibmsm`.
+It is now time to estimate the confidence interval for this curve. We define a function `calc_obs_boot` to generate a bootstrapped calibration curve which is compatible with the `boot` function from the *boot* [@Canty2022] package. Within each bootstrapped dataset, weights are calculated and then a calibration curve is estimated using `calib_msm`. The use of the argument `tp.pred.plot` is essential here, to ensure the bootstrapped observed event probabilities are generated for the same vectors of predicted transition probabilities. The function is also written to estimate a curve for the transition probabilities into a specific state $k$, as the output for `boot` must be a vector, rather than a matrix. This is done by utilising the `transitions.out` argument in `calib_msm`.
 
 ```{r}
 calc_obs_boot <- function(data, indices, tp.pred, state.k){
@@ -182,7 +182,7 @@ calc_obs_boot <- function(data, indices, tp.pred, state.k){
   
   ## Estimate bootstrapped calibration curve
   curve.est <-
-    calibmsm(data.mstate = msebmtcal,
+    calib_msm(data.mstate = msebmtcal,
              data.raw = data.boot,
              j=1,
              s=0,
@@ -241,7 +241,7 @@ for (k in 1:length(valid.transitions)){
 }
 ```
 
-Finally, metadata is added and the appropriate `class` is defined so that the data is in the same format as the output from `calibmsm`, meaning it can be used with the S3 generic `plot`. Note that in this example `assessed.transitions` = `valid.transitions`, but this may not be the case if you only estimated calibration curves for a subset of the possible transitions.
+Finally, metadata is added and the appropriate `class` is defined so that the data is in the same format as the output from `calib_msm`, meaning it can be used with the S3 generic `plot`. Note that in this example `assessed.transitions` = `valid.transitions`, but this may not be the case if you only estimated calibration curves for a subset of the possible transitions.
 
 ```{r}
 metadata <- list("valid.transitions"= valid.transitions,
@@ -249,7 +249,7 @@ metadata <- list("valid.transitions"= valid.transitions,
                  "CI" = 95,
                  "curve.type" = "rcs")
 dat.calib.blr.manual <- list("plotdata" = plot.data.list, "metadata" = metadata)
-attr(dat.calib.blr.manual, "class") <- c("calib_blr", "calibmsm")
+attr(dat.calib.blr.manual, "class") <- c("calib_blr", "calib_msm")
 ```
 
 The calibration curves with manually estimated confidence intervals are plotted in Figure 3. This Figure is very similar to Figures 1 and 2. This is to be expected given we have used the same model to estimate the weights that is used in the internal procedure, and verifies that the manual procedure for calculating the confidence interval has been successful.

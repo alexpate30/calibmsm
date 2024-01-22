@@ -81,7 +81,7 @@
 #' for estimating the weights. Secondly, `data.mstate` must be a dataset of class `msdata`,
 #' generated using the \code{[mstate]} package. This dataset is used to apply the landmarking
 #' and identify which state individuals are in at time `t`. While `data.mstate` can be
-#' derived from `data.raw`, it would be inefficient to do this within `calibmsm::calibmsm`
+#' derived from `data.raw`, it would be inefficient to do this within `calibmsm::calib_msm`
 #' due to the bootstrapping procedure, and therefore they must be inputted seperately.
 #'
 #' Unless the user specifies the weights using `weights`, the weights are
@@ -100,9 +100,9 @@
 #' can be estimated using bootstrapping (`CI.type = 'bootstrap`) or parametric formulae (`CI.type = 'parametric`).
 #' For computational reasons we recommend using the parametric approach.
 #'
-#' The calibration plots can be plotted using \code{\link{plot.calibmsm}} and \code{\link{plot.calib_mlr}}.
+#' The calibration plots can be plotted using \code{\link{plot.calib_msm}} and \code{\link{plot.calib_mlr}}.
 #'
-#' @returns \code{\link{calibmsm}} returns a list containing two elements:
+#' @returns \code{\link{calib_msm}} returns a list containing two elements:
 #' \code{plotdata} and \code{metadata}. The \code{plotdata} element contains the
 #' data for the calibration plots. This will itself be a list with each element
 #' containing calibration plot data for the transition probabilities into each of the possible
@@ -157,7 +157,7 @@
 #'
 #' # Now estimate the observed event probabilities for each possible transition.
 #' dat.calib <-
-#' calibmsm(data.mstate = msebmtcal,
+#' calib_msm(data.mstate = msebmtcal,
 #'  data.raw = ebmtcal,
 #'  j=1,
 #'  s=0,
@@ -169,7 +169,7 @@
 #' summary(dat.calib)
 #'
 #' @export
-calibmsm <- function(data.mstate,
+calib_msm <- function(data.mstate,
                      data.raw,
                      j,
                      s,
@@ -554,11 +554,11 @@ calibmsm <- function(data.mstate,
 
   ### Assign classes
   if (calib.type == "blr"){
-    class(output.object) <- c("calib_blr", "calibmsm")
+    class(output.object) <- c("calib_blr", "calib_msm")
   } else if (calib.type == "mlr"){
-    class(output.object) <- c("calib_mlr", "calibmsm")
+    class(output.object) <- c("calib_mlr", "calib_msm")
   } else if (calib.type == "pv"){
-    class(output.object) <- c("calib_pv", "calibmsm")
+    class(output.object) <- c("calib_pv", "calib_msm")
   }
 
   ### Return output object
@@ -568,7 +568,7 @@ calibmsm <- function(data.mstate,
 
 
 #' @export
-summary.calibmsm <- function(object, ...) {
+summary.calib_msm <- function(object, ...) {
 
   cat("The method used to assess calibration was", ifelse(object[["metadata"]]$calib.type == "blr", "BLR-IPCW",
                                                            ifelse(object[["metadata"]]$calib.type == "mlr", "MLR-IPCW",
@@ -610,7 +610,7 @@ summary.calibmsm <- function(object, ...) {
 }
 
 #' @export
-print.calibmsm <- function(x, ...) {
+print.calib_msm <- function(x, ...) {
 
   print(lapply(x[["plotdata"]], utils::head, 10))
 

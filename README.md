@@ -50,12 +50,12 @@ methodology.
 The predicted transition probabilities are stored in `tps0`, the
 individuals data are stored in `ebmtcal`, and the data in `msdata`
 format are stored in `msebmtcal`. Calibration curves are estimated using
-`calibmsm` using the BLR-IPCW method (`calib.type = 'blr'`) with inverse
-probability of censoring weights are calculated based on variables
-`year`, `age`, `prophylaxis` and donor gender `match`. The calibration
-curves are estimated using restricted cubic splines with 3 knots. A 95%
-confidence interval is calculated using bootstrapping with 200 bootstrap
-replicates.
+`calib_msm` using the BLR-IPCW method (`calib.type = 'blr'`) with
+inverse probability of censoring weights are calculated based on
+variables `year`, `age`, `prophylaxis` and donor gender `match`. The
+calibration curves are estimated using restricted cubic splines with 3
+knots. A 95% confidence interval is calculated using bootstrapping with
+200 bootstrap replicates.
 
 ``` r
 ## Load calibmsm
@@ -66,7 +66,7 @@ tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6
 
 ## Calculate observed event probabilities
 dat.calib.blr <-
-  calibmsm(data.mstate = msebmtcal,
+  calib_msm(data.mstate = msebmtcal,
           data.raw = ebmtcal,
           j = 1,
           s = 0,

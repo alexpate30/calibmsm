@@ -1,8 +1,8 @@
 ---
-title: "A catalogue of links and descriptions for all the vignettes"
+title: "A catalogue of links and descriptions for the vignettes/articles"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{A catalogue of links and descriptions for all the vignettes}
+  %\VignetteIndexEntry{A catalogue of links and descriptions for the vignettes/articles}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

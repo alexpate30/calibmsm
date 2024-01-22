@@ -7,6 +7,7 @@ devtools::document()
 devtools::install()
 help(package = "mstate")
 help(package = "calibmsm")
+help(package = "predRupdate")
 install.packages("calibmsm")
 ### Lets make some plots using the new inhertance stuff
 

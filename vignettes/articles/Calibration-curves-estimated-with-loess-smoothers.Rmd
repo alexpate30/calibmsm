@@ -21,11 +21,6 @@ We use data from the European Society for Blood and Marrow Transplantation [@EBM
 
 We start by reminding ourselves of the EBMT [@DeWreede2011; @EBMT2023] validation datasets `ebmtcal` and `msebmtcal`, and the predicted transition probabilities out of state `j = 1` made at time `s = 0` from the multistate model (`tps0`). We also set the time at which we want to evaluate the transition probabilities `t`. Please refer to the [Overview vignette](https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf) for a more detailed description of this data.
 
-
-```{r setup}
-library(calibmsm)
-```
-
 ```{r}
 set.seed(101)
 
@@ -57,7 +52,7 @@ We now produce calibration curves using loess smoothers for the regression model
 
 ```{r}
 dat.calib.blr <-
-  calibmsm(data.mstate = msebmtcal,
+  calib_msm(data.mstate = msebmtcal,
            data.raw = ebmtcal,
            j = 1,
            s = 0,
@@ -71,7 +66,7 @@ dat.calib.blr <-
            CI.R.boot = 200)
 
 dat.calib.pv <-
-  calibmsm(data.mstate = msebmtcal,
+  calib_msm(data.mstate = msebmtcal,
            data.raw = ebmtcal,
            j = 1,
            s = 0,
@@ -113,7 +108,7 @@ We now produce calibration curves using loess smoothers for the regression model
 
 ```{r}
 dat.calib.blr <-
-  calibmsm(data.mstate = msebmtcal,
+  calib_msm(data.mstate = msebmtcal,
            data.raw = ebmtcal,
            j = 1,
            s = 100,
@@ -127,7 +122,7 @@ dat.calib.blr <-
            CI.R.boot = 200)
 
 dat.calib.pv <-
-  calibmsm(data.mstate = msebmtcal,
+  calib_msm(data.mstate = msebmtcal,
            data.raw = ebmtcal,
            j = 1,
            s = 100,
@@ -168,7 +163,7 @@ We now produce calibration curves using loess smoothers for the regression model
 
 ```{r}
 dat.calib.blr <-
-  calibmsm(data.mstate = msebmtcal,
+  calib_msm(data.mstate = msebmtcal,
            data.raw = ebmtcal,
            j = 3,
            s = 100,
@@ -182,7 +177,7 @@ dat.calib.blr <-
            CI.R.boot = 200)
 
 dat.calib.pv <-
-  calibmsm(data.mstate = msebmtcal,
+  calib_msm(data.mstate = msebmtcal,
            data.raw = ebmtcal,
            j = 3,
            s = 100,
@@ -219,7 +214,7 @@ Compare the following graphs to figures 1 and 2 above. First do \code{loess.span
 
 ```{r}
 dat.calib.blr <-
-  calibmsm(data.mstate = msebmtcal,
+  calib_msm(data.mstate = msebmtcal,
            data.raw = ebmtcal,
            j = 1,
            s = 0,
@@ -234,7 +229,7 @@ dat.calib.blr <-
            CI.R.boot = 200)
 
 dat.calib.pv <-
-  calibmsm(data.mstate = msebmtcal,
+  calib_msm(data.mstate = msebmtcal,
            data.raw = ebmtcal,
            j = 1,
            s = 0,
@@ -263,7 +258,7 @@ Then do \code{loess.span = 1}.
 
 ```{r}
 dat.calib.blr <-
-  calibmsm(data.mstate = msebmtcal,
+  calib_msm(data.mstate = msebmtcal,
            data.raw = ebmtcal,
            j = 1,
            s = 0,
@@ -278,7 +273,7 @@ dat.calib.blr <-
            CI.R.boot = 200)
 
 dat.calib.pv <-
-  calibmsm(data.mstate = msebmtcal,
+  calib_msm(data.mstate = msebmtcal,
            data.raw = ebmtcal,
            j = 1,
            s = 0,

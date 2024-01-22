@@ -1,10 +1,10 @@
-#' Plots calibration curves estimated using \code{\link{calibmsm}}.
+#' Plots calibration curves estimated using \code{\link{calib_msm}}.
 #'
 #' @description
 #' Plots calibration curves for the transition probabilities of a multistate model
 #' estimated using BLR-IPCW and pseudo-value approaches.
 #'
-#' @param x Object of class 'calibmsm' generated from \code{\link{calibmsm}}.
+#' @param x Object of class 'calib_msm' generated from \code{\link{calib_msm}}.
 #' @param ... Other
 #' @param combine Whether to combine into one plot using ggarrange, or return as a list of individual plots
 #' @param ncol Number of columns for combined calibration plot
@@ -25,7 +25,7 @@
 #'
 #' # Now estimate the observed event probabilities for each possible transition.
 #' dat.calib <-
-#' calibmsm(data.mstate = msebmtcal,
+#' calib_msm(data.mstate = msebmtcal,
 #'  data.raw = ebmtcal,
 #'  j=1,
 #'  s=0,
@@ -38,7 +38,7 @@
 #'
 #' @importFrom graphics plot
 #' @export
-plot.calibmsm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, transparency.rug = 0.1){
+plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, transparency.rug = 0.1){
 
   ### Extract plot data and relevant metadata
   object.in <- x
@@ -123,13 +123,13 @@ plot.calibmsm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, tran
 
 
 #' Plots calibration scatter plots for objects of class `calib_mlr` estimated using
-#' using \code{\link{calibmsm}}.
+#' using \code{\link{calib_msm}}.
 #'
 #' @description
 #' Plots calibration scatter plots for the transition probabilities of a multistate model
 #' estimated using the MLR-IPCW approach.
 #'
-#' @param x Object of class `calib_mlr` generated from \code{\link{calibmsm}}
+#' @param x Object of class `calib_mlr` generated from \code{\link{calib_msm}}
 #' @param ... Other
 #' @param combine Whether to combine into one plot using ggarrange, or return as a list of individual plots
 #' @param ncol Number of columns for combined calibration plot
@@ -159,7 +159,7 @@ plot.calibmsm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, tran
 #'
 #' # Now estimate the observed event probabilities for each possible transition.
 #' dat.calib <-
-#' calibmsm(data.mstate = msebmtcal.cmprsk,
+#' calib_msm(data.mstate = msebmtcal.cmprsk,
 #'  data.raw = ebmtcal,
 #'  j=1,
 #'  s=0,

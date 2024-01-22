@@ -2,7 +2,7 @@
 
 #' Estimate data for calibration plots using BLR-IPCW.
 #' @description
-#' Called in calibmsm::calibmsm to apply the BLR-IPCW method.
+#' Called in calibmsm::calib_msm to apply the BLR-IPCW method.
 #'
 #' @details
 #' Calls heavily on calc_obs_blr_loess_boot or calc_obs_blr_rcs_boot to estimate the observed
@@ -196,7 +196,7 @@ calib_blr_ipcw <- function(data.raw,
 #' Estimate observed event probabilities for state.k using BLR-IPCW and loess smoothers.
 #' @description
 #' Estimate observed event probabilities for a specific state using BLR-IPCW when `curve.type = 'loess'` specified.
-#' Function is called by calibmsm::calib_blr_ipcw, which is called by calibmsm::calibmsm.
+#' Function is called by calibmsm::calib_blr_ipcw, which is called by calibmsm::calib_msm.
 #' This function does the heavy lifting, and is what estimates the observed event probabilities.
 #'
 #' @details
@@ -280,7 +280,7 @@ calc_obs_blr_loess_boot <- function(data.raw,
 #' Estimate observed event probabilities for state.k using BLR-IPCW and restricted cubic splines.
 #' @description
 #' Estimate observed event probabilities for a specific state using BLR-IPCW when `curve.type = 'rcs'` specified.
-#' Function is called by calibmsm::calib_blr_ipcw, which is called by calibmsm::calibmsm.
+#' Function is called by calibmsm::calib_blr_ipcw, which is called by calibmsm::calib_msm.
 #' This function does the heavy lifting, and is what estimates the observed event probabilities.
 #'
 #' @details

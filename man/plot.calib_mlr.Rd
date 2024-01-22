@@ -3,7 +3,7 @@
 \name{plot.calib_mlr}
 \alias{plot.calib_mlr}
 \title{Plots calibration scatter plots for objects of class \code{calib_mlr} estimated using
-using \code{\link{calibmsm}}.}
+using \code{\link{calib_msm}}.}
 \usage{
 \method{plot}{calib_mlr}(
   x,
@@ -16,7 +16,7 @@ using \code{\link{calibmsm}}.}
 )
 }
 \arguments{
-\item{x}{Object of class \code{calib_mlr} generated from \code{\link{calibmsm}}}
+\item{x}{Object of class \code{calib_mlr} generated from \code{\link{calib_msm}}}
 
 \item{...}{Other}
 
@@ -57,7 +57,7 @@ msebmtcal.cmprsk <- msebmtcal.cmprsk |> dplyr::filter(id \%in\% 1:150)
 
 # Now estimate the observed event probabilities for each possible transition.
 dat.calib <-
-calibmsm(data.mstate = msebmtcal.cmprsk,
+calib_msm(data.mstate = msebmtcal.cmprsk,
  data.raw = ebmtcal,
  j=1,
  s=0,

@@ -2,7 +2,7 @@
 ### Tests for calibration curves produced using BLR-IPCW (calib.type = 'blr')
 ###
 
-test_that("check calibmsm output, (j = 1, s = 0), curve.type = rcs, stabilised vs unstabilised", {
+test_that("check calib_msm output, (j = 1, s = 0), curve.type = rcs, stabilised vs unstabilised", {
 
   ## Extract relevant predicted risks from tps0
   tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), dplyr::any_of(paste("pstate", 1:6, sep = "")))
@@ -10,7 +10,7 @@ test_that("check calibmsm output, (j = 1, s = 0), curve.type = rcs, stabilised v
   ###
   ### Calculate observed event probabilities
   dat.calib.blr <-
-    calibmsm(data.mstate = msebmtcal,
+    calib_msm(data.mstate = msebmtcal,
              data.raw = ebmtcal,
              j=1,
              s=0,
@@ -21,7 +21,7 @@ test_that("check calibmsm output, (j = 1, s = 0), curve.type = rcs, stabilised v
              w.covs = c("year", "agecl", "proph", "match"))
 
   expect_type(dat.calib.blr, "list")
-  expect_equal(class(dat.calib.blr), c("calib_blr", "calibmsm"))
+  expect_equal(class(dat.calib.blr), c("calib_blr", "calib_msm"))
   expect_length(dat.calib.blr, 2)
   expect_length(dat.calib.blr[["plotdata"]], 6)
   expect_length(dat.calib.blr[["plotdata"]][[1]]$id, 1778)
@@ -32,7 +32,7 @@ test_that("check calibmsm output, (j = 1, s = 0), curve.type = rcs, stabilised v
   ###
   ### Calculate observed event probabilities with stabilised weights
   dat.calib.blr.stab <-
-    calibmsm(data.mstate = msebmtcal,
+    calib_msm(data.mstate = msebmtcal,
              data.raw = ebmtcal,
              j=1,
              s=0,
@@ -44,7 +44,7 @@ test_that("check calibmsm output, (j = 1, s = 0), curve.type = rcs, stabilised v
              w.stabilised = TRUE)
 
   expect_type(dat.calib.blr.stab, "list")
-  expect_equal(class(dat.calib.blr.stab), c("calib_blr", "calibmsm"))
+  expect_equal(class(dat.calib.blr.stab), c("calib_blr", "calib_msm"))
   expect_length(dat.calib.blr.stab, 2)
   expect_length(dat.calib.blr.stab[["plotdata"]], 6)
   expect_length(dat.calib.blr.stab[["plotdata"]][[1]]$id, 1778)
@@ -57,14 +57,14 @@ test_that("check calibmsm output, (j = 1, s = 0), curve.type = rcs, stabilised v
 })
 
 
-test_that("check calibmsm output, (j = 1, s = 0), curve.type = loess", {
+test_that("check calib_msm output, (j = 1, s = 0), curve.type = loess", {
 
   ## Extract relevant predicted risks from tps0
   tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
 
   ## Calculate observed event probabilities
   dat.calib.blr <-
-    calibmsm(data.mstate = msebmtcal,
+    calib_msm(data.mstate = msebmtcal,
              data.raw = ebmtcal,
              j=1,
              s=0,
@@ -74,7 +74,7 @@ test_that("check calibmsm output, (j = 1, s = 0), curve.type = loess", {
              w.covs = c("year", "agecl", "proph", "match"))
 
   expect_type(dat.calib.blr, "list")
-  expect_equal(class(dat.calib.blr), c("calib_blr", "calibmsm"))
+  expect_equal(class(dat.calib.blr), c("calib_blr", "calib_msm"))
   expect_length(dat.calib.blr, 2)
   expect_length(dat.calib.blr[["plotdata"]], 6)
   expect_length(dat.calib.blr[["plotdata"]][[1]]$id, 1778)
@@ -84,7 +84,7 @@ test_that("check calibmsm output, (j = 1, s = 0), curve.type = loess", {
 
   ## Calculate observed event probabilities
   dat.calib.blr.stab <-
-    calibmsm(data.mstate = msebmtcal,
+    calib_msm(data.mstate = msebmtcal,
              data.raw = ebmtcal,
              j=1,
              s=0,
@@ -95,7 +95,7 @@ test_that("check calibmsm output, (j = 1, s = 0), curve.type = loess", {
              w.stabilised = TRUE)
 
   expect_type(dat.calib.blr.stab, "list")
-  expect_equal(class(dat.calib.blr.stab), c("calib_blr", "calibmsm"))
+  expect_equal(class(dat.calib.blr.stab), c("calib_blr", "calib_msm"))
   expect_length(dat.calib.blr.stab, 2)
   expect_length(dat.calib.blr.stab[["plotdata"]], 6)
   expect_length(dat.calib.blr.stab[["plotdata"]][[1]]$id, 1778)
@@ -107,7 +107,7 @@ test_that("check calibmsm output, (j = 1, s = 0), curve.type = loess", {
 
   ## Calculate observed event probabilities
   dat.calib.blr.w.function <-
-    calibmsm(data.mstate = msebmtcal,
+    calib_msm(data.mstate = msebmtcal,
              data.raw = ebmtcal,
              j=1,
              s=0,
@@ -118,7 +118,7 @@ test_that("check calibmsm output, (j = 1, s = 0), curve.type = loess", {
              w.covs = c("year", "agecl", "proph", "match"))
 
   expect_type(dat.calib.blr.w.function, "list")
-  expect_equal(class(dat.calib.blr.w.function), c("calib_blr", "calibmsm"))
+  expect_equal(class(dat.calib.blr.w.function), c("calib_blr", "calib_msm"))
   expect_length(dat.calib.blr.w.function, 2)
   expect_length(dat.calib.blr.w.function[["plotdata"]], 6)
   expect_length(dat.calib.blr.w.function[["plotdata"]][[1]]$id, 1778)
@@ -132,7 +132,7 @@ test_that("check calibmsm output, (j = 1, s = 0), curve.type = loess", {
 })
 
 
-test_that("check calibmsm output, (j = 1, s = 0), with CI", {
+test_that("check calib_msm output, (j = 1, s = 0), with CI", {
 
   skip_on_cran()
 
@@ -141,7 +141,7 @@ test_that("check calibmsm output, (j = 1, s = 0), with CI", {
 
   ## Calculate observed event probabilities no CI
   dat.calib.blr.noCI <-
-    calibmsm(data.mstate = msebmtcal,
+    calib_msm(data.mstate = msebmtcal,
              data.raw = ebmtcal,
              j=1,
              s=0,
@@ -153,7 +153,7 @@ test_that("check calibmsm output, (j = 1, s = 0), with CI", {
 
   ## Calculate observed event probabilities with CI
   dat.calib.blr <-
-    calibmsm(data.mstate = msebmtcal,
+    calib_msm(data.mstate = msebmtcal,
              data.raw = ebmtcal,
              j=1,
              s=0,
@@ -166,7 +166,7 @@ test_that("check calibmsm output, (j = 1, s = 0), with CI", {
              CI.R.boot = 5)
 
   expect_type(dat.calib.blr, "list")
-  expect_equal(class(dat.calib.blr), c("calib_blr", "calibmsm"))
+  expect_equal(class(dat.calib.blr), c("calib_blr", "calib_msm"))
   expect_length(dat.calib.blr, 2)
   expect_length(dat.calib.blr[["plotdata"]], 6)
   expect_equal(ncol(dat.calib.blr[["plotdata"]][[1]]), 5)
@@ -182,14 +182,14 @@ test_that("check calibmsm output, (j = 1, s = 0), with CI", {
 })
 
 
-test_that("check calibmsm output, (j = 3, s = 100)", {
+test_that("check calib_msm output, (j = 3, s = 100)", {
 
   ## Extract relevant predicted risks from tps100
   tp.pred <- dplyr::select(dplyr::filter(tps100, j == 3), any_of(paste("pstate", 1:6, sep = "")))
 
   ## Calculate observed event probabilities
   dat.calib.blr <-
-    calibmsm(data.mstate = msebmtcal,
+    calib_msm(data.mstate = msebmtcal,
              data.raw = ebmtcal,
              j=3,
              s=100,
@@ -200,7 +200,7 @@ test_that("check calibmsm output, (j = 3, s = 100)", {
              w.covs = c("year", "agecl", "proph", "match"))
 
   expect_type(dat.calib.blr, "list")
-  expect_equal(class(dat.calib.blr), c("calib_blr", "calibmsm"))
+  expect_equal(class(dat.calib.blr), c("calib_blr", "calib_msm"))
   expect_length(dat.calib.blr, 2)
   expect_length(dat.calib.blr[["plotdata"]], 4)
   expect_length(dat.calib.blr[["plotdata"]][["state3"]]$id, 359)
@@ -212,14 +212,14 @@ test_that("check calibmsm output, (j = 3, s = 100)", {
 })
 
 
-test_that("check calibmsm output, (j = 1, s = 0), null covs", {
+test_that("check calib_msm output, (j = 1, s = 0), null covs", {
 
   ## Extract relevant predicted risks from tps0
   tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
 
   ## Calculate observed event probabilities
   dat.calib.blr <-
-    calibmsm(data.mstate = msebmtcal,
+    calib_msm(data.mstate = msebmtcal,
              data.raw = ebmtcal,
              j=1,
              s=0,
@@ -229,7 +229,7 @@ test_that("check calibmsm output, (j = 1, s = 0), null covs", {
              rcs.nk = 3)
 
   expect_type(dat.calib.blr, "list")
-  expect_equal(class(dat.calib.blr), c("calib_blr", "calibmsm"))
+  expect_equal(class(dat.calib.blr), c("calib_blr", "calib_msm"))
   expect_length(dat.calib.blr, 2)
   expect_length(dat.calib.blr[["plotdata"]], 6)
   expect_length(dat.calib.blr[["plotdata"]][[1]]$id, 1778)
@@ -238,7 +238,7 @@ test_that("check calibmsm output, (j = 1, s = 0), null covs", {
 
   ## Calculate observed event probabilities
   dat.calib.blr <-
-    calibmsm(data.mstate = msebmtcal,
+    calib_msm(data.mstate = msebmtcal,
              data.raw = ebmtcal,
              j=1,
              s=0,
@@ -250,7 +250,7 @@ test_that("check calibmsm output, (j = 1, s = 0), null covs", {
              w.stabilised = TRUE)
 
   expect_type(dat.calib.blr, "list")
-  expect_equal(class(dat.calib.blr), c("calib_blr", "calibmsm"))
+  expect_equal(class(dat.calib.blr), c("calib_blr", "calib_msm"))
   expect_length(dat.calib.blr, 2)
   expect_length(dat.calib.blr[["plotdata"]], 6)
   expect_length(dat.calib.blr[["plotdata"]][[1]]$id, 1778)
@@ -261,7 +261,7 @@ test_that("check calibmsm output, (j = 1, s = 0), null covs", {
 
 
 ### Run tests for manually inputted predicted probailities
-test_that("check calibmsm output, (j = 1, s = 0), curve.type = loess, CI.type = bootstrap", {
+test_that("check calib_msm output, (j = 1, s = 0), curve.type = loess, CI.type = bootstrap", {
 
   skip_on_cran()
 
@@ -276,7 +276,7 @@ test_that("check calibmsm output, (j = 1, s = 0), curve.type = loess, CI.type = 
     dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
 
   ## No confidence interval
-  dat.calib.blr <- calibmsm(data.mstate = msebmtcal,
+  dat.calib.blr <- calib_msm(data.mstate = msebmtcal,
                             data.raw = ebmtcal,
                             j = 1,
                             s = 0,
@@ -287,13 +287,13 @@ test_that("check calibmsm output, (j = 1, s = 0), curve.type = loess, CI.type = 
                             tp.pred.plot = tp.pred.plot, transitions.out = NULL)
 
   ## Should be one less column in plotdata (no patient ids)
-  expect_equal(class(dat.calib.blr), c("calib_blr", "calibmsm"))
+  expect_equal(class(dat.calib.blr), c("calib_blr", "calib_msm"))
   expect_equal(ncol(dat.calib.blr[["plotdata"]][[1]]), 2)
   expect_equal(nrow(dat.calib.blr[["plotdata"]][[1]]), 50)
   expect_no_error(summary(dat.calib.blr))
 
   ## With confidence interval
-  dat.calib.blr <- calibmsm(data.mstate = msebmtcal,
+  dat.calib.blr <- calib_msm(data.mstate = msebmtcal,
                             data.raw = ebmtcal,
                             j = 1,
                             s = 0,
@@ -306,7 +306,7 @@ test_that("check calibmsm output, (j = 1, s = 0), curve.type = loess, CI.type = 
                             tp.pred.plot = tp.pred.plot, transitions.out = NULL)
 
   ## Should be one less column in plotdata (no patient ids)
-  expect_equal(class(dat.calib.blr), c("calib_blr", "calibmsm"))
+  expect_equal(class(dat.calib.blr), c("calib_blr", "calib_msm"))
   expect_equal(ncol(dat.calib.blr[["plotdata"]][[1]]), 4)
   expect_equal(nrow(dat.calib.blr[["plotdata"]][[1]]), 50)
   expect_no_error(summary(dat.calib.blr))
@@ -331,7 +331,7 @@ test_that("Test warnings for bootstrapping with small cohort", {
   msebmtcal <- msebmtcal |> dplyr::filter(id %in% 1:50)
 
   ## No confidence interval
-  expect_warning(calibmsm(data.mstate = msebmtcal,
+  expect_warning(calib_msm(data.mstate = msebmtcal,
                           data.raw = ebmtcal,
                           j = 1,
                           s = 0,
@@ -346,7 +346,7 @@ test_that("Test warnings for bootstrapping with small cohort", {
 })
 
 
-test_that("check calibmsm output, (j = 1, s = 0),
+test_that("check calib_msm output, (j = 1, s = 0),
           manual weights,
           manually define vector of predicted probabilities,
           manually define transition out,
@@ -379,7 +379,7 @@ test_that("check calibmsm output, (j = 1, s = 0),
 
             ## Calculate observed event probabilities using weights.manual
             dat.calib.blr.w.manual <-
-              calibmsm(data.mstate = msebmtcal,
+              calib_msm(data.mstate = msebmtcal,
                        data.raw = ebmtcal,
                        j=1,
                        s=0,
@@ -392,7 +392,7 @@ test_that("check calibmsm output, (j = 1, s = 0),
                        transitions.out = c(1,2,3,4,5,6))
 
             expect_type(dat.calib.blr.w.manual, "list")
-            expect_equal(class(dat.calib.blr.w.manual), c("calib_blr", "calibmsm"))
+            expect_equal(class(dat.calib.blr.w.manual), c("calib_blr", "calib_msm"))
             expect_length(dat.calib.blr.w.manual, 2)
             expect_length(dat.calib.blr.w.manual[["plotdata"]], 6)
             expect_length(dat.calib.blr.w.manual[["plotdata"]][[1]]$pred, 1778)
@@ -401,7 +401,7 @@ test_that("check calibmsm output, (j = 1, s = 0),
 
           })
 
-test_that("check calibmsm output, (j = 1, s = 0),
+test_that("check calib_msm output, (j = 1, s = 0),
           manual weights,
           manually define vector of predicted probabilities,
           manually define transition out,
@@ -434,7 +434,7 @@ test_that("check calibmsm output, (j = 1, s = 0),
 
             ## Calculate observed event probabilities using weights.manual
             dat.calib.blr.w.manual <-
-              calibmsm(data.mstate = msebmtcal,
+              calib_msm(data.mstate = msebmtcal,
                        data.raw = ebmtcal,
                        j=1,
                        s=0,
@@ -447,7 +447,7 @@ test_that("check calibmsm output, (j = 1, s = 0),
                        transitions.out = c(1,2,3,4,5,6))
 
             expect_type(dat.calib.blr.w.manual, "list")
-            expect_equal(class(dat.calib.blr.w.manual), c("calib_blr", "calibmsm"))
+            expect_equal(class(dat.calib.blr.w.manual), c("calib_blr", "calib_msm"))
             expect_length(dat.calib.blr.w.manual, 2)
             expect_length(dat.calib.blr.w.manual[["plotdata"]], 6)
             expect_length(dat.calib.blr.w.manual[["plotdata"]][[1]]$pred, 1778)
@@ -456,7 +456,7 @@ test_that("check calibmsm output, (j = 1, s = 0),
 
           })
 
-test_that("check calibmsm output, (j = 1, s = 0),
+test_that("check calib_msm output, (j = 1, s = 0),
           with CI,
           manually define vector of predicted probabilities,
           manually define transition out", {
@@ -479,7 +479,7 @@ test_that("check calibmsm output, (j = 1, s = 0),
 
             ## Calculate observed event probabilities
             dat.calib.blr <-
-              calibmsm(data.mstate = msebmtcal,
+              calib_msm(data.mstate = msebmtcal,
                        data.raw = ebmtcal,
                        j=1,
                        s=0,
@@ -494,7 +494,7 @@ test_that("check calibmsm output, (j = 1, s = 0),
                        transitions.out = c(1,2,3,4,5,6))
 
             expect_type(dat.calib.blr, "list")
-            expect_equal(class(dat.calib.blr), c("calib_blr", "calibmsm"))
+            expect_equal(class(dat.calib.blr), c("calib_blr", "calib_msm"))
             expect_length(dat.calib.blr, 2)
             expect_length(dat.calib.blr[["plotdata"]], 6)
             expect_length(dat.calib.blr[["plotdata"]][[1]]$pred, 1778)
@@ -503,7 +503,7 @@ test_that("check calibmsm output, (j = 1, s = 0),
 
           })
 
-test_that("check calibmsm output, (j = 1, s = 0),
+test_that("check calib_msm output, (j = 1, s = 0),
           Manually define function to estimate weights", {
 
             skip_on_cran()
@@ -514,7 +514,7 @@ test_that("check calibmsm output, (j = 1, s = 0),
             ###
             ### Calculate observed event probabilities
             dat.calib.blr <-
-              calibmsm(data.mstate = msebmtcal,
+              calib_msm(data.mstate = msebmtcal,
                        data.raw = ebmtcal,
                        j=1,
                        s=0,
@@ -540,7 +540,7 @@ test_that("check calibmsm output, (j = 1, s = 0),
             ###
             ### Calculate observed event probabilities same function as internal procedure, and check it agrees with dat.calib.blr
             dat.calib.blr.w.manual <-
-              calibmsm(data.mstate = msebmtcal,
+              calib_msm(data.mstate = msebmtcal,
                        data.raw = ebmtcal,
                        j=1,
                        s=0,
@@ -555,7 +555,7 @@ test_that("check calibmsm output, (j = 1, s = 0),
             ###
             ### Calculate observed event probabilities using an incorrect vector of weights, and see if its different from dat.calib.blr
             dat.calib.blr.w.manual <-
-              calibmsm(data.mstate = msebmtcal,
+              calib_msm(data.mstate = msebmtcal,
                        data.raw = ebmtcal,
                        j=1,
                        s=0,
@@ -572,7 +572,7 @@ test_that("check calibmsm output, (j = 1, s = 0),
             calc_weights_manual <- calc_weights
 
             dat.calib.blr.w.function <-
-              calibmsm(data.mstate = msebmtcal,
+              calib_msm(data.mstate = msebmtcal,
                        data.raw = ebmtcal,
                        j=1,
                        s=0,
@@ -584,7 +584,7 @@ test_that("check calibmsm output, (j = 1, s = 0),
                        w.covs = c("year", "agecl", "proph", "match"))
 
             expect_type(dat.calib.blr.w.function, "list")
-            expect_equal(class(dat.calib.blr.w.function), c("calib_blr", "calibmsm"))
+            expect_equal(class(dat.calib.blr.w.function), c("calib_blr", "calib_msm"))
             expect_length(dat.calib.blr.w.function, 2)
             expect_length(dat.calib.blr.w.function[["plotdata"]], 6)
             expect_length(dat.calib.blr.w.function[["plotdata"]][[1]]$id, 1778)
@@ -763,7 +763,7 @@ test_that("check calibmsm output, (j = 1, s = 0),
 
             ### Calculate observed event probabilities with new w.function
             dat.calib.blr.w.function <-
-              calibmsm(data.mstate = msebmtcal,
+              calib_msm(data.mstate = msebmtcal,
                        data.raw = ebmtcal,
                        j=1,
                        s=0,
@@ -775,7 +775,7 @@ test_that("check calibmsm output, (j = 1, s = 0),
                        w.covs = c("year", "agecl", "proph", "match"))
 
             expect_type(dat.calib.blr.w.function, "list")
-            expect_equal(class(dat.calib.blr.w.function), c("calib_blr", "calibmsm"))
+            expect_equal(class(dat.calib.blr.w.function), c("calib_blr", "calib_msm"))
             expect_length(dat.calib.blr.w.function, 2)
             expect_length(dat.calib.blr.w.function[["plotdata"]], 6)
             expect_length(dat.calib.blr.w.function[["plotdata"]][[1]]$id, 1778)
@@ -959,7 +959,7 @@ test_that("check calibmsm output, (j = 1, s = 0),
 
             ### Calculate observed event probabilities with new w.function
             dat.calib.blr.w.function <-
-              calibmsm(data.mstate = msebmtcal,
+              calib_msm(data.mstate = msebmtcal,
                        data.raw = ebmtcal,
                        j=1,
                        s=0,
@@ -972,7 +972,7 @@ test_that("check calibmsm output, (j = 1, s = 0),
                        extra.arg = 10)
 
             expect_type(dat.calib.blr.w.function, "list")
-            expect_equal(class(dat.calib.blr.w.function), c("calib_blr", "calibmsm"))
+            expect_equal(class(dat.calib.blr.w.function), c("calib_blr", "calib_msm"))
             expect_length(dat.calib.blr.w.function, 2)
             expect_length(dat.calib.blr.w.function[["plotdata"]], 6)
             expect_length(dat.calib.blr.w.function[["plotdata"]][[1]]$id, 1778)
@@ -991,7 +991,7 @@ test_that("test warnings and errors", {
 
   ## Calculate observed event probabilities
   expect_error(
-    calibmsm(data.mstate = msebmtcal,
+    calib_msm(data.mstate = msebmtcal,
              data.raw = ebmtcal,
              j=1,
              s=0,
@@ -1015,7 +1015,7 @@ test_that("test warnings and errors", {
                  stabilised = FALSE)$ipcw[-1]
 
   expect_error(
-    calibmsm(data.mstate = msebmtcal,
+    calib_msm(data.mstate = msebmtcal,
              data.raw = ebmtcal,
              j=1,
              s=0,
@@ -1031,7 +1031,7 @@ test_that("test warnings and errors", {
     return(data.mstate)
   }
   expect_error(
-    calibmsm(data.mstate = msebmtcal,
+    calib_msm(data.mstate = msebmtcal,
              data.raw = ebmtcal,
              j=1,
              s=0,
@@ -1051,7 +1051,7 @@ test_that("test warnings and errors", {
 
   ###
   ### Calculate observed event probabilities
-  expect_error(calibmsm(data.mstate = msebmtcal,
+  expect_error(calib_msm(data.mstate = msebmtcal,
                         data.raw = ebmtcal,
                         j=1,
                         s=100,
@@ -1070,7 +1070,7 @@ test_that("test warnings and errors", {
 
   ###
   ### Calculate observed event probabilities
-  expect_error(calibmsm(data.mstate = msebmtcal,
+  expect_error(calib_msm(data.mstate = msebmtcal,
                         data.raw = ebmtcal,
                         j=1,
                         s=100,
@@ -1086,7 +1086,7 @@ test_that("test warnings and errors", {
 
   ###
   ### Calculate observed event probabilities
-  expect_error(calibmsm(data.mstate = msebmtcal,
+  expect_error(calib_msm(data.mstate = msebmtcal,
                         data.raw = ebmtcal,
                         j=3,
                         s=100,
@@ -1104,7 +1104,7 @@ test_that("test warnings and errors", {
 
   ###
   ### Calculate observed event probabilities
-  expect_error(calibmsm(data.mstate = msebmtcal,
+  expect_error(calib_msm(data.mstate = msebmtcal,
                         data.raw = ebmtcal,
                         j=3,
                         s=100,

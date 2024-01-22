@@ -1,5 +1,4 @@
 #' @keywords internal
-#' @aliases calibmsm-package
 "_PACKAGE"
 
 ## usethis namespace: start

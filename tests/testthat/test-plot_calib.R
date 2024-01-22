@@ -1,11 +1,11 @@
-test_that("check plot.calibmsm output (j = 1, s = 0)", {
+test_that("check plot.calib_msm output (j = 1, s = 0)", {
 
   ## Extract relevant predicted risks from tps0
   tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
 
   ## Calculate observed event probabilities
   dat.calib.blr <-
-    calibmsm(data.mstate = msebmtcal,
+    calib_msm(data.mstate = msebmtcal,
              data.raw = ebmtcal,
              j=1,
              s=0,
@@ -25,14 +25,14 @@ test_that("check plot.calibmsm output (j = 1, s = 0)", {
 
 })
 
-test_that("check plot.calibmsm output (j = 1, s = 0) with CI", {
+test_that("check plot.calib_msm output (j = 1, s = 0) with CI", {
 
   ## Extract relevant predicted risks from tps0
   tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
 
   ## Calculate observed event probabilities
   dat.calib.blr <-
-    calibmsm(data.mstate = msebmtcal,
+    calib_msm(data.mstate = msebmtcal,
              data.raw = ebmtcal,
              j=1,
              s=0,
@@ -55,14 +55,14 @@ test_that("check plot.calibmsm output (j = 1, s = 0) with CI", {
 })
 
 
-test_that("check plot.calibmsm output (j = 3, s = 100)", {
+test_that("check plot.calib_msm output (j = 3, s = 100)", {
 
   ## Extract relevant predicted risks from tps0
   tp.pred <- dplyr::select(dplyr::filter(tps100, j == 3), any_of(paste("pstate", 1:6, sep = "")))
 
   ## Calculate observed event probabilities
   dat.calib.blr <-
-    calibmsm(data.mstate = msebmtcal,
+    calib_msm(data.mstate = msebmtcal,
              data.raw = ebmtcal,
              j=3,
              s=100,
@@ -98,7 +98,7 @@ test_that("check plot.calib_pv output (j = 1, s = 0)", {
 
   ## Calculate observed event probabilities
   dat.calib.pv <-
-    suppressWarnings(calibmsm(data.mstate = msebmtcal,
+    suppressWarnings(calib_msm(data.mstate = msebmtcal,
                               data.raw = ebmtcal,
                               j=1,
                               s=0,
@@ -132,7 +132,7 @@ test_that("check plot.calib_pv output (j = 1, s = 0) with CI", {
 
   ## Calculate observed event probabilities
   dat.calib.pv <-
-    suppressWarnings(calibmsm(data.mstate = msebmtcal,
+    suppressWarnings(calib_msm(data.mstate = msebmtcal,
                               data.raw = ebmtcal,
                               j=1,
                               s=0,
@@ -169,7 +169,7 @@ test_that("check plot.calib_pv output (j = 3, s = 100) with CI", {
 
   ## Calculate observed event probabilities
   dat.calib.pv <-
-    calibmsm(data.mstate = msebmtcal,
+    calib_msm(data.mstate = msebmtcal,
              data.raw = ebmtcal,
              j=3,
              s=100,
@@ -211,7 +211,7 @@ test_that("check plot.calib_mlr output (j = 1, s = 0)", {
   ## Calculate observed event probabilities
   suppressWarnings(
     dat.calib.mlr <-
-      calibmsm(data.mstate = msebmtcal,
+      calib_msm(data.mstate = msebmtcal,
                data.raw = ebmtcal,
                j=1,
                s=0,
@@ -239,7 +239,7 @@ test_that("check plot.calib_mlr output (j = 3, s = 100)", {
   ## Calculate observed event probabilities
   suppressWarnings(
     dat.calib.mlr <-
-      calibmsm(data.mstate = msebmtcal,
+      calib_msm(data.mstate = msebmtcal,
                data.raw = ebmtcal,
                j=3,
                s=100,

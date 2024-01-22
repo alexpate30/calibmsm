@@ -2,7 +2,7 @@
 
 #' Estimate data for calibration plots using MLR-IPCW.
 #' @description
-#' Called in calibmsm::calibmsm to apply the MLR-IPCW method.
+#' Called in calib_msm::calib_msm to apply the MLR-IPCW method.
 #'
 #' @details
 #' Observed event probabilities are already returned only for the landmarked cohort of

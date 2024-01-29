@@ -4,7 +4,18 @@
 \alias{plot.calib_msm}
 \title{Plots calibration curves estimated using \code{\link{calib_msm}}.}
 \usage{
-\method{plot}{calib_msm}(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, transparency.rug = 0.1)
+\method{plot}{calib_msm}(
+  x,
+  ...,
+  combine = TRUE,
+  ncol = NULL,
+  nrow = NULL,
+  marg.density = FALSE,
+  marg.density.size = 5,
+  marg.density.type = "density",
+  marg.rug = FALSE,
+  marg.rug.transparency = 0.1
+)
 }
 \arguments{
 \item{x}{Object of class 'calib_msm' generated from \code{\link{calib_msm}}.}
@@ -17,7 +28,15 @@
 
 \item{nrow}{Number of rows for combined calibration plot}
 
-\item{transparency.rug}{Degree of transparency for the density rug plot along each axis}
+\item{marg.density}{Whether to produce marginal density plots TRUE/FALSE}
+
+\item{marg.density.size}{Size of the main plot relative to the density plots (see \code{\link[ggExtra]ggMarginal})}
+
+\item{marg.density.type}{What type of marginal plot to show (see \code{\link[ggExtra]ggMarginal})}
+
+\item{marg.rug}{Whether to produce marginal rug plots TRUE/FALSE}
+
+\item{marg.rug.transparency}{Degree of transparency for the density rug plot along each axis}
 }
 \value{
 If \code{combine = TRUE}, returns an object of classes \code{gg}, \code{ggplot}, and \code{ggarrange},

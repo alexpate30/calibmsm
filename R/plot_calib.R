@@ -9,7 +9,11 @@
 #' @param combine Whether to combine into one plot using ggarrange, or return as a list of individual plots
 #' @param ncol Number of columns for combined calibration plot
 #' @param nrow Number of rows for combined calibration plot
-#' @param transparency.rug Degree of transparency for the density rug plot along each axis
+#' @param marg.density Whether to produce marginal density plots TRUE/FALSE
+#' @param marg.density.size Size of the main plot relative to the density plots (see \code{\link[ggExtra]ggMarginal})
+#' @param marg.density.type What type of marginal plot to show (see \code{\link[ggExtra]ggMarginal})
+#' @param marg.rug Whether to produce marginal rug plots TRUE/FALSE
+#' @param marg.rug.transparency Degree of transparency for the density rug plot along each axis
 #'
 #' @returns If `combine = TRUE`, returns an object of classes `gg`, `ggplot`, and `ggarrange`,
 #' as all ggplots have been combined into one object. If `combine = FALSE`, returns an object of
@@ -38,8 +42,11 @@
 #'
 #' @importFrom graphics plot
 #' @export
-plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, transparency.rug = 0.1){
+plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
+                           marg.density = FALSE, marg.density.size = 5, marg.density.type = "density",
+                           marg.rug = FALSE, marg.rug.transparency = 0.1){
 
+  x <- dat.calib
   ### Extract plot data and relevant metadata
   object.in <- x
   plot.data <- object.in[["plotdata"]]
@@ -60,10 +67,10 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, tra
       ### Pivot longer to create data for ggplot and assign appropriate labels
       plot.data.k.longer <- tidyr::pivot_longer(plot.data.k, cols = c(obs, obs.upper, obs.lower), names_to = "line.group")
       plot.data.k.longer <- dplyr::mutate(plot.data.k.longer,
-                                   line.group = base::factor(line.group),
-                                   mapping = dplyr::case_when(line.group == "obs" ~ 1,
-                                                       line.group %in% c("obs.upper", "obs.lower") ~ 2),
-                                   mapping = base::factor(mapping))
+                                          line.group = base::factor(line.group),
+                                          mapping = dplyr::case_when(line.group == "obs" ~ 1,
+                                                                     line.group %in% c("obs.upper", "obs.lower") ~ 2),
+                                          mapping = base::factor(mapping))
 
       levels(plot.data.k.longer$line.group) <- c("Calibration", "Upper", "Lower")
       levels(plot.data.k.longer$mapping) <- c("Calibration", "95% CI")
@@ -73,11 +80,28 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, tra
         ggplot2::geom_line(ggplot2::aes(x = pred, y = value, group = line.group, color = mapping)) +
         ggplot2::geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
         ggplot2::xlab("Predicted risk") + ggplot2::ylab("Observed risk") +
-        ggplot2::xlim(c(0, max(plot.data.k.longer$pred))) +
-        ggplot2::ylim(c(min(plot.data.k.longer$value), max(plot.data.k.longer$value))) +
-        ggplot2::geom_rug(data = plot.data.k.longer |> dplyr::arrange(pred) |> dplyr::select(pred, line.group, value, mapping) |> subset(line.group == "Calibration"),
-                          ggplot2::aes(x = pred, y = value), col = grDevices::rgb(1, 0, 0, alpha = transparency.rug)) +
+        ggplot2::xlim(c(min(min(plot.data.k.longer$value), min(plot.data.k.longer$pred)),
+                        max(max(plot.data.k.longer$value), max(plot.data.k.longer$pred)))) +
+        ggplot2::ylim(c(min(min(plot.data.k.longer$value), min(plot.data.k.longer$pred)),
+                        max(max(plot.data.k.longer$value), max(plot.data.k.longer$pred)))) +
         ggplot2::ggtitle(paste("State ", state.k, sep = ""))
+
+      ### If marginal density plot has been requested add density plot
+      if (marg.density == TRUE){
+        plots.list[[k]] <- plots.list[[k]] +
+          ## Add a geom_point object of the line and set to invisible (scatter plot required for marginal density using ggMarginal)
+          ## Subset to ignore the confidence intervals when doing the density plots
+          ggplot2::geom_point(data = plot.data.k.longer |> dplyr::arrange(pred) |> dplyr::select(pred, line.group, value, mapping) |> subset(line.group == "Calibration"),
+                              ggplot2::aes(x = pred, y = obs), col = grDevices::rgb(0, 0, 0, alpha = 0))
+
+        ## Add ggMarginal
+        plots.list[[k]] <- ggExtra::ggMarginal(plots.list[[k]], margins = "x", size = marg.density.size, type = marg.density.type, colour = "red")
+      ### If marginal rug plot has been requested
+      } else if (marg.rug == TRUE){
+        plots.list[[k]] <- plots.list[[k]] +
+          ggplot2::geom_rug(data = plot.data.k.longer |> dplyr::arrange(pred) |> dplyr::select(pred, line.group, value, mapping) |> subset(line.group == "Calibration"),
+                            ggplot2::aes(x = pred, y = value), col = grDevices::rgb(1, 0, 0, alpha = marg.rug.transparency))
+      }
     }
   } else if (CI == FALSE){
     ### Create list to store plots
@@ -92,14 +116,30 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, tra
 
       ### Create the plots
       plots.list[[k]] <- ggplot2::ggplot(data = plot.data.k |> dplyr::arrange(pred) |> dplyr::select(id, pred, obs)) +
-        ggplot2::geom_line(ggplot2::aes(x = pred, y = obs)) +
+        ggplot2::geom_line(ggplot2::aes(x = pred, y = obs), colour = "red") +
         ggplot2::geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
         ggplot2::xlab("Predicted risk") + ggplot2::ylab("Observed risk") +
-        ggplot2::xlim(c(0, max(plot.data.k$pred))) +
-        ggplot2::ylim(c(min(plot.data.k$obs), max(plot.data.k$obs))) +
-        ggplot2::geom_rug(ggplot2::aes(x = pred, y = obs), col = grDevices::rgb(1, 0, 0, alpha = transparency.rug)) +
+        ggplot2::xlim(c(min(min(plot.data.k$obs), min(plot.data.k$pred)),
+                        max(max(plot.data.k$obs), max(plot.data.k$pred)))) +
+        ggplot2::ylim(c(min(min(plot.data.k$obs), min(plot.data.k$pred)),
+                        max(max(plot.data.k$obs), max(plot.data.k$pred)))) +
         ggplot2::theme(legend.position = "none") +
         ggplot2::ggtitle(paste("State ", state.k, sep = ""))
+
+      ### If marginal density plot has been requested add density plot
+      if (marg.density == TRUE){
+        plots.list[[k]] <- plots.list[[k]] +
+          ## Add a geom_point object of the line and set to invisible (scatter plot required for marginal density using ggMarginal)
+          ## Subset to ignore the confidence intervals when doing the density plots
+          ggplot2::geom_point(ggplot2::aes(x = pred, y = obs), col = grDevices::rgb(0, 0, 0, alpha = 0))
+
+        ## Add ggMarginal
+        plots.list[[k]] <- ggExtra::ggMarginal(plots.list[[k]], margins = "x", size = marg.density.size, type = marg.density.type, colour = "red")
+        ### If marginal rug plot has been requested
+      } else if (marg.rug == TRUE){
+        plots.list[[k]] <- plots.list[[k]] +
+          ggplot2::geom_rug(ggplot2::aes(x = pred, y = obs), col = grDevices::rgb(1, 0, 0, alpha = marg.rug.transparency))
+      }
     }
   }
 
@@ -113,7 +153,16 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, tra
 
   ### Combine plots into single ggplot
   if (combine == TRUE){
-    plots.list <- ggpubr::ggarrange(plotlist = plots.list, nrow = nrow, ncol = ncol, common.legend = TRUE)
+    if (marg.density == FALSE){
+      plots.list <- ggpubr::ggarrange(plotlist = plots.list, nrow = nrow, ncol = ncol, common.legend = TRUE)
+    } else if (marg.density == TRUE){
+      plots.list <- gridExtra::marrangeGrob(grobs = plots.list,
+                                            layout_matrix = base::matrix(base::seq_len(nrow*ncol),
+                                                                         nrow = nrow,
+                                                                         ncol = ncol,
+                                                                         byrow = TRUE),
+                                            top = NULL)
+    }
   }
 
   ### Return output object
@@ -135,7 +184,11 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, tra
 #' @param ncol Number of columns for combined calibration plot
 #' @param nrow Number of rows for combined calibration plot
 #' @param transparency.plot Degree of transparency for the calibration scatter plot
-#' @param transparency.rug Degree of transparency for the density rug plot along each axis
+#' @param marg.density Whether to produce marginal density plots TRUE/FALSE
+#' @param marg.density.size Size of the main plot relative to the density plots (see \code{\link[ggExtra]ggMarginal})
+#' @param marg.density.type What type of marginal plot to show (see \code{\link[ggExtra]ggMarginal})
+#' @param marg.rug Whether to produce marginal rug plots TRUE/FALSE
+#' @param marg.rug.transparency Degree of transparency for the density rug plot along each axis
 #'
 #' @returns If `combine = TRUE`, returns an object of classes `gg`, `ggplot`, and `ggarrange`,
 #' as all ggplots have been combined into one object. If `combine = FALSE`, returns an object of
@@ -175,7 +228,9 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, tra
 #'
 #' @importFrom graphics plot
 #' @export
-plot.calib_mlr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, transparency.plot = 0.25, transparency.rug = 0.1){
+plot.calib_mlr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, transparency.plot = 0.25,
+                           marg.density = FALSE, marg.density.size = 5, marg.density.type = "density",
+                           marg.rug = FALSE, marg.rug.transparency = 0.1){
 
   ### Extract plot data and relevant metadata
   object.in <- x
@@ -199,9 +254,23 @@ plot.calib_mlr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, tra
       ggplot2::xlab("Predicted risk") + ggplot2::ylab("Observed risk") +
       ggplot2::xlim(c(0, max(plot.data.k$pred))) +
       ggplot2::ylim(c(min(plot.data.k$obs), max(plot.data.k$obs))) +
-      ggplot2::geom_rug(ggplot2::aes(x = pred, y = obs), col = grDevices::rgb(1, 0, 0, alpha = .3), alpha = transparency.rug) +
       ggplot2::theme(legend.position = "none") +
       ggplot2::ggtitle(paste("State ", state.k, sep = ""))
+
+    ### If marginal density plot has been requested add density plot
+    if (marg.density == TRUE){
+      plots.list[[k]] <- plots.list[[k]] +
+        ## Add a geom_point object of the line and set to invisible (scatter plot required for marginal density using ggMarginal)
+        ## Subset to ignore the confidence intervals when doing the density plots
+        ggplot2::geom_point(ggplot2::aes(x = pred, y = obs), col = grDevices::rgb(0, 0, 0, alpha = 0))
+
+      ## Add ggMarginal
+      plots.list[[k]] <- ggExtra::ggMarginal(plots.list[[k]], margins = "x", size = marg.density.size, type = marg.density.type, colour = "red")
+      ### If marginal rug plot has been requested
+    } else if (marg.rug == TRUE){
+      plots.list[[k]] <- plots.list[[k]] +
+        ggplot2::geom_rug(ggplot2::aes(x = pred, y = obs), col = grDevices::rgb(1, 0, 0, alpha = marg.rug.transparency))
+    }
 
   }
 
@@ -215,7 +284,16 @@ plot.calib_mlr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, tra
 
   ### Combine plots into single ggplot
   if (combine == TRUE){
-    plots.list <- ggpubr::ggarrange(plotlist = plots.list, nrow = nrow, ncol = ncol)
+    if (marg.density == FALSE){
+      plots.list <- ggpubr::ggarrange(plotlist = plots.list, nrow = nrow, ncol = ncol, common.legend = TRUE)
+    } else if (marg.density == TRUE){
+      plots.list <- gridExtra::marrangeGrob(grobs = plots.list,
+                                            layout_matrix = base::matrix(base::seq_len(nrow*ncol),
+                                                                         nrow = nrow,
+                                                                         ncol = ncol,
+                                                                         byrow = TRUE),
+                                            top = NULL)
+    }
   }
 
   ### Return output object

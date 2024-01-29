@@ -70,7 +70,11 @@ estimated using the MLR-IPCW approach.</p>
 <span>  ncol <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  nrow <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  transparency.plot <span class="op">=</span> <span class="fl">0.25</span>,</span>
-<span>  transparency.rug <span class="op">=</span> <span class="fl">0.1</span></span>
+<span>  marg.density <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  marg.density.size <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  marg.density.type <span class="op">=</span> <span class="st">"density"</span>,</span>
+<span>  marg.rug <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  marg.rug.transparency <span class="op">=</span> <span class="fl">0.1</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -100,7 +104,23 @@ estimated using the MLR-IPCW approach.</p>
 <dd><p>Degree of transparency for the calibration scatter plot</p></dd>
 
 
-<dt>transparency.rug</dt>
+<dt>marg.density</dt>
+<dd><p>Whether to produce marginal density plots TRUE/FALSE</p></dd>
+
+
+<dt>marg.density.size</dt>
+<dd><p>Size of the main plot relative to the density plots (see <code><a href="https://rdrr.io/pkg/ggExtra/man/ggMarginal.html" class="external-link">ggMarginal</a></code>)</p></dd>
+
+
+<dt>marg.density.type</dt>
+<dd><p>What type of marginal plot to show (see <code><a href="https://rdrr.io/pkg/ggExtra/man/ggMarginal.html" class="external-link">ggMarginal</a></code>)</p></dd>
+
+
+<dt>marg.rug</dt>
+<dd><p>Whether to produce marginal rug plots TRUE/FALSE</p></dd>
+
+
+<dt>marg.rug.transparency</dt>
 <dd><p>Degree of transparency for the density rug plot along each axis</p></dd>
 
 </dl></div>

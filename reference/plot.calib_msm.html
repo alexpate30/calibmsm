@@ -60,7 +60,18 @@ estimated using BLR-IPCW and pseudo-value approaches.</p>
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for calib_msm</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, combine <span class="op">=</span> <span class="cn">TRUE</span>, ncol <span class="op">=</span> <span class="cn">NULL</span>, nrow <span class="op">=</span> <span class="cn">NULL</span>, transparency.rug <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  <span class="va">...</span>,</span>
+<span>  combine <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  ncol <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  nrow <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  marg.density <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  marg.density.size <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  marg.density.type <span class="op">=</span> <span class="st">"density"</span>,</span>
+<span>  marg.rug <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  marg.rug.transparency <span class="op">=</span> <span class="fl">0.1</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -85,7 +96,23 @@ estimated using BLR-IPCW and pseudo-value approaches.</p>
 <dd><p>Number of rows for combined calibration plot</p></dd>
 
 
-<dt>transparency.rug</dt>
+<dt>marg.density</dt>
+<dd><p>Whether to produce marginal density plots TRUE/FALSE</p></dd>
+
+
+<dt>marg.density.size</dt>
+<dd><p>Size of the main plot relative to the density plots (see <code><a href="https://rdrr.io/pkg/ggExtra/man/ggMarginal.html" class="external-link">ggMarginal</a></code>)</p></dd>
+
+
+<dt>marg.density.type</dt>
+<dd><p>What type of marginal plot to show (see <code><a href="https://rdrr.io/pkg/ggExtra/man/ggMarginal.html" class="external-link">ggMarginal</a></code>)</p></dd>
+
+
+<dt>marg.rug</dt>
+<dd><p>Whether to produce marginal rug plots TRUE/FALSE</p></dd>
+
+
+<dt>marg.rug.transparency</dt>
 <dd><p>Degree of transparency for the density rug plot along each axis</p></dd>
 
 </dl></div>

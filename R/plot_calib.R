@@ -46,7 +46,7 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
                            marg.density = FALSE, marg.density.size = 5, marg.density.type = "density",
                            marg.rug = FALSE, marg.rug.transparency = 0.1){
 
-  x <- dat.calib
+
   ### Extract plot data and relevant metadata
   object.in <- x
   plot.data <- object.in[["plotdata"]]

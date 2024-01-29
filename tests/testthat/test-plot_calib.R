@@ -23,6 +23,15 @@ test_that("check plot.calib_msm output (j = 1, s = 0)", {
   expect_length(plot.object, 6)
   expect_type(plot.object, "list")
 
+  ## Plot calibration plots and run tests with marginal density plots
+  plot.object <- plot(dat.calib.blr, combine = TRUE, nrow = 2, ncol = 3, marg.density = TRUE, marg.density.size = 1)
+  expect_length(plot.object, 1)
+  expect_equal(class(plot.object), c("arrangelist", "list"))
+
+  ## Plot calibration plots and run tests with marginal rug plots
+  plot.object <- plot(dat.calib.blr, combine = TRUE, nrow = 2, ncol = 3, marg.rug = TRUE)
+  expect_equal(class(plot.object), c("gg", "ggplot", "ggarrange"))
+
 })
 
 test_that("check plot.calib_msm output (j = 1, s = 0) with CI", {

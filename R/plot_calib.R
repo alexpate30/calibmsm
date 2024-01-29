@@ -92,7 +92,7 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
           ## Add a geom_point object of the line and set to invisible (scatter plot required for marginal density using ggMarginal)
           ## Subset to ignore the confidence intervals when doing the density plots
           ggplot2::geom_point(data = plot.data.k.longer |> dplyr::arrange(pred) |> dplyr::select(pred, line.group, value, mapping) |> subset(line.group == "Calibration"),
-                              ggplot2::aes(x = pred, y = obs), col = grDevices::rgb(0, 0, 0, alpha = 0))
+                              ggplot2::aes(x = pred, y = value), col = grDevices::rgb(0, 0, 0, alpha = 0))
 
         ## Add ggMarginal
         plots.list[[k]] <- ggExtra::ggMarginal(plots.list[[k]], margins = "x", size = marg.density.size, type = marg.density.type, colour = "red")

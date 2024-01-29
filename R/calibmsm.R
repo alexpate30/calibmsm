@@ -293,6 +293,13 @@ calib_msm <- function(data.mstate,
     warning("All patients in data.mstate are not contained in data.raw. Landmarking can still be applied, but potential mismatch in these two datasets?")
   }
 
+  ### Stop if variables dtcens and dtcens.s do not exist, and if any NA values for dtcens
+  if (!("dtcens" %in% colnames(data.raw)) | !("dtcens.s" %in% colnames(data.raw))){
+    stop("data.raw should contains variables dtcens and dtcens.s")
+  } else if (!(sum(is.na(data.raw$dtcens)) == 0)){
+    stop("NA values found in dtcens. Censoring time must be known for all individuals.")
+  }
+
   ### Stop if weights inputted manually, and confidence interval requested internally
   if ((CI != FALSE) & !is.null(weights)){
     stop("Estimation of confidence interval using internal bootstrapping procedure was requested.

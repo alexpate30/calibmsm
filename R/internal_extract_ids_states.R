@@ -48,6 +48,7 @@ extract_ids_states <- function(data.mstate, tmat, j, t){
 #' in the cohort (required for pseudo-value approach). This step applied through the variable
 #' 'state.poly' which will be NA if an individual is censored at time `t`.
 #'
+#' Note that the `exclude.cens.t` argument will not work for `data.return = "data.mstate"`.
 #' @noRd
 apply_landmark <- function(data.raw, data.mstate, j, s, t, exclude.cens.t = FALSE, data.return = "data.raw"){
 

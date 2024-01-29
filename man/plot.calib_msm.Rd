@@ -30,9 +30,9 @@
 
 \item{marg.density}{Whether to produce marginal density plots TRUE/FALSE}
 
-\item{marg.density.size}{Size of the main plot relative to the density plots (see \code{\link[ggExtra]ggMarginal})}
+\item{marg.density.size}{Size of the main plot relative to the density plots (see \code{\link[ggExtra]{ggMarginal}})}
 
-\item{marg.density.type}{What type of marginal plot to show (see \code{\link[ggExtra]ggMarginal})}
+\item{marg.density.type}{What type of marginal plot to show (see \code{\link[ggExtra]{ggMarginal}})}
 
 \item{marg.rug}{Whether to produce marginal rug plots TRUE/FALSE}
 

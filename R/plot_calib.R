@@ -10,8 +10,8 @@
 #' @param ncol Number of columns for combined calibration plot
 #' @param nrow Number of rows for combined calibration plot
 #' @param marg.density Whether to produce marginal density plots TRUE/FALSE
-#' @param marg.density.size Size of the main plot relative to the density plots (see \code{\link[ggExtra]ggMarginal})
-#' @param marg.density.type What type of marginal plot to show (see \code{\link[ggExtra]ggMarginal})
+#' @param marg.density.size Size of the main plot relative to the density plots (see \code{\link[ggExtra]{ggMarginal}})
+#' @param marg.density.type What type of marginal plot to show (see \code{\link[ggExtra]{ggMarginal}})
 #' @param marg.rug Whether to produce marginal rug plots TRUE/FALSE
 #' @param marg.rug.transparency Degree of transparency for the density rug plot along each axis
 #'
@@ -185,8 +185,8 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
 #' @param nrow Number of rows for combined calibration plot
 #' @param transparency.plot Degree of transparency for the calibration scatter plot
 #' @param marg.density Whether to produce marginal density plots TRUE/FALSE
-#' @param marg.density.size Size of the main plot relative to the density plots (see \code{\link[ggExtra]ggMarginal})
-#' @param marg.density.type What type of marginal plot to show (see \code{\link[ggExtra]ggMarginal})
+#' @param marg.density.size Size of the main plot relative to the density plots (see \code{\link[ggExtra]{ggMarginal}})
+#' @param marg.density.type What type of marginal plot to show (see \code{\link[ggExtra]{ggMarginal}})
 #' @param marg.rug Whether to produce marginal rug plots TRUE/FALSE
 #' @param marg.rug.transparency Degree of transparency for the density rug plot along each axis
 #'

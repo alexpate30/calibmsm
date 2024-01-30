@@ -101,11 +101,14 @@ weights, based on the nominal calibration  framework of van Hoorde et al. (2014,
 <span>  w.max.follow <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  pv.group.vars <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  pv.n.pctls <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  pv.precalc <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  CI <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  CI.type <span class="op">=</span> <span class="st">"bootstrap"</span>,</span>
 <span>  CI.R.boot <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  CI.seed <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  transitions.out <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  assess.moderate <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  assess.mean <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -213,7 +216,11 @@ weights, based on the nominal calibration  framework of van Hoorde et al. (2014,
 
 
 <dt>pv.n.pctls</dt>
-<dd><p>Number of percetiles of predicted risk to group by before calculating pseudo-values</p></dd>
+<dd><p>Number of percentiles of predicted risk to group by before calculating pseudo-values</p></dd>
+
+
+<dt>pv.precalc</dt>
+<dd><p>Pre-calculated pseudo-values</p></dd>
 
 
 <dt>CI</dt>
@@ -234,6 +241,14 @@ weights, based on the nominal calibration  framework of van Hoorde et al. (2014,
 
 <dt>transitions.out</dt>
 <dd><p>Transitions for which to calculate calibration curves. Will do all possible transitions if left as NULL.</p></dd>
+
+
+<dt>assess.moderate</dt>
+<dd><p>TRUE/FALSE whether to estimate data for calibration plots</p></dd>
+
+
+<dt>assess.mean</dt>
+<dd><p>TRUE/FALSE whether to estimate mean calibration</p></dd>
 
 
 <dt>...</dt>

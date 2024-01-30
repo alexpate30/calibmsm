@@ -32,12 +32,15 @@
 #' @param w.stabilised Indicates whether inverse probability of censoring weights should be stabilised or not
 #' @param w.max.follow Maximum follow up for model calculating inverse probability of censoring weights. Reducing this to `t` + 1 may aid in the proportional hazards assumption being met in this model.
 #' @param pv.group.vars Variables to group by before calculating pseudo-values
-#' @param pv.n.pctls Number of percetiles of predicted risk to group by before calculating pseudo-values
+#' @param pv.n.pctls Number of percentiles of predicted risk to group by before calculating pseudo-values
+#' @param pv.precalc Pre-calculated pseudo-values
 #' @param CI Size of confidence intervals as a %
 #' @param CI.type Method for estimating confidence interval (currently restricted to `bootstrap`)
 #' @param CI.R.boot Number of bootstrap replicates when estimating the confidence interval for the calibration curve
 #' @param CI.seed Seed for bootstrapping procedure
 #' @param transitions.out Transitions for which to calculate calibration curves. Will do all possible transitions if left as NULL.
+#' @param assess.moderate TRUE/FALSE whether to estimate data for calibration plots
+#' @param assess.mean TRUE/FALSE whether to estimate mean calibration
 #' @param ... Extra arguments to be passed to w.function (custom function for estimating weights)
 #'
 #' @details
@@ -195,76 +198,64 @@ calib_msm <- function(data.mstate,
                      w.max.follow = NULL,
                      pv.group.vars = NULL,
                      pv.n.pctls = NULL,
+                     pv.precalc = NULL,
                      CI = FALSE,
                      CI.type = "bootstrap",
                      CI.R.boot = NULL,
                      CI.seed = 1,
                      transitions.out = NULL,
+                     assess.moderate = TRUE,
+                     assess.mean = TRUE,
                      ...){
 
-  # rm(list=ls())
-  # devtools::load_all()
-  #
-  # j = 1
-  # s = 0
-  # t = 1826
-  # tp.pred = tp.pred
-  # calib.type = 'mlr'
-  # w.covs = c("year", "agecl", "proph", "match")
-  # mlr.ps.int = 2
-  # mlr.degree = 2
-  #
-  # tp.pred <- tps0 |>
-  #   dplyr::filter(id %in% 1:300) |>
-  #   dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
-  #
-  # # Reduce ebmtcal to first 300 individuals
-  # data.raw <- ebmtcal |> dplyr::filter(id %in% 1:300)
-  # # Reduce msebmtcal.cmprsk to first 300 individuals
-  # data.mstate <- msebmtcal |> dplyr::filter(id %in% 1:300)
-  #
-  #   data("ebmtcal")
-  #   data("msebmtcal")
-  #   data("tps0")
-  #   data("tps100")
-  # data.raw <- ebmtcal
-  # data.mstate <- msebmtcal
-  # tp.pred <- tps100 |>
-  #   subset(j == 1) |>
-  #   dplyr::select(paste("pstate", 1:6, sep = ""))
-  # j <- 1
-  # s <- 0
-  # t <- 1826
-  # curve.type = "rcs"
-  # tp.pred.plot = NULL
-  # transitions.out = NULL
-  # weights = NULL
-  #
-  # w.covs = NULL
-  # w.landmark.type = "state"
-  # w.max = 10
-  # w.stabilised = FALSE
-  # w.max.follow = NULL
-  # w.function = NULL
-  #
-  # CI = 95
-  # CI.R.boot = 3
-  # rcs.nk = 3
-  # CI.type = "bootstrap"
-  #
-  # CI.seed = 1
-  # loess.span = 1
-  # loess.degree = 1
-  #
-  # pv.group.vars = "year"
-  # pv.n.pctls = 2
-  #
-  # mlr.smoother.type = "sm.ps"
-  # mlr.ps.int = 4
-  # mlr.degree = 3
-  # mlr.s.df = 4
-  # mlr.niknots = 4
-  #
+# rm(list=ls())
+# devtools::load_all()
+#   data("ebmtcal")
+#   data("msebmtcal")
+#   data("tps0")
+#   data("tps100")
+#   calib.type <- "blr"
+# data.raw <- ebmtcal
+# data.mstate <- msebmtcal
+# tp.pred <- tps0 |>
+#   subset(j == 1) |>
+#   dplyr::select(paste("pstate", 1:6, sep = ""))
+# j <- 1
+# s <- 0
+# t <- 1826
+# curve.type = "rcs"
+# tp.pred.plot = NULL
+# transitions.out = NULL
+# weights = NULL
+#
+# w.covs = NULL
+# w.landmark.type = "state"
+# w.max = 10
+# w.stabilised = FALSE
+# w.max.follow = NULL
+# w.function = NULL
+#
+# CI = 95
+# CI.R.boot = 2
+# rcs.nk = 3
+# CI.type = "bootstrap"
+#
+# CI.seed = 1
+# loess.span = 1
+# loess.degree = 1
+#
+# pv.group.vars = NULL
+# pv.n.pctls = 2
+#
+# mlr.smoother.type = "sm.ps"
+# mlr.ps.int = 4
+# mlr.degree = 3
+# mlr.s.df = 4
+# mlr.niknots = 4
+# assess.moderate = TRUE
+# #
+# pv.precalc = NULL
+
   # calib.type <- "blr"
   #
   # # ## Calculate manual weights
@@ -333,6 +324,24 @@ calib_msm <- function(data.mstate,
   ### If vector of weights and custom function for specifying weights both inputted, give error
   if (!is.null(weights) & !is.null(w.function)){
     stop("Cannot specify weights manually and specify a custom function for estimating the weights. Choose one or the other.")
+  }
+
+  ### If pseudo-values does not have same number of columns as tp.pred give error
+  ### If pseudo-values does not have same number of rows as data.raw give error
+  ### If pseudo-values pre-calculated and bootstrapping requested give error
+  if (!is.null(pv.precalc)){
+    if (nrow(pv.precalc != nrow(data.raw))){
+      stop("pv.precalc must have same number of rows as data.raw. calib_msm assumes landmarking has already been applied to data.raw as part of estimating the pseudo-values")
+    } else if (ncol(pv.precalc) != ncol(pv.precalc)){
+      stop("pv.precalc must have same number of columns as tp.pred")
+    } else if (CI.type == "bootstrap"){
+      stop("Cannot estimate a bootstrapped confidence interval if inputting pre-calculating pseudo-values.")
+    }
+  }
+
+  ### Stop if calib.type = "AJ" and assess.moderate = TRUE
+  if (calib.type == "AJ" & assess.moderate == TRUE){
+    stop("Cannot assess moderate calibration for calib.type = 'AJ'")
   }
 
   ##########################################################
@@ -474,9 +483,9 @@ calib_msm <- function(data.mstate,
     transitions.out <- valid.transitions
   }
 
-  ############################################
-  ### Calculate data for calibration plots ###
-  ############################################
+  ##########################
+  ### Assess calibration ###
+  ##########################
   if (calib.type == "blr"){
     output.object <- calib_blr_ipcw(data.raw = data.raw,
                                     data.mstate = data.mstate,
@@ -499,7 +508,9 @@ calib_msm <- function(data.mstate,
                                     CI.type = CI.type,
                                     CI.R.boot = CI.R.boot,
                                     CI.seed = CI.seed,
-                                    transitions.out = transitions.out, ...)
+                                    transitions.out = transitions.out,
+                                    assess.moderate = assess.moderate,
+                                    assess.mean = assess.mean)
   } else if (calib.type == "mlr"){
     ### Estimate predicted-obsserved probabilities using the MLR-IPCW method
     output.object <- calib_mlr_ipcw(data.raw = data.raw,
@@ -519,7 +530,9 @@ calib_msm <- function(data.mstate,
                                     mlr.degree = mlr.degree,
                                     mlr.s.df = mlr.s.df,
                                     mlr.niknots = mlr.niknots,
-                                    valid.transitions = valid.transitions, ...)
+                                    valid.transitions = valid.transitions,
+                                    assess.moderate = assess.moderate,
+                                    assess.mean = assess.mean, ...)
   } else if (calib.type == "pv"){
     output.object <- calib_pv(data.raw = data.raw,
                               data.mstate = data.mstate,
@@ -533,11 +546,26 @@ calib_msm <- function(data.mstate,
                               loess.degree = loess.degree,
                               pv.group.vars = pv.group.vars,
                               pv.n.pctls = pv.n.pctls,
+                              pv.precalc = pv.precalc,
                               CI = CI,
                               CI.type = CI.type,
                               CI.R.boot = CI.R.boot,
                               CI.seed = CI.seed,
                               transitions.out = transitions.out)
+  } else if (calib.type == "aj"){
+    output.object <- calib_aj(data.raw = data.raw,
+                              data.mstate = data.mstate,
+                              j = j,
+                              s = s,
+                              t = t,
+                              pv.group.vars = pv.group.vars,
+                              pv.n.pctls = pv.n.pctls,
+                              CI = CI,
+                              CI.type = CI.type,
+                              CI.R.boot = CI.R.boot,
+                              CI.seed = CI.seed,
+                              transitions.out = transitions.out,
+                              valid.transitions = valid.transitions)
   }
 
   ### Create metadata object
@@ -557,7 +585,7 @@ calib_msm <- function(data.mstate,
   }
 
   ### Crate a combined output object with metadata, as well as plot data
-  output.object <- list("plotdata" = output.object, "metadata" = metadata)
+  output.object[["metadata"]] <- metadata
 
   ### Assign classes
   if (calib.type == "blr"){
@@ -566,6 +594,8 @@ calib_msm <- function(data.mstate,
     class(output.object) <- c("calib_mlr", "calib_msm")
   } else if (calib.type == "pv"){
     class(output.object) <- c("calib_pv", "calib_msm")
+  } else if (calib.type == "pv"){
+    class(output.object) <- c("calib_aj", "calib_msm")
   }
 
   ### Return output object

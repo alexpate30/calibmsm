@@ -31,11 +31,14 @@ calib_msm(
   w.max.follow = NULL,
   pv.group.vars = NULL,
   pv.n.pctls = NULL,
+  pv.precalc = NULL,
   CI = FALSE,
   CI.type = "bootstrap",
   CI.R.boot = NULL,
   CI.seed = 1,
   transitions.out = NULL,
+  assess.moderate = TRUE,
+  assess.mean = TRUE,
   ...
 )
 }
@@ -90,7 +93,9 @@ calib_msm(
 
 \item{pv.group.vars}{Variables to group by before calculating pseudo-values}
 
-\item{pv.n.pctls}{Number of percetiles of predicted risk to group by before calculating pseudo-values}
+\item{pv.n.pctls}{Number of percentiles of predicted risk to group by before calculating pseudo-values}
+
+\item{pv.precalc}{Pre-calculated pseudo-values}
 
 \item{CI}{Size of confidence intervals as a \%}
 
@@ -101,6 +106,10 @@ calib_msm(
 \item{CI.seed}{Seed for bootstrapping procedure}
 
 \item{transitions.out}{Transitions for which to calculate calibration curves. Will do all possible transitions if left as NULL.}
+
+\item{assess.moderate}{TRUE/FALSE whether to estimate data for calibration plots}
+
+\item{assess.mean}{TRUE/FALSE whether to estimate mean calibration}
 
 \item{...}{Extra arguments to be passed to w.function (custom function for estimating weights)}
 }

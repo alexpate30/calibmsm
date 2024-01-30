@@ -9,22 +9,211 @@ help(package = "mstate")
 help(package = "calibmsm")
 help(package = "predRupdate")
 install.packages("calibmsm")
-### Lets make some plots using the new inhertance stuff
 
-dat.calib.blr <-
-  calibmsm(data.mstate = msebmtcal,
+devtools::check(vignettes = FALSE, args = "--no-tests")
+
+
+rm(list=ls())
+devtools::load_all()
+
+tp.pred <- tps0 |>
+  dplyr::filter(j == 1) |>
+  dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
+
+dat.calib.aj <-
+  calib_msm(data.mstate = msebmtcal,
             data.raw = ebmtcal,
             j=1,
             s=0,
-            t = t.eval,
-            tp.pred = tp.pred.s0,
+            t = 1826,
+            tp.pred = tp.pred,
+            calib.type = "aj",
+            assess.moderate = FALSE)
+
+
+dat.calib.aj1 <-
+  calib_msm(data.mstate = msebmtcal,
+            data.raw = ebmtcal,
+            j=1,
+            s=0,
+            t = 1826,
+            tp.pred = tp.pred,
+            calib.type = "aj",
+            CI = 95,
+            CI.type = "bootstrap",
+            CI.R.boot = 2,
+            assess.moderate = FALSE)
+
+dat.calib.aj2 <-
+  calib_msm(data.mstate = msebmtcal,
+            data.raw = ebmtcal,
+            j=1,
+            s=0,
+            t = 1826,
+            tp.pred = tp.pred,
+            calib.type = "aj",
+            pv.group.vars = c("year"),
+            CI = 95,
+            CI.type = "bootstrap",
+            CI.R.boot = 2,
+            assess.moderate = FALSE)
+
+dat.calib.aj3 <-
+  calib_msm(data.mstate = msebmtcal,
+            data.raw = ebmtcal,
+            j=1,
+            s=0,
+            t = 1826,
+            tp.pred = tp.pred,
+            calib.type = "aj",
+            pv.n.pctls = 2,
+            CI = 95,
+            CI.type = "bootstrap",
+            CI.R.boot = 2,
+            assess.moderate = FALSE)
+
+dat.calib.aj4 <-
+  calib_msm(data.mstate = msebmtcal,
+            data.raw = ebmtcal,
+            j=1,
+            s=0,
+            t = 1826,
+            tp.pred = tp.pred,
+            calib.type = "aj",
+            pv.group.vars = c("year"),
+            pv.n.pctls = 2,
+            CI = 95,
+            CI.type = "bootstrap",
+            CI.R.boot = 2,
+            assess.moderate = FALSE)
+
+dat.calib.aj1[["mean"]]
+dat.calib.aj2[["mean"]]
+dat.calib.aj3[["mean"]]
+dat.calib.aj4[["mean"]]
+
+tp.pred <- tps100 |>
+  dplyr::filter(j == 1) |>
+  dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
+
+dat.calib.aj1 <-
+  calib_msm(data.mstate = msebmtcal,
+            data.raw = ebmtcal,
+            j=1,
+            s=100,
+            t = 1826,
+            tp.pred = tp.pred,
+            calib.type = "aj",
+            CI = 95,
+            CI.type = "bootstrap",
+            CI.R.boot = 2,
+            assess.moderate = FALSE)
+
+dat.calib.aj2 <-
+  calib_msm(data.mstate = msebmtcal,
+            data.raw = ebmtcal,
+            j=1,
+            s=100,
+            t = 1826,
+            tp.pred = tp.pred,
+            calib.type = "aj",
+            pv.group.vars = c("year"),
+            CI = 95,
+            CI.type = "bootstrap",
+            CI.R.boot = 2,
+            assess.moderate = FALSE)
+
+dat.calib.aj3 <-
+  calib_msm(data.mstate = msebmtcal,
+            data.raw = ebmtcal,
+            j=1,
+            s=100,
+            t = 1826,
+            tp.pred = tp.pred,
+            calib.type = "aj",
+            pv.n.pctls = 2,
+            CI = 95,
+            CI.type = "bootstrap",
+            CI.R.boot = 2,
+            assess.moderate = FALSE)
+
+dat.calib.aj4 <-
+  calib_msm(data.mstate = msebmtcal,
+            data.raw = ebmtcal,
+            j=1,
+            s=100,
+            t = 1826,
+            tp.pred = tp.pred,
+            calib.type = "aj",
+            pv.group.vars = c("year"),
+            pv.n.pctls = 2,
+            CI = 95,
+            CI.type = "bootstrap",
+            CI.R.boot = 2,
+            assess.moderate = FALSE)
+
+dat.calib.aj1[["mean"]]
+dat.calib.aj2[["mean"]]
+dat.calib.aj3[["mean"]]
+dat.calib.aj4[["mean"]]
+
+
+
+
+
+dat.calib.blr <-
+  calib_msm(data.mstate = msebmtcal,
+            data.raw = ebmtcal,
+            j=1,
+            s=0,
+            t = 1826,
+            tp.pred = tp.pred,
             calib.type = "blr",
             curve.type = "rcs",
-            w.covs = c("year", "agecl", "proph", "match"),
-            CI = 95,
-            CI.R.boot = 10,
-            CI.seed = 1)
+            w.covs = c("year", "agecl", "proph", "match"))
 
+
+
+tp.pred <- tps100 |>
+  dplyr::filter(j == 1) |>
+  dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
+
+dat.calib.blr <-
+  calib_msm(data.mstate = msebmtcal,
+            data.raw = ebmtcal,
+            j=1,
+            s=100,
+            t = 1826,
+            tp.pred = tp.pred,
+            calib.type = "blr",
+            curve.type = "rcs",
+            w.covs = c("year", "agecl", "proph", "match"))
+
+str(dat.calib.blr)
+dat.calib.blr[["mean"]]
+dat.calib.mlr <-
+  calib_msm(data.mstate = msebmtcal,
+            data.raw = ebmtcal,
+            j=1,
+            s=100,
+            t = 1826,
+            tp.pred = tp.pred,
+            calib.type = "mlr",
+            w.covs = c("year", "agecl", "proph", "match"))
+
+dat.calib.blr[["mean"]]
+dat.calib.mlr[["mean"]]
+
+dat.calib.blr <-
+  calib_msm(data.mstate = msebmtcal,
+            data.raw = ebmtcal,
+            j=1,
+            s=100,
+            t = 1826,
+            tp.pred = tp.pred,
+            calib.type = "blr",
+            curve.type = "rcs",
+            w.covs = c("year", "agecl", "proph", "match"))
 
 
 ## Reduce to 50 individuals

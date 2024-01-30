@@ -1,4 +1,4 @@
-### Internal functions to allow estimation of calibration curves using the BLR-IPCW method.
+### Internal functions to allow estimation of calibration using the BLR-IPCW method.
 
 #' Estimate data for calibration plots using BLR-IPCW.
 #' @description
@@ -33,10 +33,12 @@ calib_blr_ipcw <- function(data.raw,
                            CI.type,
                            CI.R.boot,
                            CI.seed,
-                           transitions.out, ...){
+                           transitions.out,
+                           assess.moderate,
+                           assess.mean, ...){
 
   ###
-  ### Create the object of predicted risks over which the caliration plots will be plotted
+  ### Create the object of predicted risks over which the calibration plots will be plotted
 
   ### For calib_blr_ipcw, this is the landmarked cohort of individuals who are also uncensored at time t,
   ### or tp.pred.plot if specified
@@ -49,8 +51,14 @@ calib_blr_ipcw <- function(data.raw,
   }
 
   ### Create object to store output
-  output.object <- vector("list", length(transitions.out))
-  names(output.object) <- paste("state", transitions.out, sep = "")
+  output.object.plots <- vector("list", length(transitions.out))
+  names(output.object.plots) <- paste("state", transitions.out, sep = "")
+
+  output.object.mean <- vector("list", length(transitions.out))
+  names(output.object.mean) <- paste("state", transitions.out, sep = "")
+
+  # output.object.weak <- vector("list", length(transitions.out))
+  # names(output.object.weak) <- paste("state", transitions.out, sep = "")
 
   ### Loop through and fit models if BLR selected
   for (k in 1:length(transitions.out)){
@@ -67,69 +75,124 @@ calib_blr_ipcw <- function(data.raw,
       ### Set seed for bootstrapping
       set.seed(CI.seed)
 
-      ### Run bootstrapping
-      if (curve.type == "loess"){
-        boot.obs <- boot::boot(data.raw, calc_obs_blr_loess_boot, R = CI.R.boot,
-                               data.mstate = data.mstate,
-                               data.to.plot = data.to.plot,
-                               state.k = state.k,
-                               j = j,
-                               s2 = s,
-                               t = t,
-                               weights.provided = weights.provided,
-                               w.function = w.function,
-                               w.covs = w.covs,
-                               w.landmark.type = w.landmark.type,
-                               w.max = w.max,
-                               w.stabilised = w.stabilised,
-                               w.max.follow = w.max.follow,
-                               loess.span = loess.span,
-                               loess.degree = loess.degree, ...)
-      } else if (curve.type == "rcs"){
-        boot.obs <- boot::boot(data.raw, calc_obs_blr_rcs_boot, R = CI.R.boot,
-                               data.mstate = data.mstate,
-                               data.to.plot = data.to.plot,
-                               state.k = state.k,
-                               j = j,
-                               s2 = s,
-                               t = t,
-                               weights.provided = weights.provided,
-                               w.function = w.function,
-                               w.covs = w.covs,
-                               w.landmark.type = w.landmark.type,
-                               w.max = w.max,
-                               w.stabilised = w.stabilised,
-                               w.max.follow = w.max.follow,
-                               rcs.nk = rcs.nk, ...)
+      ###
+      ### Calibration plots
+      ###
+      if (assess.moderate == TRUE){
+        if (curve.type == "loess"){
+          boot.obs <- boot::boot(data.raw, calc_obs_blr_loess_boot, R = CI.R.boot,
+                                 data.mstate = data.mstate,
+                                 data.to.plot = data.to.plot,
+                                 state.k = state.k,
+                                 j = j,
+                                 s2 = s,
+                                 t = t,
+                                 weights.provided = weights.provided,
+                                 w.function = w.function,
+                                 w.covs = w.covs,
+                                 w.landmark.type = w.landmark.type,
+                                 w.max = w.max,
+                                 w.stabilised = w.stabilised,
+                                 w.max.follow = w.max.follow,
+                                 loess.span = loess.span,
+                                 loess.degree = loess.degree, ...)
+        } else if (curve.type == "rcs"){
+          boot.obs <- boot::boot(data.raw, calc_obs_blr_rcs_boot, R = CI.R.boot,
+                                 data.mstate = data.mstate,
+                                 data.to.plot = data.to.plot,
+                                 state.k = state.k,
+                                 j = j,
+                                 s2 = s,
+                                 t = t,
+                                 weights.provided = weights.provided,
+                                 w.function = w.function,
+                                 w.covs = w.covs,
+                                 w.landmark.type = w.landmark.type,
+                                 w.max = w.max,
+                                 w.stabilised = w.stabilised,
+                                 w.max.follow = w.max.follow,
+                                 rcs.nk = rcs.nk, ...)
+        }
+
+        ### Extract confidence bands
+        lower <- apply(boot.obs$t, 2, stats::quantile, probs = alpha, na.rm = TRUE)
+        upper <- apply(boot.obs$t, 2, stats::quantile, probs = 1-alpha, na.rm = TRUE)
+
+        ### Produce a warning if any NA values
+        if(sum(is.na(boot.obs$t)) > 0){
+          warning(paste("WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE", state.k, "\n",
+                        "THERE ARE ", sum(apply(boot.obs$t, 1, function(x) {sum(is.na(x)) > 0})), " ITERATIONS WITH NA's \n",
+                        "THE MEAN NUMBER OF NA's IN EACH ITERATION IS", mean(apply(boot.obs$t, 1, function(x) {sum(is.na(x))}))
+          ))
+        }
+
+        ### Assign output
+        if ("id" %in% colnames(data.to.plot)){
+          output.object.plots[[k]] <- data.frame(
+            "id" = data.to.plot[, "id"],
+            "pred" = data.to.plot[, paste("tp.pred", state.k, sep = "")],
+            "obs" = boot.obs$t0,
+            "obs.lower" = lower,
+            "obs.upper" = upper)
+        } else {
+          output.object.plots[[k]] <- data.frame(
+            "pred" = data.to.plot[, paste("tp.pred", state.k, sep = "")],
+            "obs" = boot.obs$t0,
+            "obs.lower" = lower,
+            "obs.upper" = upper)
+        }
       }
 
-      ### Extract confidence bands
-      lower <- apply(boot.obs$t, 2, stats::quantile, probs = alpha, na.rm = TRUE)
-      upper <- apply(boot.obs$t, 2, stats::quantile, probs = 1-alpha, na.rm = TRUE)
+      ###
+      ### Mean calibration
+      ###
+      if (assess.mean == TRUE){
+        boot.mean <- boot::boot(data.raw, calc_mean_blr_boot, R = CI.R.boot,
+                                data.mstate = data.mstate,
+                                state.k = state.k,
+                                j = j,
+                                s2 = s,
+                                t = t,
+                                weights.provided = weights.provided,
+                                w.function = w.function,
+                                w.covs = w.covs,
+                                w.landmark.type = w.landmark.type,
+                                w.max = w.max,
+                                w.stabilised = w.stabilised,
+                                w.max.follow = w.max.follow, ...)
 
-      ### Produce a warning if any NA values
-      if(sum(is.na(boot.obs$t)) > 0){
-        warning(paste("WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE", state.k, "\n",
-                      "THERE ARE ", sum(apply(boot.obs$t, 1, function(x) {sum(is.na(x)) > 0})), " ITERATIONS WITH NA's \n",
-                      "THE MEAN NUMBER OF NA's IN EACH ITERATION IS", mean(apply(boot.obs$t, 1, function(x) {sum(is.na(x))}))
-                      ))
+        ### Extract confidence bands
+        lower <- stats::quantile(boot.mean$t[,1], probs = alpha, na.rm = TRUE)
+        upper <- stats::quantile(boot.mean$t[,1], probs = 1 - alpha, na.rm = TRUE)
+
+        ### Put into output object
+        output.object.mean[[k]] <- c("mean" = boot.mean$t0, "mean.lower" = as.numeric(lower), "mean.upper" = as.numeric(upper))
+
       }
 
-      ### Assign output
-      if ("id" %in% colnames(data.to.plot)){
-        output.object[[k]] <- data.frame(
-          "id" = data.to.plot[, "id"],
-          "pred" = data.to.plot[, paste("tp.pred", state.k, sep = "")],
-          "obs" = boot.obs$t0,
-          "obs.lower" = lower,
-          "obs.upper" = upper)
-      } else {
-        output.object[[k]] <- data.frame(
-          "pred" = data.to.plot[, paste("tp.pred", state.k, sep = "")],
-          "obs" = boot.obs$t0,
-          "obs.lower" = lower,
-          "obs.upper" = upper)
-      }
+      # ###
+      # ### PLACE HOLDER FOR Weak calibration (calibration slope)
+      # ###
+      # boot.weak <- boot::boot(data.raw, calc_weak_blr_boot, R = CI.R.boot,
+      #                         data.mstate = data.mstate,
+      #                         state.k = state.k,
+      #                         j = j,
+      #                         s2 = s,
+      #                         t = t,
+      #                         weights.provided = weights.provided,
+      #                         w.function = w.function,
+      #                         w.covs = w.covs,
+      #                         w.landmark.type = w.landmark.type,
+      #                         w.max = w.max,
+      #                         w.stabilised = w.stabilised,
+      #                         w.max.follow = w.max.follow, ...)
+      #
+      # ### Extract confidence bands
+      # lower <- stats::quantile(boot.weak$t[,1], probs = alpha, na.rm = TRUE)
+      # upper <- stats::quantile(boot.weak$t[,1], probs = 1 - alpha, na.rm = TRUE)
+      #
+      # ### Put into output object
+      # output.object.weak[[k]] <- c("slope" = boot.weak$t0, "slope.lower" = as.numeric(lower), "slope.upper" = as.numeric(upper))
 
     } else if (CI != FALSE & CI.type == "parametric"){
 
@@ -137,10 +200,32 @@ calib_blr_ipcw <- function(data.raw,
 
     } else if (CI == FALSE){
 
-      ### Calculate predicted observed probabilities for calibration curve (note the chosen set of indices samples every patient once)
-      ### Assign function to calculate predicted observed risks based on user input
-      if (curve.type == "loess"){
-        pred.obs <- calc_obs_blr_loess_boot(data.raw = data.raw,
+      ### Apply above functions to data.raw (note the chosen set of indices samples every patient once)
+
+      ###
+      ### Calibration plots
+      ###
+      if (assess.moderate == TRUE){
+        if (curve.type == "loess"){
+          pred.obs <- calc_obs_blr_loess_boot(data.raw = data.raw,
+                                              indices = 1:nrow(data.raw),
+                                              data.mstate = data.mstate,
+                                              data.to.plot = data.to.plot,
+                                              state.k = state.k,
+                                              j = j,
+                                              s2 = s,
+                                              t = t,
+                                              weights.provided = weights.provided,
+                                              w.function = w.function,
+                                              w.covs = w.covs,
+                                              w.landmark.type = w.landmark.type,
+                                              w.max = w.max,
+                                              w.stabilised = w.stabilised,
+                                              w.max.follow = w.max.follow,
+                                              loess.span = loess.span,
+                                              loess.degree = loess.degree, ...)
+        } else if (curve.type == "rcs"){
+          pred.obs <- calc_obs_blr_rcs_boot(data.raw = data.raw,
                                             indices = 1:nrow(data.raw),
                                             data.mstate = data.mstate,
                                             data.to.plot = data.to.plot,
@@ -155,41 +240,85 @@ calib_blr_ipcw <- function(data.raw,
                                             w.max = w.max,
                                             w.stabilised = w.stabilised,
                                             w.max.follow = w.max.follow,
-                                            loess.span = loess.span,
-                                            loess.degree = loess.degree, ...)
-      } else if (curve.type == "rcs"){
-        pred.obs <- calc_obs_blr_rcs_boot(data.raw = data.raw,
-                                          indices = 1:nrow(data.raw),
-                                          data.mstate = data.mstate,
-                                          data.to.plot = data.to.plot,
-                                          state.k = state.k,
-                                          j = j,
-                                          s2 = s,
-                                          t = t,
-                                          weights.provided = weights.provided,
-                                          w.function = w.function,
-                                          w.covs = w.covs,
-                                          w.landmark.type = w.landmark.type,
-                                          w.max = w.max,
-                                          w.stabilised = w.stabilised,
-                                          w.max.follow = w.max.follow,
-                                          rcs.nk = rcs.nk, ...)
+                                            rcs.nk = rcs.nk, ...)
+        }
+
+        ### Assign output
+        if ("id" %in% colnames(data.to.plot)){
+          output.object.plots[[k]] <- data.frame("id" = data.to.plot[, "id"],
+                                                 "pred" = data.to.plot[, paste("tp.pred", state.k, sep = "")],
+                                                 "obs" = pred.obs)
+        } else {
+          output.object.plots[[k]] <- data.frame(
+            "pred" = data.to.plot[, paste("tp.pred", state.k, sep = "")],
+            "obs" = pred.obs)
+        }
       }
 
-      ### Assign output
-      if ("id" %in% colnames(data.to.plot)){
-        output.object[[k]] <- data.frame("id" = data.to.plot[, "id"],
-                                         "pred" = data.to.plot[, paste("tp.pred", state.k, sep = "")],
-                                         "obs" = pred.obs)
-      } else {
-        output.object[[k]] <- data.frame(
-          "pred" = data.to.plot[, paste("tp.pred", state.k, sep = "")],
-          "obs" = pred.obs)
+
+      ###
+      ### Mean calibration
+      ###
+      if (assess.mean == TRUE){
+        mean <- calc_mean_blr_boot(data.raw = data.raw,
+                                   indices = 1:nrow(data.raw),
+                                   data.mstate = data.mstate,
+                                   state.k = state.k,
+                                   j = j,
+                                   s2 = s,
+                                   t = t,
+                                   weights.provided = weights.provided,
+                                   w.function = w.function,
+                                   w.covs = w.covs,
+                                   w.landmark.type = w.landmark.type,
+                                   w.max = w.max,
+                                   w.stabilised = w.stabilised,
+                                   w.max.follow = w.max.follow, ...)
+
+        ### Put into output object
+        output.object.mean[[k]] <- c("mean" = mean)
+
       }
+
+      # ###
+      # ### PLACEHOLDER FOR Weak calibration (calibration slope)
+      # ###
+      # weak <- calc_weak_blr_boot(data.raw = data.raw,
+      #                            indices = 1:nrow(data.raw),
+      #                            data.mstate = data.mstate,
+      #                            state.k = state.k,
+      #                            j = j,
+      #                            s2 = s,
+      #                            t = t,
+      #                            weights.provided = weights.provided,
+      #                            w.function = w.function,
+      #                            w.covs = w.covs,
+      #                            w.landmark.type = w.landmark.type,
+      #                            w.max = w.max,
+      #                            w.stabilised = w.stabilised,
+      #                            w.max.follow = w.max.follow, ...)
+      #
+      # ### Put into output object
+      # output.object.weak[[k]] <- c("weak" = weak)
+
     }
+
   }
 
-  return(output.object)
+  ### Define combined output object
+  output.object.comb <- vector("list")
+
+  if (assess.moderate == TRUE){
+    output.object.comb[["plotdata"]] <- output.object.plots
+  }
+  if (assess.mean == TRUE){
+    output.object.comb[["mean"]] <- output.object.mean
+  }
+  # if (assess.weak == TRUE){
+  #   output.object.comb[["weak"]] <- output.object.weak
+  # }
+
+  return(output.object.comb)
 
 }
 
@@ -382,6 +511,165 @@ calc_obs_blr_rcs_boot <- function(data.raw,
   rcs.pred.obs <- predict(rcs.model, newdata = data.to.plot, type = "fitted")
 
   return(rcs.pred.obs)
+
+}
+
+
+#' Estimate mean calibration using BLR-IPCW for state k.
+#' @description
+#' Estimate mean calibration using BLR-IPCW for state k.
+#'
+#' @details
+#' Function written in a format so that it can be used in combination with \code{\link[boot]{boot}}
+#' for bootstrapping. Specifying `indices = 1:nrow(data.raw)` will return the calibration
+#' of interest.
+#'
+#' @returns Mean calibration and calibration slope for a given state.
+#'
+#' @noRd
+calc_mean_blr_boot <- function(data.raw,
+                               indices,
+                               data.mstate,
+                               state.k,
+                               j,
+                               s2, # can't use 's' because it matches an argument for the boot function
+                               t,
+                               weights.provided,
+                               w.function,
+                               w.covs,
+                               w.landmark.type,
+                               w.max,
+                               w.stabilised,
+                               w.max.follow, ...){
+
+  ## Create bootstrapped dataset
+  data.boot <- data.raw[indices, ]
+
+  ## Create landmarked dataset
+  data.boot.lmk.js.uncens <-  apply_landmark(data.raw = data.boot, data.mstate = data.mstate, j = j, s = s2, t = t, exclude.cens.t = TRUE)
+
+  ## Calculate weights
+  ## Note this is done in the entire dataset data.boot, which has its own functionality (w.landmark.type) to landmark on j and s, or just s, before
+  ## calculating the weights
+  if (weights.provided == FALSE){
+
+    ## If custom function for estimating weights has been inputted ("w.function"), replace "calc_weights" with this function
+    if (!is.null(w.function)){
+      calc_weights <- w.function
+    }
+
+    ## Calculate the weights
+    weights <- calc_weights(data.mstate = data.mstate,
+                            data.raw = data.boot,
+                            covs = w.covs,
+                            t = t,
+                            s = s2,
+                            landmark.type = w.landmark.type,
+                            j = j,
+                            max.weight = w.max,
+                            stabilised = w.stabilised,
+                            max.follow = w.max.follow,
+                            ...)
+
+    ## Add weights to data.boot
+    data.boot.lmk.js.uncens <- dplyr::left_join(data.boot.lmk.js.uncens, dplyr::distinct(weights), by = dplyr::join_by(id))
+
+  }
+
+  ###
+  ### Estimate difference between predicted-observed (calculated using intercept model with offset) and predicted risks
+
+  ## Define equation
+  eq.int <- stats::formula(paste("state", state.k, ".bin ~ offset(tp.pred.logit", state.k, ")", sep = ""))
+
+  ## Fit recalibration models to the uncensored observations at time t to calculate intercept
+  lrm.int <- stats::glm(eq.int, data = data.boot.lmk.js.uncens, weights = ipcw, family = stats::quasibinomial(link = "logit"))
+
+  ## Generate predicted-observed risks
+  pred.obs <- predict(lrm.int, newdata = data.boot.lmk.js.uncens, type = "response")
+
+  ## Extract difference
+  int.diff <- mean(pred.obs - data.boot.lmk.js.uncens[, paste("tp.pred", state.k, sep = "")])
+
+  return(int.diff)
+
+}
+
+
+#' Estimate calibration slope using BLR-IPCW for state k.
+#' @description
+#' Estimate calibration slope using BLR-IPCW for state k.
+#'
+#' @details
+#' Function written in a format so that it can be used in combination with \code{\link[boot]{boot}}
+#' for bootstrapping. Specifying `indices = 1:nrow(data.raw)` will return the calibration
+#' of interest.
+#'
+#' @returns Mean calibration and calibration slope for a given state.
+#'
+#' @noRd
+calc_weak_blr_boot <- function(data.raw,
+                               indices,
+                               data.mstate,
+                               state.k,
+                               j,
+                               s2, # can't use 's' because it matches an argument for the boot function
+                               t,
+                               weights.provided,
+                               w.function,
+                               w.covs,
+                               w.landmark.type,
+                               w.max,
+                               w.stabilised,
+                               w.max.follow, ...){
+
+  ## Create bootstrapped dataset
+  data.boot <- data.raw[indices, ]
+
+  ## Create landmarked dataset
+  data.boot.lmk.js.uncens <-  apply_landmark(data.raw = data.boot, data.mstate = data.mstate, j = j, s = s2, t = t, exclude.cens.t = TRUE)
+
+  ## Calculate weights
+  ## Note this is done in the entire dataset data.boot, which has its own functionality (w.landmark.type) to landmark on j and s, or just s, before
+  ## calculating the weights
+  if (weights.provided == FALSE){
+
+    ## If custom function for estimating weights has been inputted ("w.function"), replace "calc_weights" with this function
+    if (!is.null(w.function)){
+      calc_weights <- w.function
+    }
+
+    ## Calculate the weights
+    weights <- calc_weights(data.mstate = data.mstate,
+                            data.raw = data.boot,
+                            covs = w.covs,
+                            t = t,
+                            s = s2,
+                            landmark.type = w.landmark.type,
+                            j = j,
+                            max.weight = w.max,
+                            stabilised = w.stabilised,
+                            max.follow = w.max.follow,
+                            ...)
+
+    ## Add weights to data.boot
+    data.boot.lmk.js.uncens <- dplyr::left_join(data.boot.lmk.js.uncens, dplyr::distinct(weights), by = dplyr::join_by(id))
+
+  }
+
+  ###
+  ### Estiamte slope
+
+  ## Define equation
+  eq.slope <- stats::formula(paste("state", state.k, ".bin ~ tp.pred.logit", state.k, sep = ""))
+
+  ## Fit recalibration models to the uncensored observations at time t to calculate slope
+  lrm.slope <- stats::glm(eq.slope, data = data.boot.lmk.js.uncens, weights = ipcw, family = stats::quasibinomial(link = "logit"))
+
+  ## Extract slope and confidence interval
+  slope <- c(as.numeric(stats::coefficients(lrm.slope)[2]))
+
+  return(slope)
 
 }
 

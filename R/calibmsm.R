@@ -335,7 +335,7 @@ calib_msm <- function(data.mstate,
       stop("pv.precalc must have same number of rows as data.raw. calib_msm assumes landmarking has already been applied to data.raw as part of estimating the pseudo-values")
     } else if (ncol(pv.precalc) != ncol(pv.precalc)){
       stop("pv.precalc must have same number of columns as tp.pred")
-    } else if (CI.type == "bootstrap"){
+    } else if (!is.null(CI) & CI.type == "bootstrap"){
       stop("Cannot estimate a bootstrapped confidence interval if inputting pre-calculating pseudo-values.")
     }
   }

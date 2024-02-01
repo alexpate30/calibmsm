@@ -3,7 +3,7 @@
 ###
 
 ### Run tests for when curve.type = "loess" and CI.type = "bootstrap".
-test_that("check calib_msm output, (j = 1, s = 0), curve.type = loess, CI.type = bootstrap", {
+test_that("check calib_pv output, (j = 1, s = 0), curve.type = loess, CI.type = bootstrap", {
 
   skip_on_cran()
 
@@ -120,7 +120,7 @@ test_that("check calib_msm output, (j = 1, s = 0), curve.type = loess, CI.type =
 })
 
 ### Run tests for when curve.type = "loess" and CI.type = "bootstrap".
-test_that("check calib_msm output, (j = 1, s = 0), curve.type = loess, CI.type = parametric", {
+test_that("check calib_pv output, (j = 1, s = 0), curve.type = loess, CI.type = parametric", {
 
   ## Reduce to 50 individuals
   # Extract the predicted transition probabilities out of state j = 1 for first 50 individuals
@@ -202,7 +202,7 @@ test_that("check calib_msm output, (j = 1, s = 0), curve.type = loess, CI.type =
 
 
 ### Run tests for when curve.type = "rcs" and CI.type = "bootstrap" (not rerunning all of them for curve.type = rcs)
-test_that("check calib_msm output, (j = 1, s = 0), curve.type = rcs, CI.type = bootstrap.", {
+test_that("check calib_pv output, (j = 1, s = 0), curve.type = rcs, CI.type = bootstrap.", {
 
   skip_on_cran()
 
@@ -254,7 +254,7 @@ test_that("check calib_msm output, (j = 1, s = 0), curve.type = rcs, CI.type = b
 })
 
 ### Run tests for when curve.type = "rcs" and CI.type = "parametric" (not rerunning all of them for curve.type = rcs)
-test_that("check calib_msm output, (j = 1, s = 0), curve.type = rcs, CI.type = bootstrap.", {
+test_that("check calib_pv output, (j = 1, s = 0), curve.type = rcs, CI.type = bootstrap.", {
 
   skip_on_cran()
 
@@ -307,7 +307,7 @@ test_that("check calib_msm output, (j = 1, s = 0), curve.type = rcs, CI.type = b
 
 
 ### Add some tests for when each of group.vars and n.pctls are specified
-test_that("check calib_msm output, (j = 1, s = 0), groups.vars and n.pctls = NULL", {
+test_that("check calib_pv output, (j = 1, s = 0), groups.vars and n.pctls = NULL", {
 
   skip_on_cran()
 
@@ -379,7 +379,7 @@ test_that("check calib_msm output, (j = 1, s = 0), groups.vars and n.pctls = NUL
 
 
 ### Add some tests where we expect errors, if requesting things that aren't possible
-test_that("check calib_msm output, (j = 1, s = 0), cause errors", {
+test_that("check calib_pv output, (j = 1, s = 0), cause errors", {
 
   skip_on_cran()
 
@@ -422,7 +422,7 @@ test_that("check calib_msm output, (j = 1, s = 0), cause errors", {
 })
 
 
-test_that("check calib_msm output, (j = 3, s = 100), pv.group.vars defined", {
+test_that("check calib_pv output, (j = 3, s = 100), pv.group.vars defined", {
 
   skip_on_cran()
 
@@ -448,12 +448,12 @@ test_that("check calib_msm output, (j = 3, s = 100), pv.group.vars defined", {
   expect_length(dat.calib.pv[["plotdata"]][["state6"]]$id, 413)
   expect_error(dat.calib.pv[["plotdata"]][[6]])
   expect_false(dat.calib.pv[["metadata"]]$CI)
-  names(dat.calib.pv[["plotdata"]])
+
 
 })
 
 
-test_that("check calib_msm output, (j = 3, s = 100), pv.n.pctls defined", {
+test_that("check calib_pv output, (j = 3, s = 100), pv.n.pctls defined", {
 
   skip_on_cran()
 
@@ -479,12 +479,11 @@ test_that("check calib_msm output, (j = 3, s = 100), pv.n.pctls defined", {
   expect_length(dat.calib.pv[["plotdata"]][["state6"]]$id, 413)
   expect_error(dat.calib.pv[["plotdata"]][[6]])
   expect_false(dat.calib.pv[["metadata"]]$CI)
-  names(dat.calib.pv[["plotdata"]])
 
 })
 
 
-test_that("check calib_msm output, (j = 3, s = 100), pv.group.vars and pv.n.pctls defined", {
+test_that("check calib_pv output, (j = 3, s = 100), pv.group.vars and pv.n.pctls defined", {
 
   skip_on_cran()
 
@@ -511,6 +510,40 @@ test_that("check calib_msm output, (j = 3, s = 100), pv.group.vars and pv.n.pctl
   expect_length(dat.calib.pv[["plotdata"]][["state6"]]$id, 413)
   expect_error(dat.calib.pv[["plotdata"]][[6]])
   expect_false(dat.calib.pv[["metadata"]]$CI)
-  names(dat.calib.pv[["plotdata"]])
 
 })
+
+
+
+test_that("check calib_pv output, (j = 1, s = 0), pv.precalc", {
+
+  skip_on_cran()
+
+  ## Extract relevant predicted risks from tps100
+  tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
+
+  ## Define pv.precalc to be the estimated predicted probabilities
+  pv.precalc <- tp.pred
+
+  ## Calculate observed event probabilities
+  dat.calib.pv <-
+    calib_msm(data.mstate = msebmtcal,
+              data.raw = ebmtcal,
+              j = 1,
+              s = 0,
+              t = 1826,
+              tp.pred = tp.pred,
+              calib.type = 'pv',
+              pv.precalc = tp.pred,
+              curve.type = "rcs",
+              rcs.nk = 3)
+
+  expect_type(dat.calib.pv, "list")
+  expect_equal(class(dat.calib.pv), c("calib_pv", "calib_msm"))
+  expect_length(dat.calib.pv[["plotdata"]], 6)
+  expect_length(dat.calib.pv[["plotdata"]][["state3"]]$id, 2279)
+  expect_length(dat.calib.pv[["plotdata"]][["state6"]]$id, 2279)
+  expect_false(dat.calib.pv[["metadata"]]$CI)
+
+})
+

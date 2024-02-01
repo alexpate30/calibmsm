@@ -43,6 +43,7 @@ test_that("check calib_msm output", {
 
   expect_type(dat.calib.mlr, "list")
   expect_equal(class(dat.calib.mlr), c("calib_mlr", "calib_msm"))
+  expect_length(dat.calib.mlr[["mean"]], 6)
   expect_length(dat.calib.mlr[["plotdata"]], 6)
   expect_length(dat.calib.mlr[["plotdata"]][["state3"]]$id, 265)
   expect_length(dat.calib.mlr[["plotdata"]][["state6"]]$id, 265)
@@ -138,7 +139,7 @@ test_that("check calib_msm output, (j = 1, s = 0),
 
             expect_type(dat.calib.mlr.w.function, "list")
             expect_equal(class(dat.calib.mlr.w.function), c("calib_mlr", "calib_msm"))
-            expect_length(dat.calib.mlr.w.function, 2)
+            expect_length(dat.calib.mlr.w.function[["mean"]], 6)
             expect_length(dat.calib.mlr.w.function[["plotdata"]], 6)
             expect_length(dat.calib.mlr.w.function[["plotdata"]][[1]]$id, 265)
             expect_length(dat.calib.mlr.w.function[["plotdata"]][[4]]$id, 265)
@@ -328,7 +329,7 @@ test_that("check calib_msm output, (j = 1, s = 0),
 
             expect_type(dat.calib.mlr.w.function, "list")
             expect_equal(class(dat.calib.mlr.w.function), c("calib_mlr", "calib_msm"))
-            expect_length(dat.calib.mlr.w.function, 2)
+            expect_length(dat.calib.mlr.w.function[["mean"]], 6)
             expect_length(dat.calib.mlr.w.function[["plotdata"]], 6)
             expect_length(dat.calib.mlr.w.function[["plotdata"]][[1]]$id, 265)
             expect_length(dat.calib.mlr.w.function[["plotdata"]][[4]]$id, 265)
@@ -523,7 +524,7 @@ test_that("check calib_msm output, (j = 1, s = 0),
 
             expect_type(dat.calib.mlr.w.function, "list")
             expect_equal(class(dat.calib.mlr.w.function), c("calib_mlr", "calib_msm"))
-            expect_length(dat.calib.mlr.w.function, 2)
+            expect_length(dat.calib.mlr.w.function[["mean"]], 6)
             expect_length(dat.calib.mlr.w.function[["plotdata"]], 6)
             expect_length(dat.calib.mlr.w.function[["plotdata"]][[1]]$id, 265)
             expect_length(dat.calib.mlr.w.function[["plotdata"]][[4]]$id, 265)

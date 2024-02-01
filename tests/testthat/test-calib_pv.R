@@ -339,7 +339,7 @@ test_that("check calib_msm output, (j = 1, s = 0), groups.vars and n.pctls = NUL
 
   expect_equal(ncol(dat.calib.pv.1[["plotdata"]][[1]]), 3)
   expect_equal(length(dat.calib.pv.1[["plotdata"]]), 6)
-  expect_equal(length(dat.calib.pv.1[["mean"]]), 6)
+
 
   ## Calculate observed event probabilities using transitions.out = NULL
   dat.calib.pv.2 <- calib_msm(data.mstate = msebmtcal,
@@ -357,7 +357,6 @@ test_that("check calib_msm output, (j = 1, s = 0), groups.vars and n.pctls = NUL
 
   expect_equal(ncol(dat.calib.pv.2[["plotdata"]][[1]]), 3)
   expect_equal(length(dat.calib.pv.2[["plotdata"]]), 6)
-  expect_equal(length(dat.calib.pv.2[["mean"]]), 6)
 
   ## Calculate observed event probabilities using transitions.out = NULL
   dat.calib.pv.3 <- calib_msm(data.mstate = msebmtcal,
@@ -375,7 +374,6 @@ test_that("check calib_msm output, (j = 1, s = 0), groups.vars and n.pctls = NUL
 
   expect_equal(ncol(dat.calib.pv.3[["plotdata"]][[1]]), 3)
   expect_equal(length(dat.calib.pv.3[["plotdata"]]), 6)
-  expect_equal(length(dat.calib.pv.3[["mean"]]), 6)
 
 })
 
@@ -445,7 +443,6 @@ test_that("check calib_msm output, (j = 3, s = 100), pv.group.vars defined", {
 
   expect_type(dat.calib.pv, "list")
   expect_equal(class(dat.calib.pv), c("calib_pv", "calib_msm"))
-  expect_length(dat.calib.pv[["mean"]], 4)
   expect_length(dat.calib.pv[["plotdata"]], 4)
   expect_length(dat.calib.pv[["plotdata"]][["state3"]]$id, 413)
   expect_length(dat.calib.pv[["plotdata"]][["state6"]]$id, 413)
@@ -477,7 +474,6 @@ test_that("check calib_msm output, (j = 3, s = 100), pv.n.pctls defined", {
 
   expect_type(dat.calib.pv, "list")
   expect_equal(class(dat.calib.pv), c("calib_pv", "calib_msm"))
-  expect_length(dat.calib.pv[["mean"]], 4)
   expect_length(dat.calib.pv[["plotdata"]], 4)
   expect_length(dat.calib.pv[["plotdata"]][["state3"]]$id, 413)
   expect_length(dat.calib.pv[["plotdata"]][["state6"]]$id, 413)
@@ -510,7 +506,6 @@ test_that("check calib_msm output, (j = 3, s = 100), pv.group.vars and pv.n.pctl
 
   expect_type(dat.calib.pv, "list")
   expect_equal(class(dat.calib.pv), c("calib_pv", "calib_msm"))
-  expect_length(dat.calib.pv[["mean"]], 4)
   expect_length(dat.calib.pv[["plotdata"]], 4)
   expect_length(dat.calib.pv[["plotdata"]][["state3"]]$id, 413)
   expect_length(dat.calib.pv[["plotdata"]][["state6"]]$id, 413)

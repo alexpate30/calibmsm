@@ -98,8 +98,8 @@ usethis::create_github_token()
 gitcreds::gitcreds_set()
 
 ### R-CMD-check action
-usethis::use_github_action_check_standard()
-
+usethis::use_github_action("check-standard")
+check-standard
 ### Test coverage
 ## For test coverage, used following sources:
 ## 1) https://www.r-bloggers.com/2017/06/how-to-add-code-coverage-codecov-to-your-r-package/

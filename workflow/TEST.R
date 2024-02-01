@@ -20,6 +20,21 @@ tp.pred <- tps0 |>
   dplyr::filter(j == 1) |>
   dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
 
+str(dat.calib.blr[["mean"]])
+dat.calib.blr <-
+  calib_msm(data.mstate = msebmtcal,
+            data.raw = ebmtcal,
+            j=1,
+            s=0,
+            t = 1826,
+            tp.pred = tp.pred,
+            calib.type = "blr",
+            w.covs = c("year"),
+            assess.moderate = FALSE,
+            assess.mean = TRUE)
+
+
+
 dat.calib.aj <-
   calib_msm(data.mstate = msebmtcal,
             data.raw = ebmtcal,
@@ -27,8 +42,10 @@ dat.calib.aj <-
             s=0,
             t = 1826,
             tp.pred = tp.pred,
-            calib.type = "aj",
-            assess.moderate = FALSE)
+            calib.type = "blr",
+            w.covs = c("year"),
+            assess.moderate = TRUE,
+            assess.mean = TRUE)
 
 
 dat.calib.aj1 <-

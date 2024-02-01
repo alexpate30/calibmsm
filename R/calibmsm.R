@@ -253,6 +253,7 @@ calib_msm <- function(data.mstate,
 # mlr.s.df = 4
 # mlr.niknots = 4
 # assess.moderate = TRUE
+# assess.mean = TRUE
 # #
 # pv.precalc = NULL
 
@@ -510,7 +511,7 @@ calib_msm <- function(data.mstate,
                                     CI.seed = CI.seed,
                                     transitions.out = transitions.out,
                                     assess.moderate = assess.moderate,
-                                    assess.mean = assess.mean)
+                                    assess.mean = assess.mean, ...)
   } else if (calib.type == "mlr"){
     ### Estimate predicted-obsserved probabilities using the MLR-IPCW method
     output.object <- calib_mlr_ipcw(data.raw = data.raw,
@@ -594,7 +595,7 @@ calib_msm <- function(data.mstate,
     class(output.object) <- c("calib_mlr", "calib_msm")
   } else if (calib.type == "pv"){
     class(output.object) <- c("calib_pv", "calib_msm")
-  } else if (calib.type == "pv"){
+  } else if (calib.type == "aj"){
     class(output.object) <- c("calib_aj", "calib_msm")
   }
 

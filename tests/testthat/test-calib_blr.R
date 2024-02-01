@@ -22,7 +22,7 @@ test_that("check calib_msm output, (j = 1, s = 0), curve.type = rcs, stabilised 
 
   expect_type(dat.calib.blr, "list")
   expect_equal(class(dat.calib.blr), c("calib_blr", "calib_msm"))
-  expect_length(dat.calib.blr, 2)
+  expect_length(dat.calib.blr[["mean"]], 6)
   expect_length(dat.calib.blr[["plotdata"]], 6)
   expect_length(dat.calib.blr[["plotdata"]][[1]]$id, 1778)
   expect_length(dat.calib.blr[["plotdata"]][[6]]$id, 1778)
@@ -45,7 +45,6 @@ test_that("check calib_msm output, (j = 1, s = 0), curve.type = rcs, stabilised 
 
   expect_type(dat.calib.blr.stab, "list")
   expect_equal(class(dat.calib.blr.stab), c("calib_blr", "calib_msm"))
-  expect_length(dat.calib.blr.stab, 2)
   expect_length(dat.calib.blr.stab[["plotdata"]], 6)
   expect_length(dat.calib.blr.stab[["plotdata"]][[1]]$id, 1778)
   expect_length(dat.calib.blr.stab[["plotdata"]][[6]]$id, 1778)
@@ -75,7 +74,7 @@ test_that("check calib_msm output, (j = 1, s = 0), curve.type = loess", {
 
   expect_type(dat.calib.blr, "list")
   expect_equal(class(dat.calib.blr), c("calib_blr", "calib_msm"))
-  expect_length(dat.calib.blr, 2)
+  expect_length(dat.calib.blr[["mean"]], 6)
   expect_length(dat.calib.blr[["plotdata"]], 6)
   expect_length(dat.calib.blr[["plotdata"]][[1]]$id, 1778)
   expect_length(dat.calib.blr[["plotdata"]][[6]]$id, 1778)
@@ -96,7 +95,6 @@ test_that("check calib_msm output, (j = 1, s = 0), curve.type = loess", {
 
   expect_type(dat.calib.blr.stab, "list")
   expect_equal(class(dat.calib.blr.stab), c("calib_blr", "calib_msm"))
-  expect_length(dat.calib.blr.stab, 2)
   expect_length(dat.calib.blr.stab[["plotdata"]], 6)
   expect_length(dat.calib.blr.stab[["plotdata"]][[1]]$id, 1778)
   expect_length(dat.calib.blr.stab[["plotdata"]][[6]]$id, 1778)
@@ -119,7 +117,7 @@ test_that("check calib_msm output, (j = 1, s = 0), curve.type = loess", {
 
   expect_type(dat.calib.blr.w.function, "list")
   expect_equal(class(dat.calib.blr.w.function), c("calib_blr", "calib_msm"))
-  expect_length(dat.calib.blr.w.function, 2)
+  expect_length(dat.calib.blr.w.function[["mean"]], 6)
   expect_length(dat.calib.blr.w.function[["plotdata"]], 6)
   expect_length(dat.calib.blr.w.function[["plotdata"]][[1]]$id, 1778)
   expect_length(dat.calib.blr.w.function[["plotdata"]][[6]]$id, 1778)
@@ -167,7 +165,7 @@ test_that("check calib_msm output, (j = 1, s = 0), with CI", {
 
   expect_type(dat.calib.blr, "list")
   expect_equal(class(dat.calib.blr), c("calib_blr", "calib_msm"))
-  expect_length(dat.calib.blr, 2)
+  expect_length(dat.calib.blr[["mean"]], 6)
   expect_length(dat.calib.blr[["plotdata"]], 6)
   expect_equal(ncol(dat.calib.blr[["plotdata"]][[1]]), 5)
   expect_equal(ncol(dat.calib.blr[["plotdata"]][[6]]), 5)
@@ -201,7 +199,7 @@ test_that("check calib_msm output, (j = 3, s = 100)", {
 
   expect_type(dat.calib.blr, "list")
   expect_equal(class(dat.calib.blr), c("calib_blr", "calib_msm"))
-  expect_length(dat.calib.blr, 2)
+  expect_length(dat.calib.blr[["mean"]], 4)
   expect_length(dat.calib.blr[["plotdata"]], 4)
   expect_length(dat.calib.blr[["plotdata"]][["state3"]]$id, 359)
   expect_length(dat.calib.blr[["plotdata"]][["state6"]]$id, 359)
@@ -230,7 +228,7 @@ test_that("check calib_msm output, (j = 1, s = 0), null covs", {
 
   expect_type(dat.calib.blr, "list")
   expect_equal(class(dat.calib.blr), c("calib_blr", "calib_msm"))
-  expect_length(dat.calib.blr, 2)
+  expect_length(dat.calib.blr[["mean"]], 6)
   expect_length(dat.calib.blr[["plotdata"]], 6)
   expect_length(dat.calib.blr[["plotdata"]][[1]]$id, 1778)
   expect_length(dat.calib.blr[["plotdata"]][[6]]$id, 1778)
@@ -251,7 +249,7 @@ test_that("check calib_msm output, (j = 1, s = 0), null covs", {
 
   expect_type(dat.calib.blr, "list")
   expect_equal(class(dat.calib.blr), c("calib_blr", "calib_msm"))
-  expect_length(dat.calib.blr, 2)
+  expect_length(dat.calib.blr[["mean"]], 6)
   expect_length(dat.calib.blr[["plotdata"]], 6)
   expect_length(dat.calib.blr[["plotdata"]][[1]]$id, 1778)
   expect_length(dat.calib.blr[["plotdata"]][[6]]$id, 1778)
@@ -495,7 +493,7 @@ test_that("check calib_msm output, (j = 1, s = 0),
 
             expect_type(dat.calib.blr, "list")
             expect_equal(class(dat.calib.blr), c("calib_blr", "calib_msm"))
-            expect_length(dat.calib.blr, 2)
+            expect_length(dat.calib.blr[["mean"]], 6)
             expect_length(dat.calib.blr[["plotdata"]], 6)
             expect_length(dat.calib.blr[["plotdata"]][[1]]$pred, 1778)
             expect_length(dat.calib.blr[["plotdata"]][[6]]$pred, 1778)
@@ -585,7 +583,7 @@ test_that("check calib_msm output, (j = 1, s = 0),
 
             expect_type(dat.calib.blr.w.function, "list")
             expect_equal(class(dat.calib.blr.w.function), c("calib_blr", "calib_msm"))
-            expect_length(dat.calib.blr.w.function, 2)
+            expect_length(dat.calib.blr.w.function[["mean"]], 6)
             expect_length(dat.calib.blr.w.function[["plotdata"]], 6)
             expect_length(dat.calib.blr.w.function[["plotdata"]][[1]]$id, 1778)
             expect_length(dat.calib.blr.w.function[["plotdata"]][[6]]$id, 1778)
@@ -776,7 +774,7 @@ test_that("check calib_msm output, (j = 1, s = 0),
 
             expect_type(dat.calib.blr.w.function, "list")
             expect_equal(class(dat.calib.blr.w.function), c("calib_blr", "calib_msm"))
-            expect_length(dat.calib.blr.w.function, 2)
+            expect_length(dat.calib.blr.w.function[["mean"]], 6)
             expect_length(dat.calib.blr.w.function[["plotdata"]], 6)
             expect_length(dat.calib.blr.w.function[["plotdata"]][[1]]$id, 1778)
             expect_length(dat.calib.blr.w.function[["plotdata"]][[6]]$id, 1778)
@@ -973,7 +971,7 @@ test_that("check calib_msm output, (j = 1, s = 0),
 
             expect_type(dat.calib.blr.w.function, "list")
             expect_equal(class(dat.calib.blr.w.function), c("calib_blr", "calib_msm"))
-            expect_length(dat.calib.blr.w.function, 2)
+            expect_length(dat.calib.blr.w.function[["mean"]], 6)
             expect_length(dat.calib.blr.w.function[["plotdata"]], 6)
             expect_length(dat.calib.blr.w.function[["plotdata"]][[1]]$id, 1778)
             expect_length(dat.calib.blr.w.function[["plotdata"]][[6]]$id, 1778)

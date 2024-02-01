@@ -43,7 +43,6 @@ test_that("check calib_msm output", {
 
   expect_type(dat.calib.mlr, "list")
   expect_equal(class(dat.calib.mlr), c("calib_mlr", "calib_msm"))
-  expect_length(dat.calib.mlr, 2)
   expect_length(dat.calib.mlr[["plotdata"]], 6)
   expect_length(dat.calib.mlr[["plotdata"]][["state3"]]$id, 265)
   expect_length(dat.calib.mlr[["plotdata"]][["state6"]]$id, 265)

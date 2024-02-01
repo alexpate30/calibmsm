@@ -391,7 +391,7 @@ test_that("check calib_msm output, (j = 1, s = 0),
 
             expect_type(dat.calib.blr.w.manual, "list")
             expect_equal(class(dat.calib.blr.w.manual), c("calib_blr", "calib_msm"))
-            expect_length(dat.calib.blr.w.manual, 2)
+            expect_length(dat.calib.blr.w.manual[["mean"]], 6)
             expect_length(dat.calib.blr.w.manual[["plotdata"]], 6)
             expect_length(dat.calib.blr.w.manual[["plotdata"]][[1]]$pred, 1778)
             expect_length(dat.calib.blr.w.manual[["plotdata"]][[6]]$pred, 1778)
@@ -446,7 +446,7 @@ test_that("check calib_msm output, (j = 1, s = 0),
 
             expect_type(dat.calib.blr.w.manual, "list")
             expect_equal(class(dat.calib.blr.w.manual), c("calib_blr", "calib_msm"))
-            expect_length(dat.calib.blr.w.manual, 2)
+            expect_length(dat.calib.blr.w.manual[["mean"]], 6)
             expect_length(dat.calib.blr.w.manual[["plotdata"]], 6)
             expect_length(dat.calib.blr.w.manual[["plotdata"]][[1]]$pred, 1778)
             expect_length(dat.calib.blr.w.manual[["plotdata"]][[6]]$pred, 1778)

@@ -331,7 +331,7 @@ calib_msm <- function(data.mstate,
   ### If pseudo-values does not have same number of rows as data.raw give error
   ### If pseudo-values pre-calculated and bootstrapping requested give error
   if (!is.null(pv.precalc)){
-    if (nrow(pv.precalc != nrow(data.raw))){
+    if (nrow(pv.precalc) != nrow(data.raw)){
       stop("pv.precalc must have same number of rows as data.raw. calib_msm assumes landmarking has already been applied to data.raw as part of estimating the pseudo-values")
     } else if (ncol(pv.precalc) != ncol(pv.precalc)){
       stop("pv.precalc must have same number of columns as tp.pred")

@@ -405,6 +405,15 @@ calib_msm <- function(data.mstate,
     }
   }
 
+  ### Assign column names to pv.precalc
+  if (!is.null(pv.precalc)){
+    if(ncol(pv.precalc) != ncol (tp.pred)){
+      stop("pv.precalc must have same number of columns as tp.pred, even if the probability (and therefore pseudo-values) of entering these states is zero")
+    } else {
+      colnames(pv.precalc) <- paste("pstate", 1:ncol(pv.precalc), sep = "")
+    }
+  }
+
   ########################
   ### DATA PREPERATION ###
   ########################

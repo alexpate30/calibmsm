@@ -813,14 +813,22 @@ calc_obs_pv_loess_model <- function(pred, pv, data.to.plot, loess.span, loess.de
 #' @noRd
 calc_obs_pv_rcs_model <- function(pred, pv, data.to.plot, rcs.nk, CI, CI.type){
 
+  ### Start by transforming pred onto logit scale
+  pred.logit <- log(pred/(1-pred))
+
   ### Create spline terms based on predicted risks
-  rcs.pred <- Hmisc::rcspline.eval(pred, nk=rcs.nk, inclx=T)
+  rcs.pred <- Hmisc::rcspline.eval(pred.logit, nk=rcs.nk, inclx=T)
   colnames(rcs.pred) <- paste("rcs.x", 1:ncol(rcs.pred), sep = "")
   knots.pred <- attr(rcs.pred,"knots")
 
   ### Create spline terms in data.to.plot (using same knot locations derived from the predicted risks)
   ### Note that if data.to.plot == pred, these will be the same
-  rcs.data.to.plot <- data.frame(Hmisc::rcspline.eval(data.to.plot ,knots = knots.pred, inclx=T))
+
+  ### First transform onto logit scale
+  data.to.plot <- log(data.to.plot/(1 - data.to.plot))
+
+  ### Create spline terms
+  rcs.data.to.plot <- data.frame(Hmisc::rcspline.eval(data.to.plot.logit ,knots = knots.pred, inclx=T))
   colnames(rcs.data.to.plot) <- paste("rcs.x", 1:ncol(rcs.data.to.plot), sep = "")
 
   ### Create dataset in which to fit the model
@@ -831,7 +839,7 @@ calc_obs_pv_rcs_model <- function(pred, pv, data.to.plot, rcs.nk, CI, CI.type){
   eq.RHS <- paste("rcs.x", 1:ncol(rcs.data.to.plot), sep = "", collapse = "+")
   eq.rcs <- stats::formula(paste(eq.LHS, eq.RHS, sep = ""))
 
-  ## Fit the model
+  ## Fit the model using logit link function
   rcs.model <- stats::glm(eq.rcs, data = data.rcs, family = stats::gaussian(link = "logit"), start = rep(0, ncol(rcs.pred) + 1))
 
   ## Calculate predicted observed probabilities (and confidence intervals if requested using parametric approach)

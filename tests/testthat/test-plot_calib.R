@@ -102,7 +102,7 @@ test_that("check plot.calib_msm output (j = 3, s = 100)", {
 
 
 test_that("check plot.calib_pv output (j = 1, s = 0)", {
-
+load_all()
   ## Reduce to 50 individuals
   # Extract the predicted transition probabilities out of state j = 1 for first 50 individuals
   tp.pred <- tps0 |>

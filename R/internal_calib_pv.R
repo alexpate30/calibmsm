@@ -828,7 +828,7 @@ calc_obs_pv_rcs_model <- function(pred, pv, data.to.plot, rcs.nk, CI, CI.type){
   data.to.plot <- log(data.to.plot/(1 - data.to.plot))
 
   ### Create spline terms
-  rcs.data.to.plot <- data.frame(Hmisc::rcspline.eval(data.to.plot.logit ,knots = knots.pred, inclx=T))
+  rcs.data.to.plot <- data.frame(Hmisc::rcspline.eval(data.to.plot ,knots = knots.pred, inclx=T))
   colnames(rcs.data.to.plot) <- paste("rcs.x", 1:ncol(rcs.data.to.plot), sep = "")
 
   ### Create dataset in which to fit the model

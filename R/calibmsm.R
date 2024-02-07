@@ -333,16 +333,18 @@ calib_msm <- function(data.mstate,
   if (!is.null(pv.precalc)){
     if (nrow(pv.precalc) != nrow(data.raw)){
       stop("pv.precalc must have same number of rows as data.raw. calib_msm assumes landmarking has already been applied to data.raw as part of estimating the pseudo-values")
-    } else if (ncol(pv.precalc) != ncol(pv.precalc)){
+    } else if (ncol(pv.precalc) != ncol(tp.pred)){
       stop("pv.precalc must have same number of columns as tp.pred")
     } else if (!isFALSE(CI) & CI.type == "bootstrap"){
       stop("Cannot estimate a bootstrapped confidence interval if inputting pre-calculating pseudo-values.")
     }
   }
 
-  ### Stop if calib.type = "AJ" and assess.moderate = TRUE
+  ### Stop if calib.type = "AJ" and assess.moderate = TRUE, or parametric confidence interval requested
   if (calib.type == "AJ" & assess.moderate == TRUE){
     stop("Cannot assess moderate calibration for calib.type = 'AJ'")
+  } else if (calib.type == "AJ" & CI != FALSE & CI.type == "parametric"){
+    stop("Cannot produce parametric confidence intervals for mean calibration assessd using calib.type = 'AJ'")
   }
 
   ##########################################################

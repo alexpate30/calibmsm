@@ -58,7 +58,6 @@ calib_aj <- function(data.mstate,
                             t = t,
                             pv.group.vars = pv.group.vars,
                             pv.n.pctls = pv.n.pctls,
-                            CI = FALSE,
                             transitions.out = transitions.out,
                             valid.transitions = valid.transitions,
                             boot.format = TRUE)
@@ -71,15 +70,14 @@ calib_aj <- function(data.mstate,
     for (state in 1:length(transitions.out)){
 
       ### Put into output object
-      output.object.mean[[state]] <- c("mean" = boot.mean$t0[state],
-                                       "mean.lower" = lower[state],
-                                       "mean.upper" = upper[state])
+      output.object.mean[[state]] <- c("mean" = as.numeric(boot.mean$t0[state]),
+                                       "mean.lower" = as.numeric(lower[state]),
+                                       "mean.upper" = as.numeric(upper[state]))
 
     }
   } else {
 
-    ### Note that calc_obs_pv_boot has the ability to output calibration curve with confidence interval estimated parametrically, as well as outputting
-    ### data in boot format (a vector), which was utilised when CI.type = "bootstrap".
+    ### This will just estimate mean calibration without applying bootstrapping
     output.object.mean <- calib_AJ_boot(data.raw = data.raw,
                                         indices = 1:nrow(data.raw),
                                         data.mstate = data.mstate,
@@ -88,14 +86,15 @@ calib_aj <- function(data.mstate,
                                         t = t,
                                         pv.group.vars = pv.group.vars,
                                         pv.n.pctls = pv.n.pctls,
-                                        CI = CI,
-                                        CI.type = CI.type,
                                         transitions.out = transitions.out,
                                         valid.transitions = valid.transitions,
                                         boot.format = FALSE)
+
+    names(output.object.mean) <- paste("state", transitions.out, sep = "")
+
   }
 
-  ### Define combined output object
+  ### Define output object
   output.object.mean = list("mean" = output.object.mean)
 
   return(output.object.mean)
@@ -124,8 +123,6 @@ calib_AJ_boot <- function(data.raw,
                           t,
                           pv.group.vars,
                           pv.n.pctls,
-                          CI,
-                          CI.type,
                           transitions.out,
                           valid.transitions,
                           boot.format = TRUE){

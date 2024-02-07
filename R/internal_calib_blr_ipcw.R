@@ -305,6 +305,20 @@ calib_blr_ipcw <- function(data.raw,
 
   }
 
+  ###
+  ### If assess.mean == TRUE, and CI == FALSE, collapse the mean calibrations into a vector (to match output from calib_aj and calib_mlr)
+  ###
+  if (assess.mean == TRUE){
+    if (CI == FALSE){
+
+      ### Put into output object
+      output.object.mean <- do.call("c", output.object.mean)
+      names(output.object.mean) <- paste("state", transitions.out, sep = "")
+
+    }
+  }
+
+
   ### Define combined output object
   output.object.comb <- vector("list")
 

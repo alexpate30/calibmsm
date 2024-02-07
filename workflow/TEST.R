@@ -39,6 +39,14 @@ dat.calib.blr <-
 str(dat.calib.blr)
 
 
+rm(list=ls())
+devtools::load_all()
+
+tp.pred <- tps0 |>
+  dplyr::filter(j == 1) |>
+  dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
+
+
 dat.calib.mlr <-
   calib_msm(data.mstate = msebmtcal,
             data.raw = ebmtcal,
@@ -48,6 +56,22 @@ dat.calib.mlr <-
             tp.pred = tp.pred,
             calib.type = "mlr",
             w.covs = c("year"),
+            assess.moderate = FALSE,
+            assess.mean = TRUE)
+str(dat.calib.mlr)
+
+
+dat.calib.mlr <-
+  calib_msm(data.mstate = msebmtcal,
+            data.raw = ebmtcal,
+            j=1,
+            s=0,
+            t = 1826,
+            tp.pred = tp.pred,
+            calib.type = "mlr",
+            w.covs = c("year"),
+            CI = 95,
+            CI.R.boot = 3,
             assess.moderate = FALSE,
             assess.mean = TRUE)
 str(dat.calib.mlr)

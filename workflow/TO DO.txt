@@ -2,3 +2,4 @@ PACKAGE TO DO LIST:
 - Output is different (list vs vector) depending on if mean calibration is requesting using BLR-IPCW (list) or MLR-IPCW or PV (vector). This should be the same. Test should also pick up on this.
 - Add full testing suite for new functions.
 - Validation of CSH (big task, for future). Based on predRupdate
+- Add confidence intervals for MLR-IPCW mean calibration

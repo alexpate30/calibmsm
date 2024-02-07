@@ -308,10 +308,10 @@ calib_msm <- function(data.mstate,
       stop("CI.type must takes values in 'parametric' or 'bootstrap'")
     } else if (CI.type == "bootstrap" & is.null(CI.R.boot)){
       stop("Must specify number of bootstrap replicates for confidence interval using CI.R.boot.")
-    } else if (calib.type == "blr" & CI.type == "parametric"){
-      stop("Cannot produce a parametric confidence interva for calib.type = 'blr'")
-    } else if (calib.type == "mlr"){
-      stop("Cannot produce a confidence interval for calib.type = 'mlr'")
+    } else if (calib.type %in% c("blr", "mlr") & CI.type == "parametric"){
+      stop("Cannot produce a parametric confidence interva for calib.type = 'blr' or 'mlr'")
+    } else if (calib.type == "mlr" & assess.moderate == TRUE){
+      stop("Cannot produce a confidence interval for moderate calibration plots using method calib.type = 'mlr'")
     }
   }
 
@@ -542,6 +542,9 @@ calib_msm <- function(data.mstate,
                                     mlr.degree = mlr.degree,
                                     mlr.s.df = mlr.s.df,
                                     mlr.niknots = mlr.niknots,
+                                    CI = CI,
+                                    CI.R.boot = CI.R.boot,
+                                    CI.seed = CI.seed,
                                     valid.transitions = valid.transitions,
                                     assess.moderate = assess.moderate,
                                     assess.mean = assess.mean, ...)

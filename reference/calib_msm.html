@@ -87,6 +87,12 @@ weights, based on the nominal calibration  framework of van Hoorde et al. (2014,
 <span>  rcs.nk <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  loess.span <span class="op">=</span> <span class="fl">0.75</span>,</span>
 <span>  loess.degree <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  loess.surface <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"interpolate"</span>, <span class="st">"direct"</span><span class="op">)</span>,</span>
+<span>  loess.statistics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"approximate"</span>, <span class="st">"exact"</span>, <span class="st">"none"</span><span class="op">)</span>,</span>
+<span>  loess.trace.hat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"exact"</span>, <span class="st">"approximate"</span><span class="op">)</span>,</span>
+<span>  loess.cell <span class="op">=</span> <span class="fl">0.2</span>,</span>
+<span>  loess.iterations <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  loess.iterTrace <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  mlr.smoother.type <span class="op">=</span> <span class="st">"sm.ps"</span>,</span>
 <span>  mlr.ps.int <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  mlr.degree <span class="op">=</span> <span class="fl">3</span>,</span>
@@ -161,6 +167,30 @@ weights, based on the nominal calibration  framework of van Hoorde et al. (2014,
 
 <dt>loess.degree</dt>
 <dd><p>Degree when curves are estimated. using loess smoothers</p></dd>
+
+
+<dt>loess.surface</dt>
+<dd><p>see <code><a href="https://rdrr.io/r/stats/loess.control.html" class="external-link">loess.control</a></code></p></dd>
+
+
+<dt>loess.statistics</dt>
+<dd><p>see <code><a href="https://rdrr.io/r/stats/loess.control.html" class="external-link">loess.control</a></code></p></dd>
+
+
+<dt>loess.trace.hat</dt>
+<dd><p>see <code><a href="https://rdrr.io/r/stats/loess.control.html" class="external-link">loess.control</a></code></p></dd>
+
+
+<dt>loess.cell</dt>
+<dd><p>see <code><a href="https://rdrr.io/r/stats/loess.control.html" class="external-link">loess.control</a></code></p></dd>
+
+
+<dt>loess.iterations</dt>
+<dd><p>see <code><a href="https://rdrr.io/r/stats/loess.control.html" class="external-link">loess.control</a></code></p></dd>
+
+
+<dt>loess.iterTrace</dt>
+<dd><p>see <code><a href="https://rdrr.io/r/stats/loess.control.html" class="external-link">loess.control</a></code></p></dd>
 
 
 <dt>mlr.smoother.type</dt>

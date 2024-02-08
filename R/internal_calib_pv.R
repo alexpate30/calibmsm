@@ -815,7 +815,7 @@ calc_obs_pv_loess_model <- function(pred, pv, data.to.plot,
 
   ### Fit model
   if (CI != FALSE){
-    if (CI.type == parametric){
+    if (CI.type == "parametric"){
       loess.model <- stats::loess(pv ~ pred,
                                   span = loess.span,
                                   degree = loess.degree,
@@ -843,7 +843,7 @@ calc_obs_pv_loess_model <- function(pred, pv, data.to.plot,
   ## Calculate predicted observed probabilities (and confidence intervals if requested using parametric approach)
   ## Note we do not calculate standard errors if confidence interval has been requested using the bootstrap (or if no CI requested)
   if (CI != FALSE){
-    if (CI.type == parametric){
+    if (CI.type == "parametric"){
       ## Predict observed
       obs <- predict(loess.model, newdata = data.to.plot, se = TRUE)
       ## Define alpha for CIs

@@ -22,6 +22,11 @@ calib_blr_ipcw <- function(data.raw,
                            rcs.nk,
                            loess.span,
                            loess.degree,
+                           loess.surface,
+                           loess.trace.hat,
+                           loess.cell,
+                           loess.iterations,
+                           loess.iterTrace,
                            weights.provided,
                            w.function,
                            w.covs,
@@ -95,7 +100,12 @@ calib_blr_ipcw <- function(data.raw,
                                  w.stabilised = w.stabilised,
                                  w.max.follow = w.max.follow,
                                  loess.span = loess.span,
-                                 loess.degree = loess.degree, ...)
+                                 loess.degree = loess.degree,
+                                 loess.surface = loess.surface,
+                                 loess.trace.hat = loess.trace.hat,
+                                 loess.cell = loess.cell,
+                                 loess.iterations = loess.iterations,
+                                 loess.iterTrace = loess.iterTrace, ...)
         } else if (curve.type == "rcs"){
           boot.obs <- boot::boot(data.raw, calc_obs_blr_rcs_boot, R = CI.R.boot,
                                  data.mstate = data.mstate,
@@ -223,7 +233,12 @@ calib_blr_ipcw <- function(data.raw,
                                               w.stabilised = w.stabilised,
                                               w.max.follow = w.max.follow,
                                               loess.span = loess.span,
-                                              loess.degree = loess.degree, ...)
+                                              loess.degree = loess.degree,
+                                              loess.surface = loess.surface,
+                                              loess.trace.hat = loess.trace.hat,
+                                              loess.cell = loess.cell,
+                                              loess.iterations = loess.iterations,
+                                              loess.iterTrace = loess.iterTrace, ...)
         } else if (curve.type == "rcs"){
           pred.obs <- calc_obs_blr_rcs_boot(data.raw = data.raw,
                                             indices = 1:nrow(data.raw),
@@ -367,7 +382,12 @@ calc_obs_blr_loess_boot <- function(data.raw,
                                     w.stabilised,
                                     w.max.follow,
                                     loess.span,
-                                    loess.degree, ...){
+                                    loess.degree,
+                                    loess.surface,
+                                    loess.trace.hat,
+                                    loess.cell,
+                                    loess.iterations,
+                                    loess.iterTrace, ...){
 
   # Create bootstrapped dataset
   data.boot <- data.raw[indices, ]
@@ -411,7 +431,13 @@ calc_obs_blr_loess_boot <- function(data.raw,
                               data = data.boot.lmk.js.uncens,
                               weights = data.boot.lmk.js.uncens[, "ipcw"],
                               span = loess.span,
-                              degree = loess.degree)
+                              degree = loess.degree,
+                              control = stats::loess.control(surface = loess.surface,
+                                                             statistics = "none",
+                                                             trace.hat = loess.trace.hat,
+                                                             cell = loess.cell,
+                                                             iterations = loess.iterations,
+                                                             iterTrace = loess.iterTrace))
 
   ## Create predicted observed probabilities.
   loess.pred.obs <- predict(loess.model, newdata = data.to.plot)

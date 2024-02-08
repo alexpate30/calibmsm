@@ -814,39 +814,47 @@ calc_obs_pv_loess_model <- function(pred, pv, data.to.plot,
                                     CI.type){
 
   ### Fit model
-  loess.model <- stats::loess(pv ~ pred,
-                              span = loess.span,
-                              degree = loess.degree,
-                              control = stats::loess.control(surface = loess.surface,
-                                                             statistics = loess.statistics,
-                                                             trace.hat = loess.trace.hat,
-                                                             cell = loess.cell,
-                                                             iterations = loess.iterations,
-                                                             iterTrace = loess.iterTrace))
+  if (CI != FALSE & CI.type == "parametric"){
+    loess.model <- stats::loess(pv ~ pred,
+                                span = loess.span,
+                                degree = loess.degree,
+                                control = stats::loess.control(surface = loess.surface,
+                                                               statistics = loess.statistics,
+                                                               trace.hat = loess.trace.hat,
+                                                               cell = loess.cell,
+                                                               iterations = loess.iterations,
+                                                               iterTrace = loess.iterTrace))
+  } else {
+    ### If not requiring standard errors for parametric confidence, let statistics = "none" for computational efficiency
+    loess.model <- stats::loess(pv ~ pred,
+                                span = loess.span,
+                                degree = loess.degree,
+                                control = stats::loess.control(surface = loess.surface,
+                                                               statistics = "none",
+                                                               trace.hat = loess.trace.hat,
+                                                               cell = loess.cell,
+                                                               iterations = loess.iterations,
+                                                               iterTrace = loess.iterTrace))
+    }
+
 
   ## Calculate predicted observed probabilities (and confidence intervals if requested using parametric approach)
-  ## Note we do not calculate standard errors if confidence interval has been requested using the bootstrap
-  if (CI == FALSE){
+  ## Note we do not calculate standard errors if confidence interval has been requested using the bootstrap (or if no CI requested)
+  ### Fit model
+  if (CI != FALSE & CI.type == "parametric"){
+    ## Predict observed
+    obs <- predict(loess.model, newdata = data.to.plot, se = TRUE)
+    ## Define alpha for CIs
+    alpha <- (1-CI/100)/2
+    ## Put into dataframe
+    obs.data <- data.frame("obs" = obs$fit,
+                           "obs.lower" = obs$fit - stats::qnorm(1-alpha)*obs$se,
+                           "obs.upper" = obs$fit + stats::qnorm(1-alpha)*obs$se)
+  } else {
     ## Predict observed
     obs <- predict(loess.model, newdata = data.to.plot)
     ## Put into dataframe
     obs.data <- data.frame("obs" = obs)
-  } else if (CI != FALSE){
-    if (CI.type == "bootstrap"){
-      ## Predict observed
-      obs <- predict(loess.model, newdata = data.to.plot)
-      ## Put into dataframe
-      obs.data <- data.frame("obs" = obs)
-    } else if (CI.type == "parametric"){
-      ## Predict observed
-      obs <- predict(loess.model, newdata = data.to.plot, se = TRUE)
-      ## Define alpha for CIs
-      alpha <- (1-CI/100)/2
-      ## Put into dataframe
-      obs.data <- data.frame("obs" = obs$fit,
-                             "obs.lower" = obs$fit - stats::qnorm(1-alpha)*obs$se,
-                             "obs.upper" = obs$fit + stats::qnorm(1-alpha)*obs$se)
-    }
   }
 
   ### Return obs.data
@@ -905,7 +913,7 @@ calc_obs_pv_rcs_model <- function(pred, pv, data.to.plot, rcs.nk, CI, CI.type){
     if (CI.type == "bootstrap"){
       ## Predict observed
       obs <- predict(rcs.model, newdata = rcs.data.to.plot, type = "link")
-      ## Put into dataframe
+      ## Put into data frame
       obs.data <- data.frame("obs" = 1/(1+exp(-obs)))
     } else if (CI.type == "parametric"){
       ## Predict observed

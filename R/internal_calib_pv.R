@@ -191,6 +191,12 @@ calc_obs_pv_boot <- function(data.raw,
                              rcs.nk,
                              loess.span,
                              loess.degree,
+                             loess.surface = loess.surface,
+                             loess.statistics = loess.statistics,
+                             loess.trace.hat = loess.trace.hat,
+                             loess.cell = loess.cell,
+                             loess.iterations = loess.iterations,
+                             loess.iterTrace = loess.iterTrace,
                              pv.group.vars,
                              pv.n.pctls,
                              pv.precalc,
@@ -571,6 +577,12 @@ calc_obs_pv_boot <- function(data.raw,
                                        data.to.plot = data.to.plot[,paste("tp.pred", state.k, sep = "")],
                                        loess.span = loess.span,
                                        loess.degree = loess.degree,
+                                       loess.surface = loess.surface,
+                                       loess.statistics = loess.statistics,
+                                       loess.trace.hat = loess.trace.hat,
+                                       loess.cell = loess.cell,
+                                       loess.iterations = loess.iterations,
+                                       loess.iterTrace = loess.iterTrace,
                                        CI = CI,
                                        CI.type = CI.type)
       } else if (curve.type == "rcs"){
@@ -625,6 +637,12 @@ calc_obs_pv_boot <- function(data.raw,
                                        data.to.plot = data.to.plot[,paste("tp.pred", state.k, sep = "")],
                                        loess.span = loess.span,
                                        loess.degree = loess.degree,
+                                       loess.surface = loess.surface,
+                                       loess.statistics = loess.statistics,
+                                       loess.trace.hat = loess.trace.hat,
+                                       loess.cell = loess.cell,
+                                       loess.iterations = loess.iterations,
+                                       loess.iterTrace = loess.iterTrace,
                                        CI = CI,
                                        CI.type = CI.type)
       } else if (curve.type == "rcs"){
@@ -765,12 +783,28 @@ calc_pv_aj <- function(person_id.eval, data.mstate, obs.aj, tmat, n.cohort, t, j
 #' @returns A vector of observed event probabilities.
 #'
 #' @noRd
-calc_obs_pv_loess_model <- function(pred, pv, data.to.plot, loess.span, loess.degree, CI, CI.type){
+calc_obs_pv_loess_model <- function(pred, pv, data.to.plot,
+                                    loess.span,
+                                    loess.degree,
+                                    loess.surface,
+                                    loess.statistics,
+                                    loess.trace.hat,
+                                    loess.cell,
+                                    loess.iterations,
+                                    loess.iterTrace,
+                                    CI,
+                                    CI.type){
 
   ### Fit model
   loess.model <- stats::loess(pv ~ pred,
                               span = loess.span,
-                              degree = loess.degree)
+                              degree = loess.degree,
+                              control = stats::loess.control(surface = loess.surface,
+                                                             statistics = loess.statistics,
+                                                             trace.hat = loess.trace.hat,
+                                                             cell = loess.cell,
+                                                             iterations = loess.iterations,
+                                                             iterTrace = loess.iterTrace))
 
   ## Calculate predicted observed probabilities (and confidence intervals if requested using parametric approach)
   ## Note we do not calculate standard errors if confidence interval has been requested using the bootstrap

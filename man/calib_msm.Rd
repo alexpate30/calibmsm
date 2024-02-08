@@ -17,6 +17,12 @@ calib_msm(
   rcs.nk = 3,
   loess.span = 0.75,
   loess.degree = 2,
+  loess.surface = c("interpolate", "direct"),
+  loess.statistics = c("approximate", "exact", "none"),
+  loess.trace.hat = c("exact", "approximate"),
+  loess.cell = 0.2,
+  loess.iterations = 4,
+  loess.iterTrace = FALSE,
   mlr.smoother.type = "sm.ps",
   mlr.ps.int = 4,
   mlr.degree = 3,
@@ -66,6 +72,18 @@ calib_msm(
 \item{loess.span}{Span when curves are estimated using loess smoothers}
 
 \item{loess.degree}{Degree when curves are estimated. using loess smoothers}
+
+\item{loess.surface}{see \code{\link[stats]{loess.control}}}
+
+\item{loess.statistics}{see \code{\link[stats]{loess.control}}}
+
+\item{loess.trace.hat}{see \code{\link[stats]{loess.control}}}
+
+\item{loess.cell}{see \code{\link[stats]{loess.control}}}
+
+\item{loess.iterations}{see \code{\link[stats]{loess.control}}}
+
+\item{loess.iterTrace}{see \code{\link[stats]{loess.control}}}
 
 \item{mlr.smoother.type}{Type of smoothing applied. Takes values \code{s} (see \code{\link[VGAM]{s}}), \code{sm.ps} (see \code{\link[VGAM]{sm.ps}}) or \code{sm.os} (see \code{\link[VGAM]{sm.os}}).}
 

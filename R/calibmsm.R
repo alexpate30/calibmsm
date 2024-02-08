@@ -19,6 +19,12 @@
 #' @param rcs.nk Number of knots when curves are estimated using restricted cubic splines
 #' @param loess.span Span when curves are estimated using loess smoothers
 #' @param loess.degree Degree when curves are estimated. using loess smoothers
+#' @param loess.surface see \code{\link[stats]{loess.control}}
+#' @param loess.statistics see \code{\link[stats]{loess.control}}
+#' @param loess.trace.hat see \code{\link[stats]{loess.control}}
+#' @param loess.cell see \code{\link[stats]{loess.control}}
+#' @param loess.iterations see \code{\link[stats]{loess.control}}
+#' @param loess.iterTrace see \code{\link[stats]{loess.control}}
 #' @param mlr.s.df degrees of freedom of vector spline (see \code{\link[VGAM]{s}})
 #' @param mlr.smoother.type Type of smoothing applied. Takes values `s` (see \code{\link[VGAM]{s}}), `sm.ps` (see \code{\link[VGAM]{sm.ps}}) or `sm.os` (see \code{\link[VGAM]{sm.os}}).
 #' @param mlr.ps.int the number of equally-spaced B spline intervals in the vector spline smoother (see \code{\link[VGAM]{sm.ps}})
@@ -184,6 +190,12 @@ calib_msm <- function(data.mstate,
                      rcs.nk = 3,
                      loess.span = 0.75,
                      loess.degree = 2,
+                     loess.surface = c("interpolate", "direct"),
+                     loess.statistics = c("approximate", "exact", "none"),
+                     loess.trace.hat = c("exact", "approximate"),
+                     loess.cell = 0.2,
+                     loess.iterations = 4,
+                     loess.iterTrace = FALSE,
                      mlr.smoother.type = "sm.ps",
                      mlr.ps.int = 4,
                      mlr.degree = 3,
@@ -559,6 +571,11 @@ calib_msm <- function(data.mstate,
                               rcs.nk = rcs.nk,
                               loess.span = loess.span,
                               loess.degree = loess.degree,
+                              loess.statistics = loess.statistics,
+                              loess.trace.hat = loess.trace.hat,
+                              loess.cell = loess.cell,
+                              loess.iterations = loess.iterations,
+                              loess.iterTrace = loess.iterTrace,
                               pv.group.vars = pv.group.vars,
                               pv.n.pctls = pv.n.pctls,
                               pv.precalc = pv.precalc,

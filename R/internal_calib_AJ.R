@@ -59,8 +59,7 @@ calib_aj <- function(data.mstate,
                             pv.group.vars = pv.group.vars,
                             pv.n.pctls = pv.n.pctls,
                             transitions.out = transitions.out,
-                            valid.transitions = valid.transitions,
-                            boot.format = TRUE)
+                            valid.transitions = valid.transitions)
 
     ### Extract confidence bands
     lower <- apply(boot.mean$t, 2, stats::quantile, probs = alpha, na.rm = TRUE)
@@ -73,7 +72,6 @@ calib_aj <- function(data.mstate,
       output.object.mean[[state]] <- c("mean" = as.numeric(boot.mean$t0[state]),
                                        "mean.lower" = as.numeric(lower[state]),
                                        "mean.upper" = as.numeric(upper[state]))
-
     }
   } else {
 
@@ -87,15 +85,14 @@ calib_aj <- function(data.mstate,
                                         pv.group.vars = pv.group.vars,
                                         pv.n.pctls = pv.n.pctls,
                                         transitions.out = transitions.out,
-                                        valid.transitions = valid.transitions,
-                                        boot.format = FALSE)
+                                        valid.transitions = valid.transitions)
 
     names(output.object.mean) <- paste("state", transitions.out, sep = "")
 
   }
 
   ### Define output object
-  output.object.mean = list("mean" = output.object.mean)
+  output.object.mean <- list("mean" = output.object.mean)
 
   return(output.object.mean)
 
@@ -124,8 +121,7 @@ calib_AJ_boot <- function(data.raw,
                           pv.group.vars,
                           pv.n.pctls,
                           transitions.out,
-                          valid.transitions,
-                          boot.format = TRUE){
+                          valid.transitions){
 
   ### Create object 's' from 's2'
   s <- s2
@@ -330,7 +326,7 @@ calib_AJ_boot <- function(data.raw,
     data.groups <- split(data.raw.lmk.js, split.formula)
 
     ### Get group ids for subgroups
-    group.ids <- sapply(data.groups, function(x) as.numeric(x[,c("id")]))
+    group.ids <- lapply(data.groups, function(x) as.numeric(x[,c("id")]))
 
     ### Calculate pseudo-values in each subgroup
     aj.out <- lapply(group.ids, calc_aj_subgroup)
@@ -362,7 +358,7 @@ calib_AJ_boot <- function(data.raw,
                                     include.lowest = TRUE))
 
       ### Get group ids for subgroups
-      group.ids <- sapply(data.pctls, function(x) as.numeric(x[,c("id")]))
+      group.ids <- lapply(data.pctls, function(x) as.numeric(x[,c("id")]))
 
       ### Calculate pseudo-values in each subgroup
       aj.temp <- lapply(group.ids, calc_aj_subgroup, state.k = state.k)
@@ -420,7 +416,7 @@ calib_AJ_boot <- function(data.raw,
       data.groups.pctls <- unlist(data.groups.pctls, recursive = FALSE)
 
       ### Get group ids for subgroups
-      group.ids <- sapply(data.groups.pctls, function(x) as.numeric(x[,c("id")]))
+      group.ids <- lapply(data.groups.pctls, function(x) as.numeric(x[,c("id")]))
 
       ### Calculate pseudo-values in each subgroup
       aj.temp <- lapply(group.ids, calc_aj_subgroup, state.k = state.k)

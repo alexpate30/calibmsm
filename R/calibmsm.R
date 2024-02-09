@@ -221,20 +221,24 @@ calib_msm <- function(data.mstate,
                      ...){
 
 # rm(list=ls())
+#   rm(list = setdiff(ls(), list("data.raw.lmk.js.normal", "data.pctls.normal")))
 # devtools::load_all()
 #   data("ebmtcal")
 #   data("msebmtcal")
 #   data("tps0")
 #   data("tps100")
-#   calib.type <- "blr"
+# calib.type <- "aj"
 # data.raw <- ebmtcal
 # data.mstate <- msebmtcal
 # tp.pred <- tps0 |>
 #   subset(j == 1) |>
 #   dplyr::select(paste("pstate", 1:6, sep = ""))
+#
+#
 # j <- 1
 # s <- 0
 # t <- 1826
+#
 # curve.type = "rcs"
 # tp.pred.plot = NULL
 # transitions.out = NULL
@@ -247,7 +251,8 @@ calib_msm <- function(data.mstate,
 # w.max.follow = NULL
 # w.function = NULL
 #
-# CI = 95
+# CI = FALSE
+# # CI = 95
 # CI.R.boot = 2
 # rcs.nk = 3
 # CI.type = "bootstrap"
@@ -256,7 +261,7 @@ calib_msm <- function(data.mstate,
 # loess.span = 1
 # loess.degree = 1
 #
-# pv.group.vars = NULL
+# pv.group.vars = c("year")
 # pv.n.pctls = 2
 #
 # mlr.smoother.type = "sm.ps"
@@ -268,7 +273,16 @@ calib_msm <- function(data.mstate,
 # assess.mean = TRUE
 # #
 # pv.precalc = NULL
+# str(data.raw)
+#
+# pv.group.vars = c("x12")
+# tp.pred <- readRDS("P:/Documents/aaa_incline/tp.pred.reduc.rds")
+# data.raw <- readRDS("P:/Documents/aaa_incline/data.raw.reduc.rds")
+# data.mstate <- readRDS("P:/Documents/aaa_incline/data.mstate.reduc.rds")
+# t <- 2557
 
+# str(ebmtcal)
+# str(readRDS("P:/Documents/aaa_incline/data.raw.reduc.rds"))
   # calib.type <- "blr"
   #
   # # ## Calculate manual weights
@@ -617,7 +631,7 @@ calib_msm <- function(data.mstate,
                    "s" = s,
                    "t" = t,
                    "calib.type" = calib.type)
-  if (calib.type == "pv"){
+  if (calib.type %in% c("pv", "aj")){
     metadata[["pv.group.vars"]] <- pv.group.vars
     metadata[["pv.n.pctls"]] <- pv.n.pctls
   }
@@ -691,3 +705,10 @@ print.calib_msm <- function(x, ...) {
 
 }
 
+
+#' @export
+print.calib_aj <- function(x, ...) {
+
+  print(x[["mean"]])
+
+}

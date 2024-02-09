@@ -12,6 +12,25 @@ install.packages("calibmsm")
 
 devtools::check(vignettes = FALSE, args = "--no-tests")
 
+rm(list=ls())
+devtools::load_all()
+
+tp.pred.reduc <- readRDS("P:/Documents/aaa_incline/tp.pred.reduc.rds")
+data.raw.reduc <- readRDS("P:/Documents/aaa_incline/data.raw.reduc.rds")
+data.mstate.reduc <- readRDS("P:/Documents/aaa_incline/data.mstate.reduc.rds")
+
+dat.calib.aj <-
+  calib_msm(data.mstate = data.mstate.reduc,
+            data.raw = data.raw.reduc,
+            j=1,
+            s=0,
+            t = 500,
+            tp.pred = tp.pred.reduc,
+            calib.type = "aj",
+            pv.n.pctls = 3,
+            assess.moderate = FALSE,
+            assess.mean = TRUE)
+
 
 rm(list=ls())
 devtools::load_all()
@@ -19,6 +38,48 @@ devtools::load_all()
 tp.pred <- tps0 |>
   dplyr::filter(j == 1) |>
   dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
+
+class(dat.calib.aj)
+dat.calib.aj <-
+  calib_msm(data.mstate = msebmtcal,
+            data.raw = ebmtcal,
+            j=1,
+            s=0,
+            t = 1826,
+            tp.pred = tp.pred,
+            calib.type = "aj",
+            pv.n.pctls = 3,
+            assess.moderate = FALSE,
+            assess.mean = TRUE)
+
+
+dat.calib.aj <-
+  calib_msm(data.mstate = msebmtcal,
+            data.raw = ebmtcal,
+            j=1,
+            s=0,
+            t = 1826,
+            tp.pred = tp.pred,
+            calib.type = "aj",
+            pv.group.vars = c("year"),
+            assess.moderate = FALSE,
+            assess.mean = TRUE)
+
+
+calib_aj(data.mstate = msebmtcal,
+                     data.raw = ebmtcal,
+                     j,
+                     s,
+                     t,
+                     pv.group.vars = NULL,
+                     pv.n.pctls = NULL,
+                     CI = FALSE,
+                     CI.type = 'bootstrap',
+                     CI.R.boot = NULL,
+                     CI.seed = 1,
+                     transitions.out = NULL,
+                     valid.transitions)
+
 
 
 dat.calib.blr <-

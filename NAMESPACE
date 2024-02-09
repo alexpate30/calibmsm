@@ -2,6 +2,7 @@
 
 S3method(plot,calib_mlr)
 S3method(plot,calib_msm)
+S3method(print,calib_aj)
 S3method(print,calib_msm)
 S3method(summary,calib_msm)
 export(calc_weights)

@@ -126,6 +126,9 @@ calib_AJ_boot <- function(data.raw,
   ### Create object 's' from 's2'
   s <- s2
 
+  ###
+  ### Apply bootstrapping
+
   ### Create bootstrapped dataset
   data.raw.boot <- data.raw[indices, ]
 
@@ -134,20 +137,9 @@ calib_AJ_boot <- function(data.raw,
   data.raw.boot$id2 <- 1:nrow(data.raw.boot)
 
   ### Create bootstrapped data.mstate (we replicate the choice of patients that was chosen in data.raw)
-  data.mstate.boot <-
-    do.call("rbind",
-            lapply(1:nrow(data.raw.boot),
-                   function(x) {
-                     base::subset(data.mstate, id == data.raw.boot$id[x]) |>
-                       dplyr::mutate(id2 = data.raw.boot$id2[x])
-                   }
-            )
-    )
+  data.mstate.boot <- apply_bootstrap_msdata(data.mstate = data.mstate, indices = indices)
 
-  ###
-  ### Apply bootstrapping and landmarking
-
-  ### Extract transition matrix from msdata object
+  ### Extract transition matrix from original msdata object, as this will have been lost when bootstrapping
   tmat <- attributes(data.mstate)$trans
 
   ### Apply attribute tmat to the bootstrapped data.mstate dataset
@@ -163,7 +155,10 @@ calib_AJ_boot <- function(data.raw,
   data.mstate <- data.mstate.boot
   rm(data.raw.boot, data.mstate.boot)
 
-  ### For calib_pv, we need to apply landmarking to both data.raw and data.mstate
+  ###
+  ### Apply landmarking
+
+  ### For calib_aj, we need to apply landmarking to both data.raw and data.mstate
   ### We model the pseudo-values on the predicted transition probabilities in the bootstrapped data.raw dataset
   ### However the calculation of the pseudo-values must be done in the bootstrapped data.mstate dataset
 
@@ -286,7 +281,7 @@ calib_AJ_boot <- function(data.raw,
     ### Extract predicted risks in subgroup
     pred <- data.raw.lmk.js[data.raw.lmk.js$id %in% subset.ids, ]
 
-    ### Calculate the difference netween observed from AJ and mean predicted risk
+    ### Calculate the difference between observed from AJ and mean predicted risk
     calib.aj <- obs.aj[paste("pstate", valid.transitions, sep = "")] - colMeans(pred[, paste("tp.pred", valid.transitions, sep = "")])
     if (!is.null(state.k)){
       calib.aj <- calib.aj[paste("pstate", state.k, sep = "")]

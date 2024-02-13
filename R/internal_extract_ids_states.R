@@ -116,3 +116,35 @@ identify_valid_transitions <- function(data.raw, data.mstate, j, s, t){
   return(valid.transitions)
 
 }
+
+
+#' Apply bootstrapping to a dataset of class `msdata`
+#'
+#' @description
+#' Apply bootstrapping to datasets of class `msdata` (i.e. `data.mstate`). This is non-trivial
+#' because there is more than one row per individual, and a new `id` variable `id2` must be
+#' assigned.
+#'
+#' @noRd
+apply_bootstrap_msdata <- function(data.mstate, indices){
+
+  ### Break up data.mstate by id
+  data.mstate.list <- split(data.mstate, data.mstate$id)
+
+  ### Extract the relevant list elements based on id
+  data.mstate.boot <- lapply(1:length(indices),
+                             function(x) {
+                               data.frame(data.mstate.list[[indices[x]]], "id2" = x)
+                             }
+  )
+  names(data.mstate.boot) <- names(data.mstate.list)
+
+  ### Combine into a single dataset and give appropriate class
+  data.mstate.boot <- do.call("rbind", data.mstate.boot)
+  rownames(data.mstate.boot) <- NULL
+  class(data.mstate.boot) <- c("msdata", "data.frame")
+
+  ### Return
+  return(data.mstate.boot)
+
+}

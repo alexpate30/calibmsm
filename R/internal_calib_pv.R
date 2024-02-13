@@ -235,6 +235,9 @@ calc_obs_pv_boot <- function(data.raw,
   ### The following steps will calculate the pseudo-values before fitting the calibration model
   if (is.null(pv.precalc)){
 
+    ###
+    ### Apply bootstrapping
+
     ### Create bootstrapped dataset
     data.raw.boot <- data.raw[indices, ]
 
@@ -243,20 +246,9 @@ calc_obs_pv_boot <- function(data.raw,
     data.raw.boot$id2 <- 1:nrow(data.raw.boot)
 
     ### Create bootstrapped data.mstate (we replicate the choice of patients that was chosen in data.raw)
-    data.mstate.boot <-
-      do.call("rbind",
-              lapply(1:nrow(data.raw.boot),
-                     function(x) {
-                       base::subset(data.mstate, id == data.raw.boot$id[x]) |>
-                         dplyr::mutate(id2 = data.raw.boot$id2[x])
-                     }
-              )
-      )
+    data.mstate.boot <- apply_bootstrap_msdata(data.mstate = data.mstate, indices = indices)
 
-    ###
-    ### Apply bootstrapping and landmarking
-
-    ### Extract transition matrix from msdata object
+    ### Extract transition matrix from original msdata object, as this will have been lost when bootstrapping
     tmat <- attributes(data.mstate)$trans
 
     ### Apply attribute tmat to the bootstrapped data.mstate dataset
@@ -271,6 +263,9 @@ calc_obs_pv_boot <- function(data.raw,
     data.raw <- data.raw.boot
     data.mstate <- data.mstate.boot
     rm(data.raw.boot, data.mstate.boot)
+
+    ###
+    ### Apply landmarking
 
     ### For calib_pv, we need to apply landmarking to both data.raw and data.mstate
     ### We model the pseudo-values on the predicted transition probabilities in the bootstrapped data.raw dataset

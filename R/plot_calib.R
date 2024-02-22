@@ -132,7 +132,7 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
       state.k <- assessed.transitions[k]
 
       ### Create the plots
-      plots.list[[k]] <- ggplot2::ggplot(data = plot.data.k |> dplyr::arrange(pred) |> dplyr::select(id, pred, obs)) |> dplyr::rename(value = obs) +
+      plots.list[[k]] <- ggplot2::ggplot(data = plot.data.k |> dplyr::arrange(pred) |> dplyr::select(id, pred, obs) |> dplyr::rename(value = obs)) +
         ggplot2::geom_line(ggplot2::aes(x = pred, y = value), colour = "red") +
         ggplot2::geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
         ggplot2::xlim(c(min(min(plot.data.k$obs), min(plot.data.k$pred)),

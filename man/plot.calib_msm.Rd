@@ -51,7 +51,7 @@
 
 \item{inclu.titles}{Whether to include titles for each individual calibration plots}
 
-\item{titles}{Vector of titles for each calibration plot. Defaults to "State k".}
+\item{titles}{Vector of titles for the calibration plots. Defaults to "State k" for each plot.}
 
 \item{axis.titles.x}{Position of plots for which to include title on x-axis}
 

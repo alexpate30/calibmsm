@@ -19,6 +19,7 @@ using \code{\link{calib_msm}}.}
   marg.rug = FALSE,
   marg.rug.transparency = 0.1,
   inclu.titles = TRUE,
+  titles = NULL,
   axis.titles.x = NULL,
   axis.titles.text.x = "Predicted risk",
   axis.titles.y = NULL,
@@ -53,6 +54,8 @@ using \code{\link{calib_msm}}.}
 
 \item{inclu.titles}{Whether to include titles for each individual calibration plots}
 
+\item{titles}{Vector of titles for the calibration plots. Defaults to "State k" for each plot.}
+
 \item{axis.titles.x}{Position of plots for which to include title on x-axis}
 
 \item{axis.titles.text.x}{x-axis title}
@@ -62,8 +65,6 @@ using \code{\link{calib_msm}}.}
 \item{axis.titles.text.y}{y-axis title}
 
 \item{size}{Size of text in plot}
-
-\item{titles}{Vector of titles for each calibration plot. Defaults to "State k".}
 }
 \value{
 If \code{combine = TRUE}, returns an object of classes \code{gg}, \code{ggplot}, and \code{ggarrange},

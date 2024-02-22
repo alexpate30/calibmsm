@@ -15,7 +15,7 @@
 #' @param marg.rug Whether to produce marginal rug plots TRUE/FALSE
 #' @param marg.rug.transparency Degree of transparency for the density rug plot along each axis
 #' @param inclu.titles Whether to include titles for each individual calibration plots
-#' @param titles Vector of titles for each calibration plot. Defaults to "State k".
+#' @param titles Vector of titles for the calibration plots. Defaults to "State k" for each plot.
 #' @param axis.titles.x Position of plots for which to include title on x-axis
 #' @param axis.titles.text.x x-axis title
 #' @param axis.titles.y Position of plots for which to include title on y-axis
@@ -301,7 +301,7 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
 #' @param marg.rug Whether to produce marginal rug plots TRUE/FALSE
 #' @param marg.rug.transparency Degree of transparency for the density rug plot along each axis
 #' @param inclu.titles Whether to include titles for each individual calibration plots
-#' @param titles Vector of titles for each calibration plot. Defaults to "State k".
+#' @param titles Vector of titles for the calibration plots. Defaults to "State k" for each plot.
 #' @param axis.titles.x Position of plots for which to include title on x-axis
 #' @param axis.titles.text.x x-axis title
 #' @param axis.titles.y Position of plots for which to include title on y-axis
@@ -349,7 +349,7 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
 plot.calib_mlr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, point.size = 0.5, transparency.plot = 0.25,
                            marg.density = FALSE, marg.density.size = 5, marg.density.type = "density",
                            marg.rug = FALSE, marg.rug.transparency = 0.1,
-                           inclu.titles = TRUE,
+                           inclu.titles = TRUE, titles = NULL,
                            axis.titles.x = NULL, axis.titles.text.x = "Predicted risk",
                            axis.titles.y = NULL, axis.titles.text.y = "Observed risk",
                            size = 12){

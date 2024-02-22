@@ -70,7 +70,18 @@ estimated using BLR-IPCW and pseudo-value approaches.</p>
 <span>  marg.density.size <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  marg.density.type <span class="op">=</span> <span class="st">"density"</span>,</span>
 <span>  marg.rug <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  marg.rug.transparency <span class="op">=</span> <span class="fl">0.1</span></span>
+<span>  marg.rug.transparency <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>  inclu.titles <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  titles <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  axis.titles.x <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  axis.titles.text.x <span class="op">=</span> <span class="st">"Predicted risk"</span>,</span>
+<span>  axis.titles.y <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  axis.titles.text.y <span class="op">=</span> <span class="st">"Observed risk"</span>,</span>
+<span>  inclu.legend <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  legend.seperate <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  legend.title <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  legend.position <span class="op">=</span> <span class="st">"bottom"</span>,</span>
+<span>  size <span class="op">=</span> <span class="fl">12</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -115,6 +126,50 @@ estimated using BLR-IPCW and pseudo-value approaches.</p>
 <dt>marg.rug.transparency</dt>
 <dd><p>Degree of transparency for the density rug plot along each axis</p></dd>
 
+
+<dt>inclu.titles</dt>
+<dd><p>Whether to include titles for each individual calibration plots</p></dd>
+
+
+<dt>titles</dt>
+<dd><p>Vector of titles for each calibration plot. Defaults to "State k".</p></dd>
+
+
+<dt>axis.titles.x</dt>
+<dd><p>Position of plots for which to include title on x-axis</p></dd>
+
+
+<dt>axis.titles.text.x</dt>
+<dd><p>x-axis title</p></dd>
+
+
+<dt>axis.titles.y</dt>
+<dd><p>Position of plots for which to include title on y-axis</p></dd>
+
+
+<dt>axis.titles.text.y</dt>
+<dd><p>y-axis title</p></dd>
+
+
+<dt>inclu.legend</dt>
+<dd><p>Whether to produce a legend</p></dd>
+
+
+<dt>legend.seperate</dt>
+<dd><p>= Whether to include legend in plot (FALSE) or as a seperate object (TRUE)</p></dd>
+
+
+<dt>legend.title</dt>
+<dd><p>Title of legend</p></dd>
+
+
+<dt>legend.position</dt>
+<dd><p>Position of legend</p></dd>
+
+
+<dt>size</dt>
+<dd><p>Size of text in plot</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -146,7 +201,7 @@ class <code>list</code>, each element containing an object of class <code>gg</co
 <span class="r-in"><span></span></span>
 <span class="r-in"><span> <span class="co"># These are then plotted</span></span></span>
 <span class="r-in"><span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat.calib</span>, combine <span class="op">=</span> <span class="cn">TRUE</span>, nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="plot.calib_msm-1.png" alt="" width="700" height="433"></span>
+<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in UseMethod("rename"):</span> no applicable method for 'rename' applied to an object of class "c('gg', 'ggplot')"</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

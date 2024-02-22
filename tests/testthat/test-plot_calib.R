@@ -25,10 +25,7 @@ test_that("check plot.calib_msm output (j = 1, s = 0)", {
 
   ## Plot calibration plots and run tests with marginal density plots
   plot.object <- plot(dat.calib.blr, combine = TRUE, nrow = 2, ncol = 3, marg.density = TRUE, marg.density.size = 1)
-  # grid::grid.draw(plot.object)
-  # expect_length(plot.object, 1)
-  # length(plot.object)
-  # str(plot.object)
+  expect_length(plot.object, 6)
   expect_equal(class(plot.object), c("gtable", "gTree", "grob", "gDesc"))
 
   ## Plot calibration plots and run tests with marginal rug plots

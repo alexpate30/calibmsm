@@ -28,8 +28,6 @@ dat.calib.blr <-
             tp.pred = tp.pred,
             calib.type = "blr",
             curve.type = "loess",
-            CI = 95,
-            CI.R.boot = 5,
             assess.moderate = TRUE,
             assess.mean = FALSE)
 

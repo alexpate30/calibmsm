@@ -139,7 +139,6 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
                         max(max(plot.data.k$obs), max(plot.data.k$pred)))) +
         ggplot2::ylim(c(min(min(plot.data.k$obs), min(plot.data.k$pred)),
                         max(max(plot.data.k$obs), max(plot.data.k$pred)))) +
-        ggplot2::theme(legend.position = "none") +
         ggplot2::ggtitle(paste("State ", state.k, sep = "")) +
         ggplot2::labs(x = NULL, y = NULL)
 
@@ -190,7 +189,14 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
       legend.save <- ggpubr::get_legend(plots.list[[k]], position = legend.position)
     }
 
+    ## Remove legend if requested to do so.
+    if (inclu.legend == FALSE){
+      plots.list[[k]] <- plots.list[[k]] +
+        ggplot2::theme(legend.position = "none")
+    }
+
     ### If marginal density plot has been requested add an invisible scatter plot on which to base this
+    ### We also remove legend forcefully. When adding marginal density plots, the legend must be added using an arrangeGrob.
     if (marg.density == TRUE){
       ### IF CI == TRUE want to only extract calibration line for the density plot
       if (CI == TRUE){
@@ -215,11 +221,6 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
 
     } else if (marg.rug == TRUE){
 
-      ## Remove legend if requested
-      if (inclu.legend == FALSE){
-        plots.list[[k]] <- plots.list[[k]] +
-          ggplot2::theme(legend.position = "none")
-      }
       ## Add the marginal rug plot
       if (CI == TRUE){
         plots.list[[k]] <- plots.list[[k]] +
@@ -231,6 +232,7 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
       }
 
     }
+
   }
 
   ### Assign nrow and ncol if not provided by user
@@ -254,7 +256,7 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
           ## Add legend as seperate list element
           plots.list <- list("plots" = plots.list, "legend" = legend.save)
         }
-      } else {
+      } else if (inclu.legend == FALSE){
         plots.list <- ggpubr::ggarrange(plotlist = plots.list, nrow = nrow, ncol = ncol, legend = "none")
       }
     } else if (marg.density == TRUE){
@@ -264,13 +266,25 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
                                                                         ncol = ncol,
                                                                         byrow = TRUE),
                                            top = NULL)
-      ### Marginal density plots require legend to be added manually, because otherwise you get the scattre plo twhich ggMarginal relies on in the
-      if (inclu.legend == TRUE){
+      ### Marginal density plots require legend to be added manually, because otherwise you get the scatter plot which ggMarginal relies on.
+      ### We only add legend if CI == TRUE, as there is no legend when CI == FALSE
+      if (inclu.legend == TRUE & !isFALSE(CI)){
         if (legend.seperate == FALSE){
           plots.list <- gridExtra::arrangeGrob(plots.list, legend.save, nrow = 2, heights = c(15, 1))
         } else {
           plots.list <- list("plots" = plots.list, "legend" = legend.save)
         }
+      }
+    }
+  } else if (combine == FALSE){
+    ### If combine == FALSE, but marginal.density == TRUE, need to manually legend for each calibration plot legends are requested
+    if (marg.density == TRUE & inclu.legend == TRUE & !isFALSE(CI)){
+      if (legend.seperate == FALSE){
+        for (k in 1:length(assessed.transitions)){
+          plots.list[[k]] <- gridExtra::arrangeGrob(plots.list[[k]], legend.save, nrow = 2, heights = c(15, 1))
+        }
+      } else if (legend.seperate == TRUE){
+        plots.list <- list("plots" = plots.list, "legend" = legend.save)
       }
     }
   }

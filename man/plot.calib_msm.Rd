@@ -14,7 +14,18 @@
   marg.density.size = 5,
   marg.density.type = "density",
   marg.rug = FALSE,
-  marg.rug.transparency = 0.1
+  marg.rug.transparency = 0.1,
+  inclu.titles = TRUE,
+  titles = NULL,
+  axis.titles.x = NULL,
+  axis.titles.text.x = "Predicted risk",
+  axis.titles.y = NULL,
+  axis.titles.text.y = "Observed risk",
+  inclu.legend = TRUE,
+  legend.seperate = FALSE,
+  legend.title = NULL,
+  legend.position = "bottom",
+  size = 12
 )
 }
 \arguments{
@@ -37,6 +48,28 @@
 \item{marg.rug}{Whether to produce marginal rug plots TRUE/FALSE}
 
 \item{marg.rug.transparency}{Degree of transparency for the density rug plot along each axis}
+
+\item{inclu.titles}{Whether to include titles for each individual calibration plots}
+
+\item{titles}{Vector of titles for each calibration plot. Defaults to "State k".}
+
+\item{axis.titles.x}{Position of plots for which to include title on x-axis}
+
+\item{axis.titles.text.x}{x-axis title}
+
+\item{axis.titles.y}{Position of plots for which to include title on y-axis}
+
+\item{axis.titles.text.y}{y-axis title}
+
+\item{inclu.legend}{Whether to produce a legend}
+
+\item{legend.seperate}{= Whether to include legend in plot (FALSE) or as a seperate object (TRUE)}
+
+\item{legend.title}{Title of legend}
+
+\item{legend.position}{Position of legend}
+
+\item{size}{Size of text in plot}
 }
 \value{
 If \code{combine = TRUE}, returns an object of classes \code{gg}, \code{ggplot}, and \code{ggarrange},

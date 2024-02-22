@@ -15,6 +15,78 @@ devtools::check(vignettes = FALSE, args = "--no-tests")
 rm(list=ls())
 devtools::load_all()
 
+tp.pred <- tps100 |>
+  dplyr::filter(j == 1) |>
+  dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
+
+dat.calib.blr <-
+  calib_msm(data.mstate = msebmtcal,
+            data.raw = ebmtcal,
+            j=1,
+            s=100,
+            t = 1826,
+            tp.pred = tp.pred,
+            calib.type = "blr",
+            curve.type = "loess",
+            CI = 95,
+            CI.R.boot = 5,
+            assess.moderate = TRUE,
+            assess.mean = FALSE)
+
+plot(dat.calib.blr, ncol = 4, nrow = 1)
+plot(dat.calib.blr, ncol = 4, nrow = 1, titles = c("egg1", "egg2", "egg3", "egg4"))
+plot(dat.calib.blr, ncol = 4, nrow = 1, inclu.legend = FALSE)
+plot(dat.calib.blr, ncol = 4, nrow = 1, axis.titles.y = 1)
+plot(dat.calib.blr, ncol = 4, nrow = 1, axis.titles.y = 1, axis.titles.text.y = "TEST")
+
+plots <- plot(dat.calib.blr, ncol = 5, nrow = 1, axis.titles.y = 1, legend.seperate = TRUE)[["plots"]]
+legend <- plot(dat.calib.blr, ncol = 5, nrow = 1, axis.titles.y = 1, legend.seperate = TRUE)[["legend"]]
+gridExtra::grid.arrange(plots, legend, nrow = 2, heights = c(20, 1))
+
+test <- plot(dat.calib.blr, ncol = 4, nrow = 1, marg.density = TRUE, axis.titles.y = 1, legend.title = "TESTTITLE")
+png("workflow/figures/margdens.png", width = 20, height = 5, unit = "in", res = 300)
+grid::grid.draw(test)
+dev.off()
+
+
+
+dat.calib.mlr <-
+  calib_msm(data.mstate = msebmtcal,
+            data.raw = ebmtcal,
+            j=1,
+            s=100,
+            t = 1826,
+            tp.pred = tp.pred,
+            calib.type = "mlr",
+            assess.moderate = TRUE,
+            assess.mean = FALSE)
+
+plot(dat.calib.mlr, ncol = 4, nrow = 1)
+plot(dat.calib.mlr, ncol = 4, nrow = 1, axis.titles.y = 1)
+plot(dat.calib.mlr, ncol = 4, nrow = 1, axis.titles.x = 1)
+plot(dat.calib.mlr, ncol = 4, nrow = 1, axis.titles.y = 1, axis.titles.text.y = "TEST")
+
+
+tp.pred <- tps100 |>
+  dplyr::filter(j == 1) |>
+  dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
+
+dat.calib.pv <-
+  calib_msm(data.mstate = msebmtcal,
+            data.raw = ebmtcal,
+            j=1,
+            s=100,
+            t = 1826,
+            tp.pred = tp.pred,
+            calib.type = "pv",
+            curve.type = "loess",
+            CI = 95,
+            CI.type = "parametric",
+            assess.moderate = FALSE,
+            assess.mean = TRUE)
+
+
+
 tp.pred.reduc <- readRDS("P:/Documents/aaa_incline/tp.pred.reduc.rds")
 data.raw.reduc <- readRDS("P:/Documents/aaa_incline/data.raw.reduc.rds")
 data.mstate.reduc <- readRDS("P:/Documents/aaa_incline/data.mstate.reduc.rds")

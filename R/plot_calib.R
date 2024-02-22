@@ -14,6 +14,17 @@
 #' @param marg.density.type What type of marginal plot to show (see \code{\link[ggExtra]{ggMarginal}})
 #' @param marg.rug Whether to produce marginal rug plots TRUE/FALSE
 #' @param marg.rug.transparency Degree of transparency for the density rug plot along each axis
+#' @param inclu.titles Whether to include titles for each individual calibration plots
+#' @param titles Vector of titles for each calibration plot. Defaults to "State k".
+#' @param axis.titles.x Position of plots for which to include title on x-axis
+#' @param axis.titles.text.x x-axis title
+#' @param axis.titles.y Position of plots for which to include title on y-axis
+#' @param axis.titles.text.y y-axis title
+#' @param inclu.legend Whether to produce a legend
+#' @param legend.seperate = Whether to include legend in plot (FALSE) or as a seperate object (TRUE)
+#' @param legend.title Title of legend
+#' @param legend.position Position of legend
+#' @param size Size of text in plot
 #'
 #' @returns If `combine = TRUE`, returns an object of classes `gg`, `ggplot`, and `ggarrange`,
 #' as all ggplots have been combined into one object. If `combine = FALSE`, returns an object of
@@ -44,7 +55,31 @@
 #' @export
 plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
                            marg.density = FALSE, marg.density.size = 5, marg.density.type = "density",
-                           marg.rug = FALSE, marg.rug.transparency = 0.1){
+                           marg.rug = FALSE, marg.rug.transparency = 0.1,
+                           inclu.titles = TRUE, titles = NULL,
+                           axis.titles.x = NULL, axis.titles.text.x = "Predicted risk",
+                           axis.titles.y = NULL, axis.titles.text.y = "Observed risk",
+                           inclu.legend = TRUE, legend.seperate = FALSE, legend.title = NULL, legend.position = "bottom",
+                           size = 12){
+
+  # x <- dat.calib.blr
+  # str(x)
+  #
+  # ncol = 5
+  # nrow = 1
+  # marg.density = FALSE
+  # marg.density.size = 5
+  # marg.density.type = "density"
+  # marg.rug = FALSE
+  # marg.rug.transparency = 0.1
+  # inclu.titles = TRUE
+  # legend.seperate = TRUE
+  # legend.title = NULL
+  # axis.titles.x = NULL
+  # axis.titles.text.x = "Predicted risk"
+  # axis.titles.y = NULL
+  # axis.titles.text.y = "Observed risk"
+  # size = 12
 
 
   ### Extract plot data and relevant metadata
@@ -53,11 +88,13 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
   assessed.transitions <- object.in[["metadata"]][["assessed.transitions"]]
   CI <- object.in[["metadata"]][["CI"]]
 
-  if (CI != FALSE){
-    ### Create list to store plots
-    plots.list <- vector("list", length(assessed.transitions))
+  ### Create list to store plots
+  plots.list <- vector("list", length(assessed.transitions))
 
-    for (k in 1:length(assessed.transitions)){
+  for (k in 1:length(assessed.transitions)){
+
+    if (CI != FALSE){
+
       ### Assign plot data
       plot.data.k <- plot.data[[k]]
 
@@ -79,34 +116,14 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
       plots.list[[k]] <- ggplot2::ggplot(data = plot.data.k.longer |> dplyr::arrange(pred) |> dplyr::select(pred, line.group, value, mapping)) +
         ggplot2::geom_line(ggplot2::aes(x = pred, y = value, group = line.group, color = mapping)) +
         ggplot2::geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
-        ggplot2::xlab("Predicted risk") + ggplot2::ylab("Observed risk") +
         ggplot2::xlim(c(min(min(plot.data.k.longer$value), min(plot.data.k.longer$pred)),
                         max(max(plot.data.k.longer$value), max(plot.data.k.longer$pred)))) +
         ggplot2::ylim(c(min(min(plot.data.k.longer$value), min(plot.data.k.longer$pred)),
                         max(max(plot.data.k.longer$value), max(plot.data.k.longer$pred)))) +
-        ggplot2::ggtitle(paste("State ", state.k, sep = ""))
+        ggplot2::ggtitle(paste("State ", state.k, sep = "")) +
+        ggplot2::labs(x = NULL, y = NULL)
 
-      ### If marginal density plot has been requested add density plot
-      if (marg.density == TRUE){
-        plots.list[[k]] <- plots.list[[k]] +
-          ## Add a geom_point object of the line and set to invisible (scatter plot required for marginal density using ggMarginal)
-          ## Subset to ignore the confidence intervals when doing the density plots
-          ggplot2::geom_point(data = plot.data.k.longer |> dplyr::arrange(pred) |> dplyr::select(pred, line.group, value, mapping) |> subset(line.group == "Calibration"),
-                              ggplot2::aes(x = pred, y = value), col = grDevices::rgb(0, 0, 0, alpha = 0))
-
-        ## Add ggMarginal
-        plots.list[[k]] <- ggExtra::ggMarginal(plots.list[[k]], margins = "x", size = marg.density.size, type = marg.density.type, colour = "red")
-      ### If marginal rug plot has been requested
-      } else if (marg.rug == TRUE){
-        plots.list[[k]] <- plots.list[[k]] +
-          ggplot2::geom_rug(data = plot.data.k.longer |> dplyr::arrange(pred) |> dplyr::select(pred, line.group, value, mapping) |> subset(line.group == "Calibration"),
-                            ggplot2::aes(x = pred, y = value), col = grDevices::rgb(1, 0, 0, alpha = marg.rug.transparency))
-      }
-    }
-  } else if (CI == FALSE){
-    ### Create list to store plots
-    plots.list <- vector("list", length(assessed.transitions))
-    for (k in 1:length(assessed.transitions)){
+    } else if (CI == FALSE){
 
       ### Assign plot data
       plot.data.k <- plot.data[[k]]
@@ -115,31 +132,104 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
       state.k <- assessed.transitions[k]
 
       ### Create the plots
-      plots.list[[k]] <- ggplot2::ggplot(data = plot.data.k |> dplyr::arrange(pred) |> dplyr::select(id, pred, obs)) +
-        ggplot2::geom_line(ggplot2::aes(x = pred, y = obs), colour = "red") +
+      plots.list[[k]] <- ggplot2::ggplot(data = plot.data.k |> dplyr::arrange(pred) |> dplyr::select(id, pred, obs)) |> dplyr::rename(value = obs) +
+        ggplot2::geom_line(ggplot2::aes(x = pred, y = value), colour = "red") +
         ggplot2::geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
-        ggplot2::xlab("Predicted risk") + ggplot2::ylab("Observed risk") +
         ggplot2::xlim(c(min(min(plot.data.k$obs), min(plot.data.k$pred)),
                         max(max(plot.data.k$obs), max(plot.data.k$pred)))) +
         ggplot2::ylim(c(min(min(plot.data.k$obs), min(plot.data.k$pred)),
                         max(max(plot.data.k$obs), max(plot.data.k$pred)))) +
         ggplot2::theme(legend.position = "none") +
-        ggplot2::ggtitle(paste("State ", state.k, sep = ""))
+        ggplot2::ggtitle(paste("State ", state.k, sep = "")) +
+        ggplot2::labs(x = NULL, y = NULL)
 
-      ### If marginal density plot has been requested add density plot
-      if (marg.density == TRUE){
-        plots.list[[k]] <- plots.list[[k]] +
-          ## Add a geom_point object of the line and set to invisible (scatter plot required for marginal density using ggMarginal)
-          ## Subset to ignore the confidence intervals when doing the density plots
-          ggplot2::geom_point(ggplot2::aes(x = pred, y = obs), col = grDevices::rgb(0, 0, 0, alpha = 0))
 
-        ## Add ggMarginal
-        plots.list[[k]] <- ggExtra::ggMarginal(plots.list[[k]], margins = "x", size = marg.density.size, type = marg.density.type, colour = "red")
-        ### If marginal rug plot has been requested
-      } else if (marg.rug == TRUE){
-        plots.list[[k]] <- plots.list[[k]] +
-          ggplot2::geom_rug(ggplot2::aes(x = pred, y = obs), col = grDevices::rgb(1, 0, 0, alpha = marg.rug.transparency))
+    }
+
+    ### Add text size
+    plots.list[[k]] <- plots.list[[k]] +
+      ggplot2::theme(text = ggplot2::element_text(size = size),
+                     legend.text = ggplot2::element_text(size = size))
+
+    ### Add ggtitles if specified
+    if (inclu.titles == TRUE){
+      if (is.null(titles)){
+        plots.list[[k]] <- plots.list[[k]] + ggplot2::ggtitle(paste("State ", state.k, sep = ""))
+      } else {
+        plots.list[[k]] <- plots.list[[k]] + ggplot2::ggtitle(titles[k])
       }
+    }
+
+    ### Add axis titles
+    if (is.null(axis.titles.x)){
+      plots.list[[k]] <- plots.list[[k]] + ggplot2::xlab(axis.titles.text.x)
+    } else if (!is.null(axis.titles.x)){
+      if (k %in% axis.titles.x){
+        plots.list[[k]] <- plots.list[[k]] + ggplot2::xlab(axis.titles.text.x)
+      }
+    }
+
+    if (is.null(axis.titles.y)){
+      plots.list[[k]] <- plots.list[[k]] + ggplot2::ylab(axis.titles.text.y)
+    } else if (!is.null(axis.titles.y)){
+      if (k %in% axis.titles.y){
+        plots.list[[k]] <- plots.list[[k]] + ggplot2::ylab(axis.titles.text.y)
+      }
+    }
+
+    ### Add legend title if specified
+    if (is.null(legend.title)){
+      plots.list[[k]] <- plots.list[[k]] + ggplot2::theme(legend.title = ggplot2::element_blank())
+    } else if (!is.null(legend.title)){
+      plots.list[[k]] <- plots.list[[k]] + ggplot2::theme(legend.title = ggplot2::element_text(size = size, face = "bold")) +
+        ggplot2::guides(color = ggplot2::guide_legend(title = legend.title), lty = ggplot2::guide_legend(title = legend.title))
+    }
+
+    ## Save legend
+    if (k == 1){
+      legend.save <- ggpubr::get_legend(plots.list[[k]], position = legend.position)
+    }
+
+    ### If marginal density plot has been requested add an invisible scatter plot on which to base this
+    if (marg.density == TRUE){
+      ### IF CI == TRUE want to only extract calibration line for the density plot
+      if (CI == TRUE){
+        ## Add scatter
+        plots.list[[k]] <- plots.list[[k]] +
+          ggplot2::geom_point(data = plot.data.k.longer |> subset(mapping == "Calibration"),
+                              ggplot2::aes(x = pred, y = value),
+                              col = grDevices::rgb(0, 0, 0, alpha = 0)) +
+          ## Remove legend
+          ggplot2::theme(legend.position = "none")
+      } else {
+        ## Add scatter
+        plots.list[[k]] <- plots.list[[k]] +
+          ggplot2::geom_point(ggplot2::aes(x = pred, y = value),
+                              col = grDevices::rgb(0, 0, 0, alpha = 0)) +
+          ## Remove legend
+          ggplot2::theme(legend.position = "none")
+      }
+
+      ## Add ggMarginal
+      plots.list[[k]] <- ggExtra::ggMarginal(plots.list[[k]], margins = "x", size = marg.density.size, type = marg.density.type, colour = "red")
+
+    } else if (marg.rug == TRUE){
+
+      ## Remove legend if requested
+      if (inclu.legend == FALSE){
+        plots.list[[k]] <- plots.list[[k]] +
+          ggplot2::theme(legend.position = "none")
+      }
+      ## Add the marginal rug plot
+      if (CI == TRUE){
+        plots.list[[k]] <- plots.list[[k]] +
+          ggplot2::geom_rug(data = plot.data.k.longer |> subset(mapping == "Calibration"),
+                            ggplot2::aes(x = pred, y = value), col = grDevices::rgb(1, 0, 0, alpha = marg.rug.transparency))
+      } else {
+        plots.list[[k]] <- plots.list[[k]] +
+          ggplot2::geom_rug(ggplot2::aes(x = pred, y = value), col = grDevices::rgb(1, 0, 0, alpha = marg.rug.transparency))
+      }
+
     }
   }
 
@@ -154,14 +244,34 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
   ### Combine plots into single ggplot
   if (combine == TRUE){
     if (marg.density == FALSE){
-      plots.list <- ggpubr::ggarrange(plotlist = plots.list, nrow = nrow, ncol = ncol, common.legend = TRUE)
+      if (inclu.legend == TRUE){
+        if (legend.seperate == FALSE){
+          ## Combine with common legend
+          plots.list <- ggpubr::ggarrange(plotlist = plots.list, nrow = nrow, ncol = ncol, common.legend = TRUE, legend = legend.position)
+        } else {
+          ## Combine without legend
+          plots.list <- ggpubr::ggarrange(plotlist = plots.list, nrow = nrow, ncol = ncol, legend = "none")
+          ## Add legend as seperate list element
+          plots.list <- list("plots" = plots.list, "legend" = legend.save)
+        }
+      } else {
+        plots.list <- ggpubr::ggarrange(plotlist = plots.list, nrow = nrow, ncol = ncol, legend = "none")
+      }
     } else if (marg.density == TRUE){
-      plots.list <- gridExtra::marrangeGrob(grobs = plots.list,
-                                            layout_matrix = base::matrix(base::seq_len(nrow*ncol),
-                                                                         nrow = nrow,
-                                                                         ncol = ncol,
-                                                                         byrow = TRUE),
-                                            top = NULL)
+      plots.list <- gridExtra::arrangeGrob(grobs = plots.list,
+                                           layout_matrix = base::matrix(base::seq_len(nrow*ncol),
+                                                                        nrow = nrow,
+                                                                        ncol = ncol,
+                                                                        byrow = TRUE),
+                                           top = NULL)
+      ### Marginal density plots require legend to be added manually, because otherwise you get the scattre plo twhich ggMarginal relies on in the
+      if (inclu.legend == TRUE){
+        if (legend.seperate == FALSE){
+          plots.list <- gridExtra::arrangeGrob(plots.list, legend.save, nrow = 2, heights = c(15, 1))
+        } else {
+          plots.list <- list("plots" = plots.list, "legend" = legend.save)
+        }
+      }
     }
   }
 
@@ -183,12 +293,20 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
 #' @param combine Whether to combine into one plot using ggarrange, or return as a list of individual plots
 #' @param ncol Number of columns for combined calibration plot
 #' @param nrow Number of rows for combined calibration plot
-#' @param transparency.plot Degree of transparency for the calibration scatter plot
+#' @param point.size Size of points in scatter plot
+#' @param transparency.plot Degree of transparency for points in the calibration scatter plot
 #' @param marg.density Whether to produce marginal density plots TRUE/FALSE
 #' @param marg.density.size Size of the main plot relative to the density plots (see \code{\link[ggExtra]{ggMarginal}})
 #' @param marg.density.type What type of marginal plot to show (see \code{\link[ggExtra]{ggMarginal}})
 #' @param marg.rug Whether to produce marginal rug plots TRUE/FALSE
 #' @param marg.rug.transparency Degree of transparency for the density rug plot along each axis
+#' @param inclu.titles Whether to include titles for each individual calibration plots
+#' @param titles Vector of titles for each calibration plot. Defaults to "State k".
+#' @param axis.titles.x Position of plots for which to include title on x-axis
+#' @param axis.titles.text.x x-axis title
+#' @param axis.titles.y Position of plots for which to include title on y-axis
+#' @param axis.titles.text.y y-axis title
+#' @param size Size of text in plot
 #'
 #' @returns If `combine = TRUE`, returns an object of classes `gg`, `ggplot`, and `ggarrange`,
 #' as all ggplots have been combined into one object. If `combine = FALSE`, returns an object of
@@ -228,9 +346,13 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
 #'
 #' @importFrom graphics plot
 #' @export
-plot.calib_mlr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, transparency.plot = 0.25,
+plot.calib_mlr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, point.size = 0.5, transparency.plot = 0.25,
                            marg.density = FALSE, marg.density.size = 5, marg.density.type = "density",
-                           marg.rug = FALSE, marg.rug.transparency = 0.1){
+                           marg.rug = FALSE, marg.rug.transparency = 0.1,
+                           inclu.titles = TRUE,
+                           axis.titles.x = NULL, axis.titles.text.x = "Predicted risk",
+                           axis.titles.y = NULL, axis.titles.text.y = "Observed risk",
+                           size = 12){
 
   ### Extract plot data and relevant metadata
   object.in <- x
@@ -249,13 +371,40 @@ plot.calib_mlr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, tra
 
     ### Create the plots
     plots.list[[k]] <- ggplot2::ggplot(data = plot.data.k |> dplyr::arrange(pred) |>  dplyr::select(id, pred, obs)) +
-      ggplot2::geom_point(ggplot2::aes(x = pred, y = obs), color = "red", alpha = transparency.plot, size = 0.5) +
+      ggplot2::geom_point(ggplot2::aes(x = pred, y = obs), color = "red", alpha = transparency.plot, size = point.size) +
       ggplot2::geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
-      ggplot2::xlab("Predicted risk") + ggplot2::ylab("Observed risk") +
       ggplot2::xlim(c(0, max(plot.data.k$pred))) +
       ggplot2::ylim(c(min(plot.data.k$obs), max(plot.data.k$obs))) +
       ggplot2::theme(legend.position = "none") +
-      ggplot2::ggtitle(paste("State ", state.k, sep = ""))
+      ggplot2::labs(x = NULL, y = NULL) +
+      ggplot2::theme(text = ggplot2::element_text(size = size),
+                     legend.text = ggplot2::element_text(size = size))
+
+    ### Add ggtitles if specified
+    if (inclu.titles == TRUE){
+      if (is.null(titles)){
+        plots.list[[k]] <- plots.list[[k]] + ggplot2::ggtitle(paste("State ", state.k, sep = ""))
+      } else {
+        plots.list[[k]] <- plots.list[[k]] + ggplot2::ggtitle(titles[k])
+      }
+    }
+
+    ### Add axis titles
+    if (is.null(axis.titles.x)){
+      plots.list[[k]] <- plots.list[[k]] + ggplot2::xlab(axis.titles.text.x)
+    } else if (!is.null(axis.titles.x)){
+      if (k %in% axis.titles.x){
+        plots.list[[k]] <- plots.list[[k]] + ggplot2::xlab(axis.titles.text.x)
+      }
+    }
+
+    if (is.null(axis.titles.y)){
+      plots.list[[k]] <- plots.list[[k]] + ggplot2::ylab(axis.titles.text.y)
+    } else if (!is.null(axis.titles.y)){
+      if (k %in% axis.titles.y){
+        plots.list[[k]] <- plots.list[[k]] + ggplot2::ylab(axis.titles.text.y)
+      }
+    }
 
     ### If marginal density plot has been requested add density plot
     if (marg.density == TRUE){
@@ -287,12 +436,12 @@ plot.calib_mlr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, tra
     if (marg.density == FALSE){
       plots.list <- ggpubr::ggarrange(plotlist = plots.list, nrow = nrow, ncol = ncol, common.legend = TRUE)
     } else if (marg.density == TRUE){
-      plots.list <- gridExtra::marrangeGrob(grobs = plots.list,
-                                            layout_matrix = base::matrix(base::seq_len(nrow*ncol),
-                                                                         nrow = nrow,
-                                                                         ncol = ncol,
-                                                                         byrow = TRUE),
-                                            top = NULL)
+      plots.list <- gridExtra::arrangeGrob(grobs = plots.list,
+                                           layout_matrix = base::matrix(base::seq_len(nrow*ncol),
+                                                                        nrow = nrow,
+                                                                        ncol = ncol,
+                                                                        byrow = TRUE),
+                                           top = NULL)
     }
   }
 

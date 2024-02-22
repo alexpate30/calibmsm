@@ -3,3 +3,5 @@ PACKAGE TO DO LIST:
 - Add full testing suite for new functions.
 - Validation of CSH (big task, for future). Based on predRupdate
 - Add confidence intervals for MLR-IPCW mean calibration
+- Ran into an issue where curve.type = "loess" wasn't working for calib.type = "pv" when using a large dataset, and using pv.precalc.
+Weidly it was working for calib.type = "blr"" and curve.type = "loess" for the same size dataset. Thought it was possibly to do with this: https://stackoverflow.com/questions/13115241/plotting-loess-with-standard-errors-in-r-causes-integer-overflow. Actually, this makes sense, because the error is when se = TRUE, which is only the case for curve.type = "pv" and the parametric confidence intervals. The solution is to split predictions up into groups and go from there. Size of 50000 seems to be sufficiently small.

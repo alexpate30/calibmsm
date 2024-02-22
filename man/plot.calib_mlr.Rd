@@ -11,12 +11,19 @@ using \code{\link{calib_msm}}.}
   combine = TRUE,
   ncol = NULL,
   nrow = NULL,
+  point.size = 0.5,
   transparency.plot = 0.25,
   marg.density = FALSE,
   marg.density.size = 5,
   marg.density.type = "density",
   marg.rug = FALSE,
-  marg.rug.transparency = 0.1
+  marg.rug.transparency = 0.1,
+  inclu.titles = TRUE,
+  axis.titles.x = NULL,
+  axis.titles.text.x = "Predicted risk",
+  axis.titles.y = NULL,
+  axis.titles.text.y = "Observed risk",
+  size = 12
 )
 }
 \arguments{
@@ -30,7 +37,9 @@ using \code{\link{calib_msm}}.}
 
 \item{nrow}{Number of rows for combined calibration plot}
 
-\item{transparency.plot}{Degree of transparency for the calibration scatter plot}
+\item{point.size}{Size of points in scatter plot}
+
+\item{transparency.plot}{Degree of transparency for points in the calibration scatter plot}
 
 \item{marg.density}{Whether to produce marginal density plots TRUE/FALSE}
 
@@ -41,6 +50,20 @@ using \code{\link{calib_msm}}.}
 \item{marg.rug}{Whether to produce marginal rug plots TRUE/FALSE}
 
 \item{marg.rug.transparency}{Degree of transparency for the density rug plot along each axis}
+
+\item{inclu.titles}{Whether to include titles for each individual calibration plots}
+
+\item{axis.titles.x}{Position of plots for which to include title on x-axis}
+
+\item{axis.titles.text.x}{x-axis title}
+
+\item{axis.titles.y}{Position of plots for which to include title on y-axis}
+
+\item{axis.titles.text.y}{y-axis title}
+
+\item{size}{Size of text in plot}
+
+\item{titles}{Vector of titles for each calibration plot. Defaults to "State k".}
 }
 \value{
 If \code{combine = TRUE}, returns an object of classes \code{gg}, \code{ggplot}, and \code{ggarrange},

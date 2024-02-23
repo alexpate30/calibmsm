@@ -9,22 +9,22 @@
 #' @param combine Whether to combine into one plot using ggarrange, or return as a list of individual plots
 #' @param ncol Number of columns for combined calibration plot
 #' @param nrow Number of rows for combined calibration plot
+#' @param size.text Size of text in plot
 #' @param marg.density Whether to produce marginal density plots TRUE/FALSE
 #' @param marg.density.size Size of the main plot relative to the density plots (see \code{\link[ggExtra]{ggMarginal}})
 #' @param marg.density.type What type of marginal plot to show (see \code{\link[ggExtra]{ggMarginal}})
 #' @param marg.rug Whether to produce marginal rug plots TRUE/FALSE
 #' @param marg.rug.transparency Degree of transparency for the density rug plot along each axis
-#' @param inclu.titles Whether to include titles for each individual calibration plots
+#' @param titles.include Whether to include titles for each individual calibration plots
 #' @param titles Vector of titles for the calibration plots. Defaults to "State k" for each plot.
 #' @param axis.titles.x Position of plots for which to include title on x-axis
 #' @param axis.titles.text.x x-axis title
 #' @param axis.titles.y Position of plots for which to include title on y-axis
 #' @param axis.titles.text.y y-axis title
-#' @param inclu.legend Whether to produce a legend
+#' @param legend.include Whether to produce a legend
 #' @param legend.seperate = Whether to include legend in plot (FALSE) or as a seperate object (TRUE)
 #' @param legend.title Title of legend
 #' @param legend.position Position of legend
-#' @param size Size of text in plot
 #'
 #' @returns If `combine = TRUE`, returns an object of classes `gg`, `ggplot`, and `ggarrange`,
 #' as all ggplots have been combined into one object. If `combine = FALSE`, returns an object of
@@ -53,14 +53,13 @@
 #'
 #' @importFrom graphics plot
 #' @export
-plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
+plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, size.line = 0.5, size.text = 12,
                            marg.density = FALSE, marg.density.size = 5, marg.density.type = "density",
                            marg.rug = FALSE, marg.rug.transparency = 0.1,
-                           inclu.titles = TRUE, titles = NULL,
+                           titles.include = TRUE, titles = NULL,
                            axis.titles.x = NULL, axis.titles.text.x = "Predicted risk",
                            axis.titles.y = NULL, axis.titles.text.y = "Observed risk",
-                           inclu.legend = TRUE, legend.seperate = FALSE, legend.title = NULL, legend.position = "bottom",
-                           size = 12){
+                           legend.include = TRUE, legend.seperate = FALSE, legend.title = NULL, legend.position = "bottom"){
 
   # x <- dat.calib.blr
   # str(x)
@@ -72,7 +71,7 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
   # marg.density.type = "density"
   # marg.rug = FALSE
   # marg.rug.transparency = 0.1
-  # inclu.titles = TRUE
+  # titles.include = TRUE
   # legend.seperate = TRUE
   # legend.title = NULL
   # axis.titles.x = NULL
@@ -114,7 +113,7 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
 
       ### Create the plots
       plots.list[[k]] <- ggplot2::ggplot(data = plot.data.k.longer |> dplyr::arrange(pred) |> dplyr::select(pred, line.group, value, mapping)) +
-        ggplot2::geom_line(ggplot2::aes(x = pred, y = value, group = line.group, color = mapping)) +
+        ggplot2::geom_line(ggplot2::aes(x = pred, y = value, group = line.group, color = mapping), size = size.line) +
         ggplot2::geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
         ggplot2::xlim(c(min(min(plot.data.k.longer$value), min(plot.data.k.longer$pred)),
                         max(max(plot.data.k.longer$value), max(plot.data.k.longer$pred)))) +
@@ -132,7 +131,7 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
 
       ### Create the plots
       plots.list[[k]] <- ggplot2::ggplot(data = plot.data.k |> dplyr::arrange(pred) |> dplyr::select(id, pred, obs) |> dplyr::rename(value = obs)) +
-        ggplot2::geom_line(ggplot2::aes(x = pred, y = value), colour = "red") +
+        ggplot2::geom_line(ggplot2::aes(x = pred, y = value), colour = "red", size = size.line) +
         ggplot2::geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
         ggplot2::xlim(c(min(min(plot.data.k$obs), min(plot.data.k$pred)),
                         max(max(plot.data.k$obs), max(plot.data.k$pred)))) +
@@ -145,11 +144,11 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
 
     ### Add text size
     plots.list[[k]] <- plots.list[[k]] +
-      ggplot2::theme(text = ggplot2::element_text(size = size),
-                     legend.text = ggplot2::element_text(size = size))
+      ggplot2::theme(text = ggplot2::element_text(size = size.text),
+                     legend.text = ggplot2::element_text(size = size.text))
 
     ### Add ggtitles if specified
-    if (inclu.titles == TRUE){
+    if (titles.include == TRUE){
       if (is.null(titles)){
         plots.list[[k]] <- plots.list[[k]] + ggplot2::ggtitle(paste("State ", state.k, sep = ""))
       } else {
@@ -178,7 +177,7 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
     if (is.null(legend.title)){
       plots.list[[k]] <- plots.list[[k]] + ggplot2::theme(legend.title = ggplot2::element_blank())
     } else if (!is.null(legend.title)){
-      plots.list[[k]] <- plots.list[[k]] + ggplot2::theme(legend.title = ggplot2::element_text(size = size, face = "bold")) +
+      plots.list[[k]] <- plots.list[[k]] + ggplot2::theme(legend.title = ggplot2::element_text(size = size.text, face = "bold")) +
         ggplot2::guides(color = ggplot2::guide_legend(title = legend.title), lty = ggplot2::guide_legend(title = legend.title))
     }
 
@@ -188,7 +187,7 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
     }
 
     ## Remove legend if requested to do so.
-    if (inclu.legend == FALSE){
+    if (legend.include == FALSE){
       plots.list[[k]] <- plots.list[[k]] +
         ggplot2::theme(legend.position = "none")
     }
@@ -244,7 +243,7 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
   ### Combine plots into single ggplot
   if (combine == TRUE){
     if (marg.density == FALSE){
-      if (inclu.legend == TRUE){
+      if (legend.include == TRUE){
         if (legend.seperate == FALSE){
           ## Combine with common legend
           plots.list <- ggpubr::ggarrange(plotlist = plots.list, nrow = nrow, ncol = ncol, common.legend = TRUE, legend = legend.position)
@@ -254,7 +253,7 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
           ## Add legend as seperate list element
           plots.list <- list("plots" = plots.list, "legend" = legend.save)
         }
-      } else if (inclu.legend == FALSE){
+      } else if (legend.include == FALSE){
         plots.list <- ggpubr::ggarrange(plotlist = plots.list, nrow = nrow, ncol = ncol, legend = "none")
       }
     } else if (marg.density == TRUE){
@@ -266,7 +265,7 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
                                            top = NULL)
       ### Marginal density plots require legend to be added manually, because otherwise you get the scatter plot which ggMarginal relies on.
       ### We only add legend if CI == TRUE, as there is no legend when CI == FALSE
-      if (inclu.legend == TRUE & !isFALSE(CI)){
+      if (legend.include == TRUE & !isFALSE(CI)){
         if (legend.seperate == FALSE){
           plots.list <- gridExtra::arrangeGrob(plots.list, legend.save, nrow = 2, heights = c(15, 1))
         } else {
@@ -276,7 +275,7 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
     }
   } else if (combine == FALSE){
     ### If combine == FALSE, but marginal.density == TRUE, need to manually legend for each calibration plot legends are requested
-    if (marg.density == TRUE & inclu.legend == TRUE & !isFALSE(CI)){
+    if (marg.density == TRUE & legend.include == TRUE & !isFALSE(CI)){
       if (legend.seperate == FALSE){
         for (k in 1:length(assessed.transitions)){
           plots.list[[k]] <- gridExtra::arrangeGrob(plots.list[[k]], legend.save, nrow = 2, heights = c(15, 1))
@@ -305,20 +304,20 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
 #' @param combine Whether to combine into one plot using ggarrange, or return as a list of individual plots
 #' @param ncol Number of columns for combined calibration plot
 #' @param nrow Number of rows for combined calibration plot
-#' @param point.size Size of points in scatter plot
+#' @param size.point Size of points in scatter plot
+#' @param size.text Size of text in plot
 #' @param transparency.plot Degree of transparency for points in the calibration scatter plot
 #' @param marg.density Whether to produce marginal density plots TRUE/FALSE
 #' @param marg.density.size Size of the main plot relative to the density plots (see \code{\link[ggExtra]{ggMarginal}})
 #' @param marg.density.type What type of marginal plot to show (see \code{\link[ggExtra]{ggMarginal}})
 #' @param marg.rug Whether to produce marginal rug plots TRUE/FALSE
 #' @param marg.rug.transparency Degree of transparency for the density rug plot along each axis
-#' @param inclu.titles Whether to include titles for each individual calibration plots
+#' @param titles.include Whether to include titles for each individual calibration plots
 #' @param titles Vector of titles for the calibration plots. Defaults to "State k" for each plot.
 #' @param axis.titles.x Position of plots for which to include title on x-axis
 #' @param axis.titles.text.x x-axis title
 #' @param axis.titles.y Position of plots for which to include title on y-axis
 #' @param axis.titles.text.y y-axis title
-#' @param size Size of text in plot
 #'
 #' @returns If `combine = TRUE`, returns an object of classes `gg`, `ggplot`, and `ggarrange`,
 #' as all ggplots have been combined into one object. If `combine = FALSE`, returns an object of
@@ -358,13 +357,13 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
 #'
 #' @importFrom graphics plot
 #' @export
-plot.calib_mlr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, point.size = 0.5, transparency.plot = 0.25,
+plot.calib_mlr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, size.point = 0.5, transparency.plot = 0.25,
                            marg.density = FALSE, marg.density.size = 5, marg.density.type = "density",
                            marg.rug = FALSE, marg.rug.transparency = 0.1,
-                           inclu.titles = TRUE, titles = NULL,
+                           titles.include = TRUE, titles = NULL,
                            axis.titles.x = NULL, axis.titles.text.x = "Predicted risk",
                            axis.titles.y = NULL, axis.titles.text.y = "Observed risk",
-                           size = 12){
+                           size.text = 12){
 
   ### Extract plot data and relevant metadata
   object.in <- x
@@ -383,17 +382,17 @@ plot.calib_mlr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, poi
 
     ### Create the plots
     plots.list[[k]] <- ggplot2::ggplot(data = plot.data.k |> dplyr::arrange(pred) |>  dplyr::select(id, pred, obs)) +
-      ggplot2::geom_point(ggplot2::aes(x = pred, y = obs), color = "red", alpha = transparency.plot, size = point.size) +
+      ggplot2::geom_point(ggplot2::aes(x = pred, y = obs), color = "red", alpha = transparency.plot, size = size.point) +
       ggplot2::geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
       ggplot2::xlim(c(0, max(plot.data.k$pred))) +
       ggplot2::ylim(c(min(plot.data.k$obs), max(plot.data.k$obs))) +
       ggplot2::theme(legend.position = "none") +
       ggplot2::labs(x = NULL, y = NULL) +
-      ggplot2::theme(text = ggplot2::element_text(size = size),
-                     legend.text = ggplot2::element_text(size = size))
+      ggplot2::theme(text = ggplot2::element_text(size = size.text),
+                     legend.text = ggplot2::element_text(size = size.text))
 
     ### Add ggtitles if specified
-    if (inclu.titles == TRUE){
+    if (titles.include == TRUE){
       if (is.null(titles)){
         plots.list[[k]] <- plots.list[[k]] + ggplot2::ggtitle(paste("State ", state.k, sep = ""))
       } else {

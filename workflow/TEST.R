@@ -28,8 +28,13 @@ dat.calib.blr <-
             tp.pred = tp.pred,
             calib.type = "blr",
             curve.type = "loess",
+            CI = 95,
+            CI.R.boot = 5,
             assess.moderate = TRUE,
             assess.mean = FALSE)
+
+grid::grid.draw(
+  plot(dat.calib.blr, ncol = 4, nrow = 1, inclu.legend = FALSE, marg.density = TRUE, axis.titles.y = 1, inclu.titles = FALSE))
 
 str(dat.calib.blr)
 test <- plot(dat.calib.blr, ncol = 4, nrow = 1, inclu.legend = FALSE, marg.density = FALSE, axis.titles.y = 1)

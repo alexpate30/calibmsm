@@ -31,7 +31,83 @@ dat.calib.blr <-
             assess.moderate = TRUE,
             assess.mean = FALSE)
 
-plot(dat.calib.blr, ncol = 4, nrow = 1)
+str(dat.calib.blr)
+test <- plot(dat.calib.blr, ncol = 4, nrow = 1, inclu.legend = FALSE, marg.density = FALSE, axis.titles.y = 1)
+test
+str(test)
+
+test <- plot(dat.calib.blr, ncol = 4, nrow = 1, inclu.legend = TRUE, marg.density = TRUE, axis.titles.y = 1, legend.title = "TESTTITLE")
+str(test)
+class(test)
+test$grobs
+
+png("workflow/figures/margdens.png", width = 20, height = 5, unit = "in", res = 300)
+grid::grid.draw(test)
+dev.off()
+
+
+
+
+test <- plot(dat.calib.blr, ncol = 4, nrow = 1, inclu.legend = TRUE, marg.density = TRUE, axis.titles.y = 1, legend.title = "TESTTITLE")
+str(test)
+class(test)
+test$grobs
+
+png("workflow/figures/margdens.png", width = 20, height = 5, unit = "in", res = 300)
+grid::grid.draw(test)
+dev.off()
+
+
+dat.calib.blr2 <-
+  calib_msm(data.mstate = msebmtcal,
+            data.raw = ebmtcal,
+            j=1,
+            s=100,
+            t = 1826,
+            tp.pred = tp.pred,
+            calib.type = "blr",
+            curve.type = "loess",
+            CI = 95,
+            CI.R.boot = 3,
+            assess.moderate = TRUE,
+            assess.mean = FALSE)
+
+plot(dat.calib.blr2, ncol = 4, nrow = 1, titles = c("egg1", "egg2", "egg3", "egg4"))
+plot(dat.calib.blr2, ncol = 4, nrow = 1, inclu.legend = FALSE)
+plot(dat.calib.blr2, ncol = 4, nrow = 1, axis.titles.y = 1)
+plot(dat.calib.blr2, ncol = 4, nrow = 1, axis.titles.y = 1, axis.titles.text.y = "TEST")
+
+test <- plot(dat.calib.blr2, ncol = 4, nrow = 1, marg.density = FALSE, axis.titles.y = 1, legend.title = "TESTTITLE")
+str(test)
+str(dat.calib.blr)
+str(dat.calib.blr2)
+test <- plot(dat.calib.blr2, ncol = 4, nrow = 1, marg.density = TRUE, axis.titles.y = 1, legend.title = "TESTTITLE")
+png("workflow/figures/margdens.png", width = 20, height = 5, unit = "in", res = 300)
+grid::grid.draw(test)
+dev.off()
+
+
+test <- plot(dat.calib.blr2, ncol = 4, nrow = 1, marg.density = TRUE, combine = FALSE, axis.titles.y = 1, legend.title = "TESTTITLE")
+png("workflow/figures/margdens.png", width = 20, height = 5, unit = "in", res = 300)
+grid::grid.draw(test[[1]])
+dev.off()
+
+test <- plot(dat.calib.blr2, ncol = 4, nrow = 1, marg.density = TRUE, combine = FALSE, legend.seperate = TRUE, axis.titles.y = 1, legend.title = "TESTTITLE")
+png("workflow/figures/margdens.png", width = 20, height = 5, unit = "in", res = 300)
+grid::grid.draw(test[[1]][[1]])
+dev.off()
+
+
+
+
+class(test)
+test$grobs
+
+
+
+
+test <- plot(dat.calib.blr, ncol = 4, nrow = 1)
+str(test)
 plot(dat.calib.blr, ncol = 4, nrow = 1, titles = c("egg1", "egg2", "egg3", "egg4"))
 plot(dat.calib.blr, ncol = 4, nrow = 1, inclu.legend = FALSE)
 plot(dat.calib.blr, ncol = 4, nrow = 1, axis.titles.y = 1)
@@ -41,7 +117,14 @@ plots <- plot(dat.calib.blr, ncol = 5, nrow = 1, axis.titles.y = 1, legend.seper
 legend <- plot(dat.calib.blr, ncol = 5, nrow = 1, axis.titles.y = 1, legend.seperate = TRUE)[["legend"]]
 gridExtra::grid.arrange(plots, legend, nrow = 2, heights = c(20, 1))
 
+test <- plot(dat.calib.blr, ncol = 4, nrow = 1, marg.density = FALSE, axis.titles.y = 1, legend.title = "TESTTITLE")
+str(test)
+
 test <- plot(dat.calib.blr, ncol = 4, nrow = 1, marg.density = TRUE, axis.titles.y = 1, legend.title = "TESTTITLE")
+class(test)
+test$grobs
+
+
 png("workflow/figures/margdens.png", width = 20, height = 5, unit = "in", res = 300)
 grid::grid.draw(test)
 dev.off()
@@ -904,3 +987,12 @@ expect_error(1 / "a")
 #   t.eval <- t.eval
 #   max.weight <- 10
 #
+
+
+obs <- predict(loess.model, newdata = data.to.plot, se = TRUE)
+## Define alpha for CIs
+alpha <- (1-CI/100)/2
+## Put into dataframe
+obs.data <- data.frame("obs" = obs$fit,
+                       "obs.lower" = obs$fit - stats::qnorm(1-alpha)*obs$se,
+                       "obs.upper" = obs$fit + stats::qnorm(1-alpha)*obs$se)

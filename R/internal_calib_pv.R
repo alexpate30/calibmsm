@@ -839,14 +839,33 @@ calc_obs_pv_loess_model <- function(pred, pv, data.to.plot,
   ## Note we do not calculate standard errors if confidence interval has been requested using the bootstrap (or if no CI requested)
   if (CI != FALSE){
     if (CI.type == "parametric"){
-      ## Predict observed
-      obs <- predict(loess.model, newdata = data.to.plot, se = TRUE)
+      ## Need to split up individuals into smaller grouped otherwise predict.loess with SE = TRUE will give an
+      ## error, as it will create a matrix that is too large.
+
+      ## Split data into groups of size 10000
+      data.to.plot.list <- split(data.to.plot,
+                                 rep(1:ceiling(length(data.to.plot)/10000), each = 10000, length.out = length(data.to.plot)))
+
       ## Define alpha for CIs
       alpha <- (1-CI/100)/2
-      ## Put into dataframe
-      obs.data <- data.frame("obs" = obs$fit,
-                             "obs.lower" = obs$fit - stats::qnorm(1-alpha)*obs$se,
-                             "obs.upper" = obs$fit + stats::qnorm(1-alpha)*obs$se)
+
+      ## Predict observed and create data frame
+      obs.data <- lapply(1:length(data.to.plot.list),
+                    function(x) {
+                      ## Predict observed
+                      obs <- predict(loess.model, newdata = data.to.plot.list[[x]], se = TRUE)
+
+                      ## Put into dataframe
+                      obs.df <- data.frame("obs" = obs$fit,
+                                             "obs.lower" = obs$fit - stats::qnorm(1-alpha)*obs$se,
+                                             "obs.upper" = obs$fit + stats::qnorm(1-alpha)*obs$se)
+                      ## Return
+                      return(obs.df)
+                      })
+
+      ## Combine into one data frame
+      obs.data <- do.call("rbind", obs.data)
+
     }
   } else {
     ## Predict observed

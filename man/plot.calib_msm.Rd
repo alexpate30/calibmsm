@@ -10,22 +10,23 @@
   combine = TRUE,
   ncol = NULL,
   nrow = NULL,
+  size.line = 0.5,
+  size.text = 12,
   marg.density = FALSE,
   marg.density.size = 5,
   marg.density.type = "density",
   marg.rug = FALSE,
   marg.rug.transparency = 0.1,
-  inclu.titles = TRUE,
+  titles.include = TRUE,
   titles = NULL,
   axis.titles.x = NULL,
   axis.titles.text.x = "Predicted risk",
   axis.titles.y = NULL,
   axis.titles.text.y = "Observed risk",
-  inclu.legend = TRUE,
+  legend.include = TRUE,
   legend.seperate = FALSE,
   legend.title = NULL,
-  legend.position = "bottom",
-  size = 12
+  legend.position = "bottom"
 )
 }
 \arguments{
@@ -39,6 +40,8 @@
 
 \item{nrow}{Number of rows for combined calibration plot}
 
+\item{size.text}{Size of text in plot}
+
 \item{marg.density}{Whether to produce marginal density plots TRUE/FALSE}
 
 \item{marg.density.size}{Size of the main plot relative to the density plots (see \code{\link[ggExtra]{ggMarginal}})}
@@ -49,7 +52,7 @@
 
 \item{marg.rug.transparency}{Degree of transparency for the density rug plot along each axis}
 
-\item{inclu.titles}{Whether to include titles for each individual calibration plots}
+\item{titles.include}{Whether to include titles for each individual calibration plots}
 
 \item{titles}{Vector of titles for the calibration plots. Defaults to "State k" for each plot.}
 
@@ -61,15 +64,13 @@
 
 \item{axis.titles.text.y}{y-axis title}
 
-\item{inclu.legend}{Whether to produce a legend}
+\item{legend.include}{Whether to produce a legend}
 
 \item{legend.seperate}{= Whether to include legend in plot (FALSE) or as a seperate object (TRUE)}
 
 \item{legend.title}{Title of legend}
 
 \item{legend.position}{Position of legend}
-
-\item{size}{Size of text in plot}
 }
 \value{
 If \code{combine = TRUE}, returns an object of classes \code{gg}, \code{ggplot}, and \code{ggarrange},

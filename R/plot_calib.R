@@ -10,6 +10,7 @@
 #' @param ncol Number of columns for combined calibration plot
 #' @param nrow Number of rows for combined calibration plot
 #' @param size.text Size of text in plot
+#' @param size.line Size of line plots
 #' @param marg.density Whether to produce marginal density plots TRUE/FALSE
 #' @param marg.density.size Size of the main plot relative to the density plots (see \code{\link[ggExtra]{ggMarginal}})
 #' @param marg.density.type What type of marginal plot to show (see \code{\link[ggExtra]{ggMarginal}})
@@ -357,13 +358,12 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, siz
 #'
 #' @importFrom graphics plot
 #' @export
-plot.calib_mlr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, size.point = 0.5, transparency.plot = 0.25,
+plot.calib_mlr <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, size.point = 0.5, size.text = 12, transparency.plot = 0.25,
                            marg.density = FALSE, marg.density.size = 5, marg.density.type = "density",
                            marg.rug = FALSE, marg.rug.transparency = 0.1,
                            titles.include = TRUE, titles = NULL,
                            axis.titles.x = NULL, axis.titles.text.x = "Predicted risk",
-                           axis.titles.y = NULL, axis.titles.text.y = "Observed risk",
-                           size.text = 12){
+                           axis.titles.y = NULL, axis.titles.text.y = "Observed risk"){
 
   ### Extract plot data and relevant metadata
   object.in <- x

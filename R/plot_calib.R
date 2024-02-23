@@ -120,7 +120,6 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
                         max(max(plot.data.k.longer$value), max(plot.data.k.longer$pred)))) +
         ggplot2::ylim(c(min(min(plot.data.k.longer$value), min(plot.data.k.longer$pred)),
                         max(max(plot.data.k.longer$value), max(plot.data.k.longer$pred)))) +
-        ggplot2::ggtitle(paste("State ", state.k, sep = "")) +
         ggplot2::labs(x = NULL, y = NULL)
 
     } else if (CI == FALSE){
@@ -139,7 +138,6 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL,
                         max(max(plot.data.k$obs), max(plot.data.k$pred)))) +
         ggplot2::ylim(c(min(min(plot.data.k$obs), min(plot.data.k$pred)),
                         max(max(plot.data.k$obs), max(plot.data.k$pred)))) +
-        ggplot2::ggtitle(paste("State ", state.k, sep = "")) +
         ggplot2::labs(x = NULL, y = NULL)
 
 

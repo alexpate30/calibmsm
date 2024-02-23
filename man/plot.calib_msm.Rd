@@ -40,6 +40,8 @@
 
 \item{nrow}{Number of rows for combined calibration plot}
 
+\item{size.line}{Size of line plots}
+
 \item{size.text}{Size of text in plot}
 
 \item{marg.density}{Whether to produce marginal density plots TRUE/FALSE}

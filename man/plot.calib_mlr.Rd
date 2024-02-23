@@ -12,6 +12,7 @@ using \code{\link{calib_msm}}.}
   ncol = NULL,
   nrow = NULL,
   size.point = 0.5,
+  size.text = 12,
   transparency.plot = 0.25,
   marg.density = FALSE,
   marg.density.size = 5,
@@ -23,8 +24,7 @@ using \code{\link{calib_msm}}.}
   axis.titles.x = NULL,
   axis.titles.text.x = "Predicted risk",
   axis.titles.y = NULL,
-  axis.titles.text.y = "Observed risk",
-  size.text = 12
+  axis.titles.text.y = "Observed risk"
 )
 }
 \arguments{
@@ -39,6 +39,8 @@ using \code{\link{calib_msm}}.}
 \item{nrow}{Number of rows for combined calibration plot}
 
 \item{size.point}{Size of points in scatter plot}
+
+\item{size.text}{Size of text in plot}
 
 \item{transparency.plot}{Degree of transparency for points in the calibration scatter plot}
 
@@ -63,8 +65,6 @@ using \code{\link{calib_msm}}.}
 \item{axis.titles.y}{Position of plots for which to include title on y-axis}
 
 \item{axis.titles.text.y}{y-axis title}
-
-\item{size.text}{Size of text in plot}
 }
 \value{
 If \code{combine = TRUE}, returns an object of classes \code{gg}, \code{ggplot}, and \code{ggarrange},

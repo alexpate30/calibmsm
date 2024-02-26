@@ -433,7 +433,7 @@ calc_obs_pv_boot <- function(data.raw,
       data.groups <- split(data.raw.lmk.js, split.formula)
 
       ### Get group ids for subgroups
-      group.ids <- sapply(data.groups, function(x) as.numeric(x[,c("id")]))
+      group.ids <- lapply(data.groups, function(x) as.numeric(x[,c("id")]))
 
       ### Calculate pseudo-values in each subgroup
       pv.out <- lapply(group.ids, calc_pv_subgroup)
@@ -465,7 +465,7 @@ calc_obs_pv_boot <- function(data.raw,
                                       include.lowest = TRUE))
 
         ### Get group ids for subgroups
-        group.ids <- sapply(data.pctls, function(x) as.numeric(x[,c("id")]))
+        group.ids <- lapply(data.pctls, function(x) as.numeric(x[,c("id")]))
 
         ### Calculate pseudo-values in each subgroup
         pv.temp <- lapply(group.ids, calc_pv_subgroup)
@@ -532,7 +532,7 @@ calc_obs_pv_boot <- function(data.raw,
         data.groups.pctls <- unlist(data.groups.pctls, recursive = FALSE)
 
         ### Get group ids for subgroups
-        group.ids <- sapply(data.groups.pctls, function(x) as.numeric(x[,c("id")]))
+        group.ids <- lapply(data.groups.pctls, function(x) as.numeric(x[,c("id")]))
 
         ### Calculate pseudo-values in each subgroup
         pv.temp <- lapply(group.ids, calc_pv_subgroup)

@@ -221,7 +221,7 @@ calib_msm <- function(data.mstate,
                      ...){
 
 # rm(list=ls())
-#   rm(list = setdiff(ls(), list("data.raw.lmk.js.normal", "data.pctls.normal")))
+#
 # devtools::load_all()
 #   data("ebmtcal")
 #   data("msebmtcal")
@@ -271,14 +271,15 @@ calib_msm <- function(data.mstate,
 # mlr.niknots = 4
 # assess.moderate = TRUE
 # assess.mean = TRUE
-# #
+#
 # pv.precalc = NULL
 # str(data.raw)
 #
-# pv.group.vars = c("x12")
-# tp.pred <- readRDS("P:/Documents/aaa_incline/tp.pred.reduc.rds")
-# data.raw <- readRDS("P:/Documents/aaa_incline/data.raw.reduc.rds")
-# data.mstate <- readRDS("P:/Documents/aaa_incline/data.mstate.reduc.rds")
+# pv.group.vars = NULL
+# tp.pred <- readRDS("P:/Documents/aaa_incline/DEBUG.tp.pred.rds")
+# data.raw <- readRDS("P:/Documents/aaa_incline/DEBUG.data.raw.rds")
+# data.mstate <- readRDS("P:/Documents/aaa_incline/DEBUG.data.mstate.rds")
+# pv.n.pctls = 10
 # t <- 2557
 
 # str(ebmtcal)

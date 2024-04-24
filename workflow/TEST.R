@@ -10,6 +10,27 @@ help(package = "calibmsm")
 help(package = "predRupdate")
 install.packages("calibmsm")
 
+tp.pred <- readRDS("P:/Documents/aaa_incline/DEBUG.tp.pred.rds")
+data.raw <- readRDS("P:/Documents/aaa_incline/DEBUG.data.raw.rds")
+data.mstate <- readRDS("P:/Documents/aaa_incline/DEBUG.data.mstate.rds")
+t <- 2557
+
+
+dat.calib.blr <-
+  calib_msm(data.mstate = data.mstate,
+            data.raw = data.raw,
+            j=1,
+            s=100,
+            t = 2557,
+            tp.pred = tp.pred,
+            calib.type = "pv",
+            curve.type = "rcs",
+            pv.n.pctls = 10,
+            assess.moderate = TRUE,
+            assess.mean = FALSE)
+
+
+
 devtools::check(vignettes = FALSE, args = "--no-tests")
 
 rm(list=ls())

@@ -49,7 +49,8 @@ Suggests:
     covr,
     knitr,
     rmarkdown,
+    R.rsp,
     testthat (>= 3.0.0)
-VignetteBuilder: knitr
+VignetteBuilder: knitr, R.rsp
 URL: https://alexpate30.github.io/calibmsm/
 Config/testthat/edition: 3

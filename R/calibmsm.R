@@ -40,6 +40,7 @@
 #' @param pv.group.vars Variables to group by before calculating pseudo-values
 #' @param pv.n.pctls Number of percentiles of predicted risk to group by before calculating pseudo-values
 #' @param pv.precalc Pre-calculated pseudo-values
+#' @param pv.ids Id's of individuals to calculate pseudo-values for
 #' @param CI Size of confidence intervals as a %
 #' @param CI.type Method for estimating confidence interval (currently restricted to `bootstrap`)
 #' @param CI.R.boot Number of bootstrap replicates when estimating the confidence interval for the calibration curve
@@ -211,6 +212,7 @@ calib_msm <- function(data.mstate,
                      pv.group.vars = NULL,
                      pv.n.pctls = NULL,
                      pv.precalc = NULL,
+                     pv.ids = NULL,
                      CI = FALSE,
                      CI.type = "bootstrap",
                      CI.R.boot = NULL,
@@ -227,12 +229,17 @@ calib_msm <- function(data.mstate,
 #   data("msebmtcal")
 #   data("tps0")
 #   data("tps100")
-# calib.type <- "aj"
+# calib.type <- "pv"
 # data.raw <- ebmtcal
 # data.mstate <- msebmtcal
 # tp.pred <- tps0 |>
 #   subset(j == 1) |>
 #   dplyr::select(paste("pstate", 1:6, sep = ""))
+#
+# data.raw <- ebmtcal[ebmtcal$id %in% 1:50, ]
+# data.mstate <- msebmtcal[msebmtcal$id %in% 1:50, ]
+# tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
+# tp.pred <- tp.pred[1:50, ]
 #
 #
 # j <- 1
@@ -600,6 +607,7 @@ calib_msm <- function(data.mstate,
                               pv.group.vars = pv.group.vars,
                               pv.n.pctls = pv.n.pctls,
                               pv.precalc = pv.precalc,
+                              pv.ids = pv.ids,
                               CI = CI,
                               CI.type = CI.type,
                               CI.R.boot = CI.R.boot,

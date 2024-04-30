@@ -31,8 +31,22 @@ test_that("check calib_pv output, (j = 1, s = 0), curve.type = loess, CI.type = 
 
   expect_equal(class(dat.calib.pv.1), c("calib_pv", "calib_msm"))
   expect_equal(dat.calib.pv.1[["metadata"]][["curve.type"]], "loess")
-  expect_equal(ncol(dat.calib.pv.1[["plotdata"]][[1]]), 3)
+  expect_equal(ncol(dat.calib.pv.1[["plotdata"]][[1]]), 4)
   expect_no_error(summary(dat.calib.pv.1))
+
+  ## Check same results when just calculating pseudo-values for first three individuals
+  dat.calib.pv.ids.1 <- calib_msm(data.mstate = msebmtcal,
+                                  data.raw = ebmtcal,
+                                  j = 1,
+                                  s = 0,
+                                  t = 1826,
+                                  tp.pred = tp.pred,
+                                  calib.type = 'pv',
+                                  pv.ids = 1:3,
+                                  tp.pred.plot = NULL, transitions.out = NULL)
+
+  expect_equal(dat.calib.pv.1[["plotdata"]][[1]][1:3, "pv"], dat.calib.pv.ids.1[[1]][,2])
+  expect_equal(dat.calib.pv.1[["plotdata"]][[6]][1:3, "pv"], dat.calib.pv.ids.1[[1]][,7])
 
   ## Calculate observed event probabilities with a confidence interval using bootstrapping and transitions.out = NULL
   expect_warning(calib_msm(data.mstate = msebmtcal,
@@ -58,7 +72,7 @@ test_that("check calib_pv output, (j = 1, s = 0), curve.type = loess, CI.type = 
                                               tp.pred.plot = NULL, transitions.out = c(1,2)))
 
   expect_equal(class(dat.calib.pv.4), c("calib_pv", "calib_msm"))
-  expect_equal(ncol(dat.calib.pv.4[["plotdata"]][[1]]), 5)
+  expect_equal(ncol(dat.calib.pv.4[["plotdata"]][[1]]), 6)
 
   expect_equal(dat.calib.pv.1[["plotdata"]][[1]]$obs, dat.calib.pv.4[["plotdata"]][[1]]$obs)
   expect_equal(dat.calib.pv.1[["plotdata"]][[1]]$pred, dat.calib.pv.4[["plotdata"]][[1]]$pred)
@@ -90,7 +104,7 @@ test_that("check calib_pv output, (j = 1, s = 0), curve.type = loess, CI.type = 
 
   ## Should be one less column in plotdata (no patient ids)
   expect_equal(class(dat.calib.pv.9), c("calib_pv", "calib_msm"))
-  expect_equal(ncol(dat.calib.pv.9[["plotdata"]][[1]]), 2)
+  expect_equal(ncol(dat.calib.pv.9[["plotdata"]][[1]]), 3)
   expect_equal(nrow(dat.calib.pv.9[["plotdata"]][[1]]), 50)
   expect_equal(dat.calib.pv.1[["plotdata"]][[1]]$obs, dat.calib.pv.9[["plotdata"]][[1]]$obs)
   expect_equal(dat.calib.pv.1[["plotdata"]][[1]]$pred, dat.calib.pv.9[["plotdata"]][[1]]$pred)
@@ -145,7 +159,7 @@ test_that("check calib_pv output, (j = 1, s = 0), curve.type = loess, CI.type = 
                              tp.pred.plot = NULL, transitions.out = NULL)
 
   expect_equal(dat.calib.pv.1[["metadata"]][["curve.type"]], "loess")
-  expect_equal(ncol(dat.calib.pv.1[["plotdata"]][[1]]), 3)
+  expect_equal(ncol(dat.calib.pv.1[["plotdata"]][[1]]), 4)
   expect_no_error(summary(dat.calib.pv.1))
 
   ## Calculate observed event probabilities with a confidence interval using parametric approach
@@ -160,7 +174,7 @@ test_that("check calib_pv output, (j = 1, s = 0), curve.type = loess, CI.type = 
                              CI = 95, CI.type = "parametric",
                              tp.pred.plot = NULL, transitions.out = c(1,2))
 
-  expect_equal(ncol(dat.calib.pv.5[["plotdata"]][[1]]), 5)
+  expect_equal(ncol(dat.calib.pv.5[["plotdata"]][[1]]), 6)
 
   expect_equal(dat.calib.pv.1[["plotdata"]][[1]]$obs, dat.calib.pv.5[["plotdata"]][[1]]$obs)
   expect_equal(dat.calib.pv.1[["plotdata"]][[1]]$pred, dat.calib.pv.5[["plotdata"]][[1]]$pred)
@@ -229,7 +243,7 @@ test_that("check calib_pv output, (j = 1, s = 0), curve.type = rcs, CI.type = bo
                              tp.pred.plot = NULL, transitions.out = c(1))
 
   expect_equal(dat.calib.pv.1[["metadata"]][["curve.type"]], "rcs")
-  expect_equal(ncol(dat.calib.pv.1[["plotdata"]][[1]]), 3)
+  expect_equal(ncol(dat.calib.pv.1[["plotdata"]][[1]]), 4)
   expect_no_error(summary(dat.calib.pv.1))
 
   ## Calculate observed event probabilities with a confidence interval using bootstrapping
@@ -244,7 +258,7 @@ test_that("check calib_pv output, (j = 1, s = 0), curve.type = rcs, CI.type = bo
                                               CI = 95, CI.type = "bootstrap", CI.R.boot = 3,
                                               tp.pred.plot = NULL, transitions.out = c(1)))
 
-  expect_equal(ncol(dat.calib.pv.4[["plotdata"]][[1]]), 5)
+  expect_equal(ncol(dat.calib.pv.4[["plotdata"]][[1]]), 6)
 
   expect_equal(dat.calib.pv.1[["plotdata"]][[1]]$obs, dat.calib.pv.4[["plotdata"]][[1]]$obs)
   expect_equal(dat.calib.pv.1[["plotdata"]][[1]]$pred, dat.calib.pv.4[["plotdata"]][[1]]$pred)
@@ -281,7 +295,7 @@ test_that("check calib_pv output, (j = 1, s = 0), curve.type = rcs, CI.type = bo
                              tp.pred.plot = NULL, transitions.out = c(1))
 
   expect_equal(dat.calib.pv.1[["metadata"]][["curve.type"]], "rcs")
-  expect_equal(ncol(dat.calib.pv.1[["plotdata"]][[1]]), 3)
+  expect_equal(ncol(dat.calib.pv.1[["plotdata"]][[1]]), 4)
   expect_no_error(summary(dat.calib.pv.1))
 
   ## Calculate observed event probabilities with a confidence interval using parametric approach
@@ -296,7 +310,7 @@ test_that("check calib_pv output, (j = 1, s = 0), curve.type = rcs, CI.type = bo
                              CI = 95, CI.type = "parametric",
                              tp.pred.plot = NULL, transitions.out = c(1))
 
-  expect_equal(ncol(dat.calib.pv.4[["plotdata"]][[1]]), 5)
+  expect_equal(ncol(dat.calib.pv.4[["plotdata"]][[1]]), 6)
 
   expect_equal(dat.calib.pv.1[["plotdata"]][[1]]$obs, dat.calib.pv.4[["plotdata"]][[1]]$obs)
   expect_equal(dat.calib.pv.1[["plotdata"]][[1]]$pred, dat.calib.pv.4[["plotdata"]][[1]]$pred)
@@ -306,8 +320,8 @@ test_that("check calib_pv output, (j = 1, s = 0), curve.type = rcs, CI.type = bo
 })
 
 
-### Add some tests for when each of group.vars and n.pctls are specified
-test_that("check calib_pv output, (j = 1, s = 0), groups.vars and n.pctls = NULL", {
+### Add some tests for when each of group.vars and pv.n.pctls are specified
+test_that("check calib_pv output, (j = 1, s = 0), groups.vars and pv.n.pctls specified", {
 
   skip_on_cran()
 
@@ -322,7 +336,7 @@ test_that("check calib_pv output, (j = 1, s = 0), groups.vars and n.pctls = NULL
   # Reduce msebmtcal.cmprsk to first 100 individuals
   msebmtcal <- msebmtcal |> dplyr::filter(id %in% 1:50)
 
-  ## Calculate observed event probabilities using transitions.out = NULL
+  ## Calculate observed event probabilities when both pv.group.vars and pv.n.pctls are specified
   dat.calib.pv.1 <- calib_msm(data.mstate = msebmtcal,
                              data.raw = ebmtcal,
                              j = 1,
@@ -333,15 +347,46 @@ test_that("check calib_pv output, (j = 1, s = 0), groups.vars and n.pctls = NULL
                              curve.type = "loess",
                              loess.span = 1,
                              loess.degree = 1,
-                             group.vars = c("year"),
-                             n.pctls = 2,
+                             pv.group.vars = c("year"),
+                             pv.n.pctls = 2,
                              tp.pred.plot = NULL, transitions.out = NULL)
 
-  expect_equal(ncol(dat.calib.pv.1[["plotdata"]][[1]]), 3)
+  expect_equal(ncol(dat.calib.pv.1[["plotdata"]][[1]]), 4)
   expect_equal(length(dat.calib.pv.1[["plotdata"]]), 6)
 
+  ## Check same results when just calculating pseudo-values for first three individuals
+  dat.calib.pv.ids.1 <- calib_msm(data.mstate = msebmtcal,
+                              data.raw = ebmtcal,
+                              j = 1,
+                              s = 0,
+                              t = 1826,
+                              tp.pred = tp.pred,
+                              calib.type = 'pv',
+                              pv.group.vars = c("year"),
+                              pv.n.pctls = 2,
+                              pv.ids = 1:3,
+                              tp.pred.plot = NULL, transitions.out = NULL)
 
-  ## Calculate observed event probabilities using transitions.out = NULL
+  expect_equal(dat.calib.pv.1[["plotdata"]][[1]][1:3, "pv"], dat.calib.pv.ids.1[[1]][,2])
+  expect_equal(dat.calib.pv.1[["plotdata"]][[6]][1:3, "pv"], dat.calib.pv.ids.1[[1]][,7])
+
+  ## Check same results when just calculating pseudo-values for first three individuals, but specify transitions 1 and 6
+  dat.calib.pv.ids.1.tout <- calib_msm(data.mstate = msebmtcal,
+                                       data.raw = ebmtcal,
+                                       j = 1,
+                                       s = 0,
+                                       t = 1826,
+                                       tp.pred = tp.pred,
+                                       calib.type = 'pv',
+                                       pv.group.vars = c("year"),
+                                       pv.n.pctls = 2,
+                                       pv.ids = 1:3,
+                                       tp.pred.plot = NULL, transitions.out = c(1,6))
+
+  expect_equal(dat.calib.pv.ids.1.tout[[1]][,2], dat.calib.pv.ids.1[[1]][,2])
+  expect_equal(dat.calib.pv.ids.1.tout[[1]][,3], dat.calib.pv.ids.1[[1]][,7])
+
+  ## Calculate observed event probabilities for pv.group.vars
   dat.calib.pv.2 <- calib_msm(data.mstate = msebmtcal,
                              data.raw = ebmtcal,
                              j = 1,
@@ -352,13 +397,43 @@ test_that("check calib_pv output, (j = 1, s = 0), groups.vars and n.pctls = NULL
                              curve.type = "loess",
                              loess.span = 1,
                              loess.degree = 1,
-                             group.vars = c("year"),
+                             pv.group.vars = c("year"),
                              tp.pred.plot = NULL, transitions.out = NULL)
 
-  expect_equal(ncol(dat.calib.pv.2[["plotdata"]][[1]]), 3)
+  expect_equal(ncol(dat.calib.pv.2[["plotdata"]][[1]]), 4)
   expect_equal(length(dat.calib.pv.2[["plotdata"]]), 6)
 
-  ## Calculate observed event probabilities using transitions.out = NULL
+  ## Check same results when just calculating pseudo-values for first three individuals
+  dat.calib.pv.ids.2 <- calib_msm(data.mstate = msebmtcal,
+                                  data.raw = ebmtcal,
+                                  j = 1,
+                                  s = 0,
+                                  t = 1826,
+                                  tp.pred = tp.pred,
+                                  calib.type = 'pv',
+                                  pv.group.vars = c("year"),
+                                  pv.ids = 1:3,
+                                  tp.pred.plot = NULL, transitions.out = NULL)
+
+  expect_equal(dat.calib.pv.2[["plotdata"]][[1]][1:3, "pv"], dat.calib.pv.ids.2[[1]][,2])
+  expect_equal(dat.calib.pv.2[["plotdata"]][[6]][1:3, "pv"], dat.calib.pv.ids.2[[1]][,7])
+
+  ## Check same results when just calculating pseudo-values for first three individuals, but specify transitions 1 and 6
+  dat.calib.pv.ids.2.tout <- calib_msm(data.mstate = msebmtcal,
+                                       data.raw = ebmtcal,
+                                       j = 1,
+                                       s = 0,
+                                       t = 1826,
+                                       tp.pred = tp.pred,
+                                       calib.type = 'pv',
+                                       pv.group.vars = c("year"),
+                                       pv.ids = 1:3,
+                                       tp.pred.plot = NULL, transitions.out = c(1,6))
+
+  expect_equal(dat.calib.pv.ids.2.tout[[1]][,2], dat.calib.pv.ids.2[[1]][,2])
+  expect_equal(dat.calib.pv.ids.2.tout[[1]][,3], dat.calib.pv.ids.2[[1]][,7])
+
+  ## Calculate observed event probabilities for pv.n.pctls
   dat.calib.pv.3 <- calib_msm(data.mstate = msebmtcal,
                              data.raw = ebmtcal,
                              j = 1,
@@ -369,13 +444,44 @@ test_that("check calib_pv output, (j = 1, s = 0), groups.vars and n.pctls = NULL
                              curve.type = "loess",
                              loess.span = 1,
                              loess.degree = 1,
-                             n.pctls = 2,
+                             pv.n.pctls = 2,
                              tp.pred.plot = NULL, transitions.out = NULL)
 
-  expect_equal(ncol(dat.calib.pv.3[["plotdata"]][[1]]), 3)
+  expect_equal(ncol(dat.calib.pv.3[["plotdata"]][[1]]), 4)
   expect_equal(length(dat.calib.pv.3[["plotdata"]]), 6)
 
+  ## Check same results when just calculating pseudo-values for first three individuals
+  dat.calib.pv.ids.3 <- calib_msm(data.mstate = msebmtcal,
+                                  data.raw = ebmtcal,
+                                  j = 1,
+                                  s = 0,
+                                  t = 1826,
+                                  tp.pred = tp.pred,
+                                  calib.type = 'pv',
+                                  pv.n.pctls = 2,
+                                  pv.ids = 1:3,
+                                  tp.pred.plot = NULL, transitions.out = NULL)
+
+  expect_equal(dat.calib.pv.3[["plotdata"]][[1]][1:3, "pv"], dat.calib.pv.ids.3[[1]][,2])
+  expect_equal(dat.calib.pv.3[["plotdata"]][[6]][1:3, "pv"], dat.calib.pv.ids.3[[1]][,7])
+
+  ## Check same results when just calculating pseudo-values for first three individuals, but specify transitions 1 and 6
+  dat.calib.pv.ids.3.tout <- calib_msm(data.mstate = msebmtcal,
+                                  data.raw = ebmtcal,
+                                  j = 1,
+                                  s = 0,
+                                  t = 1826,
+                                  tp.pred = tp.pred,
+                                  calib.type = 'pv',
+                                  pv.n.pctls = 2,
+                                  pv.ids = 1:3,
+                                  tp.pred.plot = NULL, transitions.out = c(1,6))
+
+  expect_equal(dat.calib.pv.ids.3.tout[[1]][,2], dat.calib.pv.ids.3[[1]][,2])
+  expect_equal(dat.calib.pv.ids.3.tout[[1]][,3], dat.calib.pv.ids.3[[1]][,7])
+
 })
+
 
 
 ### Add some tests where we expect errors, if requesting things that aren't possible

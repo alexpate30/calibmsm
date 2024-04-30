@@ -819,14 +819,16 @@ install.packages("rlang")
 devtools::document()
 getwd()
 
-
+ebmtcal <- calibmsm::ebmtcal
+msebmtcal <- calibmsm::msebmtcal
 
 rm(list=ls())
 devtools::load_all()
 devtools::test()
 
 
-
+rm(list=ls())
+devtools::load_all()
 testthat::test_file("tests/testthat/test-calib_blr.R")
 testthat::test_file("tests/testthat/test-calib_mlr.R")
 testthat::test_file("tests/testthat/test-weights.R")

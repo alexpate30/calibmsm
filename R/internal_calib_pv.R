@@ -490,7 +490,6 @@ calc_obs_pv_boot <- function(data.raw,
           }
         })
 
-
       }
 
       ### Combine into single dataset
@@ -739,58 +738,58 @@ calc_obs_pv_boot <- function(data.raw,
       }
 
       ### If pseudo-values have been user-inputted, skip the majority of steps and just fit the calibration model using pv.precalc and data.raw
-    } else if (!is.null(pv.precalc)){
+    }
+  } else if (!is.null(pv.precalc)){
 
-      ###
-      ### Create object to store output
-      output.object <- vector("list", length(transitions.out))
-      names(output.object) <- paste("state", transitions.out, sep = "")
+    ###
+    ### Create object to store output
+    output.object <- vector("list", length(transitions.out))
+    names(output.object) <- paste("state", transitions.out, sep = "")
 
-      ###
-      ### Loop through and generate observed event probabilities
-      for (state in 1:length(transitions.out)){
+    ###
+    ### Loop through and generate observed event probabilities
+    for (state in 1:length(transitions.out)){
 
-        ### Assign state.k
-        state.k <- transitions.out[state]
+      ### Assign state.k
+      state.k <- transitions.out[state]
 
-        ### Calculate observed event probabilities
-        if (curve.type == "loess"){
-          obs <- calc_obs_pv_loess_model(pred = data.raw[,paste("tp.pred", state.k, sep = "")],
-                                         pv = pv.precalc[,paste("pstate", state.k, sep = "")],
-                                         data.to.plot = data.to.plot[,paste("tp.pred", state.k, sep = "")],
-                                         loess.span = loess.span,
-                                         loess.degree = loess.degree,
-                                         loess.surface = loess.surface,
-                                         loess.statistics = loess.statistics,
-                                         loess.trace.hat = loess.trace.hat,
-                                         loess.cell = loess.cell,
-                                         loess.iterations = loess.iterations,
-                                         loess.iterTrace = loess.iterTrace,
-                                         CI = CI,
-                                         CI.type = CI.type)
-        } else if (curve.type == "rcs"){
-          obs <- calc_obs_pv_rcs_model(pred = data.raw[,paste("tp.pred", state.k, sep = "")],
+      ### Calculate observed event probabilities
+      if (curve.type == "loess"){
+        obs <- calc_obs_pv_loess_model(pred = data.raw[,paste("tp.pred", state.k, sep = "")],
                                        pv = pv.precalc[,paste("pstate", state.k, sep = "")],
                                        data.to.plot = data.to.plot[,paste("tp.pred", state.k, sep = "")],
-                                       rcs.nk = rcs.nk,
+                                       loess.span = loess.span,
+                                       loess.degree = loess.degree,
+                                       loess.surface = loess.surface,
+                                       loess.statistics = loess.statistics,
+                                       loess.trace.hat = loess.trace.hat,
+                                       loess.cell = loess.cell,
+                                       loess.iterations = loess.iterations,
+                                       loess.iterTrace = loess.iterTrace,
                                        CI = CI,
                                        CI.type = CI.type)
-        }
+      } else if (curve.type == "rcs"){
+        obs <- calc_obs_pv_rcs_model(pred = data.raw[,paste("tp.pred", state.k, sep = "")],
+                                     pv = pv.precalc[,paste("pstate", state.k, sep = "")],
+                                     data.to.plot = data.to.plot[,paste("tp.pred", state.k, sep = "")],
+                                     rcs.nk = rcs.nk,
+                                     CI = CI,
+                                     CI.type = CI.type)
+      }
 
-        ### Create output object
-        if ("id" %in% colnames(data.to.plot)) {
-          output.object[[state]] <- data.frame(
-            "id" = data.to.plot$id,
-            "pred" = data.to.plot[,paste("tp.pred", state.k, sep = "")],
-            obs,
-            "pv" = pv.precalc[,paste("pstate", state.k, sep = "")])
+      ### Create output object
+      if ("id" %in% colnames(data.to.plot)){
+        output.object[[state]] <- data.frame(
+          "id" = data.to.plot$id,
+          "pred" = data.to.plot[,paste("tp.pred", state.k, sep = "")],
+          obs,
+          "pv" = pv.precalc[,paste("pstate", state.k, sep = "")])
 
-        } else {
-          output.object[[state]] <- data.frame(
-            "pred" = data.to.plot[,paste("tp.pred", state.k, sep = "")],
-            obs,
-            "pv" = pv.precalc[,paste("pstate", state.k, sep = "")])
-        }
+      } else {
+        output.object[[state]] <- data.frame(
+          "pred" = data.to.plot[,paste("tp.pred", state.k, sep = "")],
+          obs,
+          "pv" = pv.precalc[,paste("pstate", state.k, sep = "")])
       }
     }
   }

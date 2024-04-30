@@ -712,7 +712,7 @@ summary.calib_msm <- function(object, ...) {
     }
   }
 
-  cat("\n\nThe estimated calibration plots are stored in list element `plotdata`:\n\n")
+  cat("\n\nThe estimated data are stored in list element `plotdata`:\n\n")
 
   print(lapply(object[["plotdata"]], utils::head, 3))
 

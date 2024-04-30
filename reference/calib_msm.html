@@ -108,6 +108,7 @@ weights, based on the nominal calibration  framework of van Hoorde et al. (2014,
 <span>  pv.group.vars <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  pv.n.pctls <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  pv.precalc <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  pv.ids <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  CI <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  CI.type <span class="op">=</span> <span class="st">"bootstrap"</span>,</span>
 <span>  CI.R.boot <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -251,6 +252,10 @@ weights, based on the nominal calibration  framework of van Hoorde et al. (2014,
 
 <dt>pv.precalc</dt>
 <dd><p>Pre-calculated pseudo-values</p></dd>
+
+
+<dt>pv.ids</dt>
+<dd><p>Id's of individuals to calculate pseudo-values for</p></dd>
 
 
 <dt>CI</dt>
@@ -416,7 +421,7 @@ URL https://link.springer.com/book/10.1007/978-1-4939-2818-7.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> A confidence interval was not estimated</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The estimated calibration plots are stored in list element `plotdata`:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The estimated data are stored in list element `plotdata`:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $state1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   id      pred       obs</span>

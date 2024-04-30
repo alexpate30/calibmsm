@@ -2,7 +2,6 @@
 ### Tests for calibration curves produced using MLR-IPCW (calib.type = 'mlr')
 ###
 
-### THE ISSUE HERE IS THT I NEED TO RE-DEFINE DTCENS IN THE CMPRSK DATA
 test_that("check calib_msm output", {
 
   ## Reduce to 300 individuals
@@ -18,28 +17,28 @@ test_that("check calib_msm output", {
 
   ## Expect error if generate with CI
   expect_error(calib_msm(data.mstate = msebmtcal,
-                        data.raw = ebmtcal,
-                        j=1,
-                        s=0,
-                        t = 1826,
-                        tp.pred = tp.pred, calib.type = 'mlr',
-                        w.covs = c("year", "agecl", "proph", "match"),
-                        mlr.ps.int = 2,
-                        mlr.degree = 2,
-                        CI = 95,
-                        CI.R.boot = 5))
+                         data.raw = ebmtcal,
+                         j=1,
+                         s=0,
+                         t = 1826,
+                         tp.pred = tp.pred, calib.type = 'mlr',
+                         w.covs = c("year", "agecl", "proph", "match"),
+                         mlr.ps.int = 2,
+                         mlr.degree = 2,
+                         CI = 95,
+                         CI.R.boot = 5))
 
   ## Calculate observed event probabilities
   dat.calib.mlr <-
     suppressWarnings(calib_msm(data.mstate = msebmtcal,
-                              data.raw = ebmtcal,
-                              j=1,
-                              s=0,
-                              t = 1826,
-                              tp.pred = tp.pred, calib.type = 'mlr',
-                              w.covs = c("year", "agecl", "proph", "match"),
-                              mlr.ps.int = 2,
-                              mlr.degree = 2))
+                               data.raw = ebmtcal,
+                               j=1,
+                               s=0,
+                               t = 1826,
+                               tp.pred = tp.pred, calib.type = 'mlr',
+                               w.covs = c("year", "agecl", "proph", "match"),
+                               mlr.ps.int = 2,
+                               mlr.degree = 2))
 
   expect_type(dat.calib.mlr, "list")
   expect_equal(class(dat.calib.mlr), c("calib_mlr", "calib_msm"))
@@ -47,6 +46,42 @@ test_that("check calib_msm output", {
   expect_length(dat.calib.mlr[["plotdata"]], 6)
   expect_length(dat.calib.mlr[["plotdata"]][["state3"]]$id, 265)
   expect_length(dat.calib.mlr[["plotdata"]][["state6"]]$id, 265)
+  expect_no_error(summary(dat.calib.mlr))
+
+})
+
+test_that("check calib_msm output with CI = TRUE (for assess.mean)", {
+
+  ## Reduce to 300 individuals
+  # Extract the predicted transition probabilities out of state j = 1 for first 300 individuals
+  tp.pred <- tps0 |>
+    dplyr::filter(j == 1) |>
+    dplyr::filter(id %in% 1:300) |>
+    dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
+
+  ### Reduce ebmtcal
+  ebmtcal <- ebmtcal |> dplyr::filter(id %in% 1:300)
+  msebmtcal <- msebmtcal |> dplyr::filter(id %in% 1:300)
+
+  ## Assess mean calibration
+  dat.calib.mlr <- suppressWarnings(calib_msm(data.mstate = msebmtcal,
+                                              data.raw = ebmtcal,
+                                              j=1,
+                                              s=0,
+                                              t = 1826,
+                                              tp.pred = tp.pred,
+                                              calib.type = 'mlr',
+                                              w.covs = c("year", "agecl", "proph", "match"),
+                                              mlr.ps.int = 2,
+                                              mlr.degree = 2,
+                                              CI = 95,
+                                              CI.R.boot = 5,
+                                              assess.moderate = FALSE,
+                                              assess.mean = TRUE))
+
+  expect_type(dat.calib.mlr, "list")
+  expect_equal(class(dat.calib.mlr), c("calib_mlr", "calib_msm"))
+  expect_length(dat.calib.mlr[["mean"]], 6)
   expect_no_error(summary(dat.calib.mlr))
 
 })
@@ -69,14 +104,14 @@ test_that("check calib_msm output, (j = 1, s = 0),
             ### Calculate observed event probabilities
             dat.calib.mlr <-
               suppressWarnings(calib_msm(data.mstate = msebmtcal,
-                                        data.raw = ebmtcal,
-                                        j = 1,
-                                        s = 0,
-                                        t = 1826,
-                                        tp.pred = tp.pred, calib.type = 'mlr',
-                                        w.covs = c("year", "agecl", "proph", "match"),
-                                        mlr.ps.int = 2,
-                                        mlr.degree = 2))
+                                         data.raw = ebmtcal,
+                                         j = 1,
+                                         s = 0,
+                                         t = 1826,
+                                         tp.pred = tp.pred, calib.type = 'mlr',
+                                         w.covs = c("year", "agecl", "proph", "match"),
+                                         mlr.ps.int = 2,
+                                         mlr.degree = 2))
 
             ###
             ### Calculate manual weights
@@ -95,14 +130,14 @@ test_that("check calib_msm output, (j = 1, s = 0),
             ### Calculate observed event probabilities same function as internal procedure, and check it agrees with dat.calib.mlr
             dat.calib.mlr.w.manual <-
               suppressWarnings(calib_msm(data.mstate = msebmtcal,
-                                        data.raw = ebmtcal,
-                                        j = 1,
-                                        s = 0,
-                                        t = 1826,
-                                        tp.pred = tp.pred, calib.type = 'mlr',
-                                        weights = weights.manual$ipcw,
-                                        mlr.ps.int = 2,
-                                        mlr.degree = 2))
+                                         data.raw = ebmtcal,
+                                         j = 1,
+                                         s = 0,
+                                         t = 1826,
+                                         tp.pred = tp.pred, calib.type = 'mlr',
+                                         weights = weights.manual$ipcw,
+                                         mlr.ps.int = 2,
+                                         mlr.degree = 2))
 
             expect_equal(dat.calib.mlr[["plotdata"]][[1]], dat.calib.mlr.w.manual[["plotdata"]][[1]])
 
@@ -110,14 +145,14 @@ test_that("check calib_msm output, (j = 1, s = 0),
             ### Calculate observed event probabilities using an incorrect vector of weights, and see if its different from dat.calib.mlr
             dat.calib.mlr.w.manual <-
               suppressWarnings(calib_msm(data.mstate = msebmtcal,
-                                        data.raw = ebmtcal,
-                                        j = 1,
-                                        s = 0,
-                                        t = 1826,
-                                        tp.pred = tp.pred, calib.type = 'mlr',
-                                        weights = rep(1,nrow(weights.manual)),
-                                        mlr.ps.int = 2,
-                                        mlr.degree = 2))
+                                         data.raw = ebmtcal,
+                                         j = 1,
+                                         s = 0,
+                                         t = 1826,
+                                         tp.pred = tp.pred, calib.type = 'mlr',
+                                         weights = rep(1,nrow(weights.manual)),
+                                         mlr.ps.int = 2,
+                                         mlr.degree = 2))
 
             expect_false(any(dat.calib.mlr[["plotdata"]][[1]]$obs == dat.calib.mlr.w.manual[["plotdata"]][[1]]$obs))
 
@@ -127,15 +162,15 @@ test_that("check calib_msm output, (j = 1, s = 0),
 
             dat.calib.mlr.w.function <-
               suppressWarnings(calib_msm(data.mstate = msebmtcal,
-                                        data.raw = ebmtcal,
-                                        j = 1,
-                                        s = 0,
-                                        t = 1826,
-                                        tp.pred = tp.pred, calib.type = 'mlr',
-                                        w.function = calc_weights_manual,
-                                        w.covs = c("year", "agecl", "proph", "match"),
-                                        mlr.ps.int = 2,
-                                        mlr.degree = 2))
+                                         data.raw = ebmtcal,
+                                         j = 1,
+                                         s = 0,
+                                         t = 1826,
+                                         tp.pred = tp.pred, calib.type = 'mlr',
+                                         w.function = calc_weights_manual,
+                                         w.covs = c("year", "agecl", "proph", "match"),
+                                         mlr.ps.int = 2,
+                                         mlr.degree = 2))
 
             expect_type(dat.calib.mlr.w.function, "list")
             expect_equal(class(dat.calib.mlr.w.function), c("calib_mlr", "calib_msm"))
@@ -317,15 +352,15 @@ test_that("check calib_msm output, (j = 1, s = 0),
             ### Calculate observed event probabilities with new w.function
             dat.calib.mlr.w.function <-
               suppressWarnings(calib_msm(data.mstate = msebmtcal,
-                       data.raw = ebmtcal,
-                       j = 1,
-                       s = 0,
-                       t = 1826,
-                       tp.pred = tp.pred, calib.type = 'mlr',
-                       w.function = calc_weights_manual,
-                       w.covs = c("year", "agecl", "proph", "match"),
-                       mlr.ps.int = 2,
-                       mlr.degree = 2))
+                                         data.raw = ebmtcal,
+                                         j = 1,
+                                         s = 0,
+                                         t = 1826,
+                                         tp.pred = tp.pred, calib.type = 'mlr',
+                                         w.function = calc_weights_manual,
+                                         w.covs = c("year", "agecl", "proph", "match"),
+                                         mlr.ps.int = 2,
+                                         mlr.degree = 2))
 
             expect_type(dat.calib.mlr.w.function, "list")
             expect_equal(class(dat.calib.mlr.w.function), c("calib_mlr", "calib_msm"))
@@ -511,16 +546,16 @@ test_that("check calib_msm output, (j = 1, s = 0),
             ### Calculate observed event probabilities with new w.function
             dat.calib.mlr.w.function <-
               suppressWarnings(calib_msm(data.mstate = msebmtcal,
-                                        data.raw = ebmtcal,
-                                        j = 1,
-                                        s = 0,
-                                        t = 1826,
-                                        tp.pred = tp.pred, calib.type = 'mlr',
-                                        w.function = calc_weights_manual_extra,
-                                        w.covs = c("year", "agecl", "proph", "match"),
-                                        mlr.ps.int = 2,
-                                        mlr.degree = 2,
-                                        extra.arg = 0.1))
+                                         data.raw = ebmtcal,
+                                         j = 1,
+                                         s = 0,
+                                         t = 1826,
+                                         tp.pred = tp.pred, calib.type = 'mlr',
+                                         w.function = calc_weights_manual_extra,
+                                         w.covs = c("year", "agecl", "proph", "match"),
+                                         mlr.ps.int = 2,
+                                         mlr.degree = 2,
+                                         extra.arg = 0.1))
 
             expect_type(dat.calib.mlr.w.function, "list")
             expect_equal(class(dat.calib.mlr.w.function), c("calib_mlr", "calib_msm"))

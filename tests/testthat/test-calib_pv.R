@@ -385,6 +385,7 @@ test_that("check calib_pv output, (j = 1, s = 0), groups.vars and pv.n.pctls spe
 
   expect_equal(dat.calib.pv.ids.1.tout[[1]][,2], dat.calib.pv.ids.1[[1]][,2])
   expect_equal(dat.calib.pv.ids.1.tout[[1]][,3], dat.calib.pv.ids.1[[1]][,7])
+  expect_equal(ncol(dat.calib.pv.ids.1.tout[["plotdata"]]), 3)
 
   ## Calculate observed event probabilities for pv.group.vars
   dat.calib.pv.2 <- calib_msm(data.mstate = msebmtcal,
@@ -432,6 +433,7 @@ test_that("check calib_pv output, (j = 1, s = 0), groups.vars and pv.n.pctls spe
 
   expect_equal(dat.calib.pv.ids.2.tout[[1]][,2], dat.calib.pv.ids.2[[1]][,2])
   expect_equal(dat.calib.pv.ids.2.tout[[1]][,3], dat.calib.pv.ids.2[[1]][,7])
+  expect_equal(ncol(dat.calib.pv.ids.2.tout[["plotdata"]]), 3)
 
   ## Calculate observed event probabilities for pv.n.pctls
   dat.calib.pv.3 <- calib_msm(data.mstate = msebmtcal,
@@ -479,6 +481,7 @@ test_that("check calib_pv output, (j = 1, s = 0), groups.vars and pv.n.pctls spe
 
   expect_equal(dat.calib.pv.ids.3.tout[[1]][,2], dat.calib.pv.ids.3[[1]][,2])
   expect_equal(dat.calib.pv.ids.3.tout[[1]][,3], dat.calib.pv.ids.3[[1]][,7])
+  expect_equal(ncol(dat.calib.pv.ids.3.tout[["plotdata"]]), 3)
 
 })
 

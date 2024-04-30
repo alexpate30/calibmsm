@@ -668,7 +668,7 @@ calc_obs_pv_boot <- function(data.raw,
     if (!is.null(pv.ids)){
 
       ### Assign column names
-      # colnames(pv.out)[-1] <- paste("pv.state", transitions.out, sep = "")
+      colnames(pv.out)[-1] <- paste("pv.state", transitions.out, sep = "")
 
       ### Assign output.object
       output.object <- pv.out

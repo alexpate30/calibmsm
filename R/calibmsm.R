@@ -180,117 +180,117 @@
 #'
 #' @export
 calib_msm <- function(data.mstate,
-                     data.raw,
-                     j,
-                     s,
-                     t,
-                     tp.pred,
-                     tp.pred.plot = NULL,
-                     calib.type = "blr",
-                     curve.type = "rcs",
-                     rcs.nk = 3,
-                     loess.span = 0.75,
-                     loess.degree = 2,
-                     loess.surface = c("interpolate", "direct"),
-                     loess.statistics = c("approximate", "exact", "none"),
-                     loess.trace.hat = c("exact", "approximate"),
-                     loess.cell = 0.2,
-                     loess.iterations = 4,
-                     loess.iterTrace = FALSE,
-                     mlr.smoother.type = "sm.ps",
-                     mlr.ps.int = 4,
-                     mlr.degree = 3,
-                     mlr.s.df = 4,
-                     mlr.niknots = 4,
-                     weights = NULL,
-                     w.function = NULL,
-                     w.covs = NULL,
-                     w.landmark.type = "state",
-                     w.max = 10,
-                     w.stabilised = FALSE,
-                     w.max.follow = NULL,
-                     pv.group.vars = NULL,
-                     pv.n.pctls = NULL,
-                     pv.precalc = NULL,
-                     pv.ids = NULL,
-                     CI = FALSE,
-                     CI.type = "bootstrap",
-                     CI.R.boot = NULL,
-                     CI.seed = 1,
-                     transitions.out = NULL,
-                     assess.moderate = TRUE,
-                     assess.mean = TRUE,
-                     ...){
+                      data.raw,
+                      j,
+                      s,
+                      t,
+                      tp.pred,
+                      tp.pred.plot = NULL,
+                      calib.type = "blr",
+                      curve.type = "rcs",
+                      rcs.nk = 3,
+                      loess.span = 0.75,
+                      loess.degree = 2,
+                      loess.surface = c("interpolate", "direct"),
+                      loess.statistics = c("approximate", "exact", "none"),
+                      loess.trace.hat = c("exact", "approximate"),
+                      loess.cell = 0.2,
+                      loess.iterations = 4,
+                      loess.iterTrace = FALSE,
+                      mlr.smoother.type = "sm.ps",
+                      mlr.ps.int = 4,
+                      mlr.degree = 3,
+                      mlr.s.df = 4,
+                      mlr.niknots = 4,
+                      weights = NULL,
+                      w.function = NULL,
+                      w.covs = NULL,
+                      w.landmark.type = "state",
+                      w.max = 10,
+                      w.stabilised = FALSE,
+                      w.max.follow = NULL,
+                      pv.group.vars = NULL,
+                      pv.n.pctls = NULL,
+                      pv.precalc = NULL,
+                      pv.ids = NULL,
+                      CI = FALSE,
+                      CI.type = "bootstrap",
+                      CI.R.boot = NULL,
+                      CI.seed = 1,
+                      transitions.out = NULL,
+                      assess.moderate = TRUE,
+                      assess.mean = TRUE,
+                      ...){
 
-# rm(list=ls())
-#
-# devtools::load_all()
-#   data("ebmtcal")
-#   data("msebmtcal")
-#   data("tps0")
-#   data("tps100")
-# calib.type <- "pv"
-# data.raw <- ebmtcal
-# data.mstate <- msebmtcal
-# tp.pred <- tps0 |>
-#   subset(j == 1) |>
-#   dplyr::select(paste("pstate", 1:6, sep = ""))
-#
-# data.raw <- ebmtcal[ebmtcal$id %in% 1:50, ]
-# data.mstate <- msebmtcal[msebmtcal$id %in% 1:50, ]
-# tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
-# tp.pred <- tp.pred[1:50, ]
-#
-#
-# j <- 1
-# s <- 0
-# t <- 1826
-#
-# curve.type = "rcs"
-# tp.pred.plot = NULL
-# transitions.out = NULL
-# weights = NULL
-#
-# w.covs = NULL
-# w.landmark.type = "state"
-# w.max = 10
-# w.stabilised = FALSE
-# w.max.follow = NULL
-# w.function = NULL
-#
-# CI = FALSE
-# # CI = 95
-# CI.R.boot = 2
-# rcs.nk = 3
-# CI.type = "bootstrap"
-#
-# CI.seed = 1
-# loess.span = 1
-# loess.degree = 1
-#
-# pv.group.vars = c("year")
-# pv.n.pctls = 2
-#
-# mlr.smoother.type = "sm.ps"
-# mlr.ps.int = 4
-# mlr.degree = 3
-# mlr.s.df = 4
-# mlr.niknots = 4
-# assess.moderate = TRUE
-# assess.mean = TRUE
-#
-# pv.precalc = NULL
-# str(data.raw)
-#
-# pv.group.vars = NULL
-# tp.pred <- readRDS("P:/Documents/aaa_incline/DEBUG.tp.pred.rds")
-# data.raw <- readRDS("P:/Documents/aaa_incline/DEBUG.data.raw.rds")
-# data.mstate <- readRDS("P:/Documents/aaa_incline/DEBUG.data.mstate.rds")
-# pv.n.pctls = 10
-# t <- 2557
+  # rm(list=ls())
+  #
+  # devtools::load_all()
+  #   data("ebmtcal")
+  #   data("msebmtcal")
+  #   data("tps0")
+  #   data("tps100")
+  # calib.type <- "pv"
+  # data.raw <- ebmtcal
+  # data.mstate <- msebmtcal
+  # tp.pred <- tps0 |>
+  #   subset(j == 1) |>
+  #   dplyr::select(paste("pstate", 1:6, sep = ""))
+  #
+  # data.raw <- ebmtcal[ebmtcal$id %in% 1:50, ]
+  # data.mstate <- msebmtcal[msebmtcal$id %in% 1:50, ]
+  # tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
+  # tp.pred <- tp.pred[1:50, ]
+  #
+  #
+  # j <- 1
+  # s <- 0
+  # t <- 1826
+  #
+  # curve.type = "rcs"
+  # tp.pred.plot = NULL
+  # transitions.out = NULL
+  # weights = NULL
+  #
+  # w.covs = NULL
+  # w.landmark.type = "state"
+  # w.max = 10
+  # w.stabilised = FALSE
+  # w.max.follow = NULL
+  # w.function = NULL
+  #
+  # CI = FALSE
+  # # CI = 95
+  # CI.R.boot = 2
+  # rcs.nk = 3
+  # CI.type = "bootstrap"
+  #
+  # CI.seed = 1
+  # loess.span = 1
+  # loess.degree = 1
+  #
+  # pv.group.vars = c("year")
+  # pv.n.pctls = 2
+  #
+  # mlr.smoother.type = "sm.ps"
+  # mlr.ps.int = 4
+  # mlr.degree = 3
+  # mlr.s.df = 4
+  # mlr.niknots = 4
+  # assess.moderate = TRUE
+  # assess.mean = TRUE
+  #
+  # pv.precalc = NULL
+  # str(data.raw)
+  #
+  # pv.group.vars = NULL
+  # tp.pred <- readRDS("P:/Documents/aaa_incline/DEBUG.tp.pred.rds")
+  # data.raw <- readRDS("P:/Documents/aaa_incline/DEBUG.data.raw.rds")
+  # data.mstate <- readRDS("P:/Documents/aaa_incline/DEBUG.data.mstate.rds")
+  # pv.n.pctls = 10
+  # t <- 2557
 
-# str(ebmtcal)
-# str(readRDS("P:/Documents/aaa_incline/data.raw.reduc.rds"))
+  # str(ebmtcal)
+  # str(readRDS("P:/Documents/aaa_incline/data.raw.reduc.rds"))
   # calib.type <- "blr"
   #
   # # ## Calculate manual weights
@@ -635,14 +635,25 @@ calib_msm <- function(data.mstate,
                    "CI" = CI,
                    "CI.type" = CI.type,
                    "CI.R.boot" = CI.R.boot,
-                   "curve.type" = curve.type,
                    "j" = j,
                    "s" = s,
                    "t" = t,
                    "calib.type" = calib.type)
-  if (calib.type %in% c("pv", "aj")){
+  if (calib.type %in% c("blr", "mlr")){
+    metadata[["curve.type"]] <- curve.type
+  } else if (calib.type %in% c("pv", "aj")){
     metadata[["pv.group.vars"]] <- pv.group.vars
     metadata[["pv.n.pctls"]] <- pv.n.pctls
+    if (calib.type == "pv" & is.null(pv.ids)){
+      metadata[["curve.type"]] <- curve.type
+    }
+  }
+  if (CI != FALSE){
+    metadata[["CI"]] <- CI
+    metadata[["CI.type"]] <- CI.type
+    if (CI.type == "bootstrap"){
+      metadata[["CI.R.boot"]] <- CI.R.boot
+    }
   }
 
   ### Crate a combined output object with metadata, as well as plot data
@@ -669,8 +680,8 @@ calib_msm <- function(data.mstate,
 summary.calib_msm <- function(object, ...) {
 
   cat("The method used to assess calibration was", ifelse(object[["metadata"]]$calib.type == "blr", "BLR-IPCW",
-                                                           ifelse(object[["metadata"]]$calib.type == "mlr", "MLR-IPCW",
-                                                                  ifelse(object[["metadata"]]$calib.type == "pv", "Pseudo-values with Aalen-Johansen estimator"))),  sep = " ")
+                                                          ifelse(object[["metadata"]]$calib.type == "mlr", "MLR-IPCW",
+                                                                 ifelse(object[["metadata"]]$calib.type == "pv", "Pseudo-values with Aalen-Johansen estimator"))),  sep = " ")
 
   cat("\n\nThere were non-zero predicted transition probabilities into states ",
       paste(object[["metadata"]]$valid.transitions, collapse = ","),  sep = " ")

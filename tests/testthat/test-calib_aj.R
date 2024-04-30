@@ -3,7 +3,7 @@
 ###
 
 ### Run tests for pv.n.pctls = NULL and pv.group.vars = NULL
-test_that("check calib_pv output, (j = 1, s = 0), curve.type = loess, CI.type = bootstrap", {
+test_that("check calib_aj, pv.n.pctls = NULL and pv.group.vars = NULL", {
 
   skip_on_cran()
 
@@ -53,7 +53,7 @@ test_that("check calib_pv output, (j = 1, s = 0), curve.type = loess, CI.type = 
 
 
 ### Run tets pv.n.pctls specified
-test_that("check calib_pv output, (j = 1, s = 0), curve.type = loess, CI.type = bootstrap", {
+test_that("check calib_pv output, pv.n.pctls specified", {
 
   skip_on_cran()
 
@@ -105,7 +105,7 @@ test_that("check calib_pv output, (j = 1, s = 0), curve.type = loess, CI.type = 
 
 
 ### Run tests pv.group.vars specified
-test_that("check calib_pv output, (j = 1, s = 0), curve.type = loess, CI.type = bootstrap", {
+test_that("check calib_pv output, pv.group.vars specified", {
 
   skip_on_cran()
 
@@ -157,20 +157,20 @@ test_that("check calib_pv output, (j = 1, s = 0), curve.type = loess, CI.type = 
 
 
 ### Run tests pv.group.vars and pv.n.pctls specified
-test_that("check calib_pv output, (j = 1, s = 0), curve.type = loess, CI.type = bootstrap", {
+test_that("check calib_pv output, pv.group.vars and pv.n.pctls specified", {
 
   skip_on_cran()
 
   ## Reduce to 50 individuals
   # Extract the predicted transition probabilities out of state j = 1 for first 50 individuals
   tp.pred <- tps0 |>
-    dplyr::filter(id %in% 1:50) |>
+    dplyr::filter(id %in% 1:100) |>
     dplyr::filter(j == 1) |>
     dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
   # Reduce ebmtcal to first 50 individuals
-  ebmtcal <- ebmtcal |> dplyr::filter(id %in% 1:50)
+  ebmtcal <- ebmtcal |> dplyr::filter(id %in% 1:100)
   # Reduce msebmtcal.cmprsk to first 100 individuals
-  msebmtcal <- msebmtcal |> dplyr::filter(id %in% 1:50)
+  msebmtcal <- msebmtcal |> dplyr::filter(id %in% 1:100)
 
   ## Calculate observed event probabilities using transitions.out = NULL
   dat.calib.aj.1 <- calib_msm(data.mstate = msebmtcal,

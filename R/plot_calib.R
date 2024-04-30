@@ -196,8 +196,8 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, siz
     ### If marginal density plot has been requested add an invisible scatter plot on which to base this
     ### We also remove legend forcefully. When adding marginal density plots, the legend must be added using an arrangeGrob.
     if (marg.density == TRUE){
-      ### IF CI == TRUE want to only extract calibration line for the density plot
-      if (CI == TRUE){
+      ### IF CI != FALSE want to only extract calibration line for the density plot
+      if (CI != FALSE){
         ## Add scatter
         plots.list[[k]] <- plots.list[[k]] +
           ggplot2::geom_point(data = plot.data.k.longer |> subset(mapping == "Calibration"),
@@ -220,7 +220,7 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, siz
     } else if (marg.rug == TRUE){
 
       ## Add the marginal rug plot
-      if (CI == TRUE){
+      if (CI != FALSE){
         plots.list[[k]] <- plots.list[[k]] +
           ggplot2::geom_rug(data = plot.data.k.longer |> subset(mapping == "Calibration"),
                             ggplot2::aes(x = pred, y = value), col = grDevices::rgb(1, 0, 0, alpha = marg.rug.transparency))
@@ -265,7 +265,7 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, siz
                                                                         byrow = TRUE),
                                            top = NULL)
       ### Marginal density plots require legend to be added manually, because otherwise you get the scatter plot which ggMarginal relies on.
-      ### We only add legend if CI == TRUE, as there is no legend when CI == FALSE
+      ### We only add legend if CI != FALSE, as there is no legend when CI == FALSE
       if (legend.include == TRUE & !isFALSE(CI)){
         if (legend.seperate == FALSE){
           plots.list <- gridExtra::arrangeGrob(plots.list, legend.save, nrow = 2, heights = c(15, 1))

@@ -32,6 +32,13 @@ test_that("check plot.calib_msm output (j = 1, s = 0)", {
   plot.object <- plot(dat.calib.blr, combine = TRUE, nrow = 2, ncol = 3, marg.rug = TRUE)
   expect_equal(class(plot.object), c("gg", "ggplot", "ggarrange"))
 
+  ## Add titles
+  plot.object <- plot(dat.calib.blr, combine = TRUE, nrow = 2, ncol = 3, marg.rug = TRUE,
+                      titles = paste("eggs", 1:6),
+                      axis.titles.text.x = paste("eggs.x", 1:6),
+                      axis.titles.text.y = paste("eggs.y", 1:6))
+  expect_equal(class(plot.object), c("gg", "ggplot", "ggarrange"))
+
 })
 
 test_that("check plot.calib_msm output (j = 1, s = 0) with CI", {

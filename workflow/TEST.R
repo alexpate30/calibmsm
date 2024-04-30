@@ -831,6 +831,7 @@ testthat::test_file("tests/testthat/test-calib_blr.R")
 testthat::test_file("tests/testthat/test-calib_mlr.R")
 testthat::test_file("tests/testthat/test-weights.R")
 testthat::test_file("tests/testthat/test-calib_pv.R")
+testthat::test_file("tests/testthat/test-calib_aj.R")
 testthat::test_file("tests/testthat/test-plot_calib.R")
 
 

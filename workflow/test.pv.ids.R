@@ -11,13 +11,7 @@ test <- msebmtcal[msebmtcal$id %in% 1:100, ]
 str(test)
 #'
 # Now estimate the observed event probabilities for each possible transition.
-dat.calib <- calib_msm(data.mstate = msebmtcal[msebmtcal$id %in% 1:100, ],
- data.raw = ebmtcal[ebmtcal$id %in% 1:100, ],
- j=1,
- s=0,
- t = 1826,
- tp.pred = tp.pred[1:100, ],
- calib.type = "pv")
+
 
 dat.calib <- calib_msm(data.mstate = msebmtcal[msebmtcal$id %in% 1:50, ],
                        data.raw = ebmtcal[ebmtcal$id %in% 1:50, ],

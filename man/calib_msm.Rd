@@ -38,6 +38,7 @@ calib_msm(
   pv.group.vars = NULL,
   pv.n.pctls = NULL,
   pv.precalc = NULL,
+  pv.ids = NULL,
   CI = FALSE,
   CI.type = "bootstrap",
   CI.R.boot = NULL,
@@ -114,6 +115,8 @@ calib_msm(
 \item{pv.n.pctls}{Number of percentiles of predicted risk to group by before calculating pseudo-values}
 
 \item{pv.precalc}{Pre-calculated pseudo-values}
+
+\item{pv.ids}{Id's of individuals to calculate pseudo-values for}
 
 \item{CI}{Size of confidence intervals as a \%}
 

@@ -5,8 +5,6 @@
 ### Run tests for pv.n.pctls = NULL and pv.group.vars = NULL
 test_that("check calib_aj, pv.n.pctls = NULL and pv.group.vars = NULL", {
 
-  skip_on_cran()
-
   ## Reduce to 50 individuals
   # Extract the predicted transition probabilities out of state j = 1 for first 50 individuals
   tp.pred <- tps0 |>
@@ -54,8 +52,6 @@ test_that("check calib_aj, pv.n.pctls = NULL and pv.group.vars = NULL", {
 
 ### Run tets pv.n.pctls specified
 test_that("check calib_pv output, pv.n.pctls specified", {
-
-  skip_on_cran()
 
   ## Reduce to 50 individuals
   # Extract the predicted transition probabilities out of state j = 1 for first 50 individuals

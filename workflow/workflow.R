@@ -99,13 +99,13 @@ gitcreds::gitcreds_set()
 
 ### R-CMD-check action
 usethis::use_github_action("check-standard")
-check-standard
+
 ### Test coverage
 ## For test coverage, used following sources:
 ## 1) https://www.r-bloggers.com/2017/06/how-to-add-code-coverage-codecov-to-your-r-package/
 ## 2) The instructions on codecov.io
 usethis::use_coverage(type = "codecov")
-# covr::codecov(token = "INSERT TOKEN HERE")
+covr::codecov(token = "INSERT TOKEN HERE")
 use_github_action("test-coverage")
 
 ### Build readme

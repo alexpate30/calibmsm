@@ -309,9 +309,19 @@ calib_msm <- function(data.mstate,
   ### Warnings and errors ###
   ###########################
 
+  ### Stop if data.mstate is missing the transition matrix, this can happen when using the subset function on data.mstate
+  if (!("trans" %in% attributes(data.mstate))){
+    stop("The is no transition matrix (trans) attribute in data.mstate, this may have happened when using the subset function to subset an 'msdata' data frame,
+         which should have this attribute")
+  }
   ### Stop if patients in data.raw are not in data.mstate
   if (!base::all(unique(data.raw$id) %in% unique(data.mstate$id))){
     stop("All patients in data.raw are not contained in data.mstate. Landmarking cannot be applied.")
+  }
+
+  ### Stop if not same number of rows in data.raw and tp.pred
+  if (nrow(tp.pred) != nrow(data.raw)){
+    stop("Number of rows in tp.pred does not match number of rows in data.raw")
   }
 
   ### Warning if patients in data.mstate are not in data.raw

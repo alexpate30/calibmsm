@@ -310,7 +310,7 @@ calib_msm <- function(data.mstate,
   ###########################
 
   ### Stop if data.mstate is missing the transition matrix, this can happen when using the subset function on data.mstate
-  if (!("trans" %in% attributes(data.mstate))){
+  if (!("trans" %in% names(attributes(data.mstate)))){
     stop("The is no transition matrix (trans) attribute in data.mstate, this may have happened when using the subset function to subset an 'msdata' data frame,
          which should have this attribute")
   }

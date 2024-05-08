@@ -114,7 +114,7 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, siz
 
       ### Create the plots
       plots.list[[k]] <- ggplot2::ggplot(data = plot.data.k.longer |> dplyr::arrange(pred) |> dplyr::select(pred, line.group, value, mapping)) +
-        ggplot2::geom_line(ggplot2::aes(x = pred, y = value, group = line.group, color = mapping), size = size.line) +
+        ggplot2::geom_line(ggplot2::aes(x = pred, y = value, group = line.group, color = mapping), linewidth = size.line) +
         ggplot2::geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
         ggplot2::xlim(c(min(min(plot.data.k.longer$value), min(plot.data.k.longer$pred)),
                         max(max(plot.data.k.longer$value), max(plot.data.k.longer$pred)))) +
@@ -132,7 +132,7 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, siz
 
       ### Create the plots
       plots.list[[k]] <- ggplot2::ggplot(data = plot.data.k |> dplyr::arrange(pred) |> dplyr::select(id, pred, obs) |> dplyr::rename(value = obs)) +
-        ggplot2::geom_line(ggplot2::aes(x = pred, y = value), colour = "red", size = size.line) +
+        ggplot2::geom_line(ggplot2::aes(x = pred, y = value), colour = "red", linewidth = size.line) +
         ggplot2::geom_abline(intercept = 0, slope = 1, linetype = "dashed") +
         ggplot2::xlim(c(min(min(plot.data.k$obs), min(plot.data.k$pred)),
                         max(max(plot.data.k$obs), max(plot.data.k$pred)))) +

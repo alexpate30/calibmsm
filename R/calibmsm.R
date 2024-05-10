@@ -451,6 +451,21 @@ calib_msm <- function(data.mstate,
     }
   }
 
+  ### Check for sufficient numbers in each state at time when calibration is being assessed
+  ## Create landmarked dataset
+  temp.landmark <-  apply_landmark(data.raw = data.raw, data.mstate = data.mstate, j = j, s = s, t = t, exclude.cens.t = TRUE, data.return = "data.mstate")
+
+  ## Identify individuals in state j at time s
+  temp.ids.lmk <- lapply(valid.transitions, extract_ids_states, data.mstate = temp.landmark, tmat = attributes(data.mstate)$trans, t = t)
+  if (any(unlist(lapply(temp.ids.lmk, length)) < 50)){
+    warning("In the landmark cohort of individuals uncensored and in state j at time s,
+    there are some states have less than 50 people at the time at which calibration is being assessed (t).
+    Warnings and errors may occur when the models are fitted to estimate the calibration curves due to small sample size.
+    This warning has been written to try and intercept some uninformative error messages when the underlying statistical models fail.
+    The number to flag this warning (50) has been chosen arbitrarily, and does not constitute a sufficient sample size from a statistical point of view.")
+  }
+  rm(temp.landmark, temp.ids.lmk)
+
   ### Assign column names to pv.precalc
   if (!is.null(pv.precalc)){
     if(ncol(pv.precalc) != ncol (tp.pred)){

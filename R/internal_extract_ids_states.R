@@ -43,10 +43,9 @@ extract_ids_states <- function(data.mstate, tmat, j, t){
 #'
 #' @description
 #' Reduce cohort to individual who are uncensored and in state `j` at time `s`. Choosing
-#' `exclude.cens.t = FALSE` (default) will also remove individuals who are censored by time `t`.
-#' Choosing `exclude.cens.t = TRUE` will allow individuals censored at time `t` to remain
-#' in the cohort (required for pseudo-value approach). This step applied through the variable
-#' 'state.poly' which will be NA if an individual is censored at time `t`.
+#' `exclude.cens.t = FALSE` (default) will allow individuals censored at time `t` to remain
+#' in the cohort (required for pseudo-value approach).
+#' Choosing `exclude.cens.t = TRUE` will also remove individuals who are censored by time `t`.
 #'
 #' Note that the `exclude.cens.t` argument will not work for `data.return = "data.mstate"`.
 #' @noRd

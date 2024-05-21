@@ -1,4 +1,4 @@
-#' Calibration plots for a multistate model'
+#' Assess the calibration of a multistate model
 #' @description
 #' Calculates the underlying data for calibration plots of the predicted transition
 #' probabilities from a multistate model using three methods.

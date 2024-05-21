@@ -8,6 +8,11 @@
 [![R-CMD-check](https://github.com/alexpate30/calibmsm/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/alexpate30/calibmsm/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/alexpate30/calibmsm/branch/master/graph/badge.svg)](https://app.codecov.io/gh/alexpate30/calibmsm/?branch=master)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/calibmsm)](https://CRAN.R-project.org/package=calibmsm)
+[![metacran
+downloads](https://cranlogs.r-pkg.org/badges/grand-total/calibmsm)](https://cran.r-project.org/package=calibmsm)
+
 <!-- badges: end -->
 
 The goal of **calibmsm** is to provide a set of tools for estimating
@@ -60,6 +65,7 @@ knots. A 95% confidence interval is calculated using bootstrapping with
 ``` r
 ## Load calibmsm
 library(calibmsm)
+#> Warning: package 'calibmsm' was built under R version 4.3.3
 
 ## Extract relevant predicted risks from tps0
 tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))

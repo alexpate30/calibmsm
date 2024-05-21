@@ -826,7 +826,7 @@ rm(list=ls())
 devtools::load_all()
 devtools::test()
 
-
+testchange <- 1
 rm(list=ls())
 devtools::load_all()
 testthat::test_file("tests/testthat/test-calib_blr.R")

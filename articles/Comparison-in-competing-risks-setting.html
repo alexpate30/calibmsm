@@ -155,8 +155,9 @@ all methods.</p>
 <span><span class="co">#&gt; 3 0.01921355 0.01871733   0 0.006325238 0.007708340</span></span>
 <span><span class="co">#&gt; 4 0.02447306 0.02323096   0 0.010698591 0.010818696</span></span>
 <span><span class="co">#&gt; 5 0.02777129 0.02476595   0 0.009947925 0.012554747</span></span>
-<span><span class="co">#&gt; 6 0.01921355 0.01871733   0 0.006325238 0.007708340</span></span>
-<span></span>
+<span><span class="co">#&gt; 6 0.01921355 0.01871733   0 0.006325238 0.007708340</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"ebmtcal.cmprsk"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">ebmtcal.cmprsk</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   id  rec rec.s   ae ae.s recae recae.s  rel rel.s  srv srv.s      year agecl</span></span>
@@ -172,8 +173,9 @@ all methods.</p>
 <span><span class="co">#&gt; 3    no no gender mismatch     27        0</span></span>
 <span><span class="co">#&gt; 4    no    gender mismatch     42        0</span></span>
 <span><span class="co">#&gt; 5    no    gender mismatch     22        0</span></span>
-<span><span class="co">#&gt; 6    no no gender mismatch     27        0</span></span>
-<span></span>
+<span><span class="co">#&gt; 6    no no gender mismatch     27        0</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"msebmtcal.cmprsk"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">msebmtcal.cmprsk</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   id from to trans Tstart Tstop time status</span></span>
@@ -189,7 +191,7 @@ all methods.</p>
 </h2>
 <p>We first assess the calibration of this competing risks model using
 the BLR-IPCW approach.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### Estimate calibration curves</span></span>
 <span><span class="va">dat.calib.blr</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="../reference/calib_msm.html">calib_msm</a></span><span class="op">(</span>data.mstate <span class="op">=</span> <span class="va">msebmtcal.cmprsk</span>,</span>
@@ -208,7 +210,7 @@ the BLR-IPCW approach.</p>
 <span></span>
 <span><span class="co">### Turn into plot and print</span></span>
 <span><span class="va">plot.calibmsm.blr</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat.calib.blr</span>, combine <span class="op">=</span> <span class="cn">TRUE</span>, nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">plot.calibmsm.blr</span></span></code></pre></div>
 <div class="figure">
 <img src="Comparison-in-competing-risks-setting_files/figure-html/unnamed-chunk-4-1.png" alt="Figure 1: Calibration plots for competing risks model out of the starting state when using BLR-IPCW" width="720"><p class="caption">
@@ -223,7 +225,7 @@ starting state when using BLR-IPCW
 <p>Next we assess the calibration of this competing risks model using
 the pseudo-value approach, implemented through
 <code>calib_pv</code>.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### Estimate calibration curves</span></span>
 <span><span class="va">dat.calib.pv</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="../reference/calib_msm.html">calib_msm</a></span><span class="op">(</span>data.mstate <span class="op">=</span> <span class="va">msebmtcal.cmprsk</span>,</span>
@@ -243,7 +245,7 @@ the pseudo-value approach, implemented through
 <span></span>
 <span><span class="co">### Turn into plot and print</span></span>
 <span><span class="va">plot.calibmsm.pv</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat.calib.pv</span>, combine <span class="op">=</span> <span class="cn">TRUE</span>, nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">plot.calibmsm.pv</span></span></code></pre></div>
 <div class="figure">
 <img src="Comparison-in-competing-risks-setting_files/figure-html/unnamed-chunk-6-1.png" alt="Figure 2: Calibration plots for competing risks model out of the starting state when using pseudo-values" width="720"><p class="caption">
@@ -259,7 +261,7 @@ starting state when using pseudo-values
 the graphical calibration curves approach of <span class="citation">Austin et al. (2022)</span>. A custom function is
 written to do this, which estimates the calibration curves and returns a
 list of plots using <code>ggplot2</code>.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">calc.calib.gcc.mod</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data.mstate</span>, <span class="va">data.raw</span>, <span class="va">j</span>, <span class="va">s</span>, <span class="va">t</span>, <span class="va">p.est</span>, <span class="va">nk</span> <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">{</span></span>
 <span>  </span>
 <span>  <span class="co">### Assign colnames to p.est</span></span>
@@ -375,7 +377,7 @@ list of plots using <code>ggplot2</code>.</p>
 <span><span class="op">}</span></span></code></pre></div>
 <p>This function is then applied to estimate the calibration curves and
 create the plots.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### Estimate calibration curves and create plots</span></span>
 <span><span class="va">plot.gcc.rcs.list</span> <span class="op">&lt;-</span> <span class="fu">calc.calib.gcc.mod</span><span class="op">(</span>data.mstate <span class="op">=</span> <span class="va">msebmtcal.cmprsk</span>,</span>
 <span>                                        data.raw <span class="op">=</span> <span class="va">ebmtcal.cmprsk</span>,</span>
@@ -387,7 +389,7 @@ create the plots.</p>
 <span></span>
 <span><span class="co">### Combine into one plot and print</span></span>
 <span><span class="va">plot.gcc.rcs</span> <span class="op">&lt;-</span> <span class="fu">ggpubr</span><span class="fu">::</span><span class="fu"><a href="https://rpkgs.datanovia.com/ggpubr/reference/ggarrange.html" class="external-link">ggarrange</a></span><span class="op">(</span>plotlist <span class="op">=</span> <span class="va">plot.gcc.rcs.list</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">plot.gcc.rcs</span></span></code></pre></div>
 <div class="figure">
 <img src="Comparison-in-competing-risks-setting_files/figure-html/unnamed-chunk-9-1.png" alt="Figure 3: Calibration plots for competing risks model out of the starting state when using graphical calibration curves" width="720"><p class="caption">

@@ -121,8 +121,9 @@ vignette</a> for a more detailed description of this data.</p>
 <span><span class="co">#&gt; 3    no no gender mismatch   1264        1</span></span>
 <span><span class="co">#&gt; 4    no    gender mismatch     84        0</span></span>
 <span><span class="co">#&gt; 5    no    gender mismatch    114        0</span></span>
-<span><span class="co">#&gt; 6    no no gender mismatch   1427        1</span></span>
-<span></span>
+<span><span class="co">#&gt; 6    no no gender mismatch   1427        1</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"msebmtcal"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">msebmtcal</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   id from to trans Tstart Tstop time status</span></span>
@@ -131,8 +132,9 @@ vignette</a> for a more detailed description of this data.</p>
 <span><span class="co">#&gt; 3  1    1  5     3      0    22   22      0</span></span>
 <span><span class="co">#&gt; 4  1    1  6     4      0    22   22      0</span></span>
 <span><span class="co">#&gt; 5  1    2  4     5     22   995  973      0</span></span>
-<span><span class="co">#&gt; 6  1    2  5     6     22   995  973      0</span></span>
-<span></span>
+<span><span class="co">#&gt; 6  1    2  5     6     22   995  973      0</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"tps0"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">tps0</span><span class="op">)</span></span>
 <span><span class="co">#&gt;   id   pstate1   pstate2    pstate3   pstate4   pstate5   pstate6        se1</span></span>
@@ -148,8 +150,9 @@ vignette</a> for a more detailed description of this data.</p>
 <span><span class="co">#&gt; 3 0.02375770 0.01245752 0.02322375 0.01647890 0.01601525 1</span></span>
 <span><span class="co">#&gt; 4 0.03004447 0.01462570 0.03018673 0.02124071 0.02416121 1</span></span>
 <span><span class="co">#&gt; 5 0.03419721 0.01367768 0.03423941 0.02329644 0.03688586 1</span></span>
-<span><span class="co">#&gt; 6 0.02375770 0.01257276 0.02317348 0.01649531 0.01602438 1</span></span>
-<span></span>
+<span><span class="co">#&gt; 6 0.02375770 0.01257276 0.02317348 0.01649531 0.01602438 1</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
 <span><span class="va">t</span> <span class="op">&lt;-</span> <span class="fl">1826</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -173,7 +176,7 @@ dataset)</li>
 </ol>
 <p>The code to produce the calibration curves with confidence intervals
 is as follows:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dat.calib.blr</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="../reference/calib_msm.html">calib_msm</a></span><span class="op">(</span>data.mstate <span class="op">=</span> <span class="va">msebmtcal</span>,</span>
 <span>           data.raw <span class="op">=</span> <span class="va">ebmtcal</span>,</span>
@@ -189,7 +192,7 @@ is as follows:</p>
 <span>           w.covs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span>, <span class="st">"agecl"</span>, <span class="st">"proph"</span>, <span class="st">"match"</span><span class="op">)</span>,</span>
 <span>           CI <span class="op">=</span> <span class="fl">95</span>,</span>
 <span>           CI.R.boot <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat.calib.blr</span>, combine <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <img src="BLR-IPCW-manual-bootstrap_files/figure-html/unnamed-chunk-4-1.png" alt="Figure 2: Calibration plots using BLR-IPCW, confidence interval estimated using manual bootstrap procedure" width="720"><p class="caption">
@@ -229,7 +232,7 @@ allow the user to specify their own function for estimating the weights.
 Given our choice of function to estimate the weights, the calibration
 curve is the same as that from Figure 1, and the confidence interval is
 a similar size.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">calc_weights_manual</span> <span class="op">&lt;-</span> <span class="fu">calibmsm</span><span class="fu">::</span><span class="va"><a href="../reference/calc_weights.html">calc_weights</a></span></span>
 <span></span>
 <span><span class="va">dat.calib.blr.w.function</span> <span class="op">&lt;-</span></span>
@@ -248,7 +251,7 @@ a similar size.</p>
 <span>           w.covs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span>, <span class="st">"agecl"</span>, <span class="st">"proph"</span>, <span class="st">"match"</span><span class="op">)</span>,</span>
 <span>           CI <span class="op">=</span> <span class="fl">95</span>,</span>
 <span>           CI.R.boot <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat.calib.blr.w.function</span>, combine <span class="op">=</span> <span class="cn">TRUE</span>, nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <img src="BLR-IPCW-manual-bootstrap_files/figure-html/unnamed-chunk-6-1.png" alt="Figure 2: Calibration plots using BLR-IPCW, confidence interval estimated using internal bootstrap procedure with custom specification of function to estimate the weights" width="720"><p class="caption">
@@ -270,7 +273,7 @@ time. This is done by using the package <em>boot</em> <span class="citation">(Ca
 each individual. When the validation cohort <code>ebmtcal</code> is
 resampled, the appropriate predicted transition probabilities must also
 be resampled from this object.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tp.pred</span> <span class="op">&lt;-</span> <span class="va">tps0</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">j</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu">any_of</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"pstate"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -280,7 +283,7 @@ every bootstrapped calibration curve. These are the predicted transition
 probabilities of the individuals who are uncensored at time
 <code>t</code>, which are the predicted transition probabilities for the
 original calibration curves.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Extract ids for individuals uncensored at t</span></span>
 <span><span class="va">ids.uncens</span> <span class="op">&lt;-</span> <span class="va">ebmtcal</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">dtcens</span> <span class="op">&gt;</span> <span class="va">t</span> <span class="op">|</span> <span class="op">(</span><span class="va">dtcens</span> <span class="op">&lt;</span> <span class="va">t</span> <span class="op">&amp;</span> <span class="va">dtcens.s</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -298,7 +301,7 @@ from the internal procedure. The vector of weights should have an entry
 for every row the validation dataset. For individuals who will not be
 included in the landmark cohort, or who are censored prior to time <span class="math inline">\(t\)</span>, these weights can take any value as
 they will not be included when the calibration model is fitted.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">weights.manual</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="../reference/calc_weights.html">calc_weights</a></span><span class="op">(</span>data.mstate <span class="op">=</span> <span class="va">msebmtcal</span>,</span>
 <span>               data.raw <span class="op">=</span> <span class="va">ebmtcal</span>,</span>
@@ -314,7 +317,7 @@ they will not be included when the calibration model is fitted.</p>
 <p>The observed event probabilities can then be estimated using
 <code>calib_msm</code> and a call to the <code>weights</code>
 argument.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dat.calib.boot.manual</span> <span class="op">&lt;-</span></span>
 <span>  <span class="fu"><a href="../reference/calib_msm.html">calib_msm</a></span><span class="op">(</span>data.mstate <span class="op">=</span> <span class="va">msebmtcal</span>,</span>
 <span>           data.raw <span class="op">=</span> <span class="va">ebmtcal</span>,</span>
@@ -341,7 +344,7 @@ estimate a curve for the transition probabilities into a specific state
 <code>boot</code> must be a vector, rather than a matrix. This is done
 by utilising the <code>transitions.out</code> argument in
 <code>calib_msm</code>.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">calc_obs_boot</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">data</span>, <span class="va">indices</span>, <span class="va">tp.pred</span>, <span class="va">state.k</span><span class="op">)</span><span class="op">{</span></span>
 <span>  </span>
 <span>  <span class="co">## Bootstrap dataset and predicted transition probabilities</span></span>
@@ -386,7 +389,7 @@ by utilising the <code>transitions.out</code> argument in
 <p>The size of the confidence interval, the states <span class="math inline">\(k\)</span> which individuals may transition into
 from state <span class="math inline">\(j\)</span>, and a list to store
 the data for the plots are then defined:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">1</span><span class="op">-</span><span class="fl">95</span><span class="op">/</span><span class="fl">100</span><span class="op">)</span><span class="op">/</span><span class="fl">2</span></span>
 <span><span class="va">valid.transitions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html" class="external-link">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">tp.pred</span><span class="op">)</span> <span class="op">!=</span> <span class="fl">0</span><span class="op">)</span></span>
 <span><span class="va">plot.data.list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">vector</a></span><span class="op">(</span><span class="st">"list"</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">valid.transitions</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -395,7 +398,7 @@ the data for the plots are then defined:</p>
 the upper and lower confidence bands are stored in a
 <code>data.frame</code> along with the calibration curve calculated
 earlier.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">for</span> <span class="op">(</span><span class="va">k</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">valid.transitions</span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
 <span>  </span>
 <span>  <span class="co">## Assign state k</span></span>
@@ -4027,7 +4030,7 @@ defined so that the data is in the same format as the output from
 <code>assessed.transitions</code> = <code>valid.transitions</code>, but
 this may not be the case if you only estimated calibration curves for a
 subset of the possible transitions.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">metadata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"valid.transitions"</span><span class="op">=</span> <span class="va">valid.transitions</span>,</span>
 <span>                 <span class="st">"assessed.transitions"</span> <span class="op">=</span> <span class="va">valid.transitions</span>,</span>
 <span>                 <span class="st">"CI"</span> <span class="op">=</span> <span class="fl">95</span>,</span>
@@ -4040,7 +4043,7 @@ This is to be expected given we have used the same model to estimate the
 weights that is used in the internal procedure, and verifies that the
 manual procedure for calculating the confidence interval has been
 successful.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat.calib.blr.manual</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <img src="BLR-IPCW-manual-bootstrap_files/figure-html/unnamed-chunk-15-1.png" alt="Figure 3: Calibration plots using BLR-IPCW, confidence interval estimated using manual bootstrap procedure" width="720"><p class="caption">

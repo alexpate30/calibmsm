@@ -6,6 +6,6 @@ PACKAGE TO DO LIST:
 - Ran into an issue where curve.type = "loess" wasn't working for calib.type = "pv" when using a large dataset, and using pv.precalc.
 Weidly it was working for calib.type = "blr"" and curve.type = "loess" for the same size dataset. Thought it was possibly to do with this: https://stackoverflow.com/questions/13115241/plotting-loess-with-standard-errors-in-r-causes-integer-overflow. Actually, this makes sense, because the error is when se = TRUE, which is only the case for curve.type = "pv" and the parametric confidence intervals. The solution is to split predictions up into groups and go from there. Size of 50000 seems to be sufficiently small.
 - Add GAM for loess style curves when the dataset is large (above issue).
-- Explainer on how to save plots when using marginal densities (i.e. grid.draw).
+- Explainer on how to save plots when using marginal densities (i.e. grid.draw)
+- The static vignette can't be accessed through help, only browseVignettes. This is the same for the static vignette in R.rsp. Maybe raise this as a potential problem? At I think its not just me. Could also ask Glen to install and see if he can access the vignettes.
 - The replication script now takes 30 minutes as opposed to 12, is this because I have bloated it with some stuff?
-- 

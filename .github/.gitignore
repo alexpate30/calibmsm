@@ -1,6 +1,6 @@
 *.html
-/workflow
-/workflow2
-/ignore
-/ignore/eggs.R
-/ignore/eggs2.R
+/ignore/*
+ignore/*
+ignore/workflow.R
+ignore/TO DO.txt
+ignore/TEST.R

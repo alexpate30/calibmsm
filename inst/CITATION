@@ -4,8 +4,6 @@ bibentry(
   author   = "Alexander Pate, Matthew Sperrin, Richard D. Riley, Niels Peek, Tjeerd Van Staa, Jamie C. Sergeant, Mamas A. Mamas, Gregory Y. H. Lip, Martin O'Flaherty, Michael Barrowman, Iain Buchan, Glen P. Martin",
   journal  = "Statistics in Medicine",
   year     = 2024,
-  volume   = ,
-  number   = ,
-  pages    = ,
-  doi      = "10.1002/sim.10094"
+  doi      = "10.1002/sim.10094",
+  url = "https://onlinelibrary.wiley.com/doi/10.1002/sim.10094"
 )

@@ -1,8 +1,12 @@
 bibentry(
   bibtype  = "Article",
   title    = "Calibration plots for multistate risk prediction models"",
-  author   = personList(as.person(Alexander Pate), as.person(Matthew Sperrin), as.person(Richard D. Riley), as.person(Niels Peek), as.person(Tjeerd Van Staa), as.person(Jamie C. Sergean)t, as.person(Mamas A. Mamas), as.person(Gregory Y. H. Lip), as.person(Martin O'Flaherty), as.person(Michael Barrowman), as.person(Iain Buchan), as.person(Glen P. Martin)),
-  journal  = "Statistics in Medicine"",
+  author   = "Alexander Pate, Matthew Sperrin, Richard D. Riley, Niels Peek, Tjeerd Van Staa, Jamie C. Sergeant, Mamas A. Mamas, Gregory Y. H. Lip, Martin O'Flaherty, Michael Barrowman, Iain Buchan, Glen P. Martin",
+  journal  = "Statistics in Medicine",
   year     = 2024,
-  doi      = "10.1002/sim.10094"
+  volume   = ,
+  number   = ,
+  pages    = ,
+  doi      = "10.1002/sim.10094",
+  url = "https://onlinelibrary.wiley.com/doi/10.1002/sim.10094"
 )

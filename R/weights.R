@@ -17,9 +17,9 @@
 #' @param stabilised Indicates whether weights should be stabilised or not
 #' @param max.follow Maximum follow up for model calculating inverse probability of censoring weights. Reducing this to `t` + 1 may aid in the proportional hazards assumption being met in this model.
 #'
-#' @returns A dataframe with three columns. `id` corresponds to the patient ids from `data.raw`. `ipcw` contains the inverse probability
-#' of censoring weights (specifically the inverse of the probability of being uncesored). `pcw = 1/ipcw`. If `stabilised = TRUE` was specified,
-#' a fourth variable `ipcw.stab` will be returned, which is the stabilised inverse probability of censoring weights.
+#' @returns A data frame with two columns. `id` corresponds to the patient ids from `data.raw`. `ipcw` contains the inverse probability
+#' of censoring weights (specifically the inverse of the probability of being uncesored). If `stabilised = TRUE` was specified,
+#' a third variable `ipcw.stab` will be returned, which is the stabilised inverse probability of censoring weights.
 #'
 #' @details
 #' Estimates inverse probability of censoring weights (Hernan M, Robins J, 2020).

@@ -2,7 +2,7 @@
 % Please edit documentation in R/calibmsm.R
 \name{calib_msm}
 \alias{calib_msm}
-\title{Calibration plots for a multistate model'}
+\title{Assess the calibration of a multistate model}
 \usage{
 calib_msm(
   data.mstate,
@@ -170,7 +170,7 @@ calibration curve can be made using \code{curve.type}. Landmarking (van Houwelin
 is applied to only assess calibration in individuals who are uncensored and in state \code{j} at time \code{s}.
 Calibration can only be assessed in individuals who are also uncensored at time \code{t},
 which is accounted for using inverse probability of censoring weights (Hernan M, Robins J, 2020).
-See method BLR-IPCW from Pate et al XXXX for a full explanation of the approach.
+See method BLR-IPCW from Pate et al., (2024) for a full explanation of the approach.
 
 \code{calib.type = 'mlr'} estimates calibration scatter plots using a technique for assessing
 the calibration of multinomial logistic regression models, namely the nominal
@@ -178,7 +178,7 @@ calibration framework of van Hoorde et al. (2014, 2015). Landmarking (van Houwel
 is applied to only assess calibration in individuals who are uncensored
 and in state \code{j} at time \code{s}. Calibration can only be assessed in individuals
 who are also uncensored at time \code{t}, which is accounted for using inverse probability
-of censoring weights (Hernan M, Robins J, 2020). See method BLR-IPCW from Pate et al XXXX
+of censoring weights (Hernan M, Robins J, 2020). See method BLR-IPCW from Pate et al., (2024)
 for a full explanation of the approach.
 
 \code{calib.type = 'pv'} estimates calibration curves using using pseudo-values (Andersen PK, Pohar Perme M, 2010)
@@ -188,7 +188,7 @@ A choice between restricted cubic splines and loess smoothers for estimating the
 calibration curve can be made using \code{curve.type}. Landmarking (van Houwelingen HC, 2007)
 is applied to only assess calibration in individuals who are uncensored and in state \code{j} at time \code{s}.
 The nature of pseudo-values means calibration can be assessed in all landmarked individuals,
-regardless of their censoring time. See method PV from Pate et al XXXX
+regardless of their censoring time. See method Pseudo-value approach from Pate et al., (2024)
 for a full explanation of the approach.
 
 Two datasets for the same cohort of inidividuals must be provided. Firstly, \code{data.raw}
@@ -252,6 +252,11 @@ Andersen PK, Pohar Perme M. Pseudo-observations in survival analysis.
 
 Hernan M, Robins J (2020). “12.2 Estimating IP weights via modeling.” In \emph{Causal Inference:
 What If}, chapter 12.2. Chapman Hall/CRC, Boca Raton.
+
+Pate, A., Sperrin, M., Riley, R. D., Peek, N., Van Staa, T., Sergeant, J. C., Mamas, M. A.,
+Lip, G. Y. H., Flaherty, M. O., Barrowman, M., Buchan, I., & Martin, G. P.
+Calibration plots for multistate risk predictions models.
+\emph{Statistics in Medicine}. 2024;April:1–23. doi: 10.1002/sim.10094.
 
 Van Calster B, Nieboer D, Vergouwe Y, De Cock B, Pencina MJ, Steyerberg EW (2016). “A
 calibration hierarchy for risk models was defined: From utopia to empirical data.” \emph{Journal

@@ -711,7 +711,8 @@ summary.calib_msm <- function(object, ...) {
 
   cat("The method used to assess calibration was", ifelse(object[["metadata"]]$calib.type == "blr", "BLR-IPCW",
                                                           ifelse(object[["metadata"]]$calib.type == "mlr", "MLR-IPCW",
-                                                                 ifelse(object[["metadata"]]$calib.type == "pv", "Pseudo-values with Aalen-Johansen estimator"))),  sep = " ")
+                                                                 ifelse(object[["metadata"]]$calib.type == "pv", "Pseudo-values with Aalen-Johansen estimator",
+                                                                        ifelse(object[["metadata"]]$calib.type == "aj", "Aalen-Johansen estimator")))),  sep = " ")
 
   cat("\n\nThere were non-zero predicted transition probabilities into states ",
       paste(object[["metadata"]]$valid.transitions, collapse = ","),  sep = " ")
@@ -742,16 +743,25 @@ summary.calib_msm <- function(object, ...) {
     }
   }
 
-  cat("\n\nThe estimated data are stored in list element `plotdata`:\n\n")
+  if ("plotdata" %in% names(object)){
+    cat("\n\nThe estimated data for calibration plots are stored in list element `plotdata`:\n\n")
 
-  print(lapply(object[["plotdata"]], utils::head, 3))
+    print(lapply(object[["plotdata"]], utils::head, 2))
+  }
+
+  if ("mean" %in% names(object)){
+    cat("\n\nThe estimated mean calibration are stored in list element `mean`:\n\n")
+
+    print(object[["mean"]])
+  }
+
 
 }
 
 #' @export
 print.calib_msm <- function(x, ...) {
 
-  print(lapply(x[["plotdata"]], utils::head, 10))
+  print(lapply(x[["plotdata"]], utils::head, 5))
 
 }
 
@@ -760,5 +770,24 @@ print.calib_msm <- function(x, ...) {
 print.calib_aj <- function(x, ...) {
 
   print(x[["mean"]])
+
+}
+
+#' @export
+plot.calib_aj <- function(x, ...) {
+
+  print("Calibration plots are not available for calib.type = 'aj'")
+
+}
+
+#' Create S3 generic for printing metadata
+metadata <- function(x, ...) {
+  UseMethod("metadata")
+}
+
+#' @export
+metadata.calib_msm <- function(x, ...) {
+
+  print(x[["metadata"]])
 
 }

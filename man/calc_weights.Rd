@@ -39,9 +39,9 @@ calc_weights(
 \item{max.follow}{Maximum follow up for model calculating inverse probability of censoring weights. Reducing this to \code{t} + 1 may aid in the proportional hazards assumption being met in this model.}
 }
 \value{
-A dataframe with three columns. \code{id} corresponds to the patient ids from \code{data.raw}. \code{ipcw} contains the inverse probability
-of censoring weights (specifically the inverse of the probability of being uncesored). \code{pcw = 1/ipcw}. If \code{stabilised = TRUE} was specified,
-a fourth variable \code{ipcw.stab} will be returned, which is the stabilised inverse probability of censoring weights.
+A data frame with two columns. \code{id} corresponds to the patient ids from \code{data.raw}. \code{ipcw} contains the inverse probability
+of censoring weights (specifically the inverse of the probability of being uncesored). If \code{stabilised = TRUE} was specified,
+a third variable \code{ipcw.stab} will be returned, which is the stabilised inverse probability of censoring weights.
 }
 \description{
 Estimates the inverse probability of censoring weights by fitting a cox-propotinal hazards model

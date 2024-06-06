@@ -125,9 +125,9 @@ estimating confidence intervals using bootstrapping manually.</p>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A dataframe with three columns. <code>id</code> corresponds to the patient ids from <code>data.raw</code>. <code>ipcw</code> contains the inverse probability
-of censoring weights (specifically the inverse of the probability of being uncesored). <code>pcw = 1/ipcw</code>. If <code>stabilised = TRUE</code> was specified,
-a fourth variable <code>ipcw.stab</code> will be returned, which is the stabilised inverse probability of censoring weights.</p>
+<p>A data frame with two columns. <code>id</code> corresponds to the patient ids from <code>data.raw</code>. <code>ipcw</code> contains the inverse probability
+of censoring weights (specifically the inverse of the probability of being uncesored). If <code>stabilised = TRUE</code> was specified,
+a third variable <code>ipcw.stab</code> will be returned, which is the stabilised inverse probability of censoring weights.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>

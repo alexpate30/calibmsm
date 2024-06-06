@@ -6,7 +6,7 @@ MLR-IPCW: Multinomial logistic regression with inverse probability of censoring
 weights, based on the nominal calibration  framework of van Hoorde et al. (2014, 2015)
 Pseudo-values: Pseudo-values estimated using the Aalen-Johansen estimator (Aalen OO, Johansen S, 1978).
 
-"><title>Calibration plots for a multistate model' — calib_msm • calibmsm</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha512-7O5pXpc0oCRrxk8RUfDYFgn0nO1t+jLuIOQdOMRp4APB7uZ4vSjspzp5y6YDtDs4VzUSTbWzBFZ/LKJhnyFOKw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Calibration plots for a multistate model' — calib_msm"><meta property="og:description" content="Calculates the underlying data for calibration plots of the predicted transition
+"><title>Assess the calibration of a multistate model — calib_msm • calibmsm</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.11/clipboard.min.js" integrity="sha512-7O5pXpc0oCRrxk8RUfDYFgn0nO1t+jLuIOQdOMRp4APB7uZ4vSjspzp5y6YDtDs4VzUSTbWzBFZ/LKJhnyFOKw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Assess the calibration of a multistate model — calib_msm"><meta property="og:description" content="Calculates the underlying data for calibration plots of the predicted transition
 probabilities from a multistate model using three methods.
 BLR-IPCW: Binary logistic regression with inverse probability of censoring weights.
 MLR-IPCW: Multinomial logistic regression with inverse probability of censoring
@@ -59,7 +59,7 @@ Pseudo-values: Pseudo-values estimated using the Aalen-Johansen estimator (Aalen
 </nav><div class="container template-reference-topic">
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="" class="logo" alt=""><h1>Calibration plots for a multistate model'</h1>
+      <img src="" class="logo" alt=""><h1>Assess the calibration of a multistate model</h1>
       
       <div class="d-none name"><code>calib_msm.Rd</code></div>
     </div>
@@ -319,14 +319,14 @@ calibration curve can be made using <code>curve.type</code>. Landmarking (van Ho
 is applied to only assess calibration in individuals who are uncensored and in state <code>j</code> at time <code>s</code>.
 Calibration can only be assessed in individuals who are also uncensored at time <code>t</code>,
 which is accounted for using inverse probability of censoring weights (Hernan M, Robins J, 2020).
-See method BLR-IPCW from Pate et al XXXX for a full explanation of the approach.</p>
+See method BLR-IPCW from Pate et al., (2024) for a full explanation of the approach.</p>
 <p><code>calib.type = 'mlr'</code> estimates calibration scatter plots using a technique for assessing
 the calibration of multinomial logistic regression models, namely the nominal
 calibration framework of van Hoorde et al. (2014, 2015). Landmarking (van Houwelingen HC, 2007)
 is applied to only assess calibration in individuals who are uncensored
 and in state <code>j</code> at time <code>s</code>. Calibration can only be assessed in individuals
 who are also uncensored at time <code>t</code>, which is accounted for using inverse probability
-of censoring weights (Hernan M, Robins J, 2020). See method BLR-IPCW from Pate et al XXXX
+of censoring weights (Hernan M, Robins J, 2020). See method BLR-IPCW from Pate et al., (2024)
 for a full explanation of the approach.</p>
 <p><code>calib.type = 'pv'</code> estimates calibration curves using using pseudo-values (Andersen PK, Pohar Perme M, 2010)
 calculated using the Aalen-Johansen estimator (Aalen OO, Johansen S, 1978).
@@ -335,7 +335,7 @@ A choice between restricted cubic splines and loess smoothers for estimating the
 calibration curve can be made using <code>curve.type</code>. Landmarking (van Houwelingen HC, 2007)
 is applied to only assess calibration in individuals who are uncensored and in state <code>j</code> at time <code>s</code>.
 The nature of pseudo-values means calibration can be assessed in all landmarked individuals,
-regardless of their censoring time. See method PV from Pate et al XXXX
+regardless of their censoring time. See method Pseudo-value approach from Pate et al., (2024)
 for a full explanation of the approach.</p>
 <p>Two datasets for the same cohort of inidividuals must be provided. Firstly, <code>data.raw</code>
 must be a <code>data.frame</code> with one row per individual containing the variables for
@@ -372,6 +372,10 @@ For computational reasons we recommend using the parametric approach.</p>
 <em>Stat Methods Med Res</em>. 2010;19(1):71-99. doi:10.1177/0962280209105020</p>
 <p>Hernan M, Robins J (2020). “12.2 Estimating IP weights via modeling.” In <em>Causal Inference:
 What If</em>, chapter 12.2. Chapman Hall/CRC, Boca Raton.</p>
+<p>Pate, A., Sperrin, M., Riley, R. D., Peek, N., Van Staa, T., Sergeant, J. C., Mamas, M. A.,
+Lip, G. Y. H., Flaherty, M. O., Barrowman, M., Buchan, I., &amp; Martin, G. P.
+Calibration plots for multistate risk predictions models.
+<em>Statistics in Medicine</em>. 2024;April:1–23. doi: 10.1002/sim.10094.</p>
 <p>Van Calster B, Nieboer D, Vergouwe Y, De Cock B, Pencina MJ, Steyerberg EW (2016). “A
 calibration hierarchy for risk models was defined: From utopia to empirical data.” <em>Journal
 of Clinical Epidemiology</em>, 74, 167–176. ISSN 18785921. doi:10.1016/j.jclinepi.2015.
@@ -421,44 +425,46 @@ URL https://link.springer.com/book/10.1007/978-1-4939-2818-7.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> A confidence interval was not estimated</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The estimated data are stored in list element `plotdata`:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The estimated data for calibration plots are stored in list element `plotdata`:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $state1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   id      pred       obs</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2  2 0.1140189 0.1095897</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4  4 0.1383878 0.1036308</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  5 0.1233226 0.1051035</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $state2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   id      pred       obs</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2  2 0.2316569 0.1698031</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4  4 0.1836189 0.1855591</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  5 0.1609740 0.1759804</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $state3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   id       pred        obs</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  2 0.08442692 0.12485834</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  4 0.07579429 0.11666056</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  5 0.05508100 0.09189341</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   id       pred       obs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  2 0.08442692 0.1248583</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  4 0.07579429 0.1166606</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $state4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   id      pred       obs</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2  2 0.2328398 0.2427580</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4  4 0.2179331 0.2243106</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  5 0.1828176 0.1851051</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $state5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   id      pred       obs</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2  2 0.1481977 0.1909795</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4  4 0.1538475 0.1654523</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  5 0.1425950 0.2215190</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $state6</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   id      pred       obs</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2  2 0.1888598 0.2069354</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4  4 0.2304185 0.2542212</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  5 0.3352099 0.3163102</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The estimated mean calibration are stored in list element `mean`:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        state1        state2        state3        state4        state5 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.0216273416 -0.0152282576  0.0254839288  0.0097158314 -0.0003011927 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        state6 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.0032309988 </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

@@ -784,6 +784,8 @@ plot.calib_aj <- function(x, ...) {
 #'
 #' @param x Object generated from \code{\link{calib_msm}}.
 #' @param ... Extra arguments
+#'
+#' @export
 metadata <- function(x, ...) {
   UseMethod("metadata")
 }

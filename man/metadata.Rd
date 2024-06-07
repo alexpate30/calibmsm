@@ -6,6 +6,11 @@
 \usage{
 metadata(x, ...)
 }
+\arguments{
+\item{x}{Object generated from \code{\link{calib_msm}}.}
+
+\item{...}{Extra arguments}
+}
 \description{
 Create S3 generic for printing metadata
 }

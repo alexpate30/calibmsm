@@ -781,6 +781,9 @@ plot.calib_aj <- function(x, ...) {
 }
 
 #' Create S3 generic for printing metadata
+#'
+#' @param x Object generated from \code{\link{calib_msm}}.
+#' @param ... Extra arguments
 metadata <- function(x, ...) {
   UseMethod("metadata")
 }

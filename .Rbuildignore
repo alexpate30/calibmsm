@@ -2,6 +2,7 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 ^workflow$
+$gitignore$
 ^README\.Rmd$
 ^_pkgdown\.yml$
 ^docs$

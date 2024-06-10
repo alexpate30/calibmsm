@@ -170,7 +170,7 @@ calc_obs_boot <- function(data, indices, tp.pred, state.k){
   ## Calculate weights
   ## In practice - replace this function with your own
   weights.manual <-
-    calc_weights(data.ms = msebmtcal |> subset(id %in% data.boot$id),
+    calc_weights(data.ms = msebmtcal[msebmtcal$id %in% data.boot$id, ],
                  data.raw = data.boot,
                  covs = c("year", "agecl", "proph", "match"),
                  t = t,
@@ -182,7 +182,7 @@ calc_obs_boot <- function(data, indices, tp.pred, state.k){
   
   ## Estimate bootstrapped calibration curve
   curve.est <-
-    calib_msm(data.ms = msebmtcal |> subset(id %in% data.boot$id),
+    calib_msm(data.ms = msebmtcal[msebmtcal$id %in% data.boot$id, ],
              data.raw = data.boot,
              j=1,
              s=0,

@@ -2,7 +2,7 @@ test_that("check weights, stabilised == FALSE", {
 
   ### Create weights for j = 1 and s = 0
   weights.manual <-
-    calc_weights(data.mstate = msebmtcal,
+    calc_weights(data.ms = msebmtcal,
                  data.raw = ebmtcal,
                  covs = c("year", "agecl", "proph", "match"),
                  t = 1826,
@@ -20,7 +20,7 @@ test_that("check weights, stabilised == FALSE", {
 
   ### Create weights for j = 3 and s = 100
   weights.manual <-
-    calc_weights(data.mstate = msebmtcal,
+    calc_weights(data.ms = msebmtcal,
                  data.raw = ebmtcal,
                  covs = c("year", "agecl", "proph", "match"),
                  t = 1826,
@@ -42,7 +42,7 @@ test_that("check weights, stabilised == TRUE", {
 
   ### Create weights for j = 1 and s = 0
   weights.manual <-
-    calc_weights(data.mstate = msebmtcal,
+    calc_weights(data.ms = msebmtcal,
                  data.raw = ebmtcal,
                  covs = c("year", "agecl", "proph", "match"),
                  t = 1826,
@@ -61,7 +61,7 @@ test_that("check weights, stabilised == TRUE", {
 
   ### Create weights for j = 3 and s = 100
   weights.manual <-
-    calc_weights(data.mstate = msebmtcal,
+    calc_weights(data.ms = msebmtcal,
                  data.raw = ebmtcal,
                  covs = c("year", "agecl", "proph", "match"),
                  t = 1826,
@@ -83,7 +83,7 @@ test_that("check weights, stabilised == FALSE, add max.follow", {
 
   ### Create weights for j = 1 and s = 0
   weights.manual <-
-    calc_weights(data.mstate = msebmtcal,
+    calc_weights(data.ms = msebmtcal,
                  data.raw = ebmtcal,
                  covs = c("year", "agecl", "proph", "match"),
                  t = 1826,
@@ -103,7 +103,7 @@ test_that("check weights, stabilised == FALSE, add max.follow", {
 
   ### Create weights for j = 3 and s = 100
   weights.manual <-
-    calc_weights(data.mstate = msebmtcal,
+    calc_weights(data.ms = msebmtcal,
                  data.raw = ebmtcal,
                  covs = c("year", "agecl", "proph", "match"),
                  t = 1826,
@@ -122,7 +122,7 @@ test_that("check weights, stabilised == FALSE, add max.follow", {
 
   ### Expect error if max.follow < t
   expect_error(
-      calc_weights(data.mstate = msebmtcal,
+      calc_weights(data.ms = msebmtcal,
                    data.raw = ebmtcal,
                    covs = c("year", "agecl", "proph", "match"),
                    t = 1826,
@@ -140,7 +140,7 @@ test_that("check weights, stabilised == FALSE, covs = null", {
 
   ### Create weights for j = 1 and s = 0
   weights.manual <-
-    calc_weights(data.mstate = msebmtcal,
+    calc_weights(data.ms = msebmtcal,
                  data.raw = ebmtcal,
                  t = 1826,
                  s = 0,
@@ -158,7 +158,7 @@ test_that("check weights, stabilised == FALSE, covs = null", {
 
   ### Create weights for j = 3 and s = 100
   weights.manual <-
-    calc_weights(data.mstate = msebmtcal,
+    calc_weights(data.ms = msebmtcal,
                  data.raw = ebmtcal,
                  t = 1826,
                  s = 100,
@@ -179,7 +179,7 @@ test_that("check weights at j = 1 and s= 100, landmark.type = state/all", {
 
   ### Create weights for j = 1 and s = 100
   weights.manual.j1 <-
-    calc_weights(data.mstate = msebmtcal,
+    calc_weights(data.ms = msebmtcal,
                  data.raw = ebmtcal,
                  covs = c("year", "agecl", "proph", "match"),
                  t = 1826,
@@ -197,7 +197,7 @@ test_that("check weights at j = 1 and s= 100, landmark.type = state/all", {
 
   ### Create weights for j = 3 and s = 0
   weights.manual.j3 <-
-    calc_weights(data.mstate = msebmtcal,
+    calc_weights(data.ms = msebmtcal,
                  data.raw = ebmtcal,
                  covs = c("year", "agecl", "proph", "match"),
                  t = 1826,
@@ -222,7 +222,7 @@ test_that("check weights at j = 1 and s= 100, landmark.type = state/all", {
 
   ### Create weights for j = 1 and s = 100
   suppressWarnings(weights.manual.j1 <-
-                       calc_weights(data.mstate = msebmtcal,
+                       calc_weights(data.ms = msebmtcal,
                                     data.raw = ebmtcal,
                                     covs = c("year", "agecl", "proph", "match"),
                                     t = 1826,
@@ -240,7 +240,7 @@ test_that("check weights at j = 1 and s= 100, landmark.type = state/all", {
 
   ### Create weights for j = 3 and s = 0
   suppressWarnings(weights.manual.j3 <-
-                     calc_weights(data.mstate = msebmtcal,
+                     calc_weights(data.ms = msebmtcal,
                                   data.raw = ebmtcal,
                                   covs = c("year", "agecl", "proph", "match"),
                                   t = 1826,

@@ -93,7 +93,7 @@ msebmtcal.cmprsk <- msebmtcal.cmprsk |> dplyr::filter(id \%in\% 1:150)
 
 # Now estimate the observed event probabilities for each possible transition.
 dat.calib <-
-calib_msm(data.mstate = msebmtcal.cmprsk,
+calib_msm(data.ms = msebmtcal.cmprsk,
  data.raw = ebmtcal,
  j=1,
  s=0,

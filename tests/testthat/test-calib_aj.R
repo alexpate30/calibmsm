@@ -17,7 +17,7 @@ test_that("check calib_aj, pv.n.pctls = NULL and pv.group.vars = NULL", {
   msebmtcal <- msebmtcal |> dplyr::filter(id %in% 1:50)
 
   ## Calculate observed event probabilities using transitions.out = NULL
-  dat.calib.aj.1 <- calib_msm(data.mstate = msebmtcal,
+  dat.calib.aj.1 <- calib_msm(data.ms = msebmtcal,
                               data.raw = ebmtcal,
                               j = 1,
                               s = 0,
@@ -30,7 +30,7 @@ test_that("check calib_aj, pv.n.pctls = NULL and pv.group.vars = NULL", {
   expect_equal(length(dat.calib.aj.1[["mean"]]), 6)
 
   ## Calculate observed event probabilities using transitions.out = NULL
-  dat.calib.aj.CI.1 <- calib_msm(data.mstate = msebmtcal,
+  dat.calib.aj.CI.1 <- calib_msm(data.ms = msebmtcal,
                               data.raw = ebmtcal,
                               j = 1,
                               s = 0,
@@ -65,7 +65,7 @@ test_that("check calib_pv output, pv.n.pctls specified", {
   msebmtcal <- msebmtcal |> dplyr::filter(id %in% 1:50)
 
   ## Calculate observed event probabilities using transitions.out = NULL
-  dat.calib.aj.1 <- calib_msm(data.mstate = msebmtcal,
+  dat.calib.aj.1 <- calib_msm(data.ms = msebmtcal,
                               data.raw = ebmtcal,
                               j = 1,
                               s = 0,
@@ -79,7 +79,7 @@ test_that("check calib_pv output, pv.n.pctls specified", {
   expect_equal(length(dat.calib.aj.1[["mean"]]), 6)
 
   ## Calculate observed event probabilities using transitions.out = NULL
-  dat.calib.aj.CI.1 <- calib_msm(data.mstate = msebmtcal,
+  dat.calib.aj.CI.1 <- calib_msm(data.ms = msebmtcal,
                                  data.raw = ebmtcal,
                                  j = 1,
                                  s = 0,
@@ -117,7 +117,7 @@ test_that("check calib_pv output, pv.group.vars specified", {
   msebmtcal <- msebmtcal |> dplyr::filter(id %in% 1:50)
 
   ## Calculate observed event probabilities using transitions.out = NULL
-  dat.calib.aj.1 <- calib_msm(data.mstate = msebmtcal,
+  dat.calib.aj.1 <- calib_msm(data.ms = msebmtcal,
                               data.raw = ebmtcal,
                               j = 1,
                               s = 0,
@@ -131,7 +131,7 @@ test_that("check calib_pv output, pv.group.vars specified", {
   expect_equal(length(dat.calib.aj.1[["mean"]]), 6)
 
   ## Calculate observed event probabilities using transitions.out = NULL
-  dat.calib.aj.CI.1 <- calib_msm(data.mstate = msebmtcal,
+  dat.calib.aj.CI.1 <- calib_msm(data.ms = msebmtcal,
                                  data.raw = ebmtcal,
                                  j = 1,
                                  s = 0,
@@ -169,7 +169,7 @@ test_that("check calib_pv output, pv.group.vars and pv.n.pctls specified", {
   msebmtcal <- msebmtcal |> dplyr::filter(id %in% 1:100)
 
   ## Calculate observed event probabilities using transitions.out = NULL
-  dat.calib.aj.1 <- calib_msm(data.mstate = msebmtcal,
+  dat.calib.aj.1 <- calib_msm(data.ms = msebmtcal,
                               data.raw = ebmtcal,
                               j = 1,
                               s = 0,
@@ -184,7 +184,7 @@ test_that("check calib_pv output, pv.group.vars and pv.n.pctls specified", {
   expect_equal(length(dat.calib.aj.1[["mean"]]), 6)
 
   ## Calculate observed event probabilities using transitions.out = NULL
-  dat.calib.aj.CI.1 <- calib_msm(data.mstate = msebmtcal,
+  dat.calib.aj.CI.1 <- calib_msm(data.ms = msebmtcal,
                                  data.raw = ebmtcal,
                                  j = 1,
                                  s = 0,

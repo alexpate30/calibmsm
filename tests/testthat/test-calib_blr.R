@@ -10,7 +10,7 @@ test_that("check calib_msm output, (j = 1, s = 0), curve.type = rcs, stabilised 
   ###
   ### Calculate observed event probabilities
   dat.calib.blr <-
-    calib_msm(data.mstate = msebmtcal,
+    calib_msm(data.ms = msebmtcal,
              data.raw = ebmtcal,
              j=1,
              s=0,
@@ -32,7 +32,7 @@ test_that("check calib_msm output, (j = 1, s = 0), curve.type = rcs, stabilised 
   ###
   ### Calculate observed event probabilities with stabilised weights
   dat.calib.blr.stab <-
-    calib_msm(data.mstate = msebmtcal,
+    calib_msm(data.ms = msebmtcal,
              data.raw = ebmtcal,
              j=1,
              s=0,
@@ -63,7 +63,7 @@ test_that("check calib_msm output, (j = 1, s = 0), curve.type = loess", {
 
   ## Calculate observed event probabilities
   dat.calib.blr <-
-    calib_msm(data.mstate = msebmtcal,
+    calib_msm(data.ms = msebmtcal,
              data.raw = ebmtcal,
              j=1,
              s=0,
@@ -83,7 +83,7 @@ test_that("check calib_msm output, (j = 1, s = 0), curve.type = loess", {
 
   ## Calculate observed event probabilities
   dat.calib.blr.stab <-
-    calib_msm(data.mstate = msebmtcal,
+    calib_msm(data.ms = msebmtcal,
              data.raw = ebmtcal,
              j=1,
              s=0,
@@ -105,7 +105,7 @@ test_that("check calib_msm output, (j = 1, s = 0), curve.type = loess", {
 
   ## Calculate observed event probabilities
   dat.calib.blr.w.function <-
-    calib_msm(data.mstate = msebmtcal,
+    calib_msm(data.ms = msebmtcal,
              data.raw = ebmtcal,
              j=1,
              s=0,
@@ -139,7 +139,7 @@ test_that("check calib_msm output, (j = 1, s = 0), with CI", {
 
   ## Calculate observed event probabilities no CI
   dat.calib.blr.noCI <-
-    calib_msm(data.mstate = msebmtcal,
+    calib_msm(data.ms = msebmtcal,
              data.raw = ebmtcal,
              j=1,
              s=0,
@@ -151,7 +151,7 @@ test_that("check calib_msm output, (j = 1, s = 0), with CI", {
 
   ## Calculate observed event probabilities with CI
   dat.calib.blr <-
-    calib_msm(data.mstate = msebmtcal,
+    calib_msm(data.ms = msebmtcal,
              data.raw = ebmtcal,
              j=1,
              s=0,
@@ -187,7 +187,7 @@ test_that("check calib_msm output, (j = 3, s = 100)", {
 
   ## Calculate observed event probabilities
   dat.calib.blr <-
-    calib_msm(data.mstate = msebmtcal,
+    calib_msm(data.ms = msebmtcal,
              data.raw = ebmtcal,
              j=3,
              s=100,
@@ -217,7 +217,7 @@ test_that("check calib_msm output, (j = 1, s = 0), null covs", {
 
   ## Calculate observed event probabilities
   dat.calib.blr <-
-    calib_msm(data.mstate = msebmtcal,
+    calib_msm(data.ms = msebmtcal,
              data.raw = ebmtcal,
              j=1,
              s=0,
@@ -236,7 +236,7 @@ test_that("check calib_msm output, (j = 1, s = 0), null covs", {
 
   ## Calculate observed event probabilities
   dat.calib.blr <-
-    calib_msm(data.mstate = msebmtcal,
+    calib_msm(data.ms = msebmtcal,
              data.raw = ebmtcal,
              j=1,
              s=0,
@@ -274,7 +274,7 @@ test_that("check calib_msm output, (j = 1, s = 0), curve.type = loess, CI.type =
     dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
 
   ## No confidence interval
-  dat.calib.blr <- calib_msm(data.mstate = msebmtcal,
+  dat.calib.blr <- calib_msm(data.ms = msebmtcal,
                             data.raw = ebmtcal,
                             j = 1,
                             s = 0,
@@ -291,7 +291,7 @@ test_that("check calib_msm output, (j = 1, s = 0), curve.type = loess, CI.type =
   expect_no_error(summary(dat.calib.blr))
 
   ## With confidence interval
-  dat.calib.blr <- calib_msm(data.mstate = msebmtcal,
+  dat.calib.blr <- calib_msm(data.ms = msebmtcal,
                             data.raw = ebmtcal,
                             j = 1,
                             s = 0,
@@ -329,7 +329,7 @@ test_that("Test warnings for bootstrapping with small cohort", {
   msebmtcal <- msebmtcal |> dplyr::filter(id %in% 1:50)
 
   ## No confidence interval
-  expect_warning(calib_msm(data.mstate = msebmtcal,
+  expect_warning(calib_msm(data.ms = msebmtcal,
                           data.raw = ebmtcal,
                           j = 1,
                           s = 0,
@@ -366,7 +366,7 @@ test_that("check calib_msm output, (j = 1, s = 0),
 
             ## Calculate manual weights
             weights.manual <-
-              calc_weights(data.mstate = msebmtcal,
+              calc_weights(data.ms = msebmtcal,
                            data.raw = ebmtcal,
                            t = 1826,
                            s = 0,
@@ -377,7 +377,7 @@ test_that("check calib_msm output, (j = 1, s = 0),
 
             ## Calculate observed event probabilities using weights.manual
             dat.calib.blr.w.manual <-
-              calib_msm(data.mstate = msebmtcal,
+              calib_msm(data.ms = msebmtcal,
                        data.raw = ebmtcal,
                        j=1,
                        s=0,
@@ -421,7 +421,7 @@ test_that("check calib_msm output, (j = 1, s = 0),
 
             ## Calculate manual weights
             weights.manual <-
-              calc_weights(data.mstate = msebmtcal,
+              calc_weights(data.ms = msebmtcal,
                            data.raw = ebmtcal,
                            t = 1826,
                            s = 0,
@@ -432,7 +432,7 @@ test_that("check calib_msm output, (j = 1, s = 0),
 
             ## Calculate observed event probabilities using weights.manual
             dat.calib.blr.w.manual <-
-              calib_msm(data.mstate = msebmtcal,
+              calib_msm(data.ms = msebmtcal,
                        data.raw = ebmtcal,
                        j=1,
                        s=0,
@@ -477,7 +477,7 @@ test_that("check calib_msm output, (j = 1, s = 0),
 
             ## Calculate observed event probabilities
             dat.calib.blr <-
-              calib_msm(data.mstate = msebmtcal,
+              calib_msm(data.ms = msebmtcal,
                        data.raw = ebmtcal,
                        j=1,
                        s=0,
@@ -512,7 +512,7 @@ test_that("check calib_msm output, (j = 1, s = 0),
             ###
             ### Calculate observed event probabilities
             dat.calib.blr <-
-              calib_msm(data.mstate = msebmtcal,
+              calib_msm(data.ms = msebmtcal,
                        data.raw = ebmtcal,
                        j=1,
                        s=0,
@@ -525,7 +525,7 @@ test_that("check calib_msm output, (j = 1, s = 0),
             ###
             ### Calculate manual weights
             weights.manual <-
-              calc_weights(data.mstate = msebmtcal,
+              calc_weights(data.ms = msebmtcal,
                            data.raw = ebmtcal,
                            covs =  c("year", "agecl", "proph", "match"),
                            t = 1826,
@@ -538,7 +538,7 @@ test_that("check calib_msm output, (j = 1, s = 0),
             ###
             ### Calculate observed event probabilities same function as internal procedure, and check it agrees with dat.calib.blr
             dat.calib.blr.w.manual <-
-              calib_msm(data.mstate = msebmtcal,
+              calib_msm(data.ms = msebmtcal,
                        data.raw = ebmtcal,
                        j=1,
                        s=0,
@@ -553,7 +553,7 @@ test_that("check calib_msm output, (j = 1, s = 0),
             ###
             ### Calculate observed event probabilities using an incorrect vector of weights, and see if its different from dat.calib.blr
             dat.calib.blr.w.manual <-
-              calib_msm(data.mstate = msebmtcal,
+              calib_msm(data.ms = msebmtcal,
                        data.raw = ebmtcal,
                        j=1,
                        s=0,
@@ -570,7 +570,7 @@ test_that("check calib_msm output, (j = 1, s = 0),
             calc_weights_manual <- calc_weights
 
             dat.calib.blr.w.function <-
-              calib_msm(data.mstate = msebmtcal,
+              calib_msm(data.ms = msebmtcal,
                        data.raw = ebmtcal,
                        j=1,
                        s=0,
@@ -595,7 +595,7 @@ test_that("check calib_msm output, (j = 1, s = 0),
 
             ###
             ### Redefine calc_weights, but change order of all the input arguments (this shouldn't make a difference)
-            calc_weights_manual <- function(stabilised = FALSE, max.follow = NULL, data.mstate, covs = NULL, landmark.type = "state", j = NULL, t, s, max.weight = 10, data.raw){
+            calc_weights_manual <- function(stabilised = FALSE, max.follow = NULL, data.ms, covs = NULL, landmark.type = "state", j = NULL, t, s, max.weight = 10, data.raw){
 
               ### Modify everybody to be censored after time t, if a max.follow has been specified
               if(!is.null(max.follow)){
@@ -625,22 +625,22 @@ test_that("check calib_msm output, (j = 1, s = 0),
               ### who have reached absorbing states, who have been 'censored' from the survival distribution is censoring)
               if (landmark.type == "state"){
                 ### Identify individuals who are uncensored in state j at time s
-                ids.uncens <- base::subset(data.mstate, from == j & Tstart <= s & s < Tstop) |>
+                ids.uncens <- base::subset(data.ms, from == j & Tstart <= s & s < Tstop) |>
                   dplyr::select(id) |>
                   dplyr::distinct(id) |>
                   dplyr::pull(id)
 
               } else if (landmark.type == "all"){
                 ### Identify individuals who are uncensored time s
-                ids.uncens <- base::subset(data.mstate, Tstart <= s & s < Tstop) |>
+                ids.uncens <- base::subset(data.ms, Tstart <= s & s < Tstop) |>
                   dplyr::select(id) |>
                   dplyr::distinct(id) |>
                   dplyr::pull(id)
 
               }
 
-              ### Subset data.mstate and data.raw to these individuals
-              data.mstate <- data.mstate |> base::subset(id %in% ids.uncens)
+              ### Subset data.ms and data.raw to these individuals
+              data.ms <- data.ms |> base::subset(id %in% ids.uncens)
               data.raw <- data.raw |> base::subset(id %in% ids.uncens)
 
               ###
@@ -761,7 +761,7 @@ test_that("check calib_msm output, (j = 1, s = 0),
 
             ### Calculate observed event probabilities with new w.function
             dat.calib.blr.w.function <-
-              calib_msm(data.mstate = msebmtcal,
+              calib_msm(data.ms = msebmtcal,
                        data.raw = ebmtcal,
                        j=1,
                        s=0,
@@ -788,7 +788,7 @@ test_that("check calib_msm output, (j = 1, s = 0),
             ###
             ### Repeat this process (manual definition of calc_weights), again arguments are in different order, but this time an extra argument is added, which adds 10 to every weight.
             ### This extra arguments is something that could be inputted by user, and want to check it does actually change the answer. It should no longer agree with dat.calb.blr.
-            calc_weights_manual <- function(stabilised = FALSE, max.follow = NULL, data.mstate, covs = NULL, landmark.type = "state", j = NULL, t, s, max.weight = 10, data.raw, extra.arg = NULL){
+            calc_weights_manual <- function(stabilised = FALSE, max.follow = NULL, data.ms, covs = NULL, landmark.type = "state", j = NULL, t, s, max.weight = 10, data.raw, extra.arg = NULL){
 
               ### Modify everybody to be censored after time t, if a max.follow has been specified
               if(!is.null(max.follow)){
@@ -818,22 +818,22 @@ test_that("check calib_msm output, (j = 1, s = 0),
               ### who have reached absorbing states, who have been 'censored' from the survival distribution is censoring)
               if (landmark.type == "state"){
                 ### Identify individuals who are uncensored in state j at time s
-                ids.uncens <- base::subset(data.mstate, from == j & Tstart <= s & s < Tstop) |>
+                ids.uncens <- base::subset(data.ms, from == j & Tstart <= s & s < Tstop) |>
                   dplyr::select(id) |>
                   dplyr::distinct(id) |>
                   dplyr::pull(id)
 
               } else if (landmark.type == "all"){
                 ### Identify individuals who are uncensored time s
-                ids.uncens <- base::subset(data.mstate, Tstart <= s & s < Tstop) |>
+                ids.uncens <- base::subset(data.ms, Tstart <= s & s < Tstop) |>
                   dplyr::select(id) |>
                   dplyr::distinct(id) |>
                   dplyr::pull(id)
 
               }
 
-              ### Subset data.mstate and data.raw to these individuals
-              data.mstate <- data.mstate |> base::subset(id %in% ids.uncens)
+              ### Subset data.ms and data.raw to these individuals
+              data.ms <- data.ms |> base::subset(id %in% ids.uncens)
               data.raw <- data.raw |> base::subset(id %in% ids.uncens)
 
               ###
@@ -957,7 +957,7 @@ test_that("check calib_msm output, (j = 1, s = 0),
 
             ### Calculate observed event probabilities with new w.function
             dat.calib.blr.w.function <-
-              calib_msm(data.mstate = msebmtcal,
+              calib_msm(data.ms = msebmtcal,
                        data.raw = ebmtcal,
                        j=1,
                        s=0,
@@ -989,7 +989,7 @@ test_that("test warnings and errors", {
 
   ## Calculate observed event probabilities
   expect_error(
-    calib_msm(data.mstate = msebmtcal,
+    calib_msm(data.ms = msebmtcal,
              data.raw = ebmtcal,
              j=1,
              s=0,
@@ -1003,7 +1003,7 @@ test_that("test warnings and errors", {
 
   ## Calculate observed event probabilities
   weights.manual <-
-    calc_weights(data.mstate = msebmtcal,
+    calc_weights(data.ms = msebmtcal,
                  data.raw = ebmtcal,
                  t = 1826,
                  s = 0,
@@ -1013,7 +1013,7 @@ test_that("test warnings and errors", {
                  stabilised = FALSE)$ipcw[-1]
 
   expect_error(
-    calib_msm(data.mstate = msebmtcal,
+    calib_msm(data.ms = msebmtcal,
              data.raw = ebmtcal,
              j=1,
              s=0,
@@ -1025,11 +1025,11 @@ test_that("test warnings and errors", {
   )
 
   ## Write a weights function with the wrong variable names
-  calc_weights_error <- function(data.mstate, data.raw, covs = NULL, t, s, j = NULL, max.weight = 10, stabilised = FALSE, max.follow = NULL){
-    return(data.mstate)
+  calc_weights_error <- function(data.ms, data.raw, covs = NULL, t, s, j = NULL, max.weight = 10, stabilised = FALSE, max.follow = NULL){
+    return(data.ms)
   }
   expect_error(
-    calib_msm(data.mstate = msebmtcal,
+    calib_msm(data.ms = msebmtcal,
              data.raw = ebmtcal,
              j=1,
              s=0,
@@ -1049,7 +1049,7 @@ test_that("test warnings and errors", {
 
   ###
   ### Calculate observed event probabilities
-  expect_error(calib_msm(data.mstate = msebmtcal,
+  expect_error(calib_msm(data.ms = msebmtcal,
                         data.raw = ebmtcal,
                         j=1,
                         s=100,
@@ -1068,7 +1068,7 @@ test_that("test warnings and errors", {
 
   ###
   ### Calculate observed event probabilities
-  expect_error(calib_msm(data.mstate = msebmtcal,
+  expect_error(calib_msm(data.ms = msebmtcal,
                         data.raw = ebmtcal,
                         j=1,
                         s=100,
@@ -1084,7 +1084,7 @@ test_that("test warnings and errors", {
 
   ###
   ### Calculate observed event probabilities
-  expect_error(calib_msm(data.mstate = msebmtcal,
+  expect_error(calib_msm(data.ms = msebmtcal,
                         data.raw = ebmtcal,
                         j=3,
                         s=100,
@@ -1102,7 +1102,7 @@ test_that("test warnings and errors", {
 
   ###
   ### Calculate observed event probabilities
-  expect_error(calib_msm(data.mstate = msebmtcal,
+  expect_error(calib_msm(data.ms = msebmtcal,
                         data.raw = ebmtcal,
                         j=3,
                         s=100,

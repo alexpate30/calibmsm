@@ -5,7 +5,7 @@ test_that("check plot.calib_msm output (j = 1, s = 0)", {
 
   ## Calculate observed event probabilities
   dat.calib.blr <-
-    calib_msm(data.mstate = msebmtcal,
+    calib_msm(data.ms = msebmtcal,
              data.raw = ebmtcal,
              j=1,
              s=0,
@@ -48,7 +48,7 @@ test_that("check plot.calib_msm output (j = 1, s = 0) with CI", {
 
   ## Calculate observed event probabilities
   dat.calib.blr <-
-    calib_msm(data.mstate = msebmtcal,
+    calib_msm(data.ms = msebmtcal,
              data.raw = ebmtcal,
              j=1,
              s=0,
@@ -86,7 +86,7 @@ test_that("check plot.calib_msm output (j = 3, s = 100)", {
 
   ## Calculate observed event probabilities
   dat.calib.blr <-
-    calib_msm(data.mstate = msebmtcal,
+    calib_msm(data.ms = msebmtcal,
              data.raw = ebmtcal,
              j=3,
              s=100,
@@ -122,7 +122,7 @@ test_that("check plot.calib_pv output (j = 1, s = 0)", {
 
   ## Calculate observed event probabilities
   dat.calib.pv <-
-    suppressWarnings(calib_msm(data.mstate = msebmtcal,
+    suppressWarnings(calib_msm(data.ms = msebmtcal,
                               data.raw = ebmtcal,
                               j=1,
                               s=0,
@@ -156,7 +156,7 @@ test_that("check plot.calib_pv output (j = 1, s = 0) with CI", {
 
   ## Calculate observed event probabilities
   dat.calib.pv <-
-    suppressWarnings(calib_msm(data.mstate = msebmtcal,
+    suppressWarnings(calib_msm(data.ms = msebmtcal,
                               data.raw = ebmtcal,
                               j=1,
                               s=0,
@@ -193,7 +193,7 @@ test_that("check plot.calib_pv output (j = 3, s = 100) with CI", {
 
   ## Calculate observed event probabilities
   dat.calib.pv <-
-    calib_msm(data.mstate = msebmtcal,
+    calib_msm(data.ms = msebmtcal,
              data.raw = ebmtcal,
              j=3,
              s=100,
@@ -235,7 +235,7 @@ test_that("check plot.calib_mlr output (j = 1, s = 0)", {
   ## Calculate observed event probabilities
   suppressWarnings(
     dat.calib.mlr <-
-      calib_msm(data.mstate = msebmtcal,
+      calib_msm(data.ms = msebmtcal,
                data.raw = ebmtcal,
                j=1,
                s=0,
@@ -263,7 +263,7 @@ test_that("check plot.calib_mlr output (j = 3, s = 100)", {
   ## Calculate observed event probabilities
   suppressWarnings(
     dat.calib.mlr <-
-      calib_msm(data.mstate = msebmtcal,
+      calib_msm(data.ms = msebmtcal,
                data.raw = ebmtcal,
                j=3,
                s=100,

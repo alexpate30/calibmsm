@@ -11,7 +11,7 @@
 #' @returns A list of datasets for each calibration plot.
 #'
 #' @noRd
-calib_pv <- function(data.mstate,
+calib_pv <- function(data.ms,
                      data.raw,
                      tp.pred.plot,
                      j,
@@ -45,7 +45,7 @@ calib_pv <- function(data.mstate,
   if (is.null(tp.pred.plot)){
     ## Note that tp.pred has been added to data.raw and the predicted transition probabilities (and relevant transformations)
     ## are contained within this dataset.
-    data.to.plot <- apply_landmark(data.raw = data.raw, data.mstate = data.mstate, j = j, s = s, t = t, exclude.cens.t = FALSE)
+    data.to.plot <- apply_landmark(data.raw = data.raw, data.ms = data.ms, j = j, s = s, t = t, exclude.cens.t = FALSE)
   } else if (!is.null(tp.pred.plot)){
     data.to.plot <- tp.pred.plot
   }
@@ -88,7 +88,7 @@ calib_pv <- function(data.mstate,
       boot.obs <- boot::boot(data.raw,
                              calc_obs_pv_boot,
                              R = CI.R.boot,
-                             data.mstate = data.mstate,
+                             data.ms = data.ms,
                              data.to.plot = data.to.plot,
                              j = j,
                              s2 = s,
@@ -147,7 +147,7 @@ calib_pv <- function(data.mstate,
     ### NB: If !is.null(pv.ids), i.e. pv.ids was specified, the function will just return a the pseudo-values themselves.
     plotdata <- calc_obs_pv_boot(data.raw = data.raw,
                                  indices = 1:nrow(data.raw),
-                                 data.mstate = data.mstate,
+                                 data.ms = data.ms,
                                  data.to.plot = data.to.plot,
                                  j = j,
                                  s2 = s,
@@ -204,7 +204,7 @@ calib_pv <- function(data.mstate,
 #' @noRd
 calc_obs_pv_boot <- function(data.raw,
                              indices,
-                             data.mstate,
+                             data.ms,
                              data.to.plot,
                              j,
                              s2, # can't use 's' because it matches an argument for the boot function
@@ -250,55 +250,55 @@ calc_obs_pv_boot <- function(data.raw,
     ### meaning the duplicate values in the bootstrapped datasets will cause problems
     data.raw.boot$id2 <- 1:nrow(data.raw.boot)
 
-    ### Create bootstrapped data.mstate (we replicate the choice of patients that was chosen in data.raw)
-    data.mstate.boot <- apply_bootstrap_msdata(data.mstate = data.mstate, indices = indices)
+    ### Create bootstrapped data.ms (we replicate the choice of patients that was chosen in data.raw)
+    data.ms.boot <- apply_bootstrap_msdata(data.ms = data.ms, indices = indices)
 
     ### Extract transition matrix from original msdata object, as this will have been lost when bootstrapping
-    tmat <- attributes(data.mstate)$trans
+    tmat <- attributes(data.ms)$trans
 
-    ### Apply attribute tmat to the bootstrapped data.mstate dataset
-    attributes(data.mstate.boot)$trans <- tmat
+    ### Apply attribute tmat to the bootstrapped data.ms dataset
+    attributes(data.ms.boot)$trans <- tmat
 
     ### Set 'id' to be same as 'id2' in bootstrapped datasets, as the function calc_pv_aj works by removing individual
     ### with the 'id' variable
-    data.mstate.boot$id <- data.mstate.boot$id2
+    data.ms.boot$id <- data.ms.boot$id2
     data.raw.boot$id <- data.raw.boot$id2
 
-    ### Relabel data.mstate.boot and data.raw.boot and remove '.boot' datasets
+    ### Relabel data.ms.boot and data.raw.boot and remove '.boot' datasets
     data.raw <- data.raw.boot
-    data.mstate <- data.mstate.boot
-    rm(data.raw.boot, data.mstate.boot)
+    data.ms <- data.ms.boot
+    rm(data.raw.boot, data.ms.boot)
 
     ###
     ### Apply landmarking
 
-    ### For calib_pv, we need to apply landmarking to both data.raw and data.mstate
+    ### For calib_pv, we need to apply landmarking to both data.raw and data.ms
     ### We model the pseudo-values on the predicted transition probabilities in the bootstrapped data.raw dataset
-    ### However the calculation of the pseudo-values must be done in the bootstrapped data.mstate dataset
+    ### However the calculation of the pseudo-values must be done in the bootstrapped data.ms dataset
 
-    ### Apply landmarking to data.raw and data.mstate
+    ### Apply landmarking to data.raw and data.ms
     data.raw.lmk.js <- apply_landmark(data.raw = data.raw,
-                                      data.mstate = data.mstate,
+                                      data.ms = data.ms,
                                       j = j,
                                       s = s,
                                       t = t,
                                       exclude.cens.t = FALSE,
                                       data.return = "data.raw")
-    data.mstate.lmk.js <- apply_landmark(data.raw = data.raw,
-                                         data.mstate = data.mstate,
+    data.ms.lmk.js <- apply_landmark(data.raw = data.raw,
+                                         data.ms = data.ms,
                                          j = j,
                                          s = s,
                                          t = t,
                                          exclude.cens.t = FALSE,
-                                         data.return = "data.mstate")
+                                         data.return = "data.ms")
 
     ###
     ### Restructure mstate data so that time s = time 0, and relabel transitions to 1, 2,...
     ### This is required in order to estimate Aalen-Johansene estimator and calculate pseudo-values
 
     ### Reduce transition times by s and remove observations which now occur entirely prior to start up
-    data.mstate.lmk.js <-
-      dplyr::mutate(data.mstate.lmk.js,
+    data.ms.lmk.js <-
+      dplyr::mutate(data.ms.lmk.js,
                     Tstart = pmax(0, Tstart - s),
                     Tstop = pmax(0, Tstop - s),
                     time = Tstop - Tstart) |>
@@ -309,11 +309,11 @@ calc_obs_pv_boot <- function(data.raw,
     ### Otherwise mstate::msfit will throw out an unneccesary (in this context) warning
 
     ### Start by identifying which transitions these are
-    suppressMessages(zero.transition.table <- data.mstate.lmk.js |>
+    suppressMessages(zero.transition.table <- data.ms.lmk.js |>
                        dplyr::group_by(from, to) |>
                        dplyr::summarise(Frequency = sum(status)))
 
-    ### Only edit data.mstate if some transitions have a frequency of zero
+    ### Only edit data.ms if some transitions have a frequency of zero
     if (any(zero.transition.table$Frequency == 0)){
 
       ### Extract the transitions
@@ -322,14 +322,14 @@ calc_obs_pv_boot <- function(data.raw,
 
       ### Remove them from dataset
       for (i in 1:length(zero.transition.from)){
-        data.mstate.lmk.js <- base::subset(data.mstate.lmk.js, !(from == zero.transition.from[i] & to == zero.transition.to[i]))
+        data.ms.lmk.js <- base::subset(data.ms.lmk.js, !(from == zero.transition.from[i] & to == zero.transition.to[i]))
         rm(i)
       }
     }
 
     ### Fit csh's with no predictors
     strata <- survival::strata
-    csh.aj <- survival::coxph(survival::Surv(Tstart, Tstop, status) ~ strata(trans), data.mstate.lmk.js)
+    csh.aj <- survival::coxph(survival::Surv(Tstart, Tstop, status) ~ strata(trans), data.ms.lmk.js)
 
     ### Extract numeric values for transitions that can occur in the landmarked cohort
     landmark.transitions <- as.numeric(sapply(csh.aj[["xlevels"]]$`strata(trans)`, gsub, pattern = ".*=", replacement =  ""))
@@ -387,7 +387,7 @@ calc_obs_pv_boot <- function(data.raw,
     calc_pv_subgroup <- function(subset.ids, pv.ids = NULL){
 
       ### Calcuate Aalen-Johansen
-      obs.aj <- calc_aj(data.mstate = base::subset(data.mstate.lmk.js, id %in% subset.ids),
+      obs.aj <- calc_aj(data.ms = base::subset(data.ms.lmk.js, id %in% subset.ids),
                         tmat = tmat.lmk.js,
                         t = t - s,
                         j = j)[["obs.aj"]]
@@ -397,7 +397,7 @@ calc_obs_pv_boot <- function(data.raw,
         ### Calculate pseudo-values (lapply part of function) and combine into dataset (rbind part of function)
         pv.temp <- do.call("rbind",
                            lapply(subset.ids, calc_pv_aj,
-                                  data.mstate = base::subset(data.mstate.lmk.js, id %in% subset.ids),
+                                  data.ms = base::subset(data.ms.lmk.js, id %in% subset.ids),
                                   obs.aj,
                                   tmat = tmat.lmk.js,
                                   n.cohort = length(subset.ids),
@@ -413,7 +413,7 @@ calc_obs_pv_boot <- function(data.raw,
         ### Calculate pseudo-values (lapply part of function) and combine into dataset (rbind part of function)
         pv.temp <- do.call("rbind",
                            lapply(pv.ids, calc_pv_aj,
-                                  data.mstate = base::subset(data.mstate.lmk.js, id %in% subset.ids),
+                                  data.ms = base::subset(data.ms.lmk.js, id %in% subset.ids),
                                   obs.aj,
                                   tmat = tmat.lmk.js,
                                   n.cohort = length(subset.ids),
@@ -802,7 +802,7 @@ calc_obs_pv_boot <- function(data.raw,
 #' Estimate Aalen-Johansen estimator for a cohort of individuals
 #'
 #' @description
-#' Estimates Aalen-Johansen estimator for the transition probabilities in cohort data.mstate.
+#' Estimates Aalen-Johansen estimator for the transition probabilities in cohort data.ms.
 #' Estimates transition probabilities at time t if in state j at time 0
 #' The Aalen-Johansen estimator for the entire cohort (including individual person_id.eval)
 #' is inputted manually (obs.aj), to speed up computational time if calculating pseudo-values
@@ -810,20 +810,20 @@ calc_obs_pv_boot <- function(data.raw,
 #'
 #' Function is called in calibmsm::calc_obs_pv_boot
 #'
-#' @param data.mstate Validation data in `msdata` format
+#' @param data.ms Validation data in `msdata` format
 #' @param tmat Transition probability matrix
 #' @param t Follow up time at which calibration is to be assessed
 #' @param j Landmark state at which predictions were made
 #'
 #' @noRd
-calc_aj <- function(data.mstate, tmat, t, j){
+calc_aj <- function(data.ms, tmat, t, j){
 
   ### Assign max state number
   max.state <- ncol(tmat)
 
   ### Fit csh's with no predictors
   strata <- survival::strata
-  csh.aj <- survival::coxph(survival::Surv(Tstart, Tstop, status) ~ strata(trans), data.mstate)
+  csh.aj <- survival::coxph(survival::Surv(Tstart, Tstop, status) ~ strata(trans), data.ms)
 
   ### Calculate cumulative incidence functions using the new transition matrix
   suppressWarnings(
@@ -863,7 +863,7 @@ calc_aj <- function(data.mstate, tmat, t, j){
 #' Estimate pseudo-values for the transition probabilities based on the Aalen-Johansen estimator
 #'
 #' @description
-#' Estimates the pseudo-values for an individual (person_id.eval) from cohort data.mstate.
+#' Estimates the pseudo-values for an individual (person_id.eval) from cohort data.ms.
 #' Calculates psuedo-values for transition probabilities at time t if in state j at time 0
 #' The Aalen-Johansen estimator for the entire cohort (including individual person_id.eval)
 #' is inputted manually (obs.aj), to speed up computaitonal time if calculating pseudo-values
@@ -872,18 +872,18 @@ calc_aj <- function(data.mstate, tmat, t, j){
 #' Function is called in calibmsm::calc_obs_pv_boot
 #'
 #' @param person_id.eval id of individual to calculate the pseudo-value for
-#' @param data.mstate Validation data in `msdata` format
+#' @param data.ms Validation data in `msdata` format
 #' @param obs.aj Aalen-Johansen estimator of the transition probabilities in the entire cohort (not excluding person_id.eval)
 #' @param tmat Transition probability matrix
-#' @param n.cohort Size of cohort (number of unique entries in data.mstate)
+#' @param n.cohort Size of cohort (number of unique entries in data.ms)
 #' @param t Follow up time at which calibration is to be assessed
 #' @param j Landmark state at which predictions were made
 #'
 #' @noRd
-calc_pv_aj <- function(person_id.eval, data.mstate, obs.aj, tmat, n.cohort, t, j){
+calc_pv_aj <- function(person_id.eval, data.ms, obs.aj, tmat, n.cohort, t, j){
 
   ### Calculate AJ estimate without patient in dataset
-  est.drop.pat <- calc_aj(subset(data.mstate, id != person_id.eval),
+  est.drop.pat <- calc_aj(subset(data.ms, id != person_id.eval),
                           tmat = tmat,
                           t = t,
                           j = j)

@@ -13,7 +13,7 @@
 #'
 #' @noRd
 calib_blr_ipcw <- function(data.raw,
-                           data.mstate,
+                           data.ms,
                            tp.pred.plot,
                            j,
                            s,
@@ -50,7 +50,7 @@ calib_blr_ipcw <- function(data.raw,
   if (is.null(tp.pred.plot)){
     ## Note that tp.pred has been added to data.raw and the predicted transition probabilities (and relevant transformations)
     ## are contained within this dataset.
-    data.to.plot <- apply_landmark(data.raw = data.raw, data.mstate = data.mstate, j = j, s = s, t = t, exclude.cens.t = TRUE)
+    data.to.plot <- apply_landmark(data.raw = data.raw, data.ms = data.ms, j = j, s = s, t = t, exclude.cens.t = TRUE)
   } else if (!is.null(tp.pred.plot)){
     data.to.plot <- tp.pred.plot
   }
@@ -86,7 +86,7 @@ calib_blr_ipcw <- function(data.raw,
       if (assess.moderate == TRUE){
         if (curve.type == "loess"){
           boot.obs <- boot::boot(data.raw, calc_obs_blr_loess_boot, R = CI.R.boot,
-                                 data.mstate = data.mstate,
+                                 data.ms = data.ms,
                                  data.to.plot = data.to.plot,
                                  state.k = state.k,
                                  j = j,
@@ -108,7 +108,7 @@ calib_blr_ipcw <- function(data.raw,
                                  loess.iterTrace = loess.iterTrace, ...)
         } else if (curve.type == "rcs"){
           boot.obs <- boot::boot(data.raw, calc_obs_blr_rcs_boot, R = CI.R.boot,
-                                 data.mstate = data.mstate,
+                                 data.ms = data.ms,
                                  data.to.plot = data.to.plot,
                                  state.k = state.k,
                                  j = j,
@@ -158,7 +158,7 @@ calib_blr_ipcw <- function(data.raw,
       ###
       if (assess.mean == TRUE){
         boot.mean <- boot::boot(data.raw, calc_mean_blr_boot, R = CI.R.boot,
-                                data.mstate = data.mstate,
+                                data.ms = data.ms,
                                 state.k = state.k,
                                 j = j,
                                 s2 = s,
@@ -184,7 +184,7 @@ calib_blr_ipcw <- function(data.raw,
       # ### PLACE HOLDER FOR Weak calibration (calibration slope)
       # ###
       # boot.weak <- boot::boot(data.raw, calc_weak_blr_boot, R = CI.R.boot,
-      #                         data.mstate = data.mstate,
+      #                         data.ms = data.ms,
       #                         state.k = state.k,
       #                         j = j,
       #                         s2 = s,
@@ -219,7 +219,7 @@ calib_blr_ipcw <- function(data.raw,
         if (curve.type == "loess"){
           pred.obs <- calc_obs_blr_loess_boot(data.raw = data.raw,
                                               indices = 1:nrow(data.raw),
-                                              data.mstate = data.mstate,
+                                              data.ms = data.ms,
                                               data.to.plot = data.to.plot,
                                               state.k = state.k,
                                               j = j,
@@ -242,7 +242,7 @@ calib_blr_ipcw <- function(data.raw,
         } else if (curve.type == "rcs"){
           pred.obs <- calc_obs_blr_rcs_boot(data.raw = data.raw,
                                             indices = 1:nrow(data.raw),
-                                            data.mstate = data.mstate,
+                                            data.ms = data.ms,
                                             data.to.plot = data.to.plot,
                                             state.k = state.k,
                                             j = j,
@@ -277,7 +277,7 @@ calib_blr_ipcw <- function(data.raw,
       if (assess.mean == TRUE){
         mean <- calc_mean_blr_boot(data.raw = data.raw,
                                    indices = 1:nrow(data.raw),
-                                   data.mstate = data.mstate,
+                                   data.ms = data.ms,
                                    state.k = state.k,
                                    j = j,
                                    s2 = s,
@@ -300,7 +300,7 @@ calib_blr_ipcw <- function(data.raw,
       # ###
       # weak <- calc_weak_blr_boot(data.raw = data.raw,
       #                            indices = 1:nrow(data.raw),
-      #                            data.mstate = data.mstate,
+      #                            data.ms = data.ms,
       #                            state.k = state.k,
       #                            j = j,
       #                            s2 = s,
@@ -368,7 +368,7 @@ calib_blr_ipcw <- function(data.raw,
 #' @noRd
 calc_obs_blr_loess_boot <- function(data.raw,
                                     indices,
-                                    data.mstate,
+                                    data.ms,
                                     data.to.plot,
                                     state.k,
                                     j,
@@ -393,7 +393,7 @@ calc_obs_blr_loess_boot <- function(data.raw,
   data.boot <- data.raw[indices, ]
 
   ## Create landmarked dataset
-  data.boot.lmk.js.uncens <-  apply_landmark(data.raw = data.boot, data.mstate = data.mstate, j = j, s = s2, t = t, exclude.cens.t = TRUE)
+  data.boot.lmk.js.uncens <-  apply_landmark(data.raw = data.boot, data.ms = data.ms, j = j, s = s2, t = t, exclude.cens.t = TRUE)
 
   ## Calculate weights
   ## Note this is done in the entire dataset data.raw, which has its own functionality (w.landmark.type) to landmark on j and s, or just s, before
@@ -406,7 +406,7 @@ calc_obs_blr_loess_boot <- function(data.raw,
     }
 
     ## Calculate the weights
-    weights <- calc_weights(data.mstate = data.mstate,
+    weights <- calc_weights(data.ms = data.ms,
                             data.raw = data.boot,
                             covs = w.covs,
                             t = t,
@@ -463,7 +463,7 @@ calc_obs_blr_loess_boot <- function(data.raw,
 #' @noRd
 calc_obs_blr_rcs_boot <- function(data.raw,
                                   indices,
-                                  data.mstate,
+                                  data.ms,
                                   data.to.plot,
                                   state.k,
                                   j,
@@ -482,7 +482,7 @@ calc_obs_blr_rcs_boot <- function(data.raw,
   data.boot <- data.raw[indices, ]
 
   ## Create landmarked dataset
-  data.boot.lmk.js.uncens <-  apply_landmark(data.raw = data.boot, data.mstate = data.mstate, j = j, s = s2, t = t, exclude.cens.t = TRUE)
+  data.boot.lmk.js.uncens <-  apply_landmark(data.raw = data.boot, data.ms = data.ms, j = j, s = s2, t = t, exclude.cens.t = TRUE)
 
   ## Calculate weights
   ## Note this is done in the entire dataset data.boot, which has its own functionality (w.landmark.type) to landmark on j and s, or just s, before
@@ -495,7 +495,7 @@ calc_obs_blr_rcs_boot <- function(data.raw,
     }
 
     ## Calculate the weights
-    weights <- calc_weights(data.mstate = data.mstate,
+    weights <- calc_weights(data.ms = data.ms,
                             data.raw = data.boot,
                             covs = w.covs,
                             t = t,
@@ -569,7 +569,7 @@ calc_obs_blr_rcs_boot <- function(data.raw,
 #' @noRd
 calc_mean_blr_boot <- function(data.raw,
                                indices,
-                               data.mstate,
+                               data.ms,
                                state.k,
                                j,
                                s2, # can't use 's' because it matches an argument for the boot function
@@ -586,7 +586,7 @@ calc_mean_blr_boot <- function(data.raw,
   data.boot <- data.raw[indices, ]
 
   ## Create landmarked dataset
-  data.boot.lmk.js.uncens <-  apply_landmark(data.raw = data.boot, data.mstate = data.mstate, j = j, s = s2, t = t, exclude.cens.t = TRUE)
+  data.boot.lmk.js.uncens <-  apply_landmark(data.raw = data.boot, data.ms = data.ms, j = j, s = s2, t = t, exclude.cens.t = TRUE)
 
   ## Calculate weights
   ## Note this is done in the entire dataset data.boot, which has its own functionality (w.landmark.type) to landmark on j and s, or just s, before
@@ -599,7 +599,7 @@ calc_mean_blr_boot <- function(data.raw,
     }
 
     ## Calculate the weights
-    weights <- calc_weights(data.mstate = data.mstate,
+    weights <- calc_weights(data.ms = data.ms,
                             data.raw = data.boot,
                             covs = w.covs,
                             t = t,
@@ -650,7 +650,7 @@ calc_mean_blr_boot <- function(data.raw,
 #' @noRd
 calc_weak_blr_boot <- function(data.raw,
                                indices,
-                               data.mstate,
+                               data.ms,
                                state.k,
                                j,
                                s2, # can't use 's' because it matches an argument for the boot function
@@ -667,7 +667,7 @@ calc_weak_blr_boot <- function(data.raw,
   data.boot <- data.raw[indices, ]
 
   ## Create landmarked dataset
-  data.boot.lmk.js.uncens <-  apply_landmark(data.raw = data.boot, data.mstate = data.mstate, j = j, s = s2, t = t, exclude.cens.t = TRUE)
+  data.boot.lmk.js.uncens <-  apply_landmark(data.raw = data.boot, data.ms = data.ms, j = j, s = s2, t = t, exclude.cens.t = TRUE)
 
   ## Calculate weights
   ## Note this is done in the entire dataset data.boot, which has its own functionality (w.landmark.type) to landmark on j and s, or just s, before
@@ -680,7 +680,7 @@ calc_weak_blr_boot <- function(data.raw,
     }
 
     ## Calculate the weights
-    weights <- calc_weights(data.mstate = data.mstate,
+    weights <- calc_weights(data.ms = data.ms,
                             data.raw = data.boot,
                             covs = w.covs,
                             t = t,

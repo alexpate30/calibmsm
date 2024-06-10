@@ -8,7 +8,7 @@
 #' 3) Pseudo-values: Pseudo-values estimated using the Aalen-Johansen estimator (Aalen OO, Johansen S, 1978).
 #'
 #' @param data.raw Validation data in `data.frame` (one row per individual)
-#' @param data.mstate Validation data in `msdata` format
+#' @param data.ms Validation data in `msdata` format
 #' @param j Landmark state at which predictions were made
 #' @param s Landmark time at which predictions were made
 #' @param t Follow up time at which calibration is to be assessed
@@ -88,9 +88,9 @@
 #' where (`dtcens.s = 1`) if an individual is censored at time `dtcens`, and `dtcens.s = 0`
 #' otherwise. When an individual enters an absorbing state, this prevents censoring
 #' from happening (i.e. dtcens.s = 0). `data.raw` must also contain the desired variables
-#' for estimating the weights. Secondly, `data.mstate` must be a dataset of class `msdata`,
+#' for estimating the weights. Secondly, `data.ms` must be a dataset of class `msdata`,
 #' generated using the \code{[mstate]} package. This dataset is used to apply the landmarking
-#' and identify which state individuals are in at time `t`. While `data.mstate` can be
+#' and identify which state individuals are in at time `t`. While `data.ms` can be
 #' derived from `data.raw`, it would be inefficient to do this within `calibmsm::calib_msm`
 #' due to the bootstrapping procedure, and therefore they must be inputted seperately.
 #'
@@ -172,7 +172,7 @@
 #'
 #' # Now estimate the observed event probabilities for each possible transition.
 #' dat.calib <-
-#' calib_msm(data.mstate = msebmtcal,
+#' calib_msm(data.ms = msebmtcal,
 #'  data.raw = ebmtcal,
 #'  j=1,
 #'  s=0,
@@ -184,7 +184,7 @@
 #' summary(dat.calib)
 #'
 #' @export
-calib_msm <- function(data.mstate,
+calib_msm <- function(data.ms,
                       data.raw,
                       j,
                       s,
@@ -236,13 +236,13 @@ calib_msm <- function(data.mstate,
   #   data("tps100")
   # calib.type <- "pv"
   # data.raw <- ebmtcal
-  # data.mstate <- msebmtcal
+  # data.ms <- msebmtcal
   # tp.pred <- tps0 |>
   #   subset(j == 1) |>
   #   dplyr::select(paste("pstate", 1:6, sep = ""))
   #
   # data.raw <- ebmtcal[ebmtcal$id %in% 1:50, ]
-  # data.mstate <- msebmtcal[msebmtcal$id %in% 1:50, ]
+  # data.ms <- msebmtcal[msebmtcal$id %in% 1:50, ]
   # tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
   # tp.pred <- tp.pred[1:50, ]
   #
@@ -290,7 +290,7 @@ calib_msm <- function(data.mstate,
   # pv.group.vars = NULL
   # tp.pred <- readRDS("P:/Documents/aaa_incline/DEBUG.tp.pred.rds")
   # data.raw <- readRDS("P:/Documents/aaa_incline/DEBUG.data.raw.rds")
-  # data.mstate <- readRDS("P:/Documents/aaa_incline/DEBUG.data.mstate.rds")
+  # data.ms <- readRDS("P:/Documents/aaa_incline/DEBUG.data.ms.rds")
   # pv.n.pctls = 10
   # t <- 2557
 
@@ -300,7 +300,7 @@ calib_msm <- function(data.mstate,
   #
   # # ## Calculate manual weights
   # # weights.manual <-
-  # #   calc_weights(data.mstate = msebmtcal,
+  # #   calc_weights(data.ms = msebmtcal,
   # #                data.raw = ebmtcal,
   # #                t = 1826,
   # #                s = 0,
@@ -314,14 +314,14 @@ calib_msm <- function(data.mstate,
   ### Warnings and errors ###
   ###########################
 
-  ### Stop if data.mstate is missing the transition matrix, this can happen when using the subset function on data.mstate
-  if (!("trans" %in% names(attributes(data.mstate)))){
-    stop("The is no transition matrix (trans) attribute in data.mstate, this may have happened when using the subset function to subset an 'msdata' data frame,
+  ### Stop if data.ms is missing the transition matrix, this can happen when using the subset function on data.ms
+  if (!("trans" %in% names(attributes(data.ms)))){
+    stop("The is no transition matrix (trans) attribute in data.ms, this may have happened when using the subset function to subset an 'msdata' data frame,
          which should have this attribute")
   }
-  ### Stop if patients in data.raw are not in data.mstate
-  if (!base::all(unique(data.raw$id) %in% unique(data.mstate$id))){
-    stop("All patients in data.raw are not contained in data.mstate. Landmarking cannot be applied.")
+  ### Stop if patients in data.raw are not in data.ms
+  if (!base::all(unique(data.raw$id) %in% unique(data.ms$id))){
+    stop("All patients in data.raw are not contained in data.ms. Landmarking cannot be applied.")
   }
 
   ### Stop if not same number of rows in data.raw and tp.pred
@@ -329,9 +329,9 @@ calib_msm <- function(data.mstate,
     stop("Number of rows in tp.pred does not match number of rows in data.raw")
   }
 
-  ### Warning if patients in data.mstate are not in data.raw
-  if (!base::all(unique(data.mstate$id) %in% unique(data.raw$id))){
-    warning("All patients in data.mstate are not contained in data.raw. Landmarking can still be applied, but potential mismatch in these two datasets?")
+  ### Warning if patients in data.ms are not in data.raw
+  if (!base::all(unique(data.ms$id) %in% unique(data.raw$id))){
+    warning("All patients in data.ms are not contained in data.raw. Landmarking can still be applied, but potential mismatch in these two datasets?")
   }
 
   ### Stop if variables dtcens and dtcens.s do not exist, and if any NA values for dtcens
@@ -432,10 +432,10 @@ calib_msm <- function(data.mstate,
   }
 
   ### Identify valid transitions
-  valid.transitions <- identify_valid_transitions(data.raw = data.raw, data.mstate = data.mstate, j = j, s = s, t = t)
+  valid.transitions <- identify_valid_transitions(data.raw = data.raw, data.ms = data.ms, j = j, s = s, t = t)
 
   ### Check there are individuals in state.k at time t for the transitions with non-zero predicted probability
-  for (state.k in 1:max(data.mstate$to)){
+  for (state.k in 1:max(data.ms$to)){
     if (sum(tp.pred[,state.k]) > 0 & !(state.k %in% valid.transitions)){
       stop(paste("There are no individuals in state ", state.k, " at time point ", t,
                  " but there are non-zero predicted probabilities of being in this state according to tp.pred. ",
@@ -458,10 +458,10 @@ calib_msm <- function(data.mstate,
 
   ### Check for sufficient numbers in each state at time when calibration is being assessed
   ## Create landmarked dataset
-  temp.landmark <-  apply_landmark(data.raw = data.raw, data.mstate = data.mstate, j = j, s = s, t = t, exclude.cens.t = TRUE, data.return = "data.mstate")
+  temp.landmark <-  apply_landmark(data.raw = data.raw, data.ms = data.ms, j = j, s = s, t = t, exclude.cens.t = TRUE, data.return = "data.ms")
 
   ## Identify individuals in state j at time s
-  temp.ids.lmk <- lapply(valid.transitions, extract_ids_states, data.mstate = temp.landmark, tmat = attributes(data.mstate)$trans, t = t)
+  temp.ids.lmk <- lapply(valid.transitions, extract_ids_states, data.ms = temp.landmark, tmat = attributes(data.ms)$trans, t = t)
   if (any(unlist(lapply(temp.ids.lmk, length)) < 50)){
     warning("In the landmark cohort of individuals uncensored and in state j at time s,
     there are some states have less than 50 people at the time at which calibration is being assessed (t).
@@ -485,10 +485,10 @@ calib_msm <- function(data.mstate,
   ########################
 
   ### Extract transition matrix from msdata object
-  tmat <- attributes(data.mstate)$trans
+  tmat <- attributes(data.ms)$trans
 
   ### Assign the maximum state an individual may enter
-  max.state <- max(data.mstate$to)
+  max.state <- max(data.ms$to)
 
   ### Assign colnames to predicted transition probabilities (and in tp.pred.plot)
   colnames(tp.pred) <- paste("tp.pred", 1:ncol(tp.pred), sep = "")
@@ -520,7 +520,7 @@ calib_msm <- function(data.mstate,
   ### Extract which state individuals are in at time t
   ids.state.list <- vector("list", max.state)
   for (k in valid.transitions){
-    ids.state.list[[k]] <- extract_ids_states(data.mstate, tmat, k, t)
+    ids.state.list[[k]] <- extract_ids_states(data.ms, tmat, k, t)
   }
 
   ### Create a variable to say which state an individual was in at the time of interest
@@ -564,7 +564,7 @@ calib_msm <- function(data.mstate,
   ##########################
   if (calib.type == "blr"){
     output.object <- calib_blr_ipcw(data.raw = data.raw,
-                                    data.mstate = data.mstate,
+                                    data.ms = data.ms,
                                     tp.pred.plot = tp.pred.plot,
                                     j = j,
                                     s = s,
@@ -595,7 +595,7 @@ calib_msm <- function(data.mstate,
   } else if (calib.type == "mlr"){
     ### Estimate predicted-obsserved probabilities using the MLR-IPCW method
     output.object <- calib_mlr_ipcw(data.raw = data.raw,
-                                    data.mstate = data.mstate,
+                                    data.ms = data.ms,
                                     j = j,
                                     s = s,
                                     t = t,
@@ -619,7 +619,7 @@ calib_msm <- function(data.mstate,
                                     assess.mean = assess.mean, ...)
   } else if (calib.type == "pv"){
     output.object <- calib_pv(data.raw = data.raw,
-                              data.mstate = data.mstate,
+                              data.ms = data.ms,
                               tp.pred.plot = tp.pred.plot,
                               j = j,
                               s = s,
@@ -645,7 +645,7 @@ calib_msm <- function(data.mstate,
                               transitions.out = transitions.out)
   } else if (calib.type == "aj"){
     output.object <- calib_aj(data.raw = data.raw,
-                              data.mstate = data.mstate,
+                              data.ms = data.ms,
                               j = j,
                               s = s,
                               t = t,

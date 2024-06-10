@@ -19,7 +19,7 @@ test_that("check calib_pv output, (j = 1, s = 0), curve.type = loess, CI.type = 
   msebmtcal <- msebmtcal |> dplyr::filter(id %in% 1:50)
 
   ## Calculate observed event probabilities using transitions.out = NULL
-  dat.calib.pv.1 <- calib_msm(data.mstate = msebmtcal,
+  dat.calib.pv.1 <- calib_msm(data.ms = msebmtcal,
                               data.raw = ebmtcal,
                               j = 1,
                               s = 0,
@@ -35,7 +35,7 @@ test_that("check calib_pv output, (j = 1, s = 0), curve.type = loess, CI.type = 
   expect_no_error(summary(dat.calib.pv.1))
 
   ## Check same results when just calculating pseudo-values for first three individuals
-  dat.calib.pv.ids.1 <- calib_msm(data.mstate = msebmtcal,
+  dat.calib.pv.ids.1 <- calib_msm(data.ms = msebmtcal,
                                   data.raw = ebmtcal,
                                   j = 1,
                                   s = 0,
@@ -49,7 +49,7 @@ test_that("check calib_pv output, (j = 1, s = 0), curve.type = loess, CI.type = 
   expect_equal(dat.calib.pv.1[["plotdata"]][[6]][1:3, "pv"], dat.calib.pv.ids.1[[1]][,7])
 
   ## Calculate observed event probabilities with a confidence interval using bootstrapping and transitions.out = NULL
-  expect_warning(calib_msm(data.mstate = msebmtcal,
+  expect_warning(calib_msm(data.ms = msebmtcal,
                            data.raw = ebmtcal,
                            j = 1,
                            s = 0,
@@ -60,7 +60,7 @@ test_that("check calib_pv output, (j = 1, s = 0), curve.type = loess, CI.type = 
                            CI = 95, CI.type = "bootstrap", CI.R.boot = 3,
                            tp.pred.plot = NULL, transitions.out = c(1)))
 
-  dat.calib.pv.4 <- suppressWarnings(calib_msm(data.mstate = msebmtcal,
+  dat.calib.pv.4 <- suppressWarnings(calib_msm(data.ms = msebmtcal,
                                                data.raw = ebmtcal,
                                                j = 1,
                                                s = 0,
@@ -92,7 +92,7 @@ test_that("check calib_pv output, (j = 1, s = 0), curve.type = loess, CI.type = 
     dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
 
   ## No confidence interval
-  dat.calib.pv.9 <- suppressWarnings(calib_msm(data.mstate = msebmtcal,
+  dat.calib.pv.9 <- suppressWarnings(calib_msm(data.ms = msebmtcal,
                                                data.raw = ebmtcal,
                                                j = 1,
                                                s = 0,
@@ -112,7 +112,7 @@ test_that("check calib_pv output, (j = 1, s = 0), curve.type = loess, CI.type = 
   expect_no_error(summary(dat.calib.pv.9))
 
   ## With confidence interval
-  dat.calib.pv.10 <- suppressWarnings(calib_msm(data.mstate = msebmtcal,
+  dat.calib.pv.10 <- suppressWarnings(calib_msm(data.ms = msebmtcal,
                                                 data.raw = ebmtcal,
                                                 j = 1,
                                                 s = 0,
@@ -148,7 +148,7 @@ test_that("check calib_pv output, (j = 1, s = 0), curve.type = loess, CI.type = 
   msebmtcal <- msebmtcal |> dplyr::filter(id %in% 1:50)
 
   ## Calculate observed event probabilities using transitions.out = NULL
-  dat.calib.pv.1 <- calib_msm(data.mstate = msebmtcal,
+  dat.calib.pv.1 <- calib_msm(data.ms = msebmtcal,
                               data.raw = ebmtcal,
                               j = 1,
                               s = 0,
@@ -163,7 +163,7 @@ test_that("check calib_pv output, (j = 1, s = 0), curve.type = loess, CI.type = 
   expect_no_error(summary(dat.calib.pv.1))
 
   ## Calculate observed event probabilities with a confidence interval using parametric approach
-  dat.calib.pv.5 <- calib_msm(data.mstate = msebmtcal,
+  dat.calib.pv.5 <- calib_msm(data.ms = msebmtcal,
                               data.raw = ebmtcal,
                               j = 1,
                               s = 0,
@@ -194,7 +194,7 @@ test_that("check calib_pv output, (j = 1, s = 0), curve.type = loess, CI.type = 
     dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
 
   ## With confidence interval
-  dat.calib.pv.10 <- calib_msm(data.mstate = msebmtcal,
+  dat.calib.pv.10 <- calib_msm(data.ms = msebmtcal,
                                data.raw = ebmtcal,
                                j = 1,
                                s = 0,
@@ -232,7 +232,7 @@ test_that("check calib_pv output, (j = 1, s = 0), curve.type = rcs, CI.type = bo
   msebmtcal <- msebmtcal |> dplyr::filter(id %in% 1:150)
 
   ## Calculate observed event probabilities using transitions.out = NULL
-  dat.calib.pv.1 <- calib_msm(data.mstate = msebmtcal,
+  dat.calib.pv.1 <- calib_msm(data.ms = msebmtcal,
                               data.raw = ebmtcal,
                               j = 1,
                               s = 0,
@@ -247,7 +247,7 @@ test_that("check calib_pv output, (j = 1, s = 0), curve.type = rcs, CI.type = bo
   expect_no_error(summary(dat.calib.pv.1))
 
   ## Calculate observed event probabilities with a confidence interval using bootstrapping
-  dat.calib.pv.4 <- suppressWarnings(calib_msm(data.mstate = msebmtcal,
+  dat.calib.pv.4 <- suppressWarnings(calib_msm(data.ms = msebmtcal,
                                                data.raw = ebmtcal,
                                                j = 1,
                                                s = 0,
@@ -284,7 +284,7 @@ test_that("check calib_pv output, (j = 1, s = 0), curve.type = rcs, CI.type = bo
   msebmtcal <- msebmtcal |> dplyr::filter(id %in% 1:150)
 
   ## Calculate observed event probabilities using transitions.out = NULL
-  dat.calib.pv.1 <- calib_msm(data.mstate = msebmtcal,
+  dat.calib.pv.1 <- calib_msm(data.ms = msebmtcal,
                               data.raw = ebmtcal,
                               j = 1,
                               s = 0,
@@ -299,7 +299,7 @@ test_that("check calib_pv output, (j = 1, s = 0), curve.type = rcs, CI.type = bo
   expect_no_error(summary(dat.calib.pv.1))
 
   ## Calculate observed event probabilities with a confidence interval using parametric approach
-  dat.calib.pv.4 <- calib_msm(data.mstate = msebmtcal,
+  dat.calib.pv.4 <- calib_msm(data.ms = msebmtcal,
                               data.raw = ebmtcal,
                               j = 1,
                               s = 0,
@@ -337,7 +337,7 @@ test_that("check calib_pv output, (j = 1, s = 0), groups.vars and pv.n.pctls spe
   msebmtcal <- msebmtcal |> dplyr::filter(id %in% 1:50)
 
   ## Calculate observed event probabilities when both pv.group.vars and pv.n.pctls are specified
-  dat.calib.pv.1 <- calib_msm(data.mstate = msebmtcal,
+  dat.calib.pv.1 <- calib_msm(data.ms = msebmtcal,
                               data.raw = ebmtcal,
                               j = 1,
                               s = 0,
@@ -355,7 +355,7 @@ test_that("check calib_pv output, (j = 1, s = 0), groups.vars and pv.n.pctls spe
   expect_equal(length(dat.calib.pv.1[["plotdata"]]), 6)
 
   ## Check same results when just calculating pseudo-values for first three individuals
-  dat.calib.pv.ids.1 <- calib_msm(data.mstate = msebmtcal,
+  dat.calib.pv.ids.1 <- calib_msm(data.ms = msebmtcal,
                                   data.raw = ebmtcal,
                                   j = 1,
                                   s = 0,
@@ -371,7 +371,7 @@ test_that("check calib_pv output, (j = 1, s = 0), groups.vars and pv.n.pctls spe
   expect_equal(dat.calib.pv.1[["plotdata"]][[6]][1:3, "pv"], dat.calib.pv.ids.1[[1]][,7])
 
   ## Check same results when just calculating pseudo-values for first three individuals, but specify transitions 1 and 6
-  dat.calib.pv.ids.1.tout <- calib_msm(data.mstate = msebmtcal,
+  dat.calib.pv.ids.1.tout <- calib_msm(data.ms = msebmtcal,
                                        data.raw = ebmtcal,
                                        j = 1,
                                        s = 0,
@@ -388,7 +388,7 @@ test_that("check calib_pv output, (j = 1, s = 0), groups.vars and pv.n.pctls spe
   expect_equal(ncol(dat.calib.pv.ids.1.tout[["plotdata"]]), 3)
 
   ## Calculate observed event probabilities for pv.group.vars
-  dat.calib.pv.2 <- calib_msm(data.mstate = msebmtcal,
+  dat.calib.pv.2 <- calib_msm(data.ms = msebmtcal,
                               data.raw = ebmtcal,
                               j = 1,
                               s = 0,
@@ -405,7 +405,7 @@ test_that("check calib_pv output, (j = 1, s = 0), groups.vars and pv.n.pctls spe
   expect_equal(length(dat.calib.pv.2[["plotdata"]]), 6)
 
   ## Check same results when just calculating pseudo-values for first three individuals
-  dat.calib.pv.ids.2 <- calib_msm(data.mstate = msebmtcal,
+  dat.calib.pv.ids.2 <- calib_msm(data.ms = msebmtcal,
                                   data.raw = ebmtcal,
                                   j = 1,
                                   s = 0,
@@ -423,7 +423,7 @@ test_that("check calib_pv output, (j = 1, s = 0), groups.vars and pv.n.pctls spe
   ## pseudo-values are just calculated for all states anyway.
 
   ## Calculate observed event probabilities for pv.n.pctls
-  dat.calib.pv.3 <- calib_msm(data.mstate = msebmtcal,
+  dat.calib.pv.3 <- calib_msm(data.ms = msebmtcal,
                               data.raw = ebmtcal,
                               j = 1,
                               s = 0,
@@ -440,7 +440,7 @@ test_that("check calib_pv output, (j = 1, s = 0), groups.vars and pv.n.pctls spe
   expect_equal(length(dat.calib.pv.3[["plotdata"]]), 6)
 
   ## Check same results when just calculating pseudo-values for first three individuals
-  dat.calib.pv.ids.3 <- calib_msm(data.mstate = msebmtcal,
+  dat.calib.pv.ids.3 <- calib_msm(data.ms = msebmtcal,
                                   data.raw = ebmtcal,
                                   j = 1,
                                   s = 0,
@@ -455,7 +455,7 @@ test_that("check calib_pv output, (j = 1, s = 0), groups.vars and pv.n.pctls spe
   expect_equal(dat.calib.pv.3[["plotdata"]][[6]][1:3, "pv"], dat.calib.pv.ids.3[[1]][,7])
 
   ## Check same results when just calculating pseudo-values for first three individuals, but specify transitions 1 and 6
-  dat.calib.pv.ids.3.tout <- calib_msm(data.mstate = msebmtcal,
+  dat.calib.pv.ids.3.tout <- calib_msm(data.ms = msebmtcal,
                                        data.raw = ebmtcal,
                                        j = 1,
                                        s = 0,
@@ -491,7 +491,7 @@ test_that("check calib_pv output, (j = 1, s = 0), cause errors", {
   msebmtcal <- msebmtcal |> dplyr::filter(id %in% 1:50)
 
   ## Request bootstrap confidence interval and don't give number of bootstrap replicates (for either rcs or parametric)
-  expect_error(calib_msm(data.mstate = msebmtcal,
+  expect_error(calib_msm(data.ms = msebmtcal,
                          data.raw = ebmtcal,
                          j = 1,
                          s = 0,
@@ -503,7 +503,7 @@ test_that("check calib_pv output, (j = 1, s = 0), cause errors", {
                          CI.type = "bootstrap",
                          tp.pred.plot = NULL, transitions.out = NULL))
 
-  expect_error(calib_msm(data.mstate = msebmtcal,
+  expect_error(calib_msm(data.ms = msebmtcal,
                          data.raw = ebmtcal,
                          j = 1,
                          s = 0,
@@ -527,7 +527,7 @@ test_that("check calib_pv output, (j = 3, s = 100), pv.group.vars defined", {
 
   ## Calculate observed event probabilities
   dat.calib.pv <-
-    calib_msm(data.mstate = msebmtcal,
+    calib_msm(data.ms = msebmtcal,
               data.raw = ebmtcal,
               j=3,
               s=100,
@@ -558,7 +558,7 @@ test_that("check calib_pv output, (j = 3, s = 100), pv.n.pctls defined", {
 
   ## Calculate observed event probabilities
   dat.calib.pv <-
-    calib_msm(data.mstate = msebmtcal,
+    calib_msm(data.ms = msebmtcal,
               data.raw = ebmtcal,
               j=3,
               s=100,
@@ -588,7 +588,7 @@ test_that("check calib_pv output, (j = 3, s = 100), pv.group.vars and pv.n.pctls
 
   ## Calculate observed event probabilities
   dat.calib.pv <-
-    calib_msm(data.mstate = msebmtcal,
+    calib_msm(data.ms = msebmtcal,
               data.raw = ebmtcal,
               j=3,
               s=100,
@@ -622,7 +622,7 @@ test_that("check calib_pv output, (j = 1, s = 0), pv.precalc", {
 
   ## Calculate observed event probabilities
   dat.calib.pv <-
-    calib_msm(data.mstate = msebmtcal,
+    calib_msm(data.ms = msebmtcal,
               data.raw = ebmtcal,
               j = 1,
               s = 0,

@@ -50,7 +50,7 @@ The code to produce the calibration curves with confidence intervals is as follo
 
 ```{r}
 dat.calib.blr <-
-  calib_msm(data.mstate = msebmtcal,
+  calib_msm(data.ms = msebmtcal,
            data.raw = ebmtcal,
            j=1,
            s=0,
@@ -80,7 +80,7 @@ Once a function for estimating the weights has been defined, the internal bootst
 calc_weights_manual <- calibmsm::calc_weights
 
 dat.calib.blr.w.function <-
-  calib_msm(data.mstate = msebmtcal,
+  calib_msm(data.ms = msebmtcal,
            data.raw = ebmtcal,
            j=1,
            s=0,
@@ -130,7 +130,7 @@ The calibration curves (with no confidence interval) are now calculated. We util
 
 ```{r}
 weights.manual <-
-  calc_weights(data.mstate = msebmtcal,
+  calc_weights(data.ms = msebmtcal,
                data.raw = ebmtcal,
                covs = c("year", "agecl", "proph", "match"),
                t = t,
@@ -146,7 +146,7 @@ The observed event probabilities can then be estimated using `calib_msm` and a c
 
 ```{r}
 dat.calib.boot.manual <-
-  calib_msm(data.mstate = msebmtcal,
+  calib_msm(data.ms = msebmtcal,
            data.raw = ebmtcal,
            j = 1,
            s = 0,
@@ -170,7 +170,7 @@ calc_obs_boot <- function(data, indices, tp.pred, state.k){
   ## Calculate weights
   ## In practice - replace this function with your own
   weights.manual <-
-    calc_weights(data.mstate = msebmtcal,
+    calc_weights(data.ms = msebmtcal |> subset(id %in% data.boot$id),
                  data.raw = data.boot,
                  covs = c("year", "agecl", "proph", "match"),
                  t = t,
@@ -182,7 +182,7 @@ calc_obs_boot <- function(data, indices, tp.pred, state.k){
   
   ## Estimate bootstrapped calibration curve
   curve.est <-
-    calib_msm(data.mstate = msebmtcal,
+    calib_msm(data.ms = msebmtcal |> subset(id %in% data.boot$id),
              data.raw = data.boot,
              j=1,
              s=0,

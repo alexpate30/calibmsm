@@ -5,7 +5,7 @@
 \title{Assess the calibration of a multistate model}
 \usage{
 calib_msm(
-  data.mstate,
+  data.ms,
   data.raw,
   j,
   s,
@@ -50,7 +50,7 @@ calib_msm(
 )
 }
 \arguments{
-\item{data.mstate}{Validation data in \code{msdata} format}
+\item{data.ms}{Validation data in \code{msdata} format}
 
 \item{data.raw}{Validation data in \code{data.frame} (one row per individual)}
 
@@ -197,9 +197,9 @@ the time until censoring (\code{dtcens}), and an indicator for censoring \code{d
 where (\code{dtcens.s = 1}) if an individual is censored at time \code{dtcens}, and \code{dtcens.s = 0}
 otherwise. When an individual enters an absorbing state, this prevents censoring
 from happening (i.e. dtcens.s = 0). \code{data.raw} must also contain the desired variables
-for estimating the weights. Secondly, \code{data.mstate} must be a dataset of class \code{msdata},
+for estimating the weights. Secondly, \code{data.ms} must be a dataset of class \code{msdata},
 generated using the \code{[mstate]} package. This dataset is used to apply the landmarking
-and identify which state individuals are in at time \code{t}. While \code{data.mstate} can be
+and identify which state individuals are in at time \code{t}. While \code{data.ms} can be
 derived from \code{data.raw}, it would be inefficient to do this within \code{calibmsm::calib_msm}
 due to the bootstrapping procedure, and therefore they must be inputted seperately.
 
@@ -231,7 +231,7 @@ tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6
 
 # Now estimate the observed event probabilities for each possible transition.
 dat.calib <-
-calib_msm(data.mstate = msebmtcal,
+calib_msm(data.ms = msebmtcal,
  data.raw = ebmtcal,
  j=1,
  s=0,

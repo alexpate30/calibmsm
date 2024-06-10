@@ -41,7 +41,7 @@
 #'
 #' # Now estimate the observed event probabilities for each possible transition.
 #' dat.calib <-
-#' calib_msm(data.mstate = msebmtcal,
+#' calib_msm(data.ms = msebmtcal,
 #'  data.raw = ebmtcal,
 #'  j=1,
 #'  s=0,
@@ -342,7 +342,7 @@ plot.calib_msm <- function(x, ..., combine = TRUE, ncol = NULL, nrow = NULL, siz
 #'
 #' # Now estimate the observed event probabilities for each possible transition.
 #' dat.calib <-
-#' calib_msm(data.mstate = msebmtcal.cmprsk,
+#' calib_msm(data.ms = msebmtcal.cmprsk,
 #'  data.raw = ebmtcal,
 #'  j=1,
 #'  s=0,

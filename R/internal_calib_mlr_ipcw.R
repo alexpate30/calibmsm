@@ -15,7 +15,7 @@
 #'
 #' @noRd
 calib_mlr_ipcw <- function(data.raw,
-                           data.mstate,
+                           data.ms,
                            j,
                            s,
                            t,
@@ -39,7 +39,7 @@ calib_mlr_ipcw <- function(data.raw,
                            assess.mean, ...){
 
   ## Create landmarked dataset
-  data.raw.lmk.js.uncens <-  apply_landmark(data.raw = data.raw, data.mstate = data.mstate, j = j, s = s, t = t, exclude.cens.t = TRUE)
+  data.raw.lmk.js.uncens <-  apply_landmark(data.raw = data.raw, data.ms = data.ms, j = j, s = s, t = t, exclude.cens.t = TRUE)
 
   ## Calculate weights
   ## Note this is done in the entire dataset data.boot, which has its own functionality (w.landmark.type) to landmark on j and s, or just s, before
@@ -52,7 +52,7 @@ calib_mlr_ipcw <- function(data.raw,
     }
 
     ## Calculate the weights
-    weights <- calc_weights(data.mstate = data.mstate,
+    weights <- calc_weights(data.ms = data.ms,
                             data.raw = data.raw,
                             covs = w.covs,
                             t = t,
@@ -148,7 +148,7 @@ calib_mlr_ipcw <- function(data.raw,
 
       ### Apply bootstrapping
       boot.mean <- boot::boot(data.raw, calc_mean_mlr_boot, R = CI.R.boot,
-                              data.mstate = data.mstate,
+                              data.ms = data.ms,
                               state.k = state.k,
                               j = j,
                               s2 = s,
@@ -181,7 +181,7 @@ calib_mlr_ipcw <- function(data.raw,
       ### Assess mean calibration
       output.object.mean <- calc_mean_mlr_boot(data.raw = data.raw,
                                                indices = 1:nrow(data.raw),
-                                               data.mstate = data.mstate,
+                                               data.ms = data.ms,
                                                state.k = state.k,
                                                j = j,
                                                s2 = s,
@@ -267,7 +267,7 @@ calib_mlr_ipcw <- function(data.raw,
 #' @noRd
 calc_mean_mlr_boot <- function(data.raw,
                                indices,
-                               data.mstate,
+                               data.ms,
                                state.k,
                                j,
                                s2, # can't use 's' because it matches an argument for the boot function
@@ -285,7 +285,7 @@ calc_mean_mlr_boot <- function(data.raw,
   data.boot <- data.raw[indices, ]
 
   ## Create landmarked dataset
-  data.boot.lmk.js.uncens <-  apply_landmark(data.raw = data.boot, data.mstate = data.mstate, j = j, s = s2, t = t, exclude.cens.t = TRUE)
+  data.boot.lmk.js.uncens <-  apply_landmark(data.raw = data.boot, data.ms = data.ms, j = j, s = s2, t = t, exclude.cens.t = TRUE)
 
   ## Calculate weights
   ## Note this is done in the entire dataset data.boot, which has its own functionality (w.landmark.type) to landmark on j and s, or just s, before
@@ -298,7 +298,7 @@ calc_mean_mlr_boot <- function(data.raw,
     }
 
     ## Calculate the weights
-    weights <- calc_weights(data.mstate = data.mstate,
+    weights <- calc_weights(data.ms = data.ms,
                             data.raw = data.boot,
                             covs = w.covs,
                             t = t,

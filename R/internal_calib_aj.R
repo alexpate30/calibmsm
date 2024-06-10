@@ -11,7 +11,7 @@
 #' @returns A list of datasets for each calibration plot.
 #'
 #' @noRd
-calib_aj <- function(data.mstate,
+calib_aj <- function(data.ms,
                      data.raw,
                      j,
                      s,
@@ -52,7 +52,7 @@ calib_aj <- function(data.mstate,
     boot.mean <- boot::boot(data.raw,
                             calib_AJ_boot,
                             R = CI.R.boot,
-                            data.mstate = data.mstate,
+                            data.ms = data.ms,
                             j = j,
                             s2 = s,
                             t = t,
@@ -78,7 +78,7 @@ calib_aj <- function(data.mstate,
     ### This will just estimate mean calibration without applying bootstrapping
     output.object.mean <- calib_AJ_boot(data.raw = data.raw,
                                         indices = 1:nrow(data.raw),
-                                        data.mstate = data.mstate,
+                                        data.ms = data.ms,
                                         j = j,
                                         s2 = s,
                                         t = t,
@@ -114,7 +114,7 @@ calib_aj <- function(data.mstate,
 #' @noRd
 calib_AJ_boot <- function(data.raw,
                           indices,
-                          data.mstate,
+                          data.ms,
                           j,
                           s2, # can't use 's' because it matches an argument for the boot function
                           t,
@@ -136,55 +136,55 @@ calib_AJ_boot <- function(data.raw,
   ### meaning the duplicate values in the bootstrapped datasets will cause problems
   data.raw.boot$id2 <- 1:nrow(data.raw.boot)
 
-  ### Create bootstrapped data.mstate (we replicate the choice of patients that was chosen in data.raw)
-  data.mstate.boot <- apply_bootstrap_msdata(data.mstate = data.mstate, indices = indices)
+  ### Create bootstrapped data.ms (we replicate the choice of patients that was chosen in data.raw)
+  data.ms.boot <- apply_bootstrap_msdata(data.ms = data.ms, indices = indices)
 
   ### Extract transition matrix from original msdata object, as this will have been lost when bootstrapping
-  tmat <- attributes(data.mstate)$trans
+  tmat <- attributes(data.ms)$trans
 
-  ### Apply attribute tmat to the bootstrapped data.mstate dataset
-  attributes(data.mstate.boot)$trans <- tmat
+  ### Apply attribute tmat to the bootstrapped data.ms dataset
+  attributes(data.ms.boot)$trans <- tmat
 
   ### Set 'id' to be same as 'id2' in bootstrapped datasets, as the function calc_pv_aj works by removing individual
   ### with the 'id' variable
-  data.mstate.boot$id <- data.mstate.boot$id2
+  data.ms.boot$id <- data.ms.boot$id2
   data.raw.boot$id <- data.raw.boot$id2
 
-  ### Relabel data.mstate.boot and data.raw.boot and remove '.boot' datasets
+  ### Relabel data.ms.boot and data.raw.boot and remove '.boot' datasets
   data.raw <- data.raw.boot
-  data.mstate <- data.mstate.boot
-  rm(data.raw.boot, data.mstate.boot)
+  data.ms <- data.ms.boot
+  rm(data.raw.boot, data.ms.boot)
 
   ###
   ### Apply landmarking
 
-  ### For calib_aj, we need to apply landmarking to both data.raw and data.mstate
+  ### For calib_aj, we need to apply landmarking to both data.raw and data.ms
   ### We model the pseudo-values on the predicted transition probabilities in the bootstrapped data.raw dataset
-  ### However the calculation of the pseudo-values must be done in the bootstrapped data.mstate dataset
+  ### However the calculation of the pseudo-values must be done in the bootstrapped data.ms dataset
 
-  ### Apply landmarking to data.raw and data.mstate
+  ### Apply landmarking to data.raw and data.ms
   data.raw.lmk.js <- apply_landmark(data.raw = data.raw,
-                                    data.mstate = data.mstate,
+                                    data.ms = data.ms,
                                     j = j,
                                     s = s,
                                     t = t,
                                     exclude.cens.t = FALSE,
                                     data.return = "data.raw")
-  data.mstate.lmk.js <- apply_landmark(data.raw = data.raw,
-                                       data.mstate = data.mstate,
+  data.ms.lmk.js <- apply_landmark(data.raw = data.raw,
+                                       data.ms = data.ms,
                                        j = j,
                                        s = s,
                                        t = t,
                                        exclude.cens.t = FALSE,
-                                       data.return = "data.mstate")
+                                       data.return = "data.ms")
 
   ###
   ### Restructure mstate data so that time s = time 0, and relabel transitions to 1, 2,...
   ### This is required in order to estimate Aalen-Johansene estimator and calculate pseudo-values
 
   ### Reduce transition times by s and remove observations which now occur entirely prior to start up
-  data.mstate.lmk.js <-
-    dplyr::mutate(data.mstate.lmk.js,
+  data.ms.lmk.js <-
+    dplyr::mutate(data.ms.lmk.js,
                   Tstart = pmax(0, Tstart - s),
                   Tstop = pmax(0, Tstop - s),
                   time = Tstop - Tstart) |>
@@ -195,11 +195,11 @@ calib_AJ_boot <- function(data.raw,
   ### Otherwise mstate::msfit will throw out an unneccesary (in this context) warning
 
   ### Start by identifying which transitions these are
-  suppressMessages(zero.transition.table <- data.mstate.lmk.js |>
+  suppressMessages(zero.transition.table <- data.ms.lmk.js |>
                      dplyr::group_by(from, to) |>
                      dplyr::summarise(Frequency = sum(status)))
 
-  ### Only edit data.mstate if some transitions have a frequency of zero
+  ### Only edit data.ms if some transitions have a frequency of zero
   if (any(zero.transition.table$Frequency == 0)){
 
     ### Extract the transitions
@@ -208,14 +208,14 @@ calib_AJ_boot <- function(data.raw,
 
     ### Remove them from dataset
     for (i in 1:length(zero.transition.from)){
-      data.mstate.lmk.js <- base::subset(data.mstate.lmk.js, !(from == zero.transition.from[i] & to == zero.transition.to[i]))
+      data.ms.lmk.js <- base::subset(data.ms.lmk.js, !(from == zero.transition.from[i] & to == zero.transition.to[i]))
       rm(i)
     }
   }
 
   ### Fit csh's with no predictors
   strata <- survival::strata
-  csh.aj <- survival::coxph(survival::Surv(Tstart, Tstop, status) ~ strata(trans), data.mstate.lmk.js)
+  csh.aj <- survival::coxph(survival::Surv(Tstart, Tstop, status) ~ strata(trans), data.ms.lmk.js)
 
   ### Extract numeric values for transitions that can occur in the landmarked cohort
   landmark.transitions <- as.numeric(sapply(csh.aj[["xlevels"]]$`strata(trans)`, gsub, pattern = ".*=", replacement =  ""))
@@ -273,7 +273,7 @@ calib_AJ_boot <- function(data.raw,
   calc_aj_subgroup <- function(subset.ids, state.k = NULL){
 
     ### Calculate Aalen-Johansen
-    obs.aj <- calc_aj(data.mstate = base::subset(data.mstate.lmk.js, id %in% subset.ids),
+    obs.aj <- calc_aj(data.ms = base::subset(data.ms.lmk.js, id %in% subset.ids),
                       tmat = tmat.lmk.js,
                       t = t - s,
                       j = j)[["obs.aj"]]

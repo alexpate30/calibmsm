@@ -93,7 +93,7 @@ tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6
 
 # Now estimate the observed event probabilities for each possible transition.
 dat.calib <-
-calib_msm(data.mstate = msebmtcal,
+calib_msm(data.ms = msebmtcal,
  data.raw = ebmtcal,
  j=1,
  s=0,

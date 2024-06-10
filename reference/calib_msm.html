@@ -75,7 +75,7 @@ weights, based on the nominal calibration  framework of van Hoorde et al. (2014,
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">calib_msm</span><span class="op">(</span></span>
-<span>  <span class="va">data.mstate</span>,</span>
+<span>  <span class="va">data.ms</span>,</span>
 <span>  <span class="va">data.raw</span>,</span>
 <span>  <span class="va">j</span>,</span>
 <span>  <span class="va">s</span>,</span>
@@ -122,7 +122,7 @@ weights, based on the nominal calibration  framework of van Hoorde et al. (2014,
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
-    <dl><dt>data.mstate</dt>
+    <dl><dt>data.ms</dt>
 <dd><p>Validation data in <code>msdata</code> format</p></dd>
 
 
@@ -343,9 +343,9 @@ the time until censoring (<code>dtcens</code>), and an indicator for censoring <
 where (<code>dtcens.s = 1</code>) if an individual is censored at time <code>dtcens</code>, and <code>dtcens.s = 0</code>
 otherwise. When an individual enters an absorbing state, this prevents censoring
 from happening (i.e. dtcens.s = 0). <code>data.raw</code> must also contain the desired variables
-for estimating the weights. Secondly, <code>data.mstate</code> must be a dataset of class <code>msdata</code>,
+for estimating the weights. Secondly, <code>data.ms</code> must be a dataset of class <code>msdata</code>,
 generated using the <code>[mstate]</code> package. This dataset is used to apply the landmarking
-and identify which state individuals are in at time <code>t</code>. While <code>data.mstate</code> can be
+and identify which state individuals are in at time <code>t</code>. While <code>data.ms</code> can be
 derived from <code>data.raw</code>, it would be inefficient to do this within <code>calibmsm::calib_msm</code>
 due to the bootstrapping procedure, and therefore they must be inputted seperately.</p>
 <p>Unless the user specifies the weights using <code>weights</code>, the weights are
@@ -405,7 +405,7 @@ URL https://link.springer.com/book/10.1007/978-1-4939-2818-7.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Now estimate the observed event probabilities for each possible transition.</span></span></span>
 <span class="r-in"><span><span class="va">dat.calib</span> <span class="op">&lt;-</span></span></span>
-<span class="r-in"><span><span class="fu">calib_msm</span><span class="op">(</span>data.mstate <span class="op">=</span> <span class="va">msebmtcal</span>,</span></span>
+<span class="r-in"><span><span class="fu">calib_msm</span><span class="op">(</span>data.ms <span class="op">=</span> <span class="va">msebmtcal</span>,</span></span>
 <span class="r-in"><span> data.raw <span class="op">=</span> <span class="va">ebmtcal</span>,</span></span>
 <span class="r-in"><span> j<span class="op">=</span><span class="fl">1</span>,</span></span>
 <span class="r-in"><span> s<span class="op">=</span><span class="fl">0</span>,</span></span>

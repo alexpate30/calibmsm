@@ -1,3 +1,7 @@
+# calibmsm 1.1.1
+
+* Minor update introducing a new S3 generic `metadata`, and updated some S3 methods which were producing errors.
+
 # calibmsm 1.1.0
 
 * Change to package structure.
@@ -12,12 +16,8 @@
 
 # calibmsm 1.0.0
 
-* Submission of first version of package to CRAN and Journal of Statistical Software.
+* Submission of first version of package to CRAN.
 
 # calibmsm 0.0.0.9000
 
 * Added a `NEWS.md` file to track changes to the package.
-
-# calibmsm 1.0.0.0000
-
-* Submission of first version of package to CRAN. Please see *Overview* vignette for detailed explanation of the package.

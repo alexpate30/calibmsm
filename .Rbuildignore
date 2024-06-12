@@ -13,3 +13,4 @@ $gitignore$
 ^cran-comments\.md$
 ^vignettes/articles$
 ^CRAN-SUBMISSION$
+^gitignore$

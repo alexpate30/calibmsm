@@ -65,14 +65,13 @@ knots. A 95% confidence interval is calculated using bootstrapping with
 ``` r
 ## Load calibmsm
 library(calibmsm)
-#> Warning: package 'calibmsm' was built under R version 4.3.3
 
 ## Extract relevant predicted risks from tps0
 tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
 
 ## Calculate observed event probabilities
 dat.calib.blr <-
-  calib_msm(data.mstate = msebmtcal,
+  calib_msm(data.ms = msebmtcal,
           data.raw = ebmtcal,
           j = 1,
           s = 0,
@@ -87,7 +86,7 @@ dat.calib.blr <-
 
 
 ## Plot calibration plots
-plot(dat.calib.blr, combine = TRUE, nrow = 2, ncol = 3)
+plot(dat.calib.blr, combine = TRUE, nrow = 2, ncol = 3, axis.titles.x = c(4,5,6), axis.titles.y = c(1,4))
 ```
 
 <img src="man/figures/README-example-1.png" width="100%" />

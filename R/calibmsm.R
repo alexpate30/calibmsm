@@ -320,7 +320,9 @@ calib_msm <- function(data.ms,
          which should have this attribute")
   }
   ### Stop if patients in data.raw are not in data.ms
-  if (!base::all(unique(data.raw$id) %in% unique(data.ms$id))){
+  if (!("id" %in% colnames(data.raw) & "id" %in% colnames(data.ms))){
+    stop("Variable 'id' must be in both data.raw and data.ms. Individuals are identified across the two datasets using this variable.")
+  } else if (!base::all(unique(data.raw$id) %in% unique(data.ms$id))){
     stop("All patients in data.raw are not contained in data.ms. Landmarking cannot be applied.")
   }
 
@@ -761,7 +763,7 @@ summary.calib_msm <- function(object, ...) {
 #' @export
 print.calib_msm <- function(x, ...) {
 
-  print(lapply(x[["plotdata"]], utils::head, 5))
+  print(lapply(x[["plotdata"]], utils::head, 3))
 
 }
 

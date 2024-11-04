@@ -42,7 +42,7 @@ calib_msm(
   CI = FALSE,
   CI_type = "bootstrap",
   CI_R_boot = NULL,
-  CI_seed = 1,
+  CI_seed = NULL,
   transitions_out = NULL,
   assess_moderate = TRUE,
   assess_mean = TRUE,

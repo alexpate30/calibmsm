@@ -117,7 +117,7 @@ Next define the predicted transition probabilities over which the observed event
 
 ```{r}
 ## Extract ids for individuals uncensored at t
-ids.uncens <- ebmtcal |>
+ids_uncens <- ebmtcal |>
   subset(dtcens > t | (dtcens < t & dtcens_s == 0)) |>
   dplyr::pull(id)
 ## Extract the predicted risks out of state 1 for these individuals

@@ -49,25 +49,25 @@ We now remind ourselves of the procedure for generating a confidence interval, a
 The code to produce the calibration curves with confidence intervals is as follows:
 
 ```{r}
-dat.calib.blr <-
-  calib_msm(data.ms = msebmtcal,
-           data.raw = ebmtcal,
+dat_calib_blr <-
+  calib_msm(data_ms = msebmtcal,
+           data_raw = ebmtcal,
            j=1,
            s=0,
            t = t,
-           tp.pred = tps0 |>
+           tp_pred = tps0 |>
              dplyr::filter(j == 1) |>
              dplyr::select(any_of(paste("pstate", 1:6, sep = ""))),
-           calib.type = 'blr',
-           curve.type = "rcs",
-           rcs.nk = 3,
-           w.covs = c("year", "agecl", "proph", "match"),
+           calib_type = 'blr',
+           curve_type = "rcs",
+           rcs_nk = 3,
+           w_covs = c("year", "agecl", "proph", "match"),
            CI = 95,
-           CI.R.boot = 200)
+           CI_R_boot = 200)
 ```
 
 ```{r, fig.width = 7.5, fig.height = 5, fig.fullwidth = TRUE, fig.cap = "Figure 2: Calibration plots using BLR-IPCW, confidence interval estimated using manual bootstrap procedure"}
-plot(dat.calib.blr, combine = TRUE)
+plot(dat_calib_blr, combine = TRUE)
 ```
 
 # Confidence intervals for BLR-IPCW by inputting custom weights funciton into calibmsm
@@ -79,26 +79,26 @@ Once a function for estimating the weights has been defined, the internal bootst
 ```{r}
 calc_weights_manual <- calibmsm::calc_weights
 
-dat.calib.blr.w.function <-
-  calib_msm(data.ms = msebmtcal,
-           data.raw = ebmtcal,
+dat_calib_blr_w_function <-
+  calib_msm(data_ms = msebmtcal,
+           data_raw = ebmtcal,
            j=1,
            s=0,
            t = t,
-           tp.pred = tps0 |>
+           tp_pred = tps0 |>
              dplyr::filter(j == 1) |>
              dplyr::select(any_of(paste("pstate", 1:6, sep = ""))),
-           calib.type = 'blr',
-           curve.type = "rcs",
-           rcs.nk = 3,
-           w.function = calc_weights_manual,
-           w.covs = c("year", "agecl", "proph", "match"),
+           calib_type = 'blr',
+           curve_type = "rcs",
+           rcs_nk = 3,
+           w_function = calc_weights_manual,
+           w_covs = c("year", "agecl", "proph", "match"),
            CI = 95,
-           CI.R.boot = 200)
+           CI_R_boot = 200)
 ```
 
 ```{r, fig.width = 7.5, fig.height = 5, fig.fullwidth = TRUE, fig.cap = "Figure 2: Calibration plots using BLR-IPCW, confidence interval estimated using internal bootstrap procedure with custom specification of function to estimate the weights"}
-plot(dat.calib.blr.w.function, combine = TRUE, nrow = 2, ncol = 3)
+plot(dat_calib_blr_w_function, combine = TRUE, nrow = 2, ncol = 3)
 ```
 
 # Confidence intervals for BLR-IPCW by manually running bootstrapping procedure with custom function for estimating the weights
@@ -108,7 +108,7 @@ Finally, we showcase how to run the bootstrapping procedure manually. This allow
 We start by creating a permanent object with the predicted risks of each individual. When the validation cohort `ebmtcal` is resampled, the appropriate predicted transition probabilities must also be resampled from this object.
 
 ```{r}
-tp.pred <- tps0 |>
+tp_pred <- tps0 |>
   dplyr::filter(j == 1) |>
   dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
 ```
@@ -118,88 +118,88 @@ Next define the predicted transition probabilities over which the observed event
 ```{r}
 ## Extract ids for individuals uncensored at t
 ids.uncens <- ebmtcal |>
-  subset(dtcens > t | (dtcens < t & dtcens.s == 0)) |>
+  subset(dtcens > t | (dtcens < t & dtcens_s == 0)) |>
   dplyr::pull(id)
 ## Extract the predicted risks out of state 1 for these individuals
-tp.pred.plot <- tps0 |>
-  dplyr::filter(j == 1 & id %in% ids.uncens) |>
+tp_pred_plot <- tps0 |>
+  dplyr::filter(j == 1 & id %in% ids_uncens) |>
   dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
 ```
 
 The calibration curves (with no confidence interval) are now calculated. We utilise the `calc_weights` function from **calibmsm** to estimate the weights, which is the function used internally. However, in practice the point of this exercise is to create a better performing model to estimate the weights than the one from the internal procedure. The vector of weights should have an entry for every row the validation dataset. For individuals who will not be included in the landmark cohort, or who are censored prior to time $t$, these weights can take any value as they will not be included when the calibration model is fitted.
 
 ```{r}
-weights.manual <-
-  calc_weights(data.ms = msebmtcal,
-               data.raw = ebmtcal,
+weights_manual <-
+  calc_weights(data_ms = msebmtcal,
+               data_raw = ebmtcal,
                covs = c("year", "agecl", "proph", "match"),
                t = t,
                s = 0,
-               landmark.type = "state",
+               landmark_type = "state",
                j = 1,
-               max.weight = 10,
+               max_weight = 10,
                stabilised = FALSE)$ipcw
-str(weights.manual)
+str(weights_manual)
 ```
 
 The observed event probabilities can then be estimated using `calib_msm` and a call to the `weights` argument.
 
 ```{r}
-dat.calib.boot.manual <-
-  calib_msm(data.ms = msebmtcal,
-           data.raw = ebmtcal,
+dat_calib_boot_manual <-
+  calib_msm(data_ms = msebmtcal,
+           data_raw = ebmtcal,
            j = 1,
            s = 0,
            t = t,
-           tp.pred = tp.pred,
-           calib.type = 'blr',
-           curve.type = "rcs",
-           rcs.nk = 3,
-           weights = weights.manual)
+           tp_pred = tp_pred,
+           calib_type = 'blr',
+           curve_type = "rcs",
+           rcs_nk = 3,
+           weights = weights_manual)
 ```
 
 It is now time to estimate the confidence interval for this curve. We define a function `calc_obs_boot` to generate a bootstrapped calibration curve which is compatible with the `boot` function from the *boot* [@Canty2022] package. Within each bootstrapped dataset, weights are calculated and then a calibration curve is estimated using `calib_msm`. The use of the argument `tp.pred.plot` is essential here, to ensure the bootstrapped observed event probabilities are generated for the same vectors of predicted transition probabilities. The function is also written to estimate a curve for the transition probabilities into a specific state $k$, as the output for `boot` must be a vector, rather than a matrix. This is done by utilising the `transitions.out` argument in `calib_msm`.
 
 ```{r}
-calc_obs_boot <- function(data, indices, tp.pred, state.k){
+calc_obs_boot <- function(data, indices, tp_pred, state_k){
   
   ## Bootstrap dataset and predicted transition probabilities
-  data.boot <- data[indices,]
-  tp.pred.boot <- tp.pred[indices, ]
+  data_boot <- data[indices,]
+  tp_pred_boot <- tp_pred[indices, ]
   
   ## Calculate weights
   ## In practice - replace this function with your own
-  weights.manual <-
-    calc_weights(data.ms = msebmtcal[msebmtcal$id %in% data.boot$id, ],
-                 data.raw = data.boot,
+  weights_manual <-
+    calc_weights(data_ms = msebmtcal[msebmtcal$id %in% data_boot$id, ],
+                 data_raw = data_boot,
                  covs = c("year", "agecl", "proph", "match"),
                  t = t,
                  s = 0,
-                 landmark.type = "state",
+                 landmark_type = "state",
                  j = 1,
-                 max.weight = 10,
+                 max_weight = 10,
                  stabilised = FALSE)$ipcw
   
   ## Estimate bootstrapped calibration curve
-  curve.est <-
-    calib_msm(data.ms = msebmtcal[msebmtcal$id %in% data.boot$id, ],
-             data.raw = data.boot,
+  curve_est <-
+    calib_msm(data_ms = msebmtcal[msebmtcal$id %in% data_boot$id, ],
+             data_raw = data_boot,
              j=1,
              s=0,
              t = t,
-             tp.pred = tp.pred.boot,
-             calib.type = 'blr',
-             curve.type = "rcs",
-             rcs.nk = 3,
-             weights = weights.manual,
-             tp.pred.plot = tp.pred.plot,
-             transitions.out = state.k)
+             tp_pred = tp_pred_boot,
+             calib_type = 'blr',
+             curve_type = "rcs",
+             rcs_nk = 3,
+             weights = weights_manual,
+             tp_pred_plot = tp_pred_plot,
+             transitions_out = state_k)
   
   ## Extract observed event probabilities
-  curve.obs <-
-    curve.est[["plotdata"]][[paste("state", state.k, sep = "")]]$obs
+  curve_obs <-
+    curve_est[["plotdata"]][[paste("state", state_k, sep = "")]]$obs
   
-  return(curve.obs)
+  return(curve_obs)
   
 }
 ```
@@ -208,54 +208,54 @@ The size of the confidence interval, the states $k$ which individuals may transi
 
 ```{r}
 alpha <- (1-95/100)/2
-valid.transitions <- which(colSums(tp.pred) != 0)
-plot.data.list <- vector("list", length(valid.transitions))
+valid_transitions <- which(colSums(tp_pred) != 0)
+plot_data_list <- vector("list", length(valid_transitions))
 ```
 
-The bootstrap procedure is now applied to the validation dataset `ebmtcal` for each state $k$ in `valid.transitions`, and the upper and lower confidence bands are stored in a `data.frame` along with the calibration curve calculated earlier.
+The bootstrap procedure is now applied to the validation dataset `ebmtcal` for each state $k$ in `valid_transitions`, and the upper and lower confidence bands are stored in a `data.frame` along with the calibration curve calculated earlier.
 
 ```{r}
-for (k in 1:length(valid.transitions)){
+for (k in 1:length(valid_transitions)){
   
   ## Assign state k
-  state.k <- valid.transitions[k]
+  state_k <- valid_transitions[k]
   
   ## Run bootstrapping
-  boot.obs <- boot::boot(ebmtcal,
+  boot_obs <- boot::boot(ebmtcal,
                          calc_obs_boot,
                          R = 200,
-                         tp.pred = tp.pred,
-                         state.k = state.k)$t
+                         tp_pred = tp_pred,
+                         state_k = state_k)$t
   
   ## Extract confidence bands
-  lower <- apply(boot.obs, 2, stats::quantile, probs = alpha, na.rm = TRUE)
-  upper <- apply(boot.obs, 2, stats::quantile, probs = 1-alpha, na.rm = TRUE)
+  lower <- apply(boot_obs, 2, stats::quantile, probs = alpha, na.rm = TRUE)
+  upper <- apply(boot_obs, 2, stats::quantile, probs = 1-alpha, na.rm = TRUE)
   
   ## Assign output
-  plot.data.list[[k]] <- data.frame(
-    "pred" = dat.calib.boot.manual[["plotdata"]][[k]]$pred,
-    "obs" = dat.calib.boot.manual[["plotdata"]][[k]]$obs,
-    "obs.lower" = lower,
-    "obs.upper" = upper)
+  plot_data_list[[k]] <- data.frame(
+    "pred" = dat_calib_boot_manual[["plotdata"]][[k]]$pred,
+    "obs" = dat_calib_boot_manual[["plotdata"]][[k]]$obs,
+    "obs_lower" = lower,
+    "obs_upper" = upper)
   
 }
 ```
 
-Finally, metadata is added and the appropriate `class` is defined so that the data is in the same format as the output from `calib_msm`, meaning it can be used with the S3 generic `plot`. Note that in this example `assessed.transitions` = `valid.transitions`, but this may not be the case if you only estimated calibration curves for a subset of the possible transitions.
+Finally, metadata is added and the appropriate `class` is defined so that the data is in the same format as the output from `calib_msm`, meaning it can be used with the S3 generic `plot`. Note that in this example `assessed.transitions` = `valid_transitions`, but this may not be the case if you only estimated calibration curves for a subset of the possible transitions.
 
 ```{r}
-metadata <- list("valid.transitions"= valid.transitions,
-                 "assessed.transitions" = valid.transitions,
+metadata <- list("valid_transitions"= valid_transitions,
+                 "assessed_transitions" = valid_transitions,
                  "CI" = 95,
-                 "curve.type" = "rcs")
-dat.calib.blr.manual <- list("plotdata" = plot.data.list, "metadata" = metadata)
-attr(dat.calib.blr.manual, "class") <- c("calib_blr", "calib_msm")
+                 "curve_type" = "rcs")
+dat_calib_blr_manual <- list("plotdata" = plot_data_list, "metadata" = metadata)
+attr(dat_calib_blr_manual, "class") <- c("calib_blr", "calib_msm")
 ```
 
 The calibration curves with manually estimated confidence intervals are plotted in Figure 3. This Figure is very similar to Figures 1 and 2. This is to be expected given we have used the same model to estimate the weights that is used in the internal procedure, and verifies that the manual procedure for calculating the confidence interval has been successful.
 
 ```{r, fig.width = 7.5, fig.height = 5, fig.fullwidth = TRUE, fig.cap = "Figure 3: Calibration plots using BLR-IPCW, confidence interval estimated using manual bootstrap procedure"}
-plot(dat.calib.blr.manual)
+plot(dat_calib_blr_manual)
 ```
 
 Code from these examples can be re-utilised, all that is required is to specify a function to estimate the inverse probability of censoring weights.

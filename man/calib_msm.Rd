@@ -5,54 +5,54 @@
 \title{Assess the calibration of a multistate model}
 \usage{
 calib_msm(
-  data.ms,
-  data.raw,
+  data_ms,
+  data_raw,
   j,
   s,
   t,
-  tp.pred,
-  tp.pred.plot = NULL,
-  calib.type = "blr",
-  curve.type = "rcs",
-  rcs.nk = 3,
-  loess.span = 0.75,
-  loess.degree = 2,
-  loess.surface = c("interpolate", "direct"),
-  loess.statistics = c("approximate", "exact", "none"),
-  loess.trace.hat = c("exact", "approximate"),
-  loess.cell = 0.2,
-  loess.iterations = 4,
-  loess.iterTrace = FALSE,
-  mlr.smoother.type = "sm.ps",
-  mlr.ps.int = 4,
-  mlr.degree = 3,
-  mlr.s.df = 4,
-  mlr.niknots = 4,
+  tp_pred,
+  tp_pred_plot = NULL,
+  calib_type = "blr",
+  curve_type = "rcs",
+  rcs_nk = 3,
+  loess_span = 0.75,
+  loess_degree = 2,
+  loess_surface = c("interpolate", "direct"),
+  loess_statistics = c("approximate", "exact", "none"),
+  loess_trace_hat = c("exact", "approximate"),
+  loess_cell = 0.2,
+  loess_iterations = 4,
+  loess_iterTrace = FALSE,
+  mlr_smoother_type = c("sm.ps", "sm.os", "s"),
+  mlr_ps_int = 4,
+  mlr_degree = 3,
+  mlr_s_df = 4,
+  mlr_niknots = 4,
   weights = NULL,
-  w.function = NULL,
-  w.covs = NULL,
-  w.landmark.type = "state",
-  w.max = 10,
-  w.stabilised = FALSE,
-  w.max.follow = NULL,
-  pv.group.vars = NULL,
-  pv.n.pctls = NULL,
-  pv.precalc = NULL,
-  pv.ids = NULL,
+  w_function = NULL,
+  w_covs = NULL,
+  w_landmark_type = "state",
+  w_max = 10,
+  w_stabilised = FALSE,
+  w_max_follow = NULL,
+  pv_group_vars = NULL,
+  pv_n_pctls = NULL,
+  pv_precalc = NULL,
+  pv_ids = NULL,
   CI = FALSE,
-  CI.type = "bootstrap",
-  CI.R.boot = NULL,
-  CI.seed = 1,
-  transitions.out = NULL,
-  assess.moderate = TRUE,
-  assess.mean = TRUE,
+  CI_type = "bootstrap",
+  CI_R_boot = NULL,
+  CI_seed = 1,
+  transitions_out = NULL,
+  assess_moderate = TRUE,
+  assess_mean = TRUE,
   ...
 )
 }
 \arguments{
-\item{data.ms}{Validation data in \code{msdata} format}
+\item{data_ms}{Validation data in \code{msdata} format}
 
-\item{data.raw}{Validation data in \code{data.frame} (one row per individual)}
+\item{data_raw}{Validation data in \code{data.frame} (one row per individual)}
 
 \item{j}{Landmark state at which predictions were made}
 
@@ -60,90 +60,90 @@ calib_msm(
 
 \item{t}{Follow up time at which calibration is to be assessed}
 
-\item{tp.pred}{Data frame or matrix of predicted transition probabilities at time t, if in state j at time s. There must be a separate column for the predicted transition probabilities into every state, even if these predicted transition probabilities are 0.}
+\item{tp_pred}{Data frame or matrix of predicted transition probabilities at time t, if in state j at time s. There must be a separate column for the predicted transition probabilities into every state, even if these predicted transition probabilities are 0.}
 
-\item{tp.pred.plot}{Data frame or matrix of predicted risks for each possible transition over which to plot the calibration curves. Argument provided to enable user to apply bootstrapping manually.}
+\item{tp_pred_plot}{Data frame or matrix of predicted risks for each possible transition over which to plot the calibration curves. Argument provided to enable user to apply bootstrapping manually.}
 
-\item{calib.type}{Whether calibration plots are estimated using BLR-IPCW ('blr'), MLR-IPCW ('mlr') or pseudo-values ('pv')}
+\item{calib_type}{Whether calibration plots are estimated using BLR-IPCW ('blr'), MLR-IPCW ('mlr') or pseudo-values ('pv')}
 
-\item{curve.type}{Whether calibration curves are estimated using restricted cubic splines ('rcs') or loess smoothers ('loess')}
+\item{curve_type}{Whether calibration curves are estimated using restricted cubic splines ('rcs') or loess smoothers ('loess')}
 
-\item{rcs.nk}{Number of knots when curves are estimated using restricted cubic splines}
+\item{rcs_nk}{Number of knots when curves are estimated using restricted cubic splines}
 
-\item{loess.span}{Span when curves are estimated using loess smoothers}
+\item{loess_span}{Span when curves are estimated using loess smoothers}
 
-\item{loess.degree}{Degree when curves are estimated. using loess smoothers}
+\item{loess_degree}{Degree when curves are estimated_ using loess smoothers}
 
-\item{loess.surface}{see \code{\link[stats]{loess.control}}}
+\item{loess_surface}{see \code{\link[stats]{loess.control}}}
 
-\item{loess.statistics}{see \code{\link[stats]{loess.control}}}
+\item{loess_statistics}{see \code{\link[stats]{loess.control}}}
 
-\item{loess.trace.hat}{see \code{\link[stats]{loess.control}}}
+\item{loess_trace_hat}{see \code{\link[stats]{loess.control}}}
 
-\item{loess.cell}{see \code{\link[stats]{loess.control}}}
+\item{loess_cell}{see \code{\link[stats]{loess.control}}}
 
-\item{loess.iterations}{see \code{\link[stats]{loess.control}}}
+\item{loess_iterations}{see \code{\link[stats]{loess.control}}}
 
-\item{loess.iterTrace}{see \code{\link[stats]{loess.control}}}
+\item{loess_iterTrace}{see \code{\link[stats]{loess.control}}}
 
-\item{mlr.smoother.type}{Type of smoothing applied. Takes values \code{s} (see \code{\link[VGAM]{s}}), \code{sm.ps} (see \code{\link[VGAM]{sm.ps}}) or \code{sm.os} (see \code{\link[VGAM]{sm.os}}).}
+\item{mlr_smoother_type}{Type of smoothing applied. Takes values \code{s} (see \code{\link[VGAM]{s}}), \code{sm.ps} (see \code{\link[VGAM]{sm.ps}}) or \code{sm.os} (see \code{\link[VGAM]{sm.os}}).}
 
-\item{mlr.ps.int}{the number of equally-spaced B spline intervals in the vector spline smoother (see \code{\link[VGAM]{sm.ps}})}
+\item{mlr_ps_int}{the number of equally-spaced B spline intervals in the vector spline smoother (see \code{\link[VGAM]{sm.ps}})}
 
-\item{mlr.degree}{the degree of B-spline basis in the vector spline smoother (see \code{\link[VGAM]{sm.ps}})}
+\item{mlr_degree}{the degree of B-spline basis in the vector spline smoother (see \code{\link[VGAM]{sm.ps}})}
 
-\item{mlr.s.df}{degrees of freedom of vector spline (see \code{\link[VGAM]{s}})}
+\item{mlr_s_df}{degrees of freedom of vector spline (see \code{\link[VGAM]{s}})}
 
-\item{mlr.niknots}{number of interior knots (see \code{\link[VGAM]{sm.os}})}
+\item{mlr_niknots}{number of interior knots (see \code{\link[VGAM]{sm.os}})}
 
 \item{weights}{Vector of inverse probability of censoring weights}
 
-\item{w.function}{Custom function for estimating the inverse probability of censoring weights}
+\item{w_function}{Custom function for estimating the inverse probability of censoring weights}
 
-\item{w.covs}{Character vector of variable names to adjust for when calculating inverse probability of censoring weights}
+\item{w_covs}{Character vector of variable names to adjust for when calculating inverse probability of censoring weights}
 
-\item{w.landmark.type}{Whether weights are estimated in all individuals uncensored at time s ('all') or only in individuals uncensored and in state j at time s ('state')}
+\item{w_landmark_type}{Whether weights are estimated in all individuals uncensored at time s ('all') or only in individuals uncensored and in state j at time s ('state')}
 
-\item{w.max}{Maximum bound for inverse probability of censoring weights}
+\item{w_max}{Maximum bound for inverse probability of censoring weights}
 
-\item{w.stabilised}{Indicates whether inverse probability of censoring weights should be stabilised or not}
+\item{w_stabilised}{Indicates whether inverse probability of censoring weights should be stabilised or not}
 
-\item{w.max.follow}{Maximum follow up for model calculating inverse probability of censoring weights. Reducing this to \code{t} + 1 may aid in the proportional hazards assumption being met in this model.}
+\item{w_max_follow}{Maximum follow up for model calculating inverse probability of censoring weights. Reducing this to \code{t} + 1 may aid in the proportional hazards assumption being met in this model.}
 
-\item{pv.group.vars}{Variables to group by before calculating pseudo-values}
+\item{pv_group_vars}{Variables to group by before calculating pseudo-values}
 
-\item{pv.n.pctls}{Number of percentiles of predicted risk to group by before calculating pseudo-values}
+\item{pv_n_pctls}{Number of percentiles of predicted risk to group by before calculating pseudo-values}
 
-\item{pv.precalc}{Pre-calculated pseudo-values}
+\item{pv_precalc}{Pre-calculated pseudo-values}
 
-\item{pv.ids}{Id's of individuals to calculate pseudo-values for}
+\item{pv_ids}{Id's of individuals to calculate pseudo-values for}
 
 \item{CI}{Size of confidence intervals as a \%}
 
-\item{CI.type}{Method for estimating confidence interval (currently restricted to \code{bootstrap})}
+\item{CI_type}{Method for estimating confidence interval (currently restricted to \code{bootstrap})}
 
-\item{CI.R.boot}{Number of bootstrap replicates when estimating the confidence interval for the calibration curve}
+\item{CI_R_boot}{Number of bootstrap replicates when estimating the confidence interval for the calibration curve}
 
-\item{CI.seed}{Seed for bootstrapping procedure}
+\item{CI_seed}{Seed for bootstrapping procedure}
 
-\item{transitions.out}{Transitions for which to calculate calibration curves. Will do all possible transitions if left as NULL.}
+\item{transitions_out}{Transitions for which to calculate calibration curves. Will do all possible transitions if left as NULL.}
 
-\item{assess.moderate}{TRUE/FALSE whether to estimate data for calibration plots}
+\item{assess_moderate}{TRUE/FALSE whether to estimate data for calibration plots}
 
-\item{assess.mean}{TRUE/FALSE whether to estimate mean calibration}
+\item{assess_mean}{TRUE/FALSE whether to estimate mean calibration}
 
-\item{...}{Extra arguments to be passed to w.function (custom function for estimating weights)}
+\item{...}{Extra arguments to be passed to w_function (custom function for estimating weights)}
 }
 \value{
 \code{\link{calib_msm}} returns a list containing two elements:
 \code{plotdata} and \code{metadata}. The \code{plotdata} element contains the
 data for the calibration plots. This will itself be a list with each element
 containing calibration plot data for the transition probabilities into each of the possible
-states. Each list element contains patient ids (\code{id}) from \code{data.raw}, the predicted
+states. Each list element contains patient ids (\code{id}) from \code{data_raw}, the predicted
 transition probabilities (\code{pred}) and the estimated observed event
-probabilities (\code{obs}). If a confidence interval is requested, upper (\code{obs.upper})
-and lower (\code{obs.lower}) bounds for the observed event probabilities are also returned.
-If tp.pred.plot is specified, column (\code{id}) is not returned.
+probabilities (\code{obs}). If a confidence interval is requested, upper (\code{obs_upper})
+and lower (\code{obs_lower}) bounds for the observed event probabilities are also returned.
+If tp_pred_plot is specified, column (\code{id}) is not returned.
 The \code{metadata} element contains metadata including: a vector of the possible transitions,
 a vector of which transitions calibration curves have been estimated for, the
 size of the confidence interval, the method for estimating the calibration curve
@@ -161,18 +161,18 @@ weights, based on the nominal calibration  framework of van Hoorde et al. (2014,
 }
 \details{
 Observed event probabilities at time \code{t} are estimated for predicted
-transition probabilities \code{tp.pred} out of state \code{j} at time \code{s}.
+transition probabilities \code{tp_pred} out of state \code{j} at time \code{s}.
 
-\code{calib.type = 'blr'} estimates calibration curves using techniques for assessing
+\code{calib_type = 'blr'} estimates calibration curves using techniques for assessing
 the calibration of a binary logistic regression model (Van Calster et al., 2016).
 A choice between restricted cubic splines and loess smoothers for estimating the
-calibration curve can be made using \code{curve.type}. Landmarking (van Houwelingen HC, 2007)
+calibration curve can be made using \code{curve_type}. Landmarking (van Houwelingen HC, 2007)
 is applied to only assess calibration in individuals who are uncensored and in state \code{j} at time \code{s}.
 Calibration can only be assessed in individuals who are also uncensored at time \code{t},
 which is accounted for using inverse probability of censoring weights (Hernan M, Robins J, 2020).
 See method BLR-IPCW from Pate et al., (2024) for a full explanation of the approach.
 
-\code{calib.type = 'mlr'} estimates calibration scatter plots using a technique for assessing
+\code{calib_type = 'mlr'} estimates calibration scatter plots using a technique for assessing
 the calibration of multinomial logistic regression models, namely the nominal
 calibration framework of van Hoorde et al. (2014, 2015). Landmarking (van Houwelingen HC, 2007)
 is applied to only assess calibration in individuals who are uncensored
@@ -181,42 +181,42 @@ who are also uncensored at time \code{t}, which is accounted for using inverse p
 of censoring weights (Hernan M, Robins J, 2020). See method BLR-IPCW from Pate et al., (2024)
 for a full explanation of the approach.
 
-\code{calib.type = 'pv'} estimates calibration curves using using pseudo-values (Andersen PK, Pohar Perme M, 2010)
+\code{calib_type = 'pv'} estimates calibration curves using using pseudo-values (Andersen PK, Pohar Perme M, 2010)
 calculated using the Aalen-Johansen estimator (Aalen OO, Johansen S, 1978).
 Calibration curves are generated by regressing the pseudo-values on the predicted transition probabilities.
 A choice between restricted cubic splines and loess smoothers for estimating the
-calibration curve can be made using \code{curve.type}. Landmarking (van Houwelingen HC, 2007)
+calibration curve can be made using \code{curve_type}. Landmarking (van Houwelingen HC, 2007)
 is applied to only assess calibration in individuals who are uncensored and in state \code{j} at time \code{s}.
 The nature of pseudo-values means calibration can be assessed in all landmarked individuals,
 regardless of their censoring time. See method Pseudo-value approach from Pate et al., (2024)
 for a full explanation of the approach.
 
-Two datasets for the same cohort of inidividuals must be provided. Firstly, \code{data.raw}
+Two datasets for the same cohort of inidividuals must be provided. Firstly, \code{data_raw}
 must be a \code{data.frame} with one row per individual containing the variables for
-the time until censoring (\code{dtcens}), and an indicator for censoring \code{dtcens.s},
-where (\code{dtcens.s = 1}) if an individual is censored at time \code{dtcens}, and \code{dtcens.s = 0}
+the time until censoring (\code{dtcens}), and an indicator for censoring \code{dtcens_s},
+where (\code{dtcens_s = 1}) if an individual is censored at time \code{dtcens}, and \code{dtcens_s = 0}
 otherwise. When an individual enters an absorbing state, this prevents censoring
-from happening (i.e. dtcens.s = 0). \code{data.raw} must also contain the desired variables
-for estimating the weights. Secondly, \code{data.ms} must be a dataset of class \code{msdata},
+from happening (i.e. dtcens_s = 0). \code{data_raw} must also contain the desired variables
+for estimating the weights. Secondly, \code{data_ms} must be a dataset of class \code{msdata},
 generated using the \code{[mstate]} package. This dataset is used to apply the landmarking
-and identify which state individuals are in at time \code{t}. While \code{data.ms} can be
-derived from \code{data.raw}, it would be inefficient to do this within \code{calibmsm::calib_msm}
+and identify which state individuals are in at time \code{t}. While \code{data_ms} can be
+derived from \code{data_raw}, it would be inefficient to do this within \code{calibmsm::calib_msm}
 due to the bootstrapping procedure, and therefore they must be inputted seperately.
 
 Unless the user specifies the weights using \code{weights}, the weights are
 estimated using a cox-proportional hazard model, assuming a linear
-functional form of the variables defined in \code{w.covs}. We urge users to
+functional form of the variables defined in \code{w_covs}. We urge users to
 specify their own model for estimating the weights. The \code{weights} argument
-must be a vector with length equal to the number of rows of \code{data.raw}.
+must be a vector with length equal to the number of rows of \code{data_raw}.
 
-Confidence intervals cannot be produced for the calibration scatter plots (\code{calib.type = 'mlr'}).
-For calibration curves estimated using \code{calib.type = 'blr'}, confidence intervals
-can only be estimated using bootstrapping (\verb{CI.type = 'bootstrap}). This procedure uses the internal method for
+Confidence intervals cannot be produced for the calibration scatter plots (\code{calib_type = 'mlr'}).
+For calibration curves estimated using \code{calib_type = 'blr'}, confidence intervals
+can only be estimated using bootstrapping (\verb{CI_type = 'bootstrap}). This procedure uses the internal method for
 estimating weights, we therefore encourage users to specify their own bootstrapping
 procedure, which incorporates their own model for estimating the weights. Details
 on how to do this are provided in the vignette \emph{BLR-IPCW-manual-bootstrap}.
-For calibration curves estimated using \code{calib.type = 'pv'}, confidence intervals
-can be estimated using bootstrapping (\verb{CI.type = 'bootstrap}) or parametric formulae (\verb{CI.type = 'parametric}).
+For calibration curves estimated using \code{calib_type = 'pv'}, confidence intervals
+can be estimated using bootstrapping (\verb{CI_type = 'bootstrap}) or parametric formulae (\verb{CI_type = 'parametric}).
 For computational reasons we recommend using the parametric approach.
 
 The calibration plots can be plotted using \code{\link{plot.calib_msm}} and \code{\link{plot.calib_mlr}}.
@@ -227,20 +227,20 @@ The calibration plots can be plotted using \code{\link{plot.calib_msm}} and \cod
 # s = 0 in state j = 1. These predicted transition probabilities are stored in tps0.
 
 # Extract the predicted transition probabilities out of state j = 1
-tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
+tp_pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
 
 # Now estimate the observed event probabilities for each possible transition.
-dat.calib <-
-calib_msm(data.ms = msebmtcal,
- data.raw = ebmtcal,
+dat_calib <-
+calib_msm(data_ms = msebmtcal,
+ data_raw = ebmtcal,
  j=1,
  s=0,
  t = 1826,
- tp.pred = tp.pred,
- w.covs = c("year", "agecl", "proph", "match"))
+ tp_pred = tp_pred,
+ w_covs = c("year", "agecl", "proph", "match"))
 
 # Summarise the output
-summary(dat.calib)
+summary(dat_calib)
 
 }
 \references{

@@ -20,7 +20,7 @@
 #'   \item{proph}{Prophylaxis}
 #'   \item{match}{Donor-recipient match}
 #'   \item{dtcens}{Time of censoring}
-#'   \item{dtcens.s}{Event indicator, 1:censoring occured, 0: absorbing state entered before censoring occured}
+#'   \item{dtcens_s}{Event indicator, 1:censoring occured, 0: absorbing state entered before censoring occured}
 #' }
 #' @source This dataset was derived from data made available within the `mstate` package, see \code{\link[mstate]{ebmt4}}.
 #' The data was originally provided by the European Group for Blood and Marrow Transplantation (https://www.ebmt.org/).
@@ -153,12 +153,12 @@
 #' time until censoring ar calculated in the setting of a competing risks model out of the
 #' first state, where no further transitions can be made. This means entry into any
 #' state (as they are all absorbing states) will have the effect of preventing censoring
-#' from occurring, and `dtcens` and `dtcens.s` will be different than the values found
+#' from occurring, and `dtcens` and `dtcens_s` will be different than the values found
 #' in \code{\link{ebmtcal}}. This dataset has been designed to be used alongside
-#' dataset \code{\link{msebmtcal.cmprsk}}, when assessing the calibration of a competing
+#' dataset \code{\link{msebmtcal_cmprsk}}, when assessing the calibration of a competing
 #' risks model. Code for the derivation of this dataset is provided in the source code for the package.
 #'
-#' @format ## 'ebmtcal.cmprsk'
+#' @format ## 'ebmtcal_cmprsk'
 #' A data frame with 2,279 rows and 17 columns:
 #' \describe{
 #'   \item{id}{Patient indentifier}
@@ -172,7 +172,7 @@
 #'   \item{proph}{Prophylaxis}
 #'   \item{match}{Donor-recipient match}
 #'   \item{dtcens}{Time of censoring}
-#'   \item{dtcens.s}{Event indicator, 1:censoring occured, 0: absorbing state entered before censoring occured}
+#'   \item{dtcens_s}{Event indicator, 1:censoring occured, 0: absorbing state entered before censoring occured}
 #' }
 #' @source This dataset was derived from data made available within the `mstate` package, see \code{\link[mstate]{ebmt4}}.
 #' The data was originally provided by the European Group for Blood and Marrow Transplantation (https://www.ebmt.org/).
@@ -189,7 +189,7 @@
 #'
 #' de Wreede LC, Fiocco M, Putter H (2011). “mstate: An R Package for the Analysis of
 #' Competing Risks and Multi-State Models.” \emph{Journal of Statistical Software}, 38(7).
-"ebmtcal.cmprsk"
+"ebmtcal_cmprsk"
 
 
 #' European Group for Blood and Marrow Transplantation data in competing risks format, for transitions out of the initial state only
@@ -201,7 +201,7 @@
 #' meaning this data constitutes a competing risks model out of the initial state. Code for the derivation
 #' of this dataset is provided in the source code for the package.
 #'
-#' @format ## 'msebmtcal.cmprsk'
+#' @format ## 'msebmtcal_cmprsk'
 #' A data frame with 9,116 rows and 8 columns:
 #' \describe{
 #'   \item{id}{Patient indentifier}
@@ -228,20 +228,20 @@
 #'
 #' de Wreede LC, Fiocco M, Putter H (2011). “mstate: An R Package for the Analysis of
 #' Competing Risks and Multi-State Models.” \emph{Journal of Statistical Software}, 38(7).
-"msebmtcal.cmprsk"
+"msebmtcal_cmprsk"
 
 #' Predicted risks for a competing risks model out of state j = 0
 #'
 #' Used in vignette/article: Comparison-with-graphical-calibration-curves-in-competing-risks-setting.
 #'
 #' Data frame containing the predicted transition probabilities out of state j = 1
-#' made at time s = 0, for a competing risks model out of the initial state (see \code{\link{msebmtcal.cmprsk}}).
+#' made at time s = 0, for a competing risks model out of the initial state (see \code{\link{msebmtcal_cmprsk}}).
 #' The predicted transition probabilities were estimated by fitting
-#' a competing risks model to the \code{\link{msebmtcal.cmprsk}} data using a leave-one-out approach.
+#' a competing risks model to the \code{\link{msebmtcal_cmprsk}} data using a leave-one-out approach.
 #' Code for deriving this dataset is provided in the source code for `calibmsm`. Code for the derivation
 #' of this dataset is provided in the source code for the package.
 #'
-#' @format ## 'tp.cmprsk.j0'
+#' @format ## 'tp_cmprsk_j0'
 #' A data frame with 2,279 rows and 13 columns:
 #' \describe{
 #'   \item{id}{Patient indentifier}
@@ -263,4 +263,4 @@
 #'
 #' de Wreede LC, Fiocco M, Putter H (2011). “mstate: An R Package for the Analysis of
 #' Competing Risks and Multi-State Models.” \emph{Journal of Statistical Software}, 38(7).
-"tp.cmprsk.j0"
+"tp_cmprsk_j0"

@@ -7,63 +7,63 @@
 #' weights, based on the nominal calibration  framework of van Hoorde et al. (2014, 2015)
 #' 3) Pseudo-values: Pseudo-values estimated using the Aalen-Johansen estimator (Aalen OO, Johansen S, 1978).
 #'
-#' @param data.raw Validation data in `data.frame` (one row per individual)
-#' @param data.ms Validation data in `msdata` format
+#' @param data_raw Validation data in `data.frame` (one row per individual)
+#' @param data_ms Validation data in `msdata` format
 #' @param j Landmark state at which predictions were made
 #' @param s Landmark time at which predictions were made
 #' @param t Follow up time at which calibration is to be assessed
-#' @param tp.pred Data frame or matrix of predicted transition probabilities at time t, if in state j at time s. There must be a separate column for the predicted transition probabilities into every state, even if these predicted transition probabilities are 0.
-#' @param tp.pred.plot Data frame or matrix of predicted risks for each possible transition over which to plot the calibration curves. Argument provided to enable user to apply bootstrapping manually.
-#' @param calib.type Whether calibration plots are estimated using BLR-IPCW ('blr'), MLR-IPCW ('mlr') or pseudo-values ('pv')
-#' @param curve.type Whether calibration curves are estimated using restricted cubic splines ('rcs') or loess smoothers ('loess')
-#' @param rcs.nk Number of knots when curves are estimated using restricted cubic splines
-#' @param loess.span Span when curves are estimated using loess smoothers
-#' @param loess.degree Degree when curves are estimated. using loess smoothers
-#' @param loess.surface see \code{\link[stats]{loess.control}}
-#' @param loess.statistics see \code{\link[stats]{loess.control}}
-#' @param loess.trace.hat see \code{\link[stats]{loess.control}}
-#' @param loess.cell see \code{\link[stats]{loess.control}}
-#' @param loess.iterations see \code{\link[stats]{loess.control}}
-#' @param loess.iterTrace see \code{\link[stats]{loess.control}}
-#' @param mlr.s.df degrees of freedom of vector spline (see \code{\link[VGAM]{s}})
-#' @param mlr.smoother.type Type of smoothing applied. Takes values `s` (see \code{\link[VGAM]{s}}), `sm.ps` (see \code{\link[VGAM]{sm.ps}}) or `sm.os` (see \code{\link[VGAM]{sm.os}}).
-#' @param mlr.ps.int the number of equally-spaced B spline intervals in the vector spline smoother (see \code{\link[VGAM]{sm.ps}})
-#' @param mlr.degree the degree of B-spline basis in the vector spline smoother (see \code{\link[VGAM]{sm.ps}})
-#' @param mlr.niknots number of interior knots (see \code{\link[VGAM]{sm.os}})
+#' @param tp_pred Data frame or matrix of predicted transition probabilities at time t, if in state j at time s. There must be a separate column for the predicted transition probabilities into every state, even if these predicted transition probabilities are 0.
+#' @param tp_pred_plot Data frame or matrix of predicted risks for each possible transition over which to plot the calibration curves. Argument provided to enable user to apply bootstrapping manually.
+#' @param calib_type Whether calibration plots are estimated using BLR-IPCW ('blr'), MLR-IPCW ('mlr') or pseudo-values ('pv')
+#' @param curve_type Whether calibration curves are estimated using restricted cubic splines ('rcs') or loess smoothers ('loess')
+#' @param rcs_nk Number of knots when curves are estimated using restricted cubic splines
+#' @param loess_span Span when curves are estimated using loess smoothers
+#' @param loess_degree Degree when curves are estimated_ using loess smoothers
+#' @param loess_surface see \code{\link[stats]{loess.control}}
+#' @param loess_statistics see \code{\link[stats]{loess.control}}
+#' @param loess_trace_hat see \code{\link[stats]{loess.control}}
+#' @param loess_cell see \code{\link[stats]{loess.control}}
+#' @param loess_iterations see \code{\link[stats]{loess.control}}
+#' @param loess_iterTrace see \code{\link[stats]{loess.control}}
+#' @param mlr_s_df degrees of freedom of vector spline (see \code{\link[VGAM]{s}})
+#' @param mlr_smoother_type Type of smoothing applied. Takes values `s` (see \code{\link[VGAM]{s}}), `sm.ps` (see \code{\link[VGAM]{sm.ps}}) or `sm.os` (see \code{\link[VGAM]{sm.os}}).
+#' @param mlr_ps_int the number of equally-spaced B spline intervals in the vector spline smoother (see \code{\link[VGAM]{sm.ps}})
+#' @param mlr_degree the degree of B-spline basis in the vector spline smoother (see \code{\link[VGAM]{sm.ps}})
+#' @param mlr_niknots number of interior knots (see \code{\link[VGAM]{sm.os}})
 #' @param weights Vector of inverse probability of censoring weights
-#' @param w.function Custom function for estimating the inverse probability of censoring weights
-#' @param w.covs Character vector of variable names to adjust for when calculating inverse probability of censoring weights
-#' @param w.landmark.type Whether weights are estimated in all individuals uncensored at time s ('all') or only in individuals uncensored and in state j at time s ('state')
-#' @param w.max Maximum bound for inverse probability of censoring weights
-#' @param w.stabilised Indicates whether inverse probability of censoring weights should be stabilised or not
-#' @param w.max.follow Maximum follow up for model calculating inverse probability of censoring weights. Reducing this to `t` + 1 may aid in the proportional hazards assumption being met in this model.
-#' @param pv.group.vars Variables to group by before calculating pseudo-values
-#' @param pv.n.pctls Number of percentiles of predicted risk to group by before calculating pseudo-values
-#' @param pv.precalc Pre-calculated pseudo-values
-#' @param pv.ids Id's of individuals to calculate pseudo-values for
+#' @param w_function Custom function for estimating the inverse probability of censoring weights
+#' @param w_covs Character vector of variable names to adjust for when calculating inverse probability of censoring weights
+#' @param w_landmark_type Whether weights are estimated in all individuals uncensored at time s ('all') or only in individuals uncensored and in state j at time s ('state')
+#' @param w_max Maximum bound for inverse probability of censoring weights
+#' @param w_stabilised Indicates whether inverse probability of censoring weights should be stabilised or not
+#' @param w_max_follow Maximum follow up for model calculating inverse probability of censoring weights. Reducing this to `t` + 1 may aid in the proportional hazards assumption being met in this model.
+#' @param pv_group_vars Variables to group by before calculating pseudo-values
+#' @param pv_n_pctls Number of percentiles of predicted risk to group by before calculating pseudo-values
+#' @param pv_precalc Pre-calculated pseudo-values
+#' @param pv_ids Id's of individuals to calculate pseudo-values for
 #' @param CI Size of confidence intervals as a %
-#' @param CI.type Method for estimating confidence interval (currently restricted to `bootstrap`)
-#' @param CI.R.boot Number of bootstrap replicates when estimating the confidence interval for the calibration curve
-#' @param CI.seed Seed for bootstrapping procedure
-#' @param transitions.out Transitions for which to calculate calibration curves. Will do all possible transitions if left as NULL.
-#' @param assess.moderate TRUE/FALSE whether to estimate data for calibration plots
-#' @param assess.mean TRUE/FALSE whether to estimate mean calibration
-#' @param ... Extra arguments to be passed to w.function (custom function for estimating weights)
+#' @param CI_type Method for estimating confidence interval (currently restricted to `bootstrap`)
+#' @param CI_R_boot Number of bootstrap replicates when estimating the confidence interval for the calibration curve
+#' @param CI_seed Seed for bootstrapping procedure
+#' @param transitions_out Transitions for which to calculate calibration curves. Will do all possible transitions if left as NULL.
+#' @param assess_moderate TRUE/FALSE whether to estimate data for calibration plots
+#' @param assess_mean TRUE/FALSE whether to estimate mean calibration
+#' @param ... Extra arguments to be passed to w_function (custom function for estimating weights)
 #'
 #' @details
 #' Observed event probabilities at time `t` are estimated for predicted
-#' transition probabilities `tp.pred` out of state `j` at time `s`.
+#' transition probabilities `tp_pred` out of state `j` at time `s`.
 #'
-#' `calib.type = 'blr'` estimates calibration curves using techniques for assessing
+#' `calib_type = 'blr'` estimates calibration curves using techniques for assessing
 #' the calibration of a binary logistic regression model (Van Calster et al., 2016).
 #' A choice between restricted cubic splines and loess smoothers for estimating the
-#' calibration curve can be made using `curve.type`. Landmarking (van Houwelingen HC, 2007)
+#' calibration curve can be made using `curve_type`. Landmarking (van Houwelingen HC, 2007)
 #' is applied to only assess calibration in individuals who are uncensored and in state `j` at time `s`.
 #' Calibration can only be assessed in individuals who are also uncensored at time `t`,
 #' which is accounted for using inverse probability of censoring weights (Hernan M, Robins J, 2020).
 #' See method BLR-IPCW from Pate et al., (2024) for a full explanation of the approach.
 #'
-#' `calib.type = 'mlr'` estimates calibration scatter plots using a technique for assessing
+#' `calib_type = 'mlr'` estimates calibration scatter plots using a technique for assessing
 #' the calibration of multinomial logistic regression models, namely the nominal
 #' calibration framework of van Hoorde et al. (2014, 2015). Landmarking (van Houwelingen HC, 2007)
 #' is applied to only assess calibration in individuals who are uncensored
@@ -72,42 +72,42 @@
 #' of censoring weights (Hernan M, Robins J, 2020). See method BLR-IPCW from Pate et al., (2024)
 #' for a full explanation of the approach.
 #'
-#' `calib.type = 'pv'` estimates calibration curves using using pseudo-values (Andersen PK, Pohar Perme M, 2010)
+#' `calib_type = 'pv'` estimates calibration curves using using pseudo-values (Andersen PK, Pohar Perme M, 2010)
 #' calculated using the Aalen-Johansen estimator (Aalen OO, Johansen S, 1978).
 #' Calibration curves are generated by regressing the pseudo-values on the predicted transition probabilities.
 #' A choice between restricted cubic splines and loess smoothers for estimating the
-#' calibration curve can be made using `curve.type`. Landmarking (van Houwelingen HC, 2007)
+#' calibration curve can be made using `curve_type`. Landmarking (van Houwelingen HC, 2007)
 #' is applied to only assess calibration in individuals who are uncensored and in state `j` at time `s`.
 #' The nature of pseudo-values means calibration can be assessed in all landmarked individuals,
 #' regardless of their censoring time. See method Pseudo-value approach from Pate et al., (2024)
 #' for a full explanation of the approach.
 #'
-#' Two datasets for the same cohort of inidividuals must be provided. Firstly, `data.raw`
+#' Two datasets for the same cohort of inidividuals must be provided. Firstly, `data_raw`
 #' must be a `data.frame` with one row per individual containing the variables for
-#' the time until censoring (`dtcens`), and an indicator for censoring `dtcens.s`,
-#' where (`dtcens.s = 1`) if an individual is censored at time `dtcens`, and `dtcens.s = 0`
+#' the time until censoring (`dtcens`), and an indicator for censoring `dtcens_s`,
+#' where (`dtcens_s = 1`) if an individual is censored at time `dtcens`, and `dtcens_s = 0`
 #' otherwise. When an individual enters an absorbing state, this prevents censoring
-#' from happening (i.e. dtcens.s = 0). `data.raw` must also contain the desired variables
-#' for estimating the weights. Secondly, `data.ms` must be a dataset of class `msdata`,
+#' from happening (i.e. dtcens_s = 0). `data_raw` must also contain the desired variables
+#' for estimating the weights. Secondly, `data_ms` must be a dataset of class `msdata`,
 #' generated using the \code{[mstate]} package. This dataset is used to apply the landmarking
-#' and identify which state individuals are in at time `t`. While `data.ms` can be
-#' derived from `data.raw`, it would be inefficient to do this within `calibmsm::calib_msm`
+#' and identify which state individuals are in at time `t`. While `data_ms` can be
+#' derived from `data_raw`, it would be inefficient to do this within `calibmsm::calib_msm`
 #' due to the bootstrapping procedure, and therefore they must be inputted seperately.
 #'
 #' Unless the user specifies the weights using `weights`, the weights are
 #' estimated using a cox-proportional hazard model, assuming a linear
-#' functional form of the variables defined in `w.covs`. We urge users to
+#' functional form of the variables defined in `w_covs`. We urge users to
 #' specify their own model for estimating the weights. The `weights` argument
-#' must be a vector with length equal to the number of rows of `data.raw`.
+#' must be a vector with length equal to the number of rows of `data_raw`.
 #'
-#' Confidence intervals cannot be produced for the calibration scatter plots (`calib.type = 'mlr'`).
-#' For calibration curves estimated using `calib.type = 'blr'`, confidence intervals
-#' can only be estimated using bootstrapping (`CI.type = 'bootstrap`). This procedure uses the internal method for
+#' Confidence intervals cannot be produced for the calibration scatter plots (`calib_type = 'mlr'`).
+#' For calibration curves estimated using `calib_type = 'blr'`, confidence intervals
+#' can only be estimated using bootstrapping (`CI_type = 'bootstrap`). This procedure uses the internal method for
 #' estimating weights, we therefore encourage users to specify their own bootstrapping
 #' procedure, which incorporates their own model for estimating the weights. Details
 #' on how to do this are provided in the vignette \emph{BLR-IPCW-manual-bootstrap}.
-#' For calibration curves estimated using `calib.type = 'pv'`, confidence intervals
-#' can be estimated using bootstrapping (`CI.type = 'bootstrap`) or parametric formulae (`CI.type = 'parametric`).
+#' For calibration curves estimated using `calib_type = 'pv'`, confidence intervals
+#' can be estimated using bootstrapping (`CI_type = 'bootstrap`) or parametric formulae (`CI_type = 'parametric`).
 #' For computational reasons we recommend using the parametric approach.
 #'
 #' The calibration plots can be plotted using \code{\link{plot.calib_msm}} and \code{\link{plot.calib_mlr}}.
@@ -116,11 +116,11 @@
 #' \code{plotdata} and \code{metadata}. The \code{plotdata} element contains the
 #' data for the calibration plots. This will itself be a list with each element
 #' containing calibration plot data for the transition probabilities into each of the possible
-#' states. Each list element contains patient ids (\code{id}) from `data.raw`, the predicted
+#' states. Each list element contains patient ids (\code{id}) from `data_raw`, the predicted
 #' transition probabilities (\code{pred}) and the estimated observed event
-#' probabilities (\code{obs}). If a confidence interval is requested, upper (`obs.upper`)
-#' and lower (`obs.lower`) bounds for the observed event probabilities are also returned.
-#' If tp.pred.plot is specified, column (\code{id}) is not returned.
+#' probabilities (\code{obs}). If a confidence interval is requested, upper (`obs_upper`)
+#' and lower (`obs_lower`) bounds for the observed event probabilities are also returned.
+#' If tp_pred_plot is specified, column (\code{id}) is not returned.
 #' The \code{metadata} element contains metadata including: a vector of the possible transitions,
 #' a vector of which transitions calibration curves have been estimated for, the
 #' size of the confidence interval, the method for estimating the calibration curve
@@ -168,63 +168,63 @@
 #' # s = 0 in state j = 1. These predicted transition probabilities are stored in tps0.
 #'
 #' # Extract the predicted transition probabilities out of state j = 1
-#' tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
+#' tp_pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
 #'
 #' # Now estimate the observed event probabilities for each possible transition.
-#' dat.calib <-
-#' calib_msm(data.ms = msebmtcal,
-#'  data.raw = ebmtcal,
+#' dat_calib <-
+#' calib_msm(data_ms = msebmtcal,
+#'  data_raw = ebmtcal,
 #'  j=1,
 #'  s=0,
 #'  t = 1826,
-#'  tp.pred = tp.pred,
-#'  w.covs = c("year", "agecl", "proph", "match"))
+#'  tp_pred = tp_pred,
+#'  w_covs = c("year", "agecl", "proph", "match"))
 #'
 #' # Summarise the output
-#' summary(dat.calib)
+#' summary(dat_calib)
 #'
 #' @export
-calib_msm <- function(data.ms,
-                      data.raw,
+calib_msm <- function(data_ms,
+                      data_raw,
                       j,
                       s,
                       t,
-                      tp.pred,
-                      tp.pred.plot = NULL,
-                      calib.type = "blr",
-                      curve.type = "rcs",
-                      rcs.nk = 3,
-                      loess.span = 0.75,
-                      loess.degree = 2,
-                      loess.surface = c("interpolate", "direct"),
-                      loess.statistics = c("approximate", "exact", "none"),
-                      loess.trace.hat = c("exact", "approximate"),
-                      loess.cell = 0.2,
-                      loess.iterations = 4,
-                      loess.iterTrace = FALSE,
-                      mlr.smoother.type = "sm.ps",
-                      mlr.ps.int = 4,
-                      mlr.degree = 3,
-                      mlr.s.df = 4,
-                      mlr.niknots = 4,
+                      tp_pred,
+                      tp_pred_plot = NULL,
+                      calib_type = "blr",
+                      curve_type = "rcs",
+                      rcs_nk = 3,
+                      loess_span = 0.75,
+                      loess_degree = 2,
+                      loess_surface = c("interpolate", "direct"),
+                      loess_statistics = c("approximate", "exact", "none"),
+                      loess_trace_hat = c("exact", "approximate"),
+                      loess_cell = 0.2,
+                      loess_iterations = 4,
+                      loess_iterTrace = FALSE,
+                      mlr_smoother_type = c("sm.ps", "sm.os", "s"),
+                      mlr_ps_int = 4,
+                      mlr_degree = 3,
+                      mlr_s_df = 4,
+                      mlr_niknots = 4,
                       weights = NULL,
-                      w.function = NULL,
-                      w.covs = NULL,
-                      w.landmark.type = "state",
-                      w.max = 10,
-                      w.stabilised = FALSE,
-                      w.max.follow = NULL,
-                      pv.group.vars = NULL,
-                      pv.n.pctls = NULL,
-                      pv.precalc = NULL,
-                      pv.ids = NULL,
+                      w_function = NULL,
+                      w_covs = NULL,
+                      w_landmark_type = "state",
+                      w_max = 10,
+                      w_stabilised = FALSE,
+                      w_max_follow = NULL,
+                      pv_group_vars = NULL,
+                      pv_n_pctls = NULL,
+                      pv_precalc = NULL,
+                      pv_ids = NULL,
                       CI = FALSE,
-                      CI.type = "bootstrap",
-                      CI.R.boot = NULL,
-                      CI.seed = 1,
-                      transitions.out = NULL,
-                      assess.moderate = TRUE,
-                      assess.mean = TRUE,
+                      CI_type = "bootstrap",
+                      CI_R_boot = NULL,
+                      CI_seed = NULL,
+                      transitions_out = NULL,
+                      assess_moderate = TRUE,
+                      assess_mean = TRUE,
                       ...){
 
   # rm(list=ls())
@@ -234,112 +234,115 @@ calib_msm <- function(data.ms,
   #   data("msebmtcal")
   #   data("tps0")
   #   data("tps100")
-  # calib.type <- "pv"
-  # data.raw <- ebmtcal
-  # data.ms <- msebmtcal
-  # tp.pred <- tps0 |>
+  # calib_type <- "pv"
+  # data_raw <- ebmtcal
+  # data_ms <- msebmtcal
+  # tp_pred <- tps0 |>
   #   subset(j == 1) |>
   #   dplyr::select(paste("pstate", 1:6, sep = ""))
   #
-  # data.raw <- ebmtcal[ebmtcal$id %in% 1:50, ]
-  # data.ms <- msebmtcal[msebmtcal$id %in% 1:50, ]
-  # tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
-  # tp.pred <- tp.pred[1:50, ]
+  # data_raw <- ebmtcal[ebmtcal$id %in% 1:50, ]
+  # data_ms <- msebmtcal[msebmtcal$id %in% 1:50, ]
+  # tp_pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
+  # tp_pred <- tp_pred[1:50, ]
   #
   #
   # j <- 1
   # s <- 0
   # t <- 1826
   #
-  # curve.type = "rcs"
-  # tp.pred.plot = NULL
-  # transitions.out = NULL
+  # curve_type = "rcs"
+  # tp_pred_plot = NULL
+  # transitions_out = NULL
   # weights = NULL
   #
-  # w.covs = NULL
-  # w.landmark.type = "state"
-  # w.max = 10
-  # w.stabilised = FALSE
-  # w.max.follow = NULL
-  # w.function = NULL
+  # w_covs = NULL
+  # w_landmark_type = "state"
+  # w_max = 10
+  # w_stabilised = FALSE
+  # w_max_follow = NULL
+  # w_function = NULL
   #
   # CI = FALSE
   # # CI = 95
-  # CI.R.boot = 2
-  # rcs.nk = 3
-  # CI.type = "bootstrap"
+  # CI_R_boot = 2
+  # rcs_nk = 3
+  # CI_type = "bootstrap"
   #
-  # CI.seed = 1
-  # loess.span = 1
-  # loess.degree = 1
+  # CI_seed = 1
+  # loess_span = 1
+  # loess_degree = 1
   #
-  # pv.group.vars = c("year")
-  # pv.n.pctls = 2
+  # pv_group_vars = c("year")
+  # pv_n_pctls = 2
   #
-  # mlr.smoother.type = "sm.ps"
-  # mlr.ps.int = 4
-  # mlr.degree = 3
-  # mlr.s.df = 4
-  # mlr.niknots = 4
-  # assess.moderate = TRUE
-  # assess.mean = TRUE
+  # mlr_smoother_type = "sm.ps"
+  # mlr_ps_int = 4
+  # mlr_degree = 3
+  # mlr_s_df = 4
+  # mlr_niknots = 4
+  # assess_moderate = TRUE
+  # assess_mean = TRUE
   #
-  # pv.precalc = NULL
-  # str(data.raw)
+  # pv_precalc = NULL
+  # str(data_raw)
   #
-  # pv.group.vars = NULL
-  # tp.pred <- readRDS("P:/Documents/aaa_incline/DEBUG.tp.pred.rds")
-  # data.raw <- readRDS("P:/Documents/aaa_incline/DEBUG.data.raw.rds")
-  # data.ms <- readRDS("P:/Documents/aaa_incline/DEBUG.data.ms.rds")
-  # pv.n.pctls = 10
+  # pv_group_vars = NULL
+  # tp_pred <- readRDS("P:/Documents/aaa_incline/DEBUG.tp.pred.rds")
+  # data_raw <- readRDS("P:/Documents/aaa_incline/DEBUG.data.raw.rds")
+  # data_ms <- readRDS("P:/Documents/aaa_incline/DEBUG.data.ms.rds")
+  # pv_n_pctls = 10
   # t <- 2557
 
   # str(ebmtcal)
   # str(readRDS("P:/Documents/aaa_incline/data.raw.reduc.rds"))
-  # calib.type <- "blr"
+  # calib_type <- "blr"
   #
   # # ## Calculate manual weights
-  # # weights.manual <-
-  # #   calc_weights(data.ms = msebmtcal,
-  # #                data.raw = ebmtcal,
+  # # weights_manual <-
+  # #   calc_weights(data_ms = msebmtcal,
+  # #                data_raw = ebmtcal,
   # #                t = 1826,
   # #                s = 0,
-  # #                landmark.type = "state",
+  # #                landmark_type = "state",
   # #                j = 1,
-  # #                max.weight = 10,
+  # #                max_weight = 10,
   # #                stabilised = FALSE)
-  # # weights <- weights.manual$ipcw
+  # # weights <- weights_manual$ipcw
 
   ###########################
   ### Warnings and errors ###
   ###########################
 
-  ### Stop if data.ms is missing the transition matrix, this can happen when using the subset function on data.ms
-  if (!("trans" %in% names(attributes(data.ms)))){
-    stop("The is no transition matrix (trans) attribute in data.ms, this may have happened when using the subset function to subset an 'msdata' data frame,
+  ### Assign arg
+  mlr_smoother_type <- match.arg(mlr_smoother_type)
+
+  ### Stop if data_ms is missing the transition matrix, this can happen when using the subset function on data_ms
+  if (!("trans" %in% names(attributes(data_ms)))){
+    stop("The is no transition matrix (trans) attribute in data_ms, this may have happened when using the subset function to subset an 'msdata' data frame,
          which should have this attribute")
   }
-  ### Stop if patients in data.raw are not in data.ms
-  if (!("id" %in% colnames(data.raw) & "id" %in% colnames(data.ms))){
-    stop("Variable 'id' must be in both data.raw and data.ms. Individuals are identified across the two datasets using this variable.")
-  } else if (!base::all(unique(data.raw$id) %in% unique(data.ms$id))){
-    stop("All patients in data.raw are not contained in data.ms. Landmarking cannot be applied.")
+  ### Stop if patients in data_raw are not in data_ms
+  if (!("id" %in% colnames(data_raw) & "id" %in% colnames(data_ms))){
+    stop("Variable 'id' must be in both data_raw and data_ms. Individuals are identified across the two datasets using this variable.")
+  } else if (!base::all(unique(data_raw$id) %in% unique(data_ms$id))){
+    stop("All patients in data_raw are not contained in data_ms. Landmarking cannot be applied.")
   }
 
-  ### Stop if not same number of rows in data.raw and tp.pred
-  if (nrow(tp.pred) != nrow(data.raw)){
-    stop("Number of rows in tp.pred does not match number of rows in data.raw")
+  ### Stop if not same number of rows in data_raw and tp_pred
+  if (nrow(tp_pred) != nrow(data_raw)){
+    stop("Number of rows in tp_pred does not match number of rows in data_raw")
   }
 
-  ### Warning if patients in data.ms are not in data.raw
-  if (!base::all(unique(data.ms$id) %in% unique(data.raw$id))){
-    warning("All patients in data.ms are not contained in data.raw. Landmarking can still be applied, but potential mismatch in these two datasets?")
+  ### Warning if patients in data_ms are not in data_raw
+  if (!base::all(unique(data_ms$id) %in% unique(data_raw$id))){
+    warning("All patients in data_ms are not contained in data_raw. Landmarking can still be applied, but potential mismatch in these two datasets?")
   }
 
-  ### Stop if variables dtcens and dtcens.s do not exist, and if any NA values for dtcens
-  if (!("dtcens" %in% colnames(data.raw)) | !("dtcens.s" %in% colnames(data.raw))){
-    stop("data.raw should contains variables dtcens and dtcens.s")
-  } else if (!(sum(is.na(data.raw$dtcens)) == 0)){
+  ### Stop if variables dtcens and dtcens_s do not exist, and if any NA values for dtcens
+  if (!("dtcens" %in% colnames(data_raw)) | !("dtcens_s" %in% colnames(data_raw))){
+    stop("data_raw should contains variables dtcens and dtcens_s")
+  } else if (!(sum(is.na(data_raw$dtcens)) == 0)){
     stop("NA values found in dtcens. Censoring time must be known for all individuals.")
   }
 
@@ -348,54 +351,54 @@ calib_msm <- function(data.ms,
     stop("Estimation of confidence interval using internal bootstrapping procedure was requested.
          This is not possible with fixed user-inputted weights as the calibration curves will be incorrect.
          Weights must be calculated seperately within each bootstrapped dataset, this can be done using the internal procedure,
-         or with a user-specified function (w.function)")
+         or with a user-specified function (w_function)")
   }
 
   ### Ensure appropriate confidence type has been specified
   if (!isFALSE(CI)){
     if (CI >= 100 | CI <= 0){
       stop("CI should be a number taking values in (0,100)")
-    } else if (!(CI.type %in% c("parametric", "bootstrap"))){
-      stop("CI.type must takes values in 'parametric' or 'bootstrap'")
-    } else if (CI.type == "bootstrap" & is.null(CI.R.boot)){
-      stop("Must specify number of bootstrap replicates for confidence interval using CI.R.boot.")
-    } else if (calib.type %in% c("blr", "mlr") & CI.type == "parametric"){
-      stop("Cannot produce a parametric confidence interva for calib.type = 'blr' or 'mlr'")
-    } else if (calib.type == "mlr" & assess.moderate == TRUE){
-      stop("Cannot produce a confidence interval for moderate calibration plots using method calib.type = 'mlr'")
+    } else if (!(CI_type %in% c("parametric", "bootstrap"))){
+      stop("CI_type must takes values in 'parametric' or 'bootstrap'")
+    } else if (CI_type == "bootstrap" & is.null(CI_R_boot)){
+      stop("Must specify number of bootstrap replicates for confidence interval using CI_R_boot.")
+    } else if (calib_type %in% c("blr", "mlr") & CI_type == "parametric"){
+      stop("Cannot produce a parametric confidence interva for calib_type = 'blr' or 'mlr'")
+    } else if (calib_type == "mlr" & assess_moderate == TRUE){
+      stop("Cannot produce a confidence interval for moderate calibration plots using method calib_type = 'mlr'")
     }
   }
 
-  ### Check if transitions.out is only specified for non-zero columns
-  if (!is.null(transitions.out)){
-    if (sum(c(colSums(tp.pred) == 0)[transitions.out] == TRUE) > 0){
+  ### Check if transitions_out is only specified for non-zero columns
+  if (!is.null(transitions_out)){
+    if (sum(c(colSums(tp_pred) == 0)[transitions_out] == TRUE) > 0){
       stop("Calibraiton curves have been requested for transitions into states which have zero probability of occuring.")
     }
   }
 
   ### If vector of weights and custom function for specifying weights both inputted, give error
-  if (!is.null(weights) & !is.null(w.function)){
+  if (!is.null(weights) & !is.null(w_function)){
     stop("Cannot specify weights manually and specify a custom function for estimating the weights. Choose one or the other.")
   }
 
-  ### If pseudo-values does not have same number of columns as tp.pred give error
-  ### If pseudo-values does not have same number of rows as data.raw give error
+  ### If pseudo-values does not have same number of columns as tp_pred give error
+  ### If pseudo-values does not have same number of rows as data_raw give error
   ### If pseudo-values pre-calculated and bootstrapping requested give error
-  if (!is.null(pv.precalc)){
-    if (nrow(pv.precalc) != nrow(data.raw)){
-      stop("pv.precalc must have same number of rows as data.raw. calib_msm assumes landmarking has already been applied to data.raw as part of estimating the pseudo-values")
-    } else if (ncol(pv.precalc) != ncol(tp.pred)){
-      stop("pv.precalc must have same number of columns as tp.pred")
-    } else if (!isFALSE(CI) & CI.type == "bootstrap"){
+  if (!is.null(pv_precalc)){
+    if (nrow(pv_precalc) != nrow(data_raw)){
+      stop("pv_precalc must have same number of rows as data_raw. calib_msm assumes landmarking has already been applied to data_raw as part of estimating the pseudo-values")
+    } else if (ncol(pv_precalc) != ncol(tp_pred)){
+      stop("pv_precalc must have same number of columns as tp_pred")
+    } else if (!isFALSE(CI) & CI_type == "bootstrap"){
       stop("Cannot estimate a bootstrapped confidence interval if inputting pre-calculating pseudo-values.")
     }
   }
 
-  ### Stop if calib.type = "AJ" and assess.moderate = TRUE, or parametric confidence interval requested
-  if (calib.type == "AJ" & assess.moderate == TRUE){
-    stop("Cannot assess moderate calibration for calib.type = 'AJ'")
-  } else if (calib.type == "AJ" & CI != FALSE & CI.type == "parametric"){
-    stop("Cannot produce parametric confidence intervals for mean calibration assessd using calib.type = 'AJ'")
+  ### Stop if calib_type = "AJ" and assess_moderate = TRUE, or parametric confidence interval requested
+  if (calib_type == "AJ" & assess_moderate == TRUE){
+    stop("Cannot assess moderate calibration for calib_type = 'AJ'")
+  } else if (calib_type == "AJ" & CI != FALSE & CI_type == "parametric"){
+    stop("Cannot produce parametric confidence intervals for mean calibration assessd using calib_type = 'AJ'")
   }
 
   ##########################################################
@@ -405,42 +408,42 @@ calib_msm <- function(data.ms,
   ## If a vector of weights has been provided, add it to the dataset
   if (!is.null(weights)){
     ### First check whether it is the correct length (NA's should be present)
-    if (length(weights) != nrow(data.raw)){
-      stop("Weights vector not same length as data.raw")
+    if (length(weights) != nrow(data_raw)){
+      stop("Weights vector not same length as data_raw")
     } else {
-      data.raw$ipcw <- weights
-      weights.provided <- TRUE
+      data_raw$ipcw <- weights
+      weights_provided <- TRUE
     }
   } else if (is.null(weights)){
-    weights.provided <- FALSE
+    weights_provided <- FALSE
   }
 
-  ### If custom function for estimating weights has been inputted ("w.function"),
+  ### If custom function for estimating weights has been inputted ("w_function"),
   ### stop if it does not contain all the arguments from calc_weights
-  if (!is.null(w.function)){
-    ### stop if w.function doesn't have correct arguments
-    if(!all(names(formals(calc_weights)) %in% names(formals(w.function)))){
-      stop("Arguments for w.function does not contain those from calibmsm::calc_weights")
+  if (!is.null(w_function)){
+    ### stop if w_function doesn't have correct arguments
+    if(!all(names(formals(calc_weights)) %in% names(formals(w_function)))){
+      stop("Arguments for w_function does not contain those from calibmsm::calc_weights")
     }
-    # calc_weights <- w.function
+    # calc_weights <- w_function
     # print(calc_weights)
   }
 
-  ### If tp.pred.plot is user specified, ensure it has correct number of columns
-  if (!is.null(tp.pred.plot)){
-    if (ncol(tp.pred.plot) != ncol(tp.pred)){
-      stop("Data pred plot must have same number of columns as tp.pred")
+  ### If tp_pred_plot is user specified, ensure it has correct number of columns
+  if (!is.null(tp_pred_plot)){
+    if (ncol(tp_pred_plot) != ncol(tp_pred)){
+      stop("Data pred plot must have same number of columns as tp_pred")
     }
   }
 
   ### Identify valid transitions
-  valid.transitions <- identify_valid_transitions(data.raw = data.raw, data.ms = data.ms, j = j, s = s, t = t)
+  valid_transitions <- identify_valid_transitions(data_raw = data_raw, data_ms = data_ms, j = j, s = s, t = t)
 
-  ### Check there are individuals in state.k at time t for the transitions with non-zero predicted probability
-  for (state.k in 1:max(data.ms$to)){
-    if (sum(tp.pred[,state.k]) > 0 & !(state.k %in% valid.transitions)){
-      stop(paste("There are no individuals in state ", state.k, " at time point ", t,
-                 " but there are non-zero predicted probabilities of being in this state according to tp.pred. ",
+  ### Check there are individuals in state_k at time t for the transitions with non-zero predicted probability
+  for (state_k in 1:max(data_ms$to)){
+    if (sum(tp_pred[,state_k]) > 0 & !(state_k %in% valid_transitions)){
+      stop(paste("There are no individuals in state ", state_k, " at time point ", t,
+                 " but there are non-zero predicted probabilities of being in this state according to tp_pred. ",
                  "This issue must be resolved before assessing calibration. ",
                  "Is there a difference in possible transitions between the cohort the model was developed on, and the validation cohort?", sep = "")
       )
@@ -448,10 +451,10 @@ calib_msm <- function(data.ms,
   }
 
   ### Check if there are any valid transitions which have zero predicted probability
-  for (state.k in valid.transitions){
-    if (sum(tp.pred[,state.k]) == 0){
-      stop(paste("There are individuals in state ", state.k, " at time point ", t,
-                 " but there is zero predicted probability of being in this state according to tp.pred. ",
+  for (state_k in valid_transitions){
+    if (sum(tp_pred[,state_k]) == 0){
+      stop(paste("There are individuals in state ", state_k, " at time point ", t,
+                 " but there is zero predicted probability of being in this state according to tp_pred. ",
                  "This issue must be resolved before assessing calibration. ",
                  "Is there a difference in possible transitions between the cohort the model was developed on, and the validation cohort?", sep = "")
       )
@@ -460,25 +463,25 @@ calib_msm <- function(data.ms,
 
   ### Check for sufficient numbers in each state at time when calibration is being assessed
   ## Create landmarked dataset
-  temp.landmark <-  apply_landmark(data.raw = data.raw, data.ms = data.ms, j = j, s = s, t = t, exclude.cens.t = TRUE, data.return = "data.ms")
+  temp_landmark <-  apply_landmark(data_raw = data_raw, data_ms = data_ms, j = j, s = s, t = t, exclude_cens_t = TRUE, data_return = "data_ms")
 
   ## Identify individuals in state j at time s
-  temp.ids.lmk <- lapply(valid.transitions, extract_ids_states, data.ms = temp.landmark, tmat = attributes(data.ms)$trans, t = t)
-  if (any(unlist(lapply(temp.ids.lmk, length)) < 50)){
+  temp_ids_lmk <- lapply(valid_transitions, extract_ids_states, data_ms = temp_landmark, tmat = attributes(data_ms)$trans, t = t)
+  if (any(unlist(lapply(temp_ids_lmk, length)) < 50)){
     warning("In the landmark cohort of individuals uncensored and in state j at time s,
     there are some states have less than 50 people at the time at which calibration is being assessed (t).
     Warnings and errors may occur when the models are fitted to estimate the calibration curves due to small sample size.
     This warning has been written to try and intercept some uninformative error messages when the underlying statistical models fail.
     The number to flag this warning (50) has been chosen arbitrarily, and does not constitute a sufficient sample size from a statistical point of view.")
   }
-  rm(temp.landmark, temp.ids.lmk)
+  rm(temp_landmark, temp_ids_lmk)
 
-  ### Assign column names to pv.precalc
-  if (!is.null(pv.precalc)){
-    if(ncol(pv.precalc) != ncol (tp.pred)){
-      stop("pv.precalc must have same number of columns as tp.pred, even if the probability (and therefore pseudo-values) of entering these states is zero")
+  ### Assign column names to pv_precalc
+  if (!is.null(pv_precalc)){
+    if(ncol(pv_precalc) != ncol (tp_pred)){
+      stop("pv_precalc must have same number of columns as tp_pred, even if the probability (and therefore pseudo-values) of entering these states is zero")
     } else {
-      colnames(pv.precalc) <- paste("pstate", 1:ncol(pv.precalc), sep = "")
+      colnames(pv_precalc) <- paste("pstate", 1:ncol(pv_precalc), sep = "")
     }
   }
 
@@ -487,223 +490,223 @@ calib_msm <- function(data.ms,
   ########################
 
   ### Extract transition matrix from msdata object
-  tmat <- attributes(data.ms)$trans
+  tmat <- attributes(data_ms)$trans
 
   ### Assign the maximum state an individual may enter
-  max.state <- max(data.ms$to)
+  max_state <- max(data_ms$to)
 
-  ### Assign colnames to predicted transition probabilities (and in tp.pred.plot)
-  colnames(tp.pred) <- paste("tp.pred", 1:ncol(tp.pred), sep = "")
-  if (!is.null(tp.pred.plot)){
-    colnames(tp.pred.plot) <- paste("tp.pred", 1:ncol(tp.pred), sep = "")
+  ### Assign colnames to predicted transition probabilities (and in tp_pred_plot)
+  colnames(tp_pred) <- paste("tp_pred", 1:ncol(tp_pred), sep = "")
+  if (!is.null(tp_pred_plot)){
+    colnames(tp_pred_plot) <- paste("tp_pred", 1:ncol(tp_pred), sep = "")
   }
 
   ### Estimate logit transformation of the predicted risks, which are the linear predictors in the binary logistic regression models
-  tp.pred.logit <- log(tp.pred[,valid.transitions]/(1-tp.pred[,valid.transitions]))
-  colnames(tp.pred.logit) <- paste("tp.pred.logit", valid.transitions, sep = "")
+  tp_pred_logit <- log(tp_pred[,valid_transitions]/(1-tp_pred[,valid_transitions]))
+  colnames(tp_pred_logit) <- paste("tp_pred_logit", valid_transitions, sep = "")
 
   ### Estimate log-ratios of the predicted risks, which are the linear predictors in the multinomial logistic model
-  tp.pred.mlr <- tp.pred[,valid.transitions]
-  tp.pred.mlr <- log(tp.pred.mlr[,2:ncol(tp.pred.mlr)]/tp.pred.mlr[,1])
-  colnames(tp.pred.mlr) <- paste("mlr.lp", 1:(ncol(tp.pred.mlr)), sep = "")
+  tp_pred_mlr <- tp_pred[,valid_transitions]
+  tp_pred_mlr <- log(tp_pred_mlr[,2:ncol(tp_pred_mlr)]/tp_pred_mlr[,1])
+  colnames(tp_pred_mlr) <- paste("mlr_lp", 1:(ncol(tp_pred_mlr)), sep = "")
 
-  ### Add these, along with the predicted risks, to data.raw
-  data.raw <- data.frame(data.raw, tp.pred[,valid.transitions], tp.pred.logit, tp.pred.mlr)
+  ### Add these, along with the predicted risks, to data_raw
+  data_raw <- data.frame(data_raw, tp_pred[,valid_transitions], tp_pred_logit, tp_pred_mlr)
 
 
-  ### If specified, add the predicted risks and logit transformation to tp.pred.plot
-  ### Note we do not add the log-ratios, because the tp.pred.plot argument does not work for calib_type = "mlr"
-  if (!is.null(tp.pred.plot)){
-    tp.pred.plot.logit <- log(tp.pred.plot[,valid.transitions]/(1-tp.pred.plot[,valid.transitions]))
-    colnames(tp.pred.plot.logit) <- paste("tp.pred.logit", valid.transitions, sep = "")
-    tp.pred.plot <- data.frame(tp.pred.plot[,valid.transitions], tp.pred.plot.logit)
+  ### If specified, add the predicted risks and logit transformation to tp_pred_plot
+  ### Note we do not add the log-ratios, because the tp_pred_plot argument does not work for calib_type = "mlr"
+  if (!is.null(tp_pred_plot)){
+    tp_pred_plot_logit <- log(tp_pred_plot[,valid_transitions]/(1-tp_pred_plot[,valid_transitions]))
+    colnames(tp_pred_plot_logit) <- paste("tp_pred_logit", valid_transitions, sep = "")
+    tp_pred_plot <- data.frame(tp_pred_plot[,valid_transitions], tp_pred_plot_logit)
   }
 
   ### Extract which state individuals are in at time t
-  ids.state.list <- vector("list", max.state)
-  for (k in valid.transitions){
-    ids.state.list[[k]] <- extract_ids_states(data.ms, tmat, k, t)
+  ids_state_list <- vector("list", max_state)
+  for (k in valid_transitions){
+    ids_state_list[[k]] <- extract_ids_states(data_ms, tmat, k, t)
   }
 
   ### Create a variable to say which state an individual was in at the time of interest
   ## Create list containing the relevant data
-  v1 <- data.raw$id
-  m1 <- outer(v1, ids.state.list, FUN = Vectorize('%in%'))
-  state.poly <- lapply(split(m1, row(m1)), function(x) (1:max.state)[x])
+  v1 <- data_raw$id
+  m1 <- outer(v1, ids_state_list, FUN = Vectorize('%in%'))
+  state_poly <- lapply(split(m1, row(m1)), function(x) (1:max_state)[x])
 
   ## Change integer(0) values to NA's
-  idx <- !sapply(state.poly, length)
-  state.poly[idx] <- NA
+  idx <- !sapply(state_poly, length)
+  state_poly[idx] <- NA
 
-  ## Add to data.raw
-  data.raw <- dplyr::mutate(data.raw, state.poly = unlist(state.poly),
-                            state.poly.fac = factor(state.poly))
+  ## Add to data_raw
+  data_raw <- dplyr::mutate(data_raw, state_poly = unlist(state_poly),
+                            state_poly_fac = factor(state_poly))
 
   ### Create binary variables for each possible state that can be transitioned to
   ## Start by creating NA data.frame
-  temp.dummy <- data.frame(matrix(NA, ncol = length(valid.transitions), nrow = nrow(data.raw)))
+  temp_dummy <- data.frame(matrix(NA, ncol = length(valid_transitions), nrow = nrow(data_raw)))
 
   ## Create dummy variables
-  temp.dummy.calc <- stats::model.matrix(~state.poly.fac - 1, data.raw)
+  temp_dummy_calc <- stats::model.matrix(~state_poly_fac - 1, data_raw)
 
-  ## Assign to temp.dummy, for rows where data.raw is not NA
-  temp.dummy[!is.na(data.raw$state.poly), ] <- temp.dummy.calc
+  ## Assign to temp_dummy, for rows where data_raw is not NA
+  temp_dummy[!is.na(data_raw$state_poly), ] <- temp_dummy_calc
 
   ## Assign colnames
-  colnames(temp.dummy) <- paste("state", valid.transitions, ".bin", sep = "")
+  colnames(temp_dummy) <- paste("state", valid_transitions, "_bin", sep = "")
 
   ### Add to dataset
-  data.raw <- cbind(data.raw, temp.dummy)
-  rm(temp.dummy)
+  data_raw <- cbind(data_raw, temp_dummy)
+  rm(temp_dummy)
 
   ### Define the transitions for which we will be making plots for
-  if (is.null(transitions.out)){
-    transitions.out <- valid.transitions
+  if (is.null(transitions_out)){
+    transitions_out <- valid_transitions
   }
 
   ##########################
   ### Assess calibration ###
   ##########################
-  if (calib.type == "blr"){
-    output.object <- calib_blr_ipcw(data.raw = data.raw,
-                                    data.ms = data.ms,
-                                    tp.pred.plot = tp.pred.plot,
+  if (calib_type == "blr"){
+    output_object <- calib_blr_ipcw(data_raw = data_raw,
+                                    data_ms = data_ms,
+                                    tp_pred_plot = tp_pred_plot,
                                     j = j,
                                     s = s,
                                     t = t,
-                                    curve.type = curve.type,
-                                    rcs.nk = rcs.nk,
-                                    loess.span = loess.span,
-                                    loess.degree = loess.degree,
-                                    loess.surface = loess.surface, # no need for loess.statistics argument as never producing parametric confidence interval for calib_blr
-                                    loess.trace.hat = loess.trace.hat,
-                                    loess.cell = loess.cell,
-                                    loess.iterations = loess.iterations,
-                                    loess.iterTrace = loess.iterTrace,
-                                    weights.provided = weights.provided,
-                                    w.function = w.function,
-                                    w.covs = w.covs,
-                                    w.landmark.type,
-                                    w.max = w.max,
-                                    w.stabilised = w.stabilised,
-                                    w.max.follow = w.max.follow,
+                                    curve_type = curve_type,
+                                    rcs_nk = rcs_nk,
+                                    loess_span = loess_span,
+                                    loess_degree = loess_degree,
+                                    loess_surface = loess_surface, # no need for loess_statistics argument as never producing parametric confidence interval for calib_blr
+                                    loess_trace_hat = loess_trace_hat,
+                                    loess_cell = loess_cell,
+                                    loess_iterations = loess_iterations,
+                                    loess_iterTrace = loess_iterTrace,
+                                    weights_provided = weights_provided,
+                                    w_function = w_function,
+                                    w_covs = w_covs,
+                                    w_landmark_type,
+                                    w_max = w_max,
+                                    w_stabilised = w_stabilised,
+                                    w_max_follow = w_max_follow,
                                     CI = CI,
-                                    CI.type = CI.type,
-                                    CI.R.boot = CI.R.boot,
-                                    CI.seed = CI.seed,
-                                    transitions.out = transitions.out,
-                                    assess.moderate = assess.moderate,
-                                    assess.mean = assess.mean, ...)
-  } else if (calib.type == "mlr"){
+                                    CI_type = CI_type,
+                                    CI_R_boot = CI_R_boot,
+                                    CI_seed = CI_seed,
+                                    transitions_out = transitions_out,
+                                    assess_moderate = assess_moderate,
+                                    assess_mean = assess_mean, ...)
+  } else if (calib_type == "mlr"){
     ### Estimate predicted-obsserved probabilities using the MLR-IPCW method
-    output.object <- calib_mlr_ipcw(data.raw = data.raw,
-                                    data.ms = data.ms,
+    output_object <- calib_mlr_ipcw(data_raw = data_raw,
+                                    data_ms = data_ms,
                                     j = j,
                                     s = s,
                                     t = t,
-                                    weights.provided = weights.provided,
-                                    w.function = w.function,
-                                    w.covs = w.covs,
-                                    w.landmark.type = w.landmark.type,
-                                    w.max = w.max,
-                                    w.stabilised = w.stabilised,
-                                    w.max.follow = w.max.follow,
-                                    mlr.smoother.type = mlr.smoother.type,
-                                    mlr.ps.int = mlr.ps.int,
-                                    mlr.degree = mlr.degree,
-                                    mlr.s.df = mlr.s.df,
-                                    mlr.niknots = mlr.niknots,
+                                    weights_provided = weights_provided,
+                                    w_function = w_function,
+                                    w_covs = w_covs,
+                                    w_landmark_type = w_landmark_type,
+                                    w_max = w_max,
+                                    w_stabilised = w_stabilised,
+                                    w_max_follow = w_max_follow,
+                                    mlr_smoother_type = mlr_smoother_type,
+                                    mlr_ps_int = mlr_ps_int,
+                                    mlr_degree = mlr_degree,
+                                    mlr_s_df = mlr_s_df,
+                                    mlr_niknots = mlr_niknots,
                                     CI = CI,
-                                    CI.R.boot = CI.R.boot,
-                                    CI.seed = CI.seed,
-                                    valid.transitions = valid.transitions,
-                                    assess.moderate = assess.moderate,
-                                    assess.mean = assess.mean, ...)
-  } else if (calib.type == "pv"){
-    output.object <- calib_pv(data.raw = data.raw,
-                              data.ms = data.ms,
-                              tp.pred.plot = tp.pred.plot,
+                                    CI_R_boot = CI_R_boot,
+                                    CI_seed = CI_seed,
+                                    valid_transitions = valid_transitions,
+                                    assess_moderate = assess_moderate,
+                                    assess_mean = assess_mean, ...)
+  } else if (calib_type == "pv"){
+    output_object <- calib_pv(data_raw = data_raw,
+                              data_ms = data_ms,
+                              tp_pred_plot = tp_pred_plot,
                               j = j,
                               s = s,
                               t = t,
-                              curve.type = curve.type,
-                              rcs.nk = rcs.nk,
-                              loess.span = loess.span,
-                              loess.degree = loess.degree,
-                              loess.surface = loess.surface,
-                              loess.statistics = loess.statistics,
-                              loess.trace.hat = loess.trace.hat,
-                              loess.cell = loess.cell,
-                              loess.iterations = loess.iterations,
-                              loess.iterTrace = loess.iterTrace,
-                              pv.group.vars = pv.group.vars,
-                              pv.n.pctls = pv.n.pctls,
-                              pv.precalc = pv.precalc,
-                              pv.ids = pv.ids,
+                              curve_type = curve_type,
+                              rcs_nk = rcs_nk,
+                              loess_span = loess_span,
+                              loess_degree = loess_degree,
+                              loess_surface = loess_surface,
+                              loess_statistics = loess_statistics,
+                              loess_trace_hat = loess_trace_hat,
+                              loess_cell = loess_cell,
+                              loess_iterations = loess_iterations,
+                              loess_iterTrace = loess_iterTrace,
+                              pv_group_vars = pv_group_vars,
+                              pv_n_pctls = pv_n_pctls,
+                              pv_precalc = pv_precalc,
+                              pv_ids = pv_ids,
                               CI = CI,
-                              CI.type = CI.type,
-                              CI.R.boot = CI.R.boot,
-                              CI.seed = CI.seed,
-                              transitions.out = transitions.out)
-  } else if (calib.type == "aj"){
-    output.object <- calib_aj(data.raw = data.raw,
-                              data.ms = data.ms,
+                              CI_type = CI_type,
+                              CI_R_boot = CI_R_boot,
+                              CI_seed = CI_seed,
+                              transitions_out = transitions_out)
+  } else if (calib_type == "aj"){
+    output_object <- calib_aj(data_raw = data_raw,
+                              data_ms = data_ms,
                               j = j,
                               s = s,
                               t = t,
-                              pv.group.vars = pv.group.vars,
-                              pv.n.pctls = pv.n.pctls,
+                              pv_group_vars = pv_group_vars,
+                              pv_n_pctls = pv_n_pctls,
                               CI = CI,
-                              CI.type = CI.type,
-                              CI.R.boot = CI.R.boot,
-                              CI.seed = CI.seed,
-                              transitions.out = transitions.out,
-                              valid.transitions = valid.transitions)
+                              CI_type = CI_type,
+                              CI_R_boot = CI_R_boot,
+                              CI_seed = CI_seed,
+                              transitions_out = transitions_out,
+                              valid_transitions = valid_transitions)
   }
 
   ### Create metadata object
-  metadata <- list("valid.transitions" = as.numeric(valid.transitions),
-                   "assessed.transitions" = as.numeric(transitions.out),
+  metadata <- list("valid_transitions" = as.numeric(valid_transitions),
+                   "assessed_transitions" = as.numeric(transitions_out),
                    "CI" = CI,
-                   "CI.type" = CI.type,
-                   "CI.R.boot" = CI.R.boot,
+                   "CI_type" = CI_type,
+                   "CI_R_boot" = CI_R_boot,
                    "j" = j,
                    "s" = s,
                    "t" = t,
-                   "calib.type" = calib.type)
-  if (calib.type %in% c("blr", "mlr")){
-    metadata[["curve.type"]] <- curve.type
-  } else if (calib.type %in% c("pv", "aj")){
-    metadata[["pv.group.vars"]] <- pv.group.vars
-    metadata[["pv.n.pctls"]] <- pv.n.pctls
-    if (calib.type == "pv" & is.null(pv.ids)){
-      metadata[["curve.type"]] <- curve.type
+                   "calib_type" = calib_type)
+  if (calib_type %in% c("blr", "mlr")){
+    metadata[["curve_type"]] <- curve_type
+  } else if (calib_type %in% c("pv", "aj")){
+    metadata[["pv_group_vars"]] <- pv_group_vars
+    metadata[["pv_n_pctls"]] <- pv_n_pctls
+    if (calib_type == "pv" & is.null(pv_ids)){
+      metadata[["curve_type"]] <- curve_type
     }
   }
   if (CI != FALSE){
     metadata[["CI"]] <- CI
-    metadata[["CI.type"]] <- CI.type
-    if (CI.type == "bootstrap"){
-      metadata[["CI.R.boot"]] <- CI.R.boot
+    metadata[["CI_type"]] <- CI_type
+    if (CI_type == "bootstrap"){
+      metadata[["CI_R_boot"]] <- CI_R_boot
     }
   }
 
   ### Crate a combined output object with metadata, as well as plot data
-  output.object[["metadata"]] <- metadata
+  output_object[["metadata"]] <- metadata
 
   ### Assign classes
-  if (calib.type == "blr"){
-    class(output.object) <- c("calib_blr", "calib_msm")
-  } else if (calib.type == "mlr"){
-    class(output.object) <- c("calib_mlr", "calib_msm")
-  } else if (calib.type == "pv"){
-    class(output.object) <- c("calib_pv", "calib_msm")
-  } else if (calib.type == "aj"){
-    class(output.object) <- c("calib_aj", "calib_msm")
+  if (calib_type == "blr"){
+    class(output_object) <- c("calib_blr", "calib_msm")
+  } else if (calib_type == "mlr"){
+    class(output_object) <- c("calib_mlr", "calib_msm")
+  } else if (calib_type == "pv"){
+    class(output_object) <- c("calib_pv", "calib_msm")
+  } else if (calib_type == "aj"){
+    class(output_object) <- c("calib_aj", "calib_msm")
   }
 
   ### Return output object
-  return(output.object)
+  return(output_object)
 
 }
 
@@ -711,16 +714,16 @@ calib_msm <- function(data.ms,
 #' @export
 summary.calib_msm <- function(object, ...) {
 
-  cat("The method used to assess calibration was", ifelse(object[["metadata"]]$calib.type == "blr", "BLR-IPCW",
-                                                          ifelse(object[["metadata"]]$calib.type == "mlr", "MLR-IPCW",
-                                                                 ifelse(object[["metadata"]]$calib.type == "pv", "Pseudo-values with Aalen-Johansen estimator",
-                                                                        ifelse(object[["metadata"]]$calib.type == "aj", "Aalen-Johansen estimator")))),  sep = " ")
+  cat("The method used to assess calibration was", ifelse(object[["metadata"]]$calib_type == "blr", "BLR-IPCW",
+                                                          ifelse(object[["metadata"]]$calib_type == "mlr", "MLR-IPCW",
+                                                                 ifelse(object[["metadata"]]$calib_type == "pv", "Pseudo-values with Aalen-Johansen estimator",
+                                                                        ifelse(object[["metadata"]]$calib_type == "aj", "Aalen-Johansen estimator")))),  sep = " ")
 
   cat("\n\nThere were non-zero predicted transition probabilities into states ",
-      paste(object[["metadata"]]$valid.transitions, collapse = ","),  sep = " ")
+      paste(object[["metadata"]]$valid_transitions, collapse = ","),  sep = " ")
 
   cat("\n\nCalibration curves have been estimated for transitions into states ",
-      paste(object[["metadata"]]$assessed.transitions, collapse = ","), sep = " ")
+      paste(object[["metadata"]]$assessed_transitions, collapse = ","), sep = " ")
 
   cat("\n\nCalibration was assessed at time ", object[["metadata"]]$t, " and calibration was assessed in a landmarked cohort of individuals in state j = ", object[["metadata"]]$j,
       " at time s = ", object[["metadata"]]$s, sep = "")
@@ -729,19 +732,19 @@ summary.calib_msm <- function(object, ...) {
     cat("\n\nA confidence interval was not estimated")
   } else {
     cat("\n\nA ", object[["metadata"]]$CI, "% confidence interval was estimated with ",
-        ifelse(object[["metadata"]]$CI.type == "bootstrap",
-               paste("bootstrapping with ", object[["metadata"]]$CI.R.boot, " bootstrap replicates", sep = ""),
-               ifelse(object[["metadata"]]$CI.type == "parametric",
+        ifelse(object[["metadata"]]$CI_type == "bootstrap",
+               paste("bootstrapping with ", object[["metadata"]]$CI_R_boot, " bootstrap replicates", sep = ""),
+               ifelse(object[["metadata"]]$CI_type == "parametric",
                       "a parametric approach")), sep = "")
   }
 
-  if (object[["metadata"]]$calib.type == "pv"){
-    if (!is.null(object[["metadata"]]$pv.group.vars)){
-      cat("\n\nPseudo-values were calculated within groups specified by covariates", paste(object[["metadata"]]$pv.group.vars, collapse = ","), sep = "")
+  if (object[["metadata"]]$calib_type == "pv"){
+    if (!is.null(object[["metadata"]]$pv_group_vars)){
+      cat("\n\nPseudo-values were calculated within groups specified by covariates", paste(object[["metadata"]]$pv_group_vars, collapse = ","), sep = "")
     }
 
-    if (!is.null(object[["metadata"]]$pv.n.pctls)){
-      cat("\n\nPseudo-values were calculated within groups defined by predicted risk of each transition probability. the numbre of groups was", object[["metadata"]]$pv.n.pctls, sep = "")
+    if (!is.null(object[["metadata"]]$pv_n_pctls)){
+      cat("\n\nPseudo-values were calculated within groups defined by predicted risk of each transition probability. the numbre of groups was", object[["metadata"]]$pv_n_pctls, sep = "")
     }
   }
 
@@ -778,7 +781,7 @@ print.calib_aj <- function(x, ...) {
 #' @export
 plot.calib_aj <- function(x, ...) {
 
-  print("Calibration plots are not available for calib.type = 'aj'")
+  print("Calibration plots are not available for calib_type = 'aj'")
 
 }
 

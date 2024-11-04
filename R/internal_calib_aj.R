@@ -11,90 +11,90 @@
 #' @returns A list of datasets for each calibration plot.
 #'
 #' @noRd
-calib_aj <- function(data.ms,
-                     data.raw,
+calib_aj <- function(data_ms,
+                     data_raw,
                      j,
                      s,
                      t,
-                     pv.group.vars = NULL,
-                     pv.n.pctls = NULL,
+                     pv_group_vars = NULL,
+                     pv_n_pctls = NULL,
                      CI = FALSE,
-                     CI.type = 'bootstrap',
-                     CI.R.boot = NULL,
-                     CI.seed = 1,
-                     transitions.out = NULL,
-                     valid.transitions){
+                     CI_type = 'bootstrap',
+                     CI_R_boot = NULL,
+                     CI_seed = 1,
+                     transitions_out = NULL,
+                     valid_transitions){
 
   ### 1) If a confidence interval was requested using bootstrapping, use calib_AJ_boot in conjuction with boot::boot.
   ### This must be done separately for each state.
 
   ### 2) If a confidence interval was requested using parametric form, call calib_AJ_boot once, specifying indices to be
-  ### the sequence 1:nrow(data.raw)
+  ### the sequence 1:nrow(data_raw)
   ### PLACEHOLDER - THIS NEEDS TO BE ADDED XXXXX
 
   ### 3) If a confidence interval was not requested, call calib_AJ_boot once, specifying indices to be
-  ### the sequence 1:nrow(data.raw).
+  ### the sequence 1:nrow(data_raw).
 
-  ### Note that 2) and 3) are the same. This is because the function calib_AJ_boot is dependent on CI and CI.type,
-  ### which were defined as input into calib_pAJ. They will there give different output (as they should) when it is run.
+  ### Note that 2) and 3) are the same. This is because the function calib_AJ_boot is dependent on CI and CI_type,
+  ### which were defined as input into calib_aj. They will there give different output (as they should) when it is run.
 
   ### If a confidence interval was not requested, run this function once,
-  if (CI != FALSE & CI.type == "bootstrap"){
+  if (CI != FALSE & CI_type == "bootstrap"){
 
     ### Define alpha for CI's
     alpha <- (1-CI/100)/2
 
     ### Create object to store plot data
-    output.object.mean <- vector("list", length(transitions.out))
-    names(output.object.mean) <- paste("state", transitions.out, sep = "")
+    output_object_mean <- vector("list", length(transitions_out))
+    names(output_object_mean) <- paste("state", transitions_out, sep = "")
 
     ### Put function through bootstrap
-    boot.mean <- boot::boot(data.raw,
+    boot_mean <- boot::boot(data_raw,
                             calib_AJ_boot,
-                            R = CI.R.boot,
-                            data.ms = data.ms,
+                            R = CI_R_boot,
+                            data_ms = data_ms,
                             j = j,
                             s2 = s,
                             t = t,
-                            pv.group.vars = pv.group.vars,
-                            pv.n.pctls = pv.n.pctls,
-                            transitions.out = transitions.out,
-                            valid.transitions = valid.transitions)
+                            pv_group_vars = pv_group_vars,
+                            pv_n_pctls = pv_n_pctls,
+                            transitions_out = transitions_out,
+                            valid_transitions = valid_transitions)
 
     ### Extract confidence bands
-    lower <- apply(boot.mean$t, 2, stats::quantile, probs = alpha, na.rm = TRUE)
-    upper <- apply(boot.mean$t, 2, stats::quantile, probs = 1-alpha, na.rm = TRUE)
+    lower <- apply(boot_mean$t, 2, stats::quantile, probs = alpha, na.rm = TRUE)
+    upper <- apply(boot_mean$t, 2, stats::quantile, probs = 1-alpha, na.rm = TRUE)
 
     ### Cycle through states and assign to correct part of output object
-    for (state in 1:length(transitions.out)){
+    for (state in 1:length(transitions_out)){
 
       ### Put into output object
-      output.object.mean[[state]] <- c("mean" = as.numeric(boot.mean$t0[state]),
-                                       "mean.lower" = as.numeric(lower[state]),
-                                       "mean.upper" = as.numeric(upper[state]))
+      output_object_mean[[state]] <- c("mean" = as.numeric(boot_mean$t0[state]),
+                                       "mean_lower" = as.numeric(lower[state]),
+                                       "mean_upper" = as.numeric(upper[state]))
     }
   } else {
 
     ### This will just estimate mean calibration without applying bootstrapping
-    output.object.mean <- calib_AJ_boot(data.raw = data.raw,
-                                        indices = 1:nrow(data.raw),
-                                        data.ms = data.ms,
+    output_object_mean <- calib_AJ_boot(data_raw = data_raw,
+                                        indices = 1:nrow(data_raw),
+                                        data_ms = data_ms,
                                         j = j,
                                         s2 = s,
                                         t = t,
-                                        pv.group.vars = pv.group.vars,
-                                        pv.n.pctls = pv.n.pctls,
-                                        transitions.out = transitions.out,
-                                        valid.transitions = valid.transitions)
+                                        pv_group_vars = pv_group_vars,
+                                        pv_n_pctls = pv_n_pctls,
+                                        transitions_out = transitions_out,
+                                        valid_transitions = valid_transitions)
 
-    names(output.object.mean) <- paste("state", transitions.out, sep = "")
+    names(output_object_mean) <- paste("state", transitions_out, sep = "")
 
   }
 
   ### Define output object
-  output.object.mean <- list("mean" = output.object.mean)
+  output_object_mean <- list("mean" = output_object_mean)
 
-  return(output.object.mean)
+  return(output_object_mean)
 
 }
 
@@ -106,22 +106,22 @@ calib_aj <- function(data.ms,
 #'
 #' @details
 #' Function written in a format so that it can be used in combination with \code{\link[boot]{boot}}
-#' for bootstrapping. Specifying `indices = 1:nrow(data.raw)` will produce mean calibration for
+#' for bootstrapping. Specifying `indices = 1:nrow(data_raw)` will produce mean calibration for
 #' data.raw with no bootstrapping applied.
 #'
 #' @returns A vector of mean calibration.
 #'
 #' @noRd
-calib_AJ_boot <- function(data.raw,
+calib_AJ_boot <- function(data_raw,
                           indices,
-                          data.ms,
+                          data_ms,
                           j,
                           s2, # can't use 's' because it matches an argument for the boot function
                           t,
-                          pv.group.vars,
-                          pv.n.pctls,
-                          transitions.out,
-                          valid.transitions){
+                          pv_group_vars,
+                          pv_n_pctls,
+                          transitions_out,
+                          valid_transitions){
 
   ### Create object 's' from 's2'
   s <- s2
@@ -130,61 +130,61 @@ calib_AJ_boot <- function(data.raw,
   ### Apply bootstrapping
 
   ### Create bootstrapped dataset
-  data.raw.boot <- data.raw[indices, ]
+  data_raw_boot <- data_raw[indices, ]
 
   ### Create a new id for these individuals (calc_pv_aj relies on each individual having a unique identifier),
   ### meaning the duplicate values in the bootstrapped datasets will cause problems
-  data.raw.boot$id2 <- 1:nrow(data.raw.boot)
+  data_raw_boot$id2 <- 1:nrow(data_raw_boot)
 
-  ### Create bootstrapped data.ms (we replicate the choice of patients that was chosen in data.raw)
-  data.ms.boot <- apply_bootstrap_msdata(data.ms = data.ms, indices = indices)
+  ### Create bootstrapped data_ms (we replicate the choice of patients that was chosen in data_raw)
+  data_ms_boot <- apply_bootstrap_msdata(data_ms = data_ms, indices = indices)
 
   ### Extract transition matrix from original msdata object, as this will have been lost when bootstrapping
-  tmat <- attributes(data.ms)$trans
+  tmat <- attributes(data_ms)$trans
 
-  ### Apply attribute tmat to the bootstrapped data.ms dataset
-  attributes(data.ms.boot)$trans <- tmat
+  ### Apply attribute tmat to the bootstrapped data_ms dataset
+  attributes(data_ms_boot)$trans <- tmat
 
   ### Set 'id' to be same as 'id2' in bootstrapped datasets, as the function calc_pv_aj works by removing individual
   ### with the 'id' variable
-  data.ms.boot$id <- data.ms.boot$id2
-  data.raw.boot$id <- data.raw.boot$id2
+  data_ms_boot$id <- data_ms_boot$id2
+  data_raw_boot$id <- data_raw_boot$id2
 
-  ### Relabel data.ms.boot and data.raw.boot and remove '.boot' datasets
-  data.raw <- data.raw.boot
-  data.ms <- data.ms.boot
-  rm(data.raw.boot, data.ms.boot)
+  ### Relabel data_ms_boot and data_raw_boot and remove '_boot' datasets
+  data_raw <- data_raw_boot
+  data_ms <- data_ms_boot
+  rm(data_raw_boot, data_ms_boot)
 
   ###
   ### Apply landmarking
 
-  ### For calib_aj, we need to apply landmarking to both data.raw and data.ms
-  ### We model the pseudo-values on the predicted transition probabilities in the bootstrapped data.raw dataset
-  ### However the calculation of the pseudo-values must be done in the bootstrapped data.ms dataset
+  ### For calib_aj, we need to apply landmarking to both data_raw and data_ms
+  ### We model the pseudo-values on the predicted transition probabilities in the bootstrapped data_raw dataset
+  ### However the calculation of the pseudo-values must be done in the bootstrapped data_ms dataset
 
-  ### Apply landmarking to data.raw and data.ms
-  data.raw.lmk.js <- apply_landmark(data.raw = data.raw,
-                                    data.ms = data.ms,
+  ### Apply landmarking to data_raw and data_ms
+  data_raw_lmk_js <- apply_landmark(data_raw = data_raw,
+                                    data_ms = data_ms,
                                     j = j,
                                     s = s,
                                     t = t,
-                                    exclude.cens.t = FALSE,
-                                    data.return = "data.raw")
-  data.ms.lmk.js <- apply_landmark(data.raw = data.raw,
-                                       data.ms = data.ms,
+                                    exclude_cens_t = FALSE,
+                                    data_return = "data_raw")
+  data_ms_lmk_js <- apply_landmark(data_raw = data_raw,
+                                       data_ms = data_ms,
                                        j = j,
                                        s = s,
                                        t = t,
-                                       exclude.cens.t = FALSE,
-                                       data.return = "data.ms")
+                                       exclude_cens_t = FALSE,
+                                       data_return = "data_ms")
 
   ###
   ### Restructure mstate data so that time s = time 0, and relabel transitions to 1, 2,...
   ### This is required in order to estimate Aalen-Johansene estimator and calculate pseudo-values
 
   ### Reduce transition times by s and remove observations which now occur entirely prior to start up
-  data.ms.lmk.js <-
-    dplyr::mutate(data.ms.lmk.js,
+  data_ms_lmk_js <-
+    dplyr::mutate(data_ms_lmk_js,
                   Tstart = pmax(0, Tstart - s),
                   Tstop = pmax(0, Tstop - s),
                   time = Tstop - Tstart) |>
@@ -195,57 +195,57 @@ calib_AJ_boot <- function(data.raw,
   ### Otherwise mstate::msfit will throw out an unneccesary (in this context) warning
 
   ### Start by identifying which transitions these are
-  suppressMessages(zero.transition.table <- data.ms.lmk.js |>
+  suppressMessages(zero_transition_table <- data_ms_lmk_js |>
                      dplyr::group_by(from, to) |>
                      dplyr::summarise(Frequency = sum(status)))
 
-  ### Only edit data.ms if some transitions have a frequency of zero
-  if (any(zero.transition.table$Frequency == 0)){
+  ### Only edit data_ms if some transitions have a frequency of zero
+  if (any(zero_transition_table$Frequency == 0)){
 
     ### Extract the transitions
-    zero.transition.from <- zero.transition.table$from[zero.transition.table$Frequency == 0]
-    zero.transition.to <- zero.transition.table$to[zero.transition.table$Frequency == 0]
+    zero_transition_from <- zero_transition_table$from[zero_transition_table$Frequency == 0]
+    zero_transition_to <- zero_transition_table$to[zero_transition_table$Frequency == 0]
 
     ### Remove them from dataset
-    for (i in 1:length(zero.transition.from)){
-      data.ms.lmk.js <- base::subset(data.ms.lmk.js, !(from == zero.transition.from[i] & to == zero.transition.to[i]))
+    for (i in 1:length(zero_transition_from)){
+      data_ms_lmk_js <- base::subset(data_ms_lmk_js, !(from == zero_transition_from[i] & to == zero_transition_to[i]))
       rm(i)
     }
   }
 
   ### Fit csh's with no predictors
   strata <- survival::strata
-  csh.aj <- survival::coxph(survival::Surv(Tstart, Tstop, status) ~ strata(trans), data.ms.lmk.js)
+  csh_aj <- survival::coxph(survival::Surv(Tstart, Tstop, status) ~ strata(trans), data_ms_lmk_js)
 
   ### Extract numeric values for transitions that can occur in the landmarked cohort
-  landmark.transitions <- as.numeric(sapply(csh.aj[["xlevels"]]$`strata(trans)`, gsub, pattern = ".*=", replacement =  ""))
+  landmark_transitions <- as.numeric(sapply(csh_aj[["xlevels"]]$`strata(trans)`, gsub, pattern = ".*=", replacement =  ""))
 
   ### Create a mapping from the old transition numbers to new transition numbers which are in sequence
-  map.transitions <- data.frame("new" = 1:length(landmark.transitions),
-                                "old" = landmark.transitions)
+  map_transitions <- data.frame("new" = 1:length(landmark_transitions),
+                                "old" = landmark_transitions)
 
   ### Write a function to apply the mapping
-  map.func <- function(x){
+  map_func <- function(x){
     if(!is.na(x)){
-      if(!(x %in% landmark.transitions)){
+      if(!(x %in% landmark_transitions)){
         return(NA)
-      } else if (x %in% landmark.transitions)
-        return(map.transitions$new[map.transitions$old == x])
+      } else if (x %in% landmark_transitions)
+        return(map_transitions$new[map_transitions$old == x])
     } else if (is.na(x))
       return(NA)
   }
 
   ### Create new tmat for the new transition numbers
-  tmat.lmk.js <- apply(tmat, c(1,2), map.func)
+  tmat_lmk_js <- apply(tmat, c(1,2), map_func)
 
-  ### Define max.state (note this be will the same as ncol(tmat))
-  max.state <- ncol(tmat.lmk.js)
+  ### Define max_state (note this be will the same as ncol(tmat))
+  max_state <- ncol(tmat_lmk_js)
 
   ######################################
   ### A) CALCULATE THE PSEUDO VALUES ###
   ######################################
 
-  ### Data must now be split up into groups defined by predictor variables (pv.group.vars) and/or predicted risks (pv.n.pctls)
+  ### Data must now be split up into groups defined by predictor variables (pv_group_vars) and/or predicted risks (pv_n_pctls)
 
   ### Pseudo-values will be calculated seperately within each of these groups. We will also calculate
   ### the Aalen-Johansen estimate of observed risk within each of these groups to enable quicker
@@ -270,24 +270,24 @@ calib_AJ_boot <- function(data.raw,
 
 
   ### There should reallly just be one function, which calcualtes Aalen-Johansen for a group, then calculates pseudo-values for individuals in that group
-  calc_aj_subgroup <- function(subset.ids, state.k = NULL){
+  calc_aj_subgroup <- function(subset_ids, state_k = NULL){
 
     ### Calculate Aalen-Johansen
-    obs.aj <- calc_aj(data.ms = base::subset(data.ms.lmk.js, id %in% subset.ids),
-                      tmat = tmat.lmk.js,
+    obs_aj <- calc_aj(data_ms = base::subset(data_ms_lmk_js, id %in% subset_ids),
+                      tmat = tmat_lmk_js,
                       t = t - s,
-                      j = j)[["obs.aj"]]
+                      j = j)[["obs_aj"]]
 
     ### Extract predicted risks in subgroup
-    pred <- data.raw.lmk.js[data.raw.lmk.js$id %in% subset.ids, ]
+    pred <- data_raw_lmk_js[data_raw_lmk_js$id %in% subset_ids, ]
 
     ### Calculate the difference between observed from AJ and mean predicted risk
-    calib.aj <- obs.aj[paste("pstate", valid.transitions, sep = "")] - colMeans(pred[, paste("tp.pred", valid.transitions, sep = "")])
-    if (!is.null(state.k)){
-      calib.aj <- calib.aj[paste("pstate", state.k, sep = "")]
+    calib_aj <- obs_aj[paste("pstate", valid_transitions, sep = "")] - colMeans(pred[, paste("tp_pred", valid_transitions, sep = "")])
+    if (!is.null(state_k)){
+      calib_aj <- calib_aj[paste("pstate", state_k, sep = "")]
     }
 
-    return(calib.aj)
+    return(calib_aj)
 
   }
 
@@ -295,44 +295,44 @@ calib_AJ_boot <- function(data.raw,
   ### APPLY calc_aj_subgroup WITHIN SUBGROUPS TO ESTIMATE PSEUDO-VALUES
   ###
 
-  if (is.null(pv.group.vars) & is.null(pv.n.pctls)){
+  if (is.null(pv_group_vars) & is.null(pv_n_pctls)){
 
     ###
     ### 1) No grouping
     ###
 
     ### Calculate psuedo-value for each individual
-    aj.out <- calc_aj_subgroup(data.raw.lmk.js$id)
-    aj.out <- unlist(aj.out)
+    aj_out <- calc_aj_subgroup(data_raw_lmk_js$id)
+    aj_out <- unlist(aj_out)
 
-    ### Reduce to transitions.out
-    aj.out <- aj.out[paste("pstate", transitions.out, sep = "")]
+    ### Reduce to transitions_out
+    aj_out <- aj_out[paste("pstate", transitions_out, sep = "")]
 
-  } else if (!is.null(pv.group.vars) & is.null(pv.n.pctls)) {
+  } else if (!is.null(pv_group_vars) & is.null(pv_n_pctls)) {
 
     ###
     ### 2) Grouping only by baseline variables
     ###
 
-    ### Split data into groups defined by the variables in pv.group.vars
-    ## Create formula to split the dataset by (by pv.group.vars)
-    split.formula <- stats::as.formula(paste("~ ", paste(pv.group.vars, collapse = "+"), sep = ""))
+    ### Split data into groups defined by the variables in pv_group_vars
+    ## Create formula to split the dataset by (by pv_group_vars)
+    split_formula <- stats::as.formula(paste("~ ", paste(pv_group_vars, collapse = "+"), sep = ""))
     ## Split the dataset into the respective groups
-    data.groups <- split(data.raw.lmk.js, split.formula)
+    data_groups <- split(data_raw_lmk_js, split_formula)
 
     ### Get group ids for subgroups
-    group.ids <- lapply(data.groups, function(x) as.numeric(x[,c("id")]))
+    group_ids <- lapply(data_groups, function(x) as.numeric(x[,c("id")]))
 
     ### Calculate pseudo-values in each subgroup
-    aj.out <- lapply(group.ids, calc_aj_subgroup)
+    aj_out <- lapply(group_ids, calc_aj_subgroup)
 
     ### Take the average of these and get into correct format
-    aj.out <- colMeans(do.call("rbind", aj.out))
+    aj_out <- colMeans(do.call("rbind", aj_out))
 
-    ### Reduce to transitions.out
-    aj.out <- aj.out[paste("pstate", transitions.out, sep = "")]
+    ### Reduce to transitions_out
+    aj_out <- aj_out[paste("pstate", transitions_out, sep = "")]
 
-  } else if (is.null(pv.group.vars) & !is.null(pv.n.pctls)) {
+  } else if (is.null(pv_group_vars) & !is.null(pv_n_pctls)) {
 
     ###
     ### 3) Grouping only by predicted risk
@@ -343,91 +343,91 @@ calib_AJ_boot <- function(data.raw,
 
     ### Note that we now need to apply the function seperately to each state because the subgroups will change depending on the state of interest.
     ### In 1) and 2), we could calculate the pseudo-values for all states simultaneously within each subgroup.
-    apply_calc_aj_subgroup_pctls <- function(state.k){
+    apply_calc_aj_subgroup_pctls <- function(state_k){
 
       ### Split data by predicted risk of state k
-      data.pctls <- base::split(data.raw.lmk.js,
-                                cut(data.raw.lmk.js[,paste("tp.pred", state.k, sep = "")],
-                                    breaks =  stats::quantile(data.raw.lmk.js[,paste("tp.pred", state.k, sep = "")],
-                                                              seq(0,1,1/pv.n.pctls)),
+      data_pctls <- base::split(data_raw_lmk_js,
+                                cut(data_raw_lmk_js[,paste("tp_pred", state_k, sep = "")],
+                                    breaks =  stats::quantile(data_raw_lmk_js[,paste("tp_pred", state_k, sep = "")],
+                                                              seq(0,1,1/pv_n_pctls)),
                                     include.lowest = TRUE))
 
       ### Get group ids for subgroups
-      group.ids <- lapply(data.pctls, function(x) as.numeric(x[,c("id")]))
+      group_ids <- lapply(data_pctls, function(x) as.numeric(x[,c("id")]))
 
       ### Calculate pseudo-values in each subgroup
-      aj.temp <- lapply(group.ids, calc_aj_subgroup, state.k = state.k)
+      aj_temp <- lapply(group_ids, calc_aj_subgroup, state_k = state_k)
 
-      return(aj.temp)
+      return(aj_temp)
 
     }
 
     ### Calculate pseudo-values in each subgroup
-    aj.out <- lapply(transitions.out, apply_calc_aj_subgroup_pctls)
+    aj_out <- lapply(transitions_out, apply_calc_aj_subgroup_pctls)
 
     ### Take the average of these and get into correct format, and also only retain calibration for the state by which
     ### the data was sorted
-    aj.out <- lapply(1:length(transitions.out), function(x) {colMeans(do.call("rbind", aj.out[[x]]))})
+    aj_out <- lapply(1:length(transitions_out), function(x) {colMeans(do.call("rbind", aj_out[[x]]))})
 
     ### Concatenate into a vector
-    aj.out <- do.call("c", aj.out)
+    aj_out <- do.call("c", aj_out)
 
-  } else if (!is.null(pv.group.vars) & !is.null(pv.n.pctls)) {
+  } else if (!is.null(pv_group_vars) & !is.null(pv_n_pctls)) {
 
     ###
     ### 4) Grouping by baseline variables and predicted risk
     ###
 
     ### Again, we must go seperate for each state
-    apply_calc_aj_subgroup_pctls_vars <- function(state.k){
+    apply_calc_aj_subgroup_pctls_vars <- function(state_k){
 
       ###
-      ### Split data into groups defined by the variables in pv.group.vars, and then predicted risk of transition k
+      ### Split data into groups defined by the variables in pv_group_vars, and then predicted risk of transition k
 
       ###
       ### Start by splitting up data by baseline variables
 
-      ### Create formula to split the dataset by (by pv.group.vars)
-      split.formula <- stats::as.formula(paste("~ ", paste(pv.group.vars, collapse = "+"), sep = ""))
+      ### Create formula to split the dataset by (by pv_group_vars)
+      split_formula <- stats::as.formula(paste("~ ", paste(pv_group_vars, collapse = "+"), sep = ""))
       ### Split the dataset into the respective groups
-      data.groups <- split(data.raw.lmk.js, split.formula)
+      data_groups <- split(data_raw_lmk_js, split_formula)
 
       ###
-      ### Split each dataset of data.groups into groups defined by percentile of predicted risk for state k
+      ### Split each dataset of data_groups into groups defined by percentile of predicted risk for state k
 
       ### Write a function to do this
-      split_group_by_pctl <- function(data.in){
-        base::split(data.in,
-                    cut(data.in[,paste("tp.pred", state.k, sep = "")],
-                        breaks =  stats::quantile(data.in[,paste("tp.pred", state.k, sep = "")],
-                                                  seq(0,1,1/pv.n.pctls)),
+      split_group_by_pctl <- function(data_in){
+        base::split(data_in,
+                    cut(data_in[,paste("tp_pred", state_k, sep = "")],
+                        breaks =  stats::quantile(data_in[,paste("tp_pred", state_k, sep = "")],
+                                                  seq(0,1,1/pv_n_pctls)),
                         include.lowest = TRUE))
       }
 
-      ### Apply to each group in data.groups
-      data.groups.pctls <- lapply(data.groups, split_group_by_pctl)
+      ### Apply to each group in data_groups
+      data_groups_pctls <- lapply(data_groups, split_group_by_pctl)
 
       ### Create a single list containing each of these datasets
-      data.groups.pctls <- unlist(data.groups.pctls, recursive = FALSE)
+      data_groups_pctls <- unlist(data_groups_pctls, recursive = FALSE)
 
       ### Get group ids for subgroups
-      group.ids <- lapply(data.groups.pctls, function(x) as.numeric(x[,c("id")]))
+      group_ids <- lapply(data_groups_pctls, function(x) as.numeric(x[,c("id")]))
 
       ### Calculate pseudo-values in each subgroup
-      aj.temp <- lapply(group.ids, calc_aj_subgroup, state.k = state.k)
+      aj_temp <- lapply(group_ids, calc_aj_subgroup, state_k = state_k)
 
-      return(aj.temp)
+      return(aj_temp)
 
     }
 
     ### Calculate pseudo-values in each subgroup
-    aj.out <- lapply(transitions.out, apply_calc_aj_subgroup_pctls_vars)
+    aj_out <- lapply(transitions_out, apply_calc_aj_subgroup_pctls_vars)
 
     ### Take the average of these and get into correct format
-    aj.out <- lapply(1:length(transitions.out), function(x) {colMeans(do.call("rbind", aj.out[[x]]))})
+    aj_out <- lapply(1:length(transitions_out), function(x) {colMeans(do.call("rbind", aj_out[[x]]))})
 
     ### Concatenate into a vector
-    aj.out <- do.call("c", aj.out)
+    aj_out <- do.call("c", aj_out)
 
   }
 
@@ -435,6 +435,6 @@ calib_AJ_boot <- function(data.raw,
   ### Return output                      ###
   ##########################################
 
-  return(aj.out)
+  return(aj_out)
 
 }

@@ -43,51 +43,51 @@ t.eval <- 1826
 We now produce calibration curves for the predicted transition probabilities out of state $j = 1$ at time $s = 0$. Given all individuals start in state $1$, there is no need to consider the transition probabilities out of states $j \neq 1$ at $s = 0$. Calibration is assessed at follow up time ($t = 1826$ days). We start by extracting the predicted transition probabilities from state $j = 1$ at time $s = 0$ from the object \code{tps0}. These are the transition probabilities we aim to assess the calibration of.
 
 ```{r}
-tp.pred.s0 <- tps0 |>
+tp_pred_s0 <- tps0 |>
   dplyr::filter(j == 1) |>
   dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
 ```
 
-We now produce calibration curves using loess smoothers for the regression model where the observed event probabilities are estimated. This is specified by \code{curve.type = "loess"}. Behaviour of the curve can be controlled using \code{loess.span} and \code{loess.degree}, which we leave as default in this example. Please refere to documentation for the \code{loess} function from the \pkg{loess} package for details of these parameters. A smaller span and/or degree will create a more smoother line. This is done for both the BLR-IPCW and pseudo-value calibration curves.
+We now produce calibration curves using loess smoothers for the regression model where the observed event probabilities are estimated. This is specified by \code{curve_type = "loess"}. Behaviour of the curve can be controlled using \code{loess.span} and \code{loess.degree}, which we leave as default in this example. Please refere to documentation for the \code{loess} function from the \pkg{loess} package for details of these parameters. A smaller span and/or degree will create a more smoother line. This is done for both the BLR-IPCW and pseudo-value calibration curves.
 
 ```{r}
-dat.calib.blr <-
-  calib_msm(data.ms = msebmtcal,
-           data.raw = ebmtcal,
+dat_calib_blr <-
+  calib_msm(data_ms = msebmtcal,
+           data_raw = ebmtcal,
            j = 1,
            s = 0,
-           t = t.eval,
-           tp.pred = tp.pred.s0,
-           calib.type = 'blr',
-           curve.type = "loess",
-           w.covs = c("year", "agecl", "proph", "match"),
+           t = t_eval,
+           tp_pred = tp_pred_s0,
+           calib_type = 'blr',
+           curve_type = "loess",
+           w_covs = c("year", "agecl", "proph", "match"),
            CI = 95,
-           CI.type = "bootstrap",
-           CI.R.boot = 200)
+           CI_type = "bootstrap",
+           CI_R_boot = 200)
 
-dat.calib.pv <-
-  calib_msm(data.ms = msebmtcal,
-           data.raw = ebmtcal,
+dat_calib_pv <-
+  calib_msm(data_ms = msebmtcal,
+           data_raw = ebmtcal,
            j = 1,
            s = 0,
-           t = t.eval,
-           tp.pred = tp.pred.s0,
-           calib.type = 'pv',
-           curve.type = "loess",
-           pv.group.vars = c("year"),
-           pv.n.pctls = 3,
+           t = t_eval,
+           tp_pred = tp_pred_s0,
+           calib_type = 'pv',
+           curve_type = "loess",
+           pv_group_vars = c("year"),
+           pv_n_pctls = 3,
            CI = 95,
-           CI.type = 'parametric')
+           CI_type = 'parametric')
 ```
 
 We now produce calibration plots using the \code{plot} function.
 
 ```{r, fig.width = 7.5, fig.height = 5, fig.fullwidth = TRUE, fig.cap = "Figure 1: BLR-IPCW calibration plots out of state j = 1 at time s = 0  estimated using loess smoothers"}
-plot(dat.calib.blr)
+plot(dat_calib_blr)
 ```
 
 ```{r, fig.width = 7.5, fig.height = 5, fig.fullwidth = TRUE, fig.cap = "Figure 2: pseudo-value calibration plots out of state j = 1 at time s = 0 estimated using loess smoothers"}
-plot(dat.calib.pv)
+plot(dat_calib_pv)
 ```
 
 The equivalent Figures from the [Overview vignette](https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf), produced using restricted cubic splines, are Figures 2 and 3.
@@ -99,50 +99,50 @@ Write a short comparison... XXXX
 We now produce calibration curves for the predicted transition probabilities out of state $j = 1$ at time $s = 100$. Calibration is assessed at follow up time ($t = 1826$ days). We start by extracting the predicted transition probabilities from state $j = 1$ at time $s = 100$ from the object \code{tps0}. These are the transition probabilities we aim to assess the calibration of.
 
 ```{r}
-tp.pred.s100 <- tps100 |>
+tp_pred_s100 <- tps100 |>
   dplyr::filter(j == 1) |>
   dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
 ```
 
-We now produce calibration curves using loess smoothers for the regression model where the observed event probabilities are estimated. This is specified by \code{curve.type = "loess"}. Behaviour of the curve can be controlled using \code{loess.span} and \code{loess.degree}, which we leave as default in this example. Please refere to documentation for the \code{loess} function from the \pkg{loess} package for details of these parameters. A smaller span and/or degree will create a more smoother line. This is done for both the BLR-IPCW and pseudo-value calibration curves.
+We now produce calibration curves using loess smoothers for the regression model where the observed event probabilities are estimated. This is specified by \code{curve_type = "loess"}. Behaviour of the curve can be controlled using \code{loess_span} and \code{loess_degree}, which we leave as default in this example. Please refere to documentation for the \code{loess} function from the \pkg{loess} package for details of these parameters. A smaller span and/or degree will create a more smoother line. This is done for both the BLR-IPCW and pseudo-value calibration curves.
 
 ```{r}
-dat.calib.blr <-
-  calib_msm(data.ms = msebmtcal,
-           data.raw = ebmtcal,
+dat_calib_blr <-
+  calib_msm(data_ms = msebmtcal,
+           data_raw = ebmtcal,
            j = 1,
            s = 100,
-           t = t.eval,
-           tp.pred = tp.pred.s100,
-           calib.type = 'blr',
-           curve.type = "loess",
-           w.covs = c("year", "agecl", "proph", "match"),
+           t = t_eval,
+           tp_pred = tp_pred_s100,
+           calib_type = 'blr',
+           curve_type = "loess",
+           w_covs = c("year", "agecl", "proph", "match"),
            CI = 95,
-           CI.type = "bootstrap",
-           CI.R.boot = 200)
+           CI_type = "bootstrap",
+           CI_R_boot = 200)
 
-dat.calib.pv <-
-  calib_msm(data.ms = msebmtcal,
-           data.raw = ebmtcal,
+dat_calib_pv <-
+  calib_msm(data_ms = msebmtcal,
+           data_raw = ebmtcal,
            j = 1,
            s = 100,
-           t = t.eval,
-           tp.pred = tp.pred.s100,
-           calib.type = 'pv',
-           curve.type = "loess",
-           pv.group.vars = c("year"),
+           t = t_eval,
+           tp_pred = tp_pred_s100,
+           calib_type = 'pv',
+           curve_type = "loess",
+           pv_group_vars = c("year"),
            CI = 95,
-           CI.type = 'parametric')
+           CI_type = 'parametric')
 ```
 
 We now produce calibration plots using the \code{plot} function.
 
 ```{r, fig.width = 7.5, fig.height = 5, fig.fullwidth = TRUE, fig.cap = "Figure 3: BLR-IPCW calibration plots out of state j = 1 at time s = 100 estimated using loess smoothers"}
-plot(dat.calib.blr)
+plot(dat_calib_blr)
 ```
 
 ```{r, fig.width = 7.5, fig.height = 5, fig.fullwidth = TRUE, fig.cap = "Figure 4: pseudo-value calibration plots out of state j = 1 at time s = 100 estimated using loess smoothers"}
-plot(dat.calib.pv)
+plot(dat_calib_pv)
 ```
 
 The equivalent Figures from the [Overview vignette](https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf), produced using restricted cubic splines, are Figures 5 and 6.
@@ -154,50 +154,50 @@ Write a short comparison...
 We now produce calibration curves for the predicted transition probabilities out of state $j = 3$ at time $s = 100$. Calibration is assessed at follow up time ($t = 1826$ days). We start by extracting the predicted transition probabilities from state $j = 3$ at time $s = 100$ from the object \code{tps0}. These are the transition probabilities we aim to assess the calibration of.
 
 ```{r}
-tp.pred.s100 <- tps100 |>
+tp_pred_s100 <- tps100 |>
   dplyr::filter(j == 3) |>
   dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
 ```
 
-We now produce calibration curves using loess smoothers for the regression model where the observed event probabilities are estimated. This is specified by \code{curve.type = "loess"}. Behaviour of the curve can be controlled using \code{loess.span} and \code{loess.degree}, which we leave as default in this example. Please refere to documentation for the \code{loess} function from the \pkg{loess} package for details of these parameters. A smaller span and/or degree will create a more smoother line. This is done for both the BLR-IPCW and pseudo-value calibration curves.
+We now produce calibration curves using loess smoothers for the regression model where the observed event probabilities are estimated. This is specified by \code{curve_type = "loess"}. Behaviour of the curve can be controlled using \code{loess.span} and \code{loess.degree}, which we leave as default in this example. Please refere to documentation for the \code{loess} function from the \pkg{loess} package for details of these parameters. A smaller span and/or degree will create a more smoother line. This is done for both the BLR-IPCW and pseudo-value calibration curves.
 
 ```{r}
-dat.calib.blr <-
-  calib_msm(data.ms = msebmtcal,
-           data.raw = ebmtcal,
+dat_calib_blr <-
+  calib_msm(data_ms = msebmtcal,
+           data_raw = ebmtcal,
            j = 3,
            s = 100,
-           t = t.eval,
-           tp.pred = tp.pred.s100,
-           calib.type = 'blr',
-           curve.type = "loess",
-           w.covs = c("year", "agecl", "proph", "match"),
+           t = t_eval,
+           tp_pred = tp_pred_s100,
+           calib_type = 'blr',
+           curve_type = "loess",
+           w_covs = c("year", "agecl", "proph", "match"),
            CI = 95,
-           CI.type = "bootstrap",
-           CI.R.boot = 200)
+           CI_type = "bootstrap",
+           CI_R_boot = 200)
 
-dat.calib.pv <-
-  calib_msm(data.ms = msebmtcal,
-           data.raw = ebmtcal,
+dat_calib_pv <-
+  calib_msm(data_ms = msebmtcal,
+           data_raw = ebmtcal,
            j = 3,
            s = 100,
-           t = t.eval,
-           tp.pred = tp.pred.s100,
-           calib.type = 'pv',
-           curve.type = "loess",
-           pv.group.vars = c("year"),
+           t = t_eval,
+           tp_pred = tp_pred_s100,
+           calib_type = 'pv',
+           curve_type = "loess",
+           pv_group_vars = c("year"),
            CI = 95,
-           CI.type = 'parametric')
+           CI_type = 'parametric')
 ```
 
 We now produce calibration plots using the \code{plot} function.
 
 ```{r, fig.width = 7.5, fig.height = 5, fig.fullwidth = TRUE, fig.cap = "Figure 5: BLR-IPCW calibration plots out of state j = 3 at time s = 100 estimated using loess smoothers"}
-plot(dat.calib.blr)
+plot(dat_calib_blr)
 ```
 
 ```{r, fig.width = 7.5, fig.height = 5, fig.fullwidth = TRUE, fig.cap = "Figure 6: pseudo-value calibration plots out of state j = 3 at time s = 100 estimated using loess smoothers"}
-plot(dat.calib.pv)
+plot(dat_calib_pv)
 ```
 
 The equivalent Figures from the [Overview vignette](https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf), produced using restricted cubic splines, are Figures 7 and 8.
@@ -213,88 +213,88 @@ Having done a bit more research (see test_loess_bootstrap.R in the test folder),
 Compare the following graphs to figures 1 and 2 above. First do \code{loess.span = 0.9}.
 
 ```{r}
-dat.calib.blr <-
-  calib_msm(data.ms = msebmtcal,
-           data.raw = ebmtcal,
+dat_calib_blr <-
+  calib_msm(data_ms = msebmtcal,
+           data_raw = ebmtcal,
            j = 1,
            s = 0,
-           t = t.eval,
-           tp.pred = tp.pred.s0,
-           calib.type = 'blr',
-           curve.type = "loess",
-           loess.span = 0.9,
-           w.covs = c("year", "agecl", "proph", "match"),
+           t = t_eval,
+           tp_pred = tp_pred_s0,
+           calib_type = 'blr',
+           curve_type = "loess",
+           loess_span = 0.9,
+           w_covs = c("year", "agecl", "proph", "match"),
            CI = 95,
-           CI.type = "bootstrap",
-           CI.R.boot = 200)
+           CI_type = "bootstrap",
+           CI_R_boot = 200)
 
-dat.calib.pv <-
-  calib_msm(data.ms = msebmtcal,
-           data.raw = ebmtcal,
+dat_calib_pv <-
+  calib_msm(data_ms = msebmtcal,
+           data_raw = ebmtcal,
            j = 1,
            s = 0,
-           t = t.eval,
-           tp.pred = tp.pred.s0,
-           calib.type = 'pv',
-           curve.type = "loess",
-           loess.span = 0.9,
-           pv.group.vars = c("year"),
-           pv.n.pctls = 3,
+           t = t_eval,
+           tp_pred = tp_pred_s0,
+           calib_type = 'pv',
+           curve_type = "loess",
+           loess_span = 0.9,
+           pv_group_vars = c("year"),
+           pv_n_pctls = 3,
            CI = 95,
-           CI.type = 'parametric')
+           CI_type = 'parametric')
 ```
 
 We now produce calibration plots using the \code{plot} function.
 
 ```{r, fig.width = 7.5, fig.height = 5, fig.fullwidth = TRUE, fig.cap = "Figure 7: BLR-IPCW calibration plots out of state j = 1 at time s = 0  estimated using loess smoothers, span = 0.9"}
-plot(dat.calib.blr)
+plot(dat_calib_blr)
 ```
 
 ```{r, fig.width = 7.5, fig.height = 5, fig.fullwidth = TRUE, fig.cap = "Figure 8: pseudo-value calibration plots out of state j = 1 at time s = 0 estimated using loess smoothers, span = 0.9"}
-plot(dat.calib.pv)
+plot(dat_calib_pv)
 ```
 
-Then do \code{loess.span = 1}.
+Then do \code{loess_span = 1}.
 
 ```{r}
-dat.calib.blr <-
-  calib_msm(data.ms = msebmtcal,
-           data.raw = ebmtcal,
+dat_calib_blr <-
+  calib_msm(data_ms = msebmtcal,
+           data_raw = ebmtcal,
            j = 1,
            s = 0,
-           t = t.eval,
-           tp.pred = tp.pred.s0,
-           calib.type = 'blr',
-           curve.type = "loess",
-           loess.span = 1,
-           w.covs = c("year", "agecl", "proph", "match"),
+           t = t_eval,
+           tp_pred = tp_pred_s0,
+           calib_type = 'blr',
+           curve_type = "loess",
+           loess_span = 1,
+           w_covs = c("year", "agecl", "proph", "match"),
            CI = 95,
-           CI.type = "bootstrap",
-           CI.R.boot = 200)
+           CI_type = "bootstrap",
+           CI_R_boot = 200)
 
-dat.calib.pv <-
-  calib_msm(data.ms = msebmtcal,
-           data.raw = ebmtcal,
+dat_calib_pv <-
+  calib_msm(data_ms = msebmtcal,
+           data_raw = ebmtcal,
            j = 1,
            s = 0,
-           t = t.eval,
-           tp.pred = tp.pred.s0,
-           calib.type = 'pv',
-           curve.type = "loess",
-           loess.span = 1,
-           pv.group.vars = c("year"),
-           pv.n.pctls = 3,
+           t = t_eval,
+           tp_pred = tp_pred_s0,
+           calib_type = 'pv',
+           curve_type = "loess",
+           loess_span = 1,
+           pv_group_vars = c("year"),
+           pv_n_pctls = 3,
            CI = 95,
-           CI.type = 'parametric')
+           CI_type = 'parametric')
 ```
 
 We now produce calibration plots using the \code{plot} function.
 
 ```{r, fig.width = 7.5, fig.height = 5, fig.fullwidth = TRUE, fig.cap = "Figure 9: BLR-IPCW calibration plots out of state j = 1 at time s = 0  estimated using loess smoothers, span = 1"}
-plot(dat.calib.blr)
+plot(dat_calib_blr)
 ```
 
 ```{r, fig.width = 7.5, fig.height = 5, fig.fullwidth = TRUE, fig.cap = "Figure 10: pseudo-value calibration plots out of state j = 1 at time s = 0 estimated using loess smoothers, span = 1"}
-plot(dat.calib.pv)
+plot(dat_calib_pv)
 ```
 

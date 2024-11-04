@@ -40,17 +40,17 @@ data("ebmtcal")
 head(ebmtcal)
 ```
 
-This is followed by fitting a cox model to predict probability of being censored. This below code chunk is what happens internally in `calib_blr` if one sets `w.covs = c("year", "agecl", "proph", "match")`.
+This is followed by fitting a cox model to predict probability of being censored. This below code chunk is what happens internally in `calib_blr` if one sets `w_covs = c("year", "agecl", "proph", "match")`.
 
 ```{r}
-model.ipcw <- survival::coxph(survival::Surv(dtcens, dtcens.s) ~ year + agecl + proph + match, data = ebmtcal)
-model.ipcw
+model_ipcw <- survival::coxph(survival::Surv(dtcens, dtcens_s) ~ year + agecl + proph + match, data = ebmtcal)
+model_ipcw
 ```
 
 The coefficient for `year`, in particular 1995 - 1998, is very big. However, we know that year of transplant is likely be to highly predictive of being censored, so further exploration is needed. A key assumption made by this model is proportional hazards. We plot the the cumulative hazard estimate using Kaplan-Meier survival curves stratified by year of transplant and assess proportionality visually.
 
 ```{r}
-kmfit <- survival::survfit(survival::Surv(dtcens, dtcens.s) ~ year, data = ebmtcal)
+kmfit <- survival::survfit(survival::Surv(dtcens, dtcens_s) ~ year, data = ebmtcal)
 ```
 
 ```{r, fig.width = 7.5, fig.height = 5, fig.fullwidth = TRUE, fig.cap = "Figure 1: Cumulative hazard calculated within subgroups defined by year of transplant", fig.topcaption = TRUE}

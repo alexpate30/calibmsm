@@ -10,23 +10,23 @@
   combine = TRUE,
   ncol = NULL,
   nrow = NULL,
-  size.line = 0.5,
-  size.text = 12,
-  marg.density = FALSE,
-  marg.density.size = 5,
-  marg.density.type = "density",
-  marg.rug = FALSE,
-  marg.rug.transparency = 0.1,
-  titles.include = TRUE,
+  size_line = 0.5,
+  size_text = 12,
+  marg_density = TRUE,
+  marg_density_size = 5,
+  marg_density_type = "density",
+  marg_rug = FALSE,
+  marg_rug_transparency = 0.1,
+  titles_include = TRUE,
   titles = NULL,
-  axis.titles.x = NULL,
-  axis.titles.text.x = "Predicted risk",
-  axis.titles.y = NULL,
-  axis.titles.text.y = "Observed risk",
-  legend.include = TRUE,
-  legend.seperate = FALSE,
-  legend.title = NULL,
-  legend.position = "bottom"
+  axis_titles_x = NULL,
+  axis_titles_text_x = "Predicted risk",
+  axis_titles_y = NULL,
+  axis_titles_text_y = "Predicted-observed risk",
+  legend_include = TRUE,
+  legend_seperate = FALSE,
+  legend_title = NULL,
+  legend_position = "bottom"
 )
 }
 \arguments{
@@ -40,39 +40,39 @@
 
 \item{nrow}{Number of rows for combined calibration plot}
 
-\item{size.line}{Size of line plots}
+\item{size_line}{Size of line plots}
 
-\item{size.text}{Size of text in plot}
+\item{size_text}{Size of text in plot}
 
-\item{marg.density}{Whether to produce marginal density plots TRUE/FALSE}
+\item{marg_density}{Whether to produce marginal density plots TRUE/FALSE}
 
-\item{marg.density.size}{Size of the main plot relative to the density plots (see \code{\link[ggExtra]{ggMarginal}})}
+\item{marg_density_size}{Size of the main plot relative to the density plots (see \code{\link[ggExtra]{ggMarginal}})}
 
-\item{marg.density.type}{What type of marginal plot to show (see \code{\link[ggExtra]{ggMarginal}})}
+\item{marg_density_type}{What type of marginal plot to show (see \code{\link[ggExtra]{ggMarginal}})}
 
-\item{marg.rug}{Whether to produce marginal rug plots TRUE/FALSE}
+\item{marg_rug}{Whether to produce marginal rug plots TRUE/FALSE}
 
-\item{marg.rug.transparency}{Degree of transparency for the density rug plot along each axis}
+\item{marg_rug_transparency}{Degree of transparency for the density rug plot along each axis}
 
-\item{titles.include}{Whether to include titles for each individual calibration plots}
+\item{titles_include}{Whether to include titles for each individual calibration plots}
 
 \item{titles}{Vector of titles for the calibration plots. Defaults to "State k" for each plot.}
 
-\item{axis.titles.x}{Position of plots for which to include title on x-axis}
+\item{axis_titles_x}{Position of plots for which to include title on x-axis}
 
-\item{axis.titles.text.x}{x-axis title}
+\item{axis_titles_text_x}{x-axis title}
 
-\item{axis.titles.y}{Position of plots for which to include title on y-axis}
+\item{axis_titles_y}{Position of plots for which to include title on y-axis}
 
-\item{axis.titles.text.y}{y-axis title}
+\item{axis_titles_text_y}{y-axis title}
 
-\item{legend.include}{Whether to produce a legend}
+\item{legend_include}{Whether to produce a legend}
 
-\item{legend.seperate}{= Whether to include legend in plot (FALSE) or as a seperate object (TRUE)}
+\item{legend_seperate}{= Whether to include legend in plot (FALSE) or as a seperate object (TRUE)}
 
-\item{legend.title}{Title of legend}
+\item{legend_title}{Title of legend}
 
-\item{legend.position}{Position of legend}
+\item{legend_position}{Position of legend}
 }
 \value{
 If \code{combine = TRUE}, returns an object of classes \code{gg}, \code{ggplot}, and \code{ggarrange},
@@ -89,19 +89,19 @@ estimated using BLR-IPCW and pseudo-value approaches.
 # s = 0 in state j = 1. These predicted transition probabilities are stored in tps0.
 
 # Extract the predicted transition probabilities out of state j = 1
-tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
+tp_pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
 
 # Now estimate the observed event probabilities for each possible transition.
-dat.calib <-
-calib_msm(data.ms = msebmtcal,
- data.raw = ebmtcal,
+dat_calib <-
+calib_msm(data_ms = msebmtcal,
+ data_raw = ebmtcal,
  j=1,
  s=0,
  t = 1826,
- tp.pred = tp.pred,
- w.covs = c("year", "agecl", "proph", "match"))
+ tp_pred = tp_pred,
+ w_covs = c("year", "agecl", "proph", "match"))
 
  # These are then plotted
- plot(dat.calib, combine = TRUE, nrow = 2, ncol = 3)
+ plot(dat_calib, combine = TRUE, nrow = 2, ncol = 3)
 
 }

@@ -20,7 +20,7 @@ A data frame with 2,279 rows and 17 columns:
 \item{proph}{Prophylaxis}
 \item{match}{Donor-recipient match}
 \item{dtcens}{Time of censoring}
-\item{dtcens.s}{Event indicator, 1:censoring occured, 0: absorbing state entered before censoring occured}
+\item{dtcens_s}{Event indicator, 1:censoring occured, 0: absorbing state entered before censoring occured}
 }
 }
 }

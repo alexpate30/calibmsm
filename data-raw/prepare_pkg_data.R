@@ -30,7 +30,7 @@ msebmt[msebmt$id == 1, -c(9, 10, 12:48, 61:84)]
 
 ### Create a variable which is maximum observed follow up time for all individuals, this is when they were either censored, relapsed or died
 ebmt$dtcens <- pmin(ebmt$rel, ebmt$srv)
-ebmt$dtcens.s <- 1 - pmax(ebmt$rel.s, ebmt$srv.s)
+ebmt$dtcens_s <- 1 - pmax(ebmt$rel.s, ebmt$srv.s)
 
 ### Assign variables for model we will be fitting
 eq.RHS <- paste(do.call(paste0, expand.grid(c("match", "proph", "year1", "year2", "agecl1", "agecl2"), paste(".", 1:12, sep = ""))), collapse="+")

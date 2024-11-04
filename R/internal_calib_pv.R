@@ -11,43 +11,43 @@
 #' @returns A list of datasets for each calibration plot.
 #'
 #' @noRd
-calib_pv <- function(data.ms,
-                     data.raw,
-                     tp.pred.plot,
+calib_pv <- function(data_ms,
+                     data_raw,
+                     tp_pred_plot,
                      j,
                      s,
                      t,
-                     curve.type,
-                     rcs.nk,
-                     loess.span,
-                     loess.degree,
-                     loess.surface,
-                     loess.statistics,
-                     loess.trace.hat,
-                     loess.cell,
-                     loess.iterations,
-                     loess.iterTrace,
-                     pv.group.vars,
-                     pv.n.pctls,
-                     pv.precalc,
-                     pv.ids,
+                     curve_type,
+                     rcs_nk,
+                     loess_span,
+                     loess_degree,
+                     loess_surface,
+                     loess_statistics,
+                     loess_trace_hat,
+                     loess_cell,
+                     loess_iterations,
+                     loess_iterTrace,
+                     pv_group_vars,
+                     pv_n_pctls,
+                     pv_precalc,
+                     pv_ids,
                      CI,
-                     CI.type,
-                     CI.R.boot,
-                     CI.seed,
-                     transitions.out){
+                     CI_type,
+                     CI_R_boot,
+                     CI_seed,
+                     transitions_out){
 
   ###
   ### Create the object of predicted risks over which the calibration plots will be plotted
 
   ### For calib_pv, this is the landmarked cohort of individuals, including those censored at time t,
-  ### or tp.pred.plot if specified
-  if (is.null(tp.pred.plot)){
-    ## Note that tp.pred has been added to data.raw and the predicted transition probabilities (and relevant transformations)
+  ### or tp_pred_plot if specified
+  if (is.null(tp_pred_plot)){
+    ## Note that tp_pred has been added to data_raw and the predicted transition probabilities (and relevant transformations)
     ## are contained within this dataset.
-    data.to.plot <- apply_landmark(data.raw = data.raw, data.ms = data.ms, j = j, s = s, t = t, exclude.cens.t = FALSE)
-  } else if (!is.null(tp.pred.plot)){
-    data.to.plot <- tp.pred.plot
+    data_to_plot <- apply_landmark(data_raw = data_raw, data_ms = data_ms, j = j, s = s, t = t, exclude_cens_t = FALSE)
+  } else if (!is.null(tp_pred_plot)){
+    data_to_plot <- tp_pred_plot
   }
 
   ###
@@ -57,125 +57,127 @@ calib_pv <- function(data.ms,
   ### This must be done separately for each state.
 
   ### 2) If a confidence interval was requested using parametric form, call calc_obs_pv_boot once, specifying indices to be
-  ### the sequence 1:nrow(data.raw), in order to calculate the plot data.
+  ### the sequence 1:nrow(data_raw), in order to calculate the plot data.
 
   ### 3) If a confidence interval was not requested, call calc_obs_pv_boot once, specifying indices to be
-  ### the sequence 1:nrow(data.raw), in order to calculate the plot data.
+  ### the sequence 1:nrow(data_raw), in order to calculate the plot data.
 
-  ### Note that 2) and 3) are the same. This is because the function calib_pseudo_func is dependent on CI and CI.type,
+  ### Note that 2) and 3) are the same. This is because the function calib_pseudo_func is dependent on CI and CI_type,
   ### which were defined as input into calib_pv. They will there give different output (as they should) when it is run.
-  if (CI != FALSE & CI.type == "bootstrap" & is.null(pv.ids)){
+  if (CI != FALSE & CI_type == "bootstrap" & is.null(pv_ids)){
 
     ### Define alpha for CI's
     alpha <- (1-CI/100)/2
 
     ### Create object to store plot data
-    plotdata <- vector("list", length(transitions.out))
+    plotdata <- vector("list", length(transitions_out))
 
     ### Cycle through states
-    for (state in 1:length(transitions.out)){
+    for (state in 1:length(transitions_out)){
 
-      ### Assign state.k
-      state.k <- transitions.out[state]
+      ### Assign state_k
+      state_k <- transitions_out[state]
 
       ### Print progress
-      print(paste("Beginning bootstrapping for state = ", state.k, Sys.time()))
+      print(paste("Beginning bootstrapping for state = ", state_k, Sys.time()))
 
       ### Set seed for bootstrapping
-      set.seed(CI.seed)
+      if (!is.null(CI_seed)){
+        set.seed(CI_seed)
+      }
 
       ### Put function through bootstrap
-      boot.obs <- boot::boot(data.raw,
+      boot_obs <- boot::boot(data_raw,
                              calc_obs_pv_boot,
-                             R = CI.R.boot,
-                             data.ms = data.ms,
-                             data.to.plot = data.to.plot,
+                             R = CI_R_boot,
+                             data_ms = data_ms,
+                             data_to_plot = data_to_plot,
                              j = j,
                              s2 = s,
                              t = t,
-                             curve.type = curve.type,
-                             rcs.nk = rcs.nk,
-                             loess.span = loess.span,
-                             loess.degree = loess.degree,
-                             loess.surface = loess.surface,
-                             loess.statistics = loess.statistics,
-                             loess.trace.hat = loess.trace.hat,
-                             loess.cell = loess.cell,
-                             loess.iterations = loess.iterations,
-                             loess.iterTrace = loess.iterTrace,
-                             pv.group.vars = pv.group.vars,
-                             pv.n.pctls = pv.n.pctls,
-                             pv.precalc = pv.precalc,
-                             pv.ids = pv.ids,
+                             curve_type = curve_type,
+                             rcs_nk = rcs_nk,
+                             loess_span = loess_span,
+                             loess_degree = loess_degree,
+                             loess_surface = loess_surface,
+                             loess_statistics = loess_statistics,
+                             loess_trace_hat = loess_trace_hat,
+                             loess_cell = loess_cell,
+                             loess_iterations = loess_iterations,
+                             loess_iterTrace = loess_iterTrace,
+                             pv_group_vars = pv_group_vars,
+                             pv_n_pctls = pv_n_pctls,
+                             pv_precalc = pv_precalc,
+                             pv_ids = pv_ids,
                              CI = FALSE,
-                             transitions.out = state.k,
-                             boot.format = TRUE)
+                             transitions_out = state_k,
+                             boot_format = TRUE)
 
       ### Extract confidence bands
-      lower <- apply(boot.obs$t, 2, stats::quantile, probs = alpha, na.rm = TRUE)
-      upper <- apply(boot.obs$t, 2, stats::quantile, probs = 1-alpha, na.rm = TRUE)
+      lower <- apply(boot_obs$t, 2, stats::quantile, probs = alpha, na.rm = TRUE)
+      upper <- apply(boot_obs$t, 2, stats::quantile, probs = 1-alpha, na.rm = TRUE)
 
       ### Produce a warning if any NA values
-      if(sum(is.na(boot.obs$t)) > 0){
-        warning(paste("WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE", state.k, "\n",
-                      "THERE ARE ", sum(apply(boot.obs$t, 1, function(x) {sum(is.na(x)) > 0})), " ITERATIONS WITH NA's \n",
-                      "THE MEAN NUMBER OF NA's IN EACH ITERATION IS", mean(apply(boot.obs$t, 1, function(x) {sum(is.na(x))}))
+      if(sum(is.na(boot_obs$t)) > 0){
+        warning(paste("WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE", state_k, "\n",
+                      "THERE ARE ", sum(apply(boot_obs$t, 1, function(x) {sum(is.na(x)) > 0})), " ITERATIONS WITH NA's \n",
+                      "THE MEAN NUMBER OF NA's IN EACH ITERATION IS", mean(apply(boot_obs$t, 1, function(x) {sum(is.na(x))}))
         ))
       }
 
       ### Assign output
-      if ("id" %in% colnames(data.to.plot)) {
-        plotdata[[state]] <- data.frame("id" = data.to.plot$id,
-                                        "pred" = data.to.plot[,paste("tp.pred", state.k, sep = "")],
-                                        "obs" = boot.obs$t0,
-                                        "obs.lower" = lower,
-                                        "obs.upper" = upper)
+      if ("id" %in% colnames(data_to_plot)) {
+        plotdata[[state]] <- data.frame("id" = data_to_plot$id,
+                                        "pred" = data_to_plot[,paste("tp_pred", state_k, sep = "")],
+                                        "obs" = boot_obs$t0,
+                                        "obs_lower" = lower,
+                                        "obs_upper" = upper)
       } else {
         plotdata[[state]] <- data.frame(
-          "pred" = data.to.plot[,paste("tp.pred", state.k, sep = "")],
-          "obs" = boot.obs$t0,
-          "obs.lower" = lower,
-          "obs.upper" = upper)
+          "pred" = data_to_plot[,paste("tp_pred", state_k, sep = "")],
+          "obs" = boot_obs$t0,
+          "obs_lower" = lower,
+          "obs_upper" = upper)
       }
     }
   } else {
 
     ### NB: calc_obs_pv_boot has the ability to output calibration curve with confidence interval estimated parametrically, as well as outputting
-    ### data in boot format (a vector), which was utilised when CI.type = "bootstrap". Here, we specify boot.format = FALSE, which will allow the
+    ### data in boot format (a vector), which was utilised when CI_type = "bootstrap". Here, we specify boot_format = FALSE, which will allow the
     ### confidence interval to be calculated parametrically.
 
-    ### NB: If !is.null(pv.ids), i.e. pv.ids was specified, the function will just return a the pseudo-values themselves.
-    plotdata <- calc_obs_pv_boot(data.raw = data.raw,
-                                 indices = 1:nrow(data.raw),
-                                 data.ms = data.ms,
-                                 data.to.plot = data.to.plot,
+    ### NB: If !is.null(pv_ids), i.e. pv_ids was specified, the function will just return a the pseudo-values themselves.
+    plotdata <- calc_obs_pv_boot(data_raw = data_raw,
+                                 indices = 1:nrow(data_raw),
+                                 data_ms = data_ms,
+                                 data_to_plot = data_to_plot,
                                  j = j,
                                  s2 = s,
                                  t = t,
-                                 curve.type = curve.type,
-                                 rcs.nk = rcs.nk,
-                                 loess.span = loess.span,
-                                 loess.degree = loess.degree,
-                                 loess.surface = loess.surface,
-                                 loess.statistics = loess.statistics,
-                                 loess.trace.hat = loess.trace.hat,
-                                 loess.cell = loess.cell,
-                                 loess.iterations = loess.iterations,
-                                 loess.iterTrace = loess.iterTrace,
-                                 pv.group.vars = pv.group.vars,
-                                 pv.n.pctls = pv.n.pctls,
-                                 pv.precalc = pv.precalc,
-                                 pv.ids = pv.ids,
+                                 curve_type = curve_type,
+                                 rcs_nk = rcs_nk,
+                                 loess_span = loess_span,
+                                 loess_degree = loess_degree,
+                                 loess_surface = loess_surface,
+                                 loess_statistics = loess_statistics,
+                                 loess_trace_hat = loess_trace_hat,
+                                 loess_cell = loess_cell,
+                                 loess_iterations = loess_iterations,
+                                 loess_iterTrace = loess_iterTrace,
+                                 pv_group_vars = pv_group_vars,
+                                 pv_n_pctls = pv_n_pctls,
+                                 pv_precalc = pv_precalc,
+                                 pv_ids = pv_ids,
                                  CI = CI,
-                                 CI.type = CI.type,
-                                 transitions.out = transitions.out,
-                                 boot.format = FALSE)
+                                 CI_type = CI_type,
+                                 transitions_out = transitions_out,
+                                 boot_format = FALSE)
   }
 
   ### Define combined output object
-  output.object.comb = list("plotdata" = plotdata)
+  output_object_comb = list("plotdata" = plotdata)
 
-  return(output.object.comb)
+  return(output_object_comb)
 
 }
 
@@ -193,112 +195,112 @@ calib_pv <- function(data.ms,
 #'
 #' @details
 #' Function written in a format so that it can be used in combination with \code{\link[boot]{boot}}
-#' for bootstrapping. Specifying `indices = 1:nrow(data.raw)` will produce calibration
+#' for bootstrapping. Specifying `indices = 1:nrow(data_raw)` will produce calibration
 #' curves as normal.
 #'
-#' @returns If `boot.format = FALSE` a data.frame of predicted and observed event probabilities
-#' is returned for each state in `transitions.out`. If boot.format = TRUE, a vector of observed
+#' @returns If `boot_format = FALSE` a data.frame of predicted and observed event probabilities
+#' is returned for each state in `transitions_out`. If boot_format = TRUE, a vector of observed
 #' event probabilities is returned. Observed event probabilities are estimated for data points in
-#' data.to.plot.
+#' data_to_plot.
 #'
 #' @noRd
-calc_obs_pv_boot <- function(data.raw,
+calc_obs_pv_boot <- function(data_raw,
                              indices,
-                             data.ms,
-                             data.to.plot,
+                             data_ms,
+                             data_to_plot,
                              j,
                              s2, # can't use 's' because it matches an argument for the boot function
                              t,
-                             curve.type,
-                             rcs.nk,
-                             loess.span,
-                             loess.degree,
-                             loess.surface,
-                             loess.statistics,
-                             loess.trace.hat,
-                             loess.cell,
-                             loess.iterations,
-                             loess.iterTrace,
-                             pv.group.vars,
-                             pv.n.pctls,
-                             pv.precalc,
-                             pv.ids,
+                             curve_type,
+                             rcs_nk,
+                             loess_span,
+                             loess_degree,
+                             loess_surface,
+                             loess_statistics,
+                             loess_trace_hat,
+                             loess_cell,
+                             loess_iterations,
+                             loess_iterTrace,
+                             pv_group_vars,
+                             pv_n_pctls,
+                             pv_precalc,
+                             pv_ids,
                              CI,
-                             CI.type,
-                             transitions.out,
-                             boot.format = FALSE){
+                             CI_type,
+                             transitions_out,
+                             boot_format = FALSE){
 
   ### Create object 's' from 's2'
   s <- s2
 
-  ### If boot.format = TRUE and requested more than one state, stop
-  if (boot.format == TRUE & (length(transitions.out) > 1)){
+  ### If boot_format = TRUE and requested more than one state, stop
+  if (boot_format == TRUE & (length(transitions_out) > 1)){
     stop("CANNOT OUTPUT IN BOOT FORMAT IF REQUESTING OBSERVED EVENT PROBABILITIES FOR MORE
          THAN ONE STATE")
   }
 
   ### The following steps will calculate the pseudo-values before fitting the calibration model
-  if (is.null(pv.precalc)){
+  if (is.null(pv_precalc)){
 
     ###
     ### Apply bootstrapping
 
     ### Create bootstrapped dataset
-    data.raw.boot <- data.raw[indices, ]
+    data_raw_boot <- data_raw[indices, ]
 
     ### Create a new id for these individuals (calc_pv_aj relies on each individual having a unique identifier),
     ### meaning the duplicate values in the bootstrapped datasets will cause problems
-    data.raw.boot$id2 <- 1:nrow(data.raw.boot)
+    data_raw_boot$id2 <- 1:nrow(data_raw_boot)
 
-    ### Create bootstrapped data.ms (we replicate the choice of patients that was chosen in data.raw)
-    data.ms.boot <- apply_bootstrap_msdata(data.ms = data.ms, indices = indices)
+    ### Create bootstrapped data_ms (we replicate the choice of patients that was chosen in data_raw)
+    data_ms_boot <- apply_bootstrap_msdata(data_ms = data_ms, indices = indices)
 
     ### Extract transition matrix from original msdata object, as this will have been lost when bootstrapping
-    tmat <- attributes(data.ms)$trans
+    tmat <- attributes(data_ms)$trans
 
-    ### Apply attribute tmat to the bootstrapped data.ms dataset
-    attributes(data.ms.boot)$trans <- tmat
+    ### Apply attribute tmat to the bootstrapped data_ms dataset
+    attributes(data_ms_boot)$trans <- tmat
 
     ### Set 'id' to be same as 'id2' in bootstrapped datasets, as the function calc_pv_aj works by removing individual
     ### with the 'id' variable
-    data.ms.boot$id <- data.ms.boot$id2
-    data.raw.boot$id <- data.raw.boot$id2
+    data_ms_boot$id <- data_ms_boot$id2
+    data_raw_boot$id <- data_raw_boot$id2
 
-    ### Relabel data.ms.boot and data.raw.boot and remove '.boot' datasets
-    data.raw <- data.raw.boot
-    data.ms <- data.ms.boot
-    rm(data.raw.boot, data.ms.boot)
+    ### Relabel data_ms_boot and data_raw_boot and remove '_boot' datasets
+    data_raw <- data_raw_boot
+    data_ms <- data_ms_boot
+    rm(data_raw_boot, data_ms_boot)
 
     ###
     ### Apply landmarking
 
-    ### For calib_pv, we need to apply landmarking to both data.raw and data.ms
-    ### We model the pseudo-values on the predicted transition probabilities in the bootstrapped data.raw dataset
-    ### However the calculation of the pseudo-values must be done in the bootstrapped data.ms dataset
+    ### For calib_pv, we need to apply landmarking to both data_raw and data_ms
+    ### We model the pseudo-values on the predicted transition probabilities in the bootstrapped data_raw dataset
+    ### However the calculation of the pseudo-values must be done in the bootstrapped data_ms dataset
 
-    ### Apply landmarking to data.raw and data.ms
-    data.raw.lmk.js <- apply_landmark(data.raw = data.raw,
-                                      data.ms = data.ms,
+    ### Apply landmarking to data_raw and data_ms
+    data_raw_lmk_js <- apply_landmark(data_raw = data_raw,
+                                      data_ms = data_ms,
                                       j = j,
                                       s = s,
                                       t = t,
-                                      exclude.cens.t = FALSE,
-                                      data.return = "data.raw")
-    data.ms.lmk.js <- apply_landmark(data.raw = data.raw,
-                                         data.ms = data.ms,
+                                      exclude_cens_t = FALSE,
+                                      data_return = "data_raw")
+    data_ms_lmk_js <- apply_landmark(data_raw = data_raw,
+                                         data_ms = data_ms,
                                          j = j,
                                          s = s,
                                          t = t,
-                                         exclude.cens.t = FALSE,
-                                         data.return = "data.ms")
+                                         exclude_cens_t = FALSE,
+                                         data_return = "data_ms")
 
     ###
     ### Restructure mstate data so that time s = time 0, and relabel transitions to 1, 2,...
     ### This is required in order to estimate Aalen-Johansene estimator and calculate pseudo-values
 
     ### Reduce transition times by s and remove observations which now occur entirely prior to start up
-    data.ms.lmk.js <-
-      dplyr::mutate(data.ms.lmk.js,
+    data_ms_lmk_js <-
+      dplyr::mutate(data_ms_lmk_js,
                     Tstart = pmax(0, Tstart - s),
                     Tstop = pmax(0, Tstop - s),
                     time = Tstop - Tstart) |>
@@ -309,57 +311,57 @@ calc_obs_pv_boot <- function(data.raw,
     ### Otherwise mstate::msfit will throw out an unneccesary (in this context) warning
 
     ### Start by identifying which transitions these are
-    suppressMessages(zero.transition.table <- data.ms.lmk.js |>
+    suppressMessages(zero_transition_table <- data_ms_lmk_js |>
                        dplyr::group_by(from, to) |>
                        dplyr::summarise(Frequency = sum(status)))
 
-    ### Only edit data.ms if some transitions have a frequency of zero
-    if (any(zero.transition.table$Frequency == 0)){
+    ### Only edit data_ms if some transitions have a frequency of zero
+    if (any(zero_transition_table$Frequency == 0)){
 
       ### Extract the transitions
-      zero.transition.from <- zero.transition.table$from[zero.transition.table$Frequency == 0]
-      zero.transition.to <- zero.transition.table$to[zero.transition.table$Frequency == 0]
+      zero_transition_from <- zero_transition_table$from[zero_transition_table$Frequency == 0]
+      zero_transition_to <- zero_transition_table$to[zero_transition_table$Frequency == 0]
 
       ### Remove them from dataset
-      for (i in 1:length(zero.transition.from)){
-        data.ms.lmk.js <- base::subset(data.ms.lmk.js, !(from == zero.transition.from[i] & to == zero.transition.to[i]))
+      for (i in 1:length(zero_transition_from)){
+        data_ms_lmk_js <- base::subset(data_ms_lmk_js, !(from == zero_transition_from[i] & to == zero_transition_to[i]))
         rm(i)
       }
     }
 
     ### Fit csh's with no predictors
     strata <- survival::strata
-    csh.aj <- survival::coxph(survival::Surv(Tstart, Tstop, status) ~ strata(trans), data.ms.lmk.js)
+    csh_aj <- survival::coxph(survival::Surv(Tstart, Tstop, status) ~ strata(trans), data_ms_lmk_js)
 
     ### Extract numeric values for transitions that can occur in the landmarked cohort
-    landmark.transitions <- as.numeric(sapply(csh.aj[["xlevels"]]$`strata(trans)`, gsub, pattern = ".*=", replacement =  ""))
+    landmark_transitions <- as.numeric(sapply(csh_aj[["xlevels"]]$`strata(trans)`, gsub, pattern = ".*=", replacement =  ""))
 
     ### Create a mapping from the old transition numbers to new transition numbers which are in sequence
-    map.transitions <- data.frame("new" = 1:length(landmark.transitions),
-                                  "old" = landmark.transitions)
+    map_transitions <- data.frame("new" = 1:length(landmark_transitions),
+                                  "old" = landmark_transitions)
 
     ### Write a function to apply the mapping
-    map.func <- function(x){
+    map_func <- function(x){
       if(!is.na(x)){
-        if(!(x %in% landmark.transitions)){
+        if(!(x %in% landmark_transitions)){
           return(NA)
-        } else if (x %in% landmark.transitions)
-          return(map.transitions$new[map.transitions$old == x])
+        } else if (x %in% landmark_transitions)
+          return(map_transitions$new[map_transitions$old == x])
       } else if (is.na(x))
         return(NA)
     }
 
     ### Create new tmat for the new transition numbers
-    tmat.lmk.js <- apply(tmat, c(1,2), map.func)
+    tmat_lmk_js <- apply(tmat, c(1,2), map_func)
 
-    ### Define max.state (note this be will the same as ncol(tmat))
-    max.state <- ncol(tmat.lmk.js)
+    ### Define max_state (note this be will the same as ncol(tmat))
+    max_state <- ncol(tmat_lmk_js)
 
     ######################################
     ### A) CALCULATE THE PSEUDO VALUES ###
     ######################################
 
-    ### Data must now be split up into groups defined by predictor variables (pv.group.vars) and/or predicted risks (pv.n.pctls)
+    ### Data must now be split up into groups defined by predictor variables (pv_group_vars) and/or predicted risks (pv_n_pctls)
 
     ### Pseudo-values will be calculated seperately within each of these groups. We will also calculate
     ### the Aalen-Johansen estimate of observed risk within each of these groups to enable quicker
@@ -382,51 +384,51 @@ calc_obs_pv_boot <- function(data.raw,
     ### calc_aj: function to calculate to Aalen-Johansen estimator
     ### calc_pv_aj: calculate pseudo-value for an individual based on the Aalen-Johansen estimator
 
-    ### Write one function, which calculates Aalen-Johansen for a group (subset.ids), then calculates pseudo-values for individuals in that group
-    ### Can also specify specific individuals to calculate pseudo-values for (pv.ids)
-    calc_pv_subgroup <- function(subset.ids, pv.ids = NULL){
+    ### Write one function, which calculates Aalen-Johansen for a group (subset_ids), then calculates pseudo-values for individuals in that group
+    ### Can also specify specific individuals to calculate pseudo-values for (pv_ids)
+    calc_pv_subgroup <- function(subset_ids, pv_ids = NULL){
 
       ### Calcuate Aalen-Johansen
-      obs.aj <- calc_aj(data.ms = base::subset(data.ms.lmk.js, id %in% subset.ids),
-                        tmat = tmat.lmk.js,
+      obs_aj <- calc_aj(data_ms = base::subset(data_ms_lmk_js, id %in% subset_ids),
+                        tmat = tmat_lmk_js,
                         t = t - s,
-                        j = j)[["obs.aj"]]
+                        j = j)[["obs_aj"]]
 
       ### Now calculate pseudo-values for each individual
-      if (is.null(pv.ids)){
+      if (is.null(pv_ids)){
         ### Calculate pseudo-values (lapply part of function) and combine into dataset (rbind part of function)
-        pv.temp <- do.call("rbind",
-                           lapply(subset.ids, calc_pv_aj,
-                                  data.ms = base::subset(data.ms.lmk.js, id %in% subset.ids),
-                                  obs.aj,
-                                  tmat = tmat.lmk.js,
-                                  n.cohort = length(subset.ids),
+        pv_temp <- do.call("rbind",
+                           lapply(subset_ids, calc_pv_aj,
+                                  data_ms = base::subset(data_ms_lmk_js, id %in% subset_ids),
+                                  obs_aj,
+                                  tmat = tmat_lmk_js,
+                                  n_cohort = length(subset_ids),
                                   t = t - s,
                                   j = j)
         )
 
         ### Add id and columns names
-        pv.temp <- data.frame(subset.ids, pv.temp)
-        colnames(pv.temp) <- c("id", paste("pstate", 1:max.state, sep = ""))
+        pv_temp <- data.frame(subset_ids, pv_temp)
+        colnames(pv_temp) <- c("id", paste("pstate", 1:max_state, sep = ""))
 
-      } else if (!is.null(pv.ids)){
+      } else if (!is.null(pv_ids)){
         ### Calculate pseudo-values (lapply part of function) and combine into dataset (rbind part of function)
-        pv.temp <- do.call("rbind",
-                           lapply(pv.ids, calc_pv_aj,
-                                  data.ms = base::subset(data.ms.lmk.js, id %in% subset.ids),
-                                  obs.aj,
-                                  tmat = tmat.lmk.js,
-                                  n.cohort = length(subset.ids),
+        pv_temp <- do.call("rbind",
+                           lapply(pv_ids, calc_pv_aj,
+                                  data_ms = base::subset(data_ms_lmk_js, id %in% subset_ids),
+                                  obs_aj,
+                                  tmat = tmat_lmk_js,
+                                  n_cohort = length(subset_ids),
                                   t = t - s,
                                   j = j)
         )
 
         ### Add id and columns names
-        pv.temp <- data.frame(pv.ids, pv.temp)
-        colnames(pv.temp) <- c("id", paste("pstate", 1:max.state, sep = ""))
+        pv_temp <- data.frame(pv_ids, pv_temp)
+        colnames(pv_temp) <- c("id", paste("pstate", 1:max_state, sep = ""))
       }
 
-      return(pv.temp)
+      return(pv_temp)
 
     }
 
@@ -434,58 +436,58 @@ calc_obs_pv_boot <- function(data.raw,
     ### APPLY calc_pv_subgroup WITHIN SUBGROUPS TO ESTIMATE PSEUDO-VALUES
     ###
 
-    if (is.null(pv.group.vars) & is.null(pv.n.pctls)){
+    if (is.null(pv_group_vars) & is.null(pv_n_pctls)){
 
       ###
       ### 1) No grouping
       ###
 
       ### For all individuals
-      if (is.null(pv.ids)){
+      if (is.null(pv_ids)){
 
         ### Calculate psuedo-value for each individual
-        pv.out <- calc_pv_subgroup(data.raw.lmk.js$id)
+        pv_out <- calc_pv_subgroup(data_raw_lmk_js$id)
 
-        ### For just individual specified in pv.ids
-      } else if (!is.null(pv.ids)){
+        ### For just individual specified in pv_ids
+      } else if (!is.null(pv_ids)){
 
-        ### Calculate psuedo-value for each individual in pv.ids
-        pv.out <- calc_pv_subgroup(data.raw.lmk.js$id, pv.ids)
+        ### Calculate psuedo-value for each individual in pv_ids
+        pv_out <- calc_pv_subgroup(data_raw_lmk_js$id, pv_ids)
 
       }
 
-    } else if (!is.null(pv.group.vars) & is.null(pv.n.pctls)) {
+    } else if (!is.null(pv_group_vars) & is.null(pv_n_pctls)) {
 
       ###
       ### 2) Grouping only by baseline variables
       ###
 
-      ### Split data into groups defined by the variables in pv.group.vars
-      ## Create formula to split the dataset by (by pv.group.vars)
-      split.formula <- stats::as.formula(paste("~ ", paste(pv.group.vars, collapse = "+"), sep = ""))
+      ### Split data into groups defined by the variables in pv_group_vars
+      ## Create formula to split the dataset by (by pv_group_vars)
+      split_formula <- stats::as.formula(paste("~ ", paste(pv_group_vars, collapse = "+"), sep = ""))
       ## Split the dataset into the respective groups
-      data.groups <- split(data.raw.lmk.js, split.formula)
+      data_groups <- split(data_raw_lmk_js, split_formula)
 
       ### Get group ids for subgroups in which the pseudo-values need to be calculated
-      group.ids <- lapply(data.groups, function(x) as.numeric(x[,c("id")]))
+      group_ids <- lapply(data_groups, function(x) as.numeric(x[,c("id")]))
 
       ### For all individuals
-      if (is.null(pv.ids)){
+      if (is.null(pv_ids)){
 
         ### Calculate pseudo-values in each subgroup
-        pv.out <- lapply(group.ids, calc_pv_subgroup)
+        pv_out <- lapply(group_ids, calc_pv_subgroup)
 
-        ### For just individual specified in pv.ids
-      } else if (!is.null(pv.ids)){
+        ### For just individual specified in pv_ids
+      } else if (!is.null(pv_ids)){
 
-        ### Identify which pv.ids fit into which subgroup
-        group.pv.ids <- lapply(group.ids, function(x) x[x %in% pv.ids])
+        ### Identify which pv_ids fit into which subgroup
+        group_pv_ids <- lapply(group_ids, function(x) x[x %in% pv_ids])
 
-        ### Calculate pseudo-values in each subgroup, just for pv.ids
-        pv.out <- lapply(1:length(group.ids), function(x) {
-          if (length(group.pv.ids[[x]] > 0)){
-            calc_pv_subgroup(subset.ids = group.ids[[x]], pv.ids = group.pv.ids[[x]])
-          } else if (length(group.pv.ids[[x]] == 0)){
+        ### Calculate pseudo-values in each subgroup, just for pv_ids
+        pv_out <- lapply(1:length(group_ids), function(x) {
+          if (length(group_pv_ids[[x]] > 0)){
+            calc_pv_subgroup(subset_ids = group_ids[[x]], pv_ids = group_pv_ids[[x]])
+          } else if (length(group_pv_ids[[x]] == 0)){
             c()
           }
         })
@@ -493,12 +495,12 @@ calc_obs_pv_boot <- function(data.raw,
       }
 
       ### Combine into single dataset
-      pv.out <- do.call("rbind", pv.out)
+      pv_out <- do.call("rbind", pv_out)
 
       ### Sort by "id"
-      pv.out <- dplyr::arrange(pv.out, id)
+      pv_out <- dplyr::arrange(pv_out, id)
 
-    } else if (is.null(pv.group.vars) & !is.null(pv.n.pctls)) {
+    } else if (is.null(pv_group_vars) & !is.null(pv_n_pctls)) {
 
       ###
       ### 3) Grouping only by predicted risk
@@ -509,35 +511,35 @@ calc_obs_pv_boot <- function(data.raw,
 
       ### Note that we now need to apply the function seperately to each state because the subgroups will change depending on the state of interest.
       ### In 1) and 2), we could calculate the pseudo-values for all states simultaneously within each subgroup.
-      apply_calc_pv_subgroup_pctls <- function(state.k){
+      apply_calc_pv_subgroup_pctls <- function(state_k){
 
         ### Split data by predicted risk of state k
-        data.pctls <- base::split(data.raw.lmk.js,
-                                  cut(data.raw.lmk.js[,paste("tp.pred", state.k, sep = "")],
-                                      breaks =  stats::quantile(data.raw.lmk.js[,paste("tp.pred", state.k, sep = "")],
-                                                                seq(0,1,1/pv.n.pctls)),
+        data_pctls <- base::split(data_raw_lmk_js,
+                                  cut(data_raw_lmk_js[,paste("tp_pred", state_k, sep = "")],
+                                      breaks =  stats::quantile(data_raw_lmk_js[,paste("tp_pred", state_k, sep = "")],
+                                                                seq(0,1,1/pv_n_pctls)),
                                       include.lowest = TRUE))
 
         ### Get group ids for subgroups
-        group.ids <- lapply(data.pctls, function(x) as.numeric(x[,c("id")]))
+        group_ids <- lapply(data_pctls, function(x) as.numeric(x[,c("id")]))
 
         ### For all individuals
-        if (is.null(pv.ids)){
+        if (is.null(pv_ids)){
 
           ### Calculate pseudo-values in each subgroup
-          pv.temp <- lapply(group.ids, calc_pv_subgroup)
+          pv_temp <- lapply(group_ids, calc_pv_subgroup)
 
-          ### For just individual specified in pv.ids
-        } else if (!is.null(pv.ids)){
+          ### For just individual specified in pv_ids
+        } else if (!is.null(pv_ids)){
 
-          ### Identify which pv.ids fit into which subgroup
-          group.pv.ids <- lapply(group.ids, function(x) x[x %in% pv.ids])
+          ### Identify which pv_ids fit into which subgroup
+          group_pv_ids <- lapply(group_ids, function(x) x[x %in% pv_ids])
 
-          ### Calculate pseudo-values in each subgroup, just for pv.ids
-          pv.temp <- lapply(1:length(group.ids), function(x) {
-            if (length(group.pv.ids[[x]] > 0)){
-              calc_pv_subgroup(subset.ids = group.ids[[x]], pv.ids = group.pv.ids[[x]])
-            } else if (length(group.pv.ids[[x]] == 0)){
+          ### Calculate pseudo-values in each subgroup, just for pv_ids
+          pv_temp <- lapply(1:length(group_ids), function(x) {
+            if (length(group_pv_ids[[x]] > 0)){
+              calc_pv_subgroup(subset_ids = group_ids[[x]], pv_ids = group_pv_ids[[x]])
+            } else if (length(group_pv_ids[[x]] == 0)){
               c()
             }
           })
@@ -545,86 +547,86 @@ calc_obs_pv_boot <- function(data.raw,
         }
 
         ### Combine into single dataset
-        pv.temp <- do.call("rbind", pv.temp)
+        pv_temp <- do.call("rbind", pv_temp)
 
         ### Add id, and only retain the pseudo-value for the state of interest (that we sorted the data by)
         ### The pseudo-values for each state are calculated seperately
-        pv.temp <- pv.temp[, c("id", paste("pstate", state.k, sep = ""))]
+        pv_temp <- pv_temp[, c("id", paste("pstate", state_k, sep = ""))]
 
         ### Sort by "id"
-        pv.temp <- dplyr::arrange(pv.temp, id)
+        pv_temp <- dplyr::arrange(pv_temp, id)
 
-        return(pv.temp)
+        return(pv_temp)
 
       }
 
       ### Calculate pseudo-values in each subgroup
-      pv.out <- lapply(transitions.out, apply_calc_pv_subgroup_pctls)
+      pv_out <- lapply(transitions_out, apply_calc_pv_subgroup_pctls)
 
       ### Combine into a single dataset
-      pv.out <- Reduce(function(...) merge(..., by = "id", all.x = TRUE), pv.out)
+      pv_out <- Reduce(function(...) merge(..., by = "id", all.x = TRUE), pv_out)
 
       ### Arrange
-      pv.out <- dplyr::arrange(pv.out, id)
+      pv_out <- dplyr::arrange(pv_out, id)
 
-    } else if (!is.null(pv.group.vars) & !is.null(pv.n.pctls)) {
+    } else if (!is.null(pv_group_vars) & !is.null(pv_n_pctls)) {
 
       ###
       ### 4) Grouping by baseline variables and predicted risk
       ###
 
       ### Again, we must go separate for each state
-      apply_calc_pv_subgroup_pctls_vars <- function(state.k){
+      apply_calc_pv_subgroup_pctls_vars <- function(state_k){
 
         ###
-        ### Split data into groups defined by the variables in pv.group.vars, and then predicted risk of transition k
+        ### Split data into groups defined by the variables in pv_group_vars, and then predicted risk of transition k
 
         ###
         ### Start by splitting up data by baseline variables
 
-        ### Create formula to split the dataset by (by pv.group.vars)
-        split.formula <- stats::as.formula(paste("~ ", paste(pv.group.vars, collapse = "+"), sep = ""))
+        ### Create formula to split the dataset by (by pv_group_vars)
+        split_formula <- stats::as.formula(paste("~ ", paste(pv_group_vars, collapse = "+"), sep = ""))
         ### Split the dataset into the respective groups
-        data.groups <- split(data.raw.lmk.js, split.formula)
+        data_groups <- split(data_raw_lmk_js, split_formula)
 
         ###
-        ### Split each dataset of data.groups into groups defined by percentile of predicted risk for state k
+        ### Split each dataset of data_groups into groups defined by percentile of predicted risk for state k
 
         ### Write a function to do this
-        split_group_by_pctl <- function(data.in){
-          base::split(data.in,
-                      cut(data.in[,paste("tp.pred", state.k, sep = "")],
-                          breaks =  stats::quantile(data.in[,paste("tp.pred", state.k, sep = "")],
-                                                    seq(0,1,1/pv.n.pctls)),
+        split_group_by_pctl <- function(data_in){
+          base::split(data_in,
+                      cut(data_in[,paste("tp_pred", state_k, sep = "")],
+                          breaks =  stats::quantile(data_in[,paste("tp_pred", state_k, sep = "")],
+                                                    seq(0,1,1/pv_n_pctls)),
                           include.lowest = TRUE))
         }
 
-        ### Apply to each group in data.groups
-        data.groups.pctls <- lapply(data.groups, split_group_by_pctl)
+        ### Apply to each group in data_groups
+        data_groups_pctls <- lapply(data_groups, split_group_by_pctl)
 
         ### Create a single list containing each of these datasets
-        data.groups.pctls <- unlist(data.groups.pctls, recursive = FALSE)
+        data_groups_pctls <- unlist(data_groups_pctls, recursive = FALSE)
 
         ### Get group ids for subgroups
-        group.ids <- lapply(data.groups.pctls, function(x) as.numeric(x[,c("id")]))
+        group_ids <- lapply(data_groups_pctls, function(x) as.numeric(x[,c("id")]))
 
         ### For all individuals
-        if (is.null(pv.ids)){
+        if (is.null(pv_ids)){
 
           ### Calculate pseudo-values in each subgroup
-          pv.temp <- lapply(group.ids, calc_pv_subgroup)
+          pv_temp <- lapply(group_ids, calc_pv_subgroup)
 
-          ### For just individual specified in pv.ids
-        } else if (!is.null(pv.ids)){
+          ### For just individual specified in pv_ids
+        } else if (!is.null(pv_ids)){
 
-          ### Identify which pv.ids fit into which subgroup
-          group.pv.ids <- lapply(group.ids, function(x) x[x %in% pv.ids])
+          ### Identify which pv_ids fit into which subgroup
+          group_pv_ids <- lapply(group_ids, function(x) x[x %in% pv_ids])
 
-          ### Calculate pseudo-values in each subgroup, just for pv.ids
-          pv.temp <- lapply(1:length(group.ids), function(x) {
-            if (length(group.pv.ids[[x]] > 0)){
-              calc_pv_subgroup(subset.ids = group.ids[[x]], pv.ids = group.pv.ids[[x]])
-            } else if (length(group.pv.ids[[x]] == 0)){
+          ### Calculate pseudo-values in each subgroup, just for pv_ids
+          pv_temp <- lapply(1:length(group_ids), function(x) {
+            if (length(group_pv_ids[[x]] > 0)){
+              calc_pv_subgroup(subset_ids = group_ids[[x]], pv_ids = group_pv_ids[[x]])
+            } else if (length(group_pv_ids[[x]] == 0)){
               c()
             }
           })
@@ -632,169 +634,169 @@ calc_obs_pv_boot <- function(data.raw,
         }
 
         ### Combine into single dataset
-        pv.temp <- do.call("rbind", pv.temp)
+        pv_temp <- do.call("rbind", pv_temp)
 
         ### Add id, and only retain the pseudo-value for the state of interest (that we sorted the data by)
         ### The pseudo-values for each state are calculated seperately
-        pv.temp <- pv.temp[, c("id", paste("pstate", state.k, sep = ""))]
+        pv_temp <- pv_temp[, c("id", paste("pstate", state_k, sep = ""))]
 
         ### Sort by "id"
-        pv.temp <- dplyr::arrange(pv.temp, id)
+        pv_temp <- dplyr::arrange(pv_temp, id)
 
-        return(pv.temp)
+        return(pv_temp)
 
       }
 
       ### Calculate pseudo-values in each subgroup
-      pv.out <- lapply(transitions.out, apply_calc_pv_subgroup_pctls_vars)
+      pv_out <- lapply(transitions_out, apply_calc_pv_subgroup_pctls_vars)
 
       ### Combine into a single dataset
-      pv.out <- Reduce(function(...) merge(..., by = "id", all.x = TRUE), pv.out)
+      pv_out <- Reduce(function(...) merge(..., by = "id", all.x = TRUE), pv_out)
 
       ### Arrange
-      pv.out <- dplyr::arrange(pv.out, id)
+      pv_out <- dplyr::arrange(pv_out, id)
 
     }
 
     ##########################################
     ### PSEUDO-VALUES HAVE BEEN CALCULATED ###
-    ### STORED IN PV.OUT                   ###
+    ### STORED IN PV_OUT                   ###
     ##########################################
 
-    ### If pv.ids was specified, we just want to return
+    ### If pv_ids was specified, we just want to return
     ### the pseudo-values and nothing else,
     ### as no point modelling on a subset of the dataset
-    if (!is.null(pv.ids)){
+    if (!is.null(pv_ids)){
 
       ### Assign column names
-      colnames(pv.out)[-1] <- paste("pv.state", transitions.out, sep = "")
+      colnames(pv_out)[-1] <- paste("pv_state", transitions_out, sep = "")
 
-      ### Assign output.object
-      output.object <- pv.out
+      ### Assign output_object
+      output_object <- pv_out
     }
 
-    ### If pv.ids was not specified, and we have calculated psudo-values for entire cohort,
+    ### If pv_ids was not specified, and we have calculated psudo-values for entire cohort,
     ### generate the observed event probabilities for each state by regressing the calculated pseudo-values
     ### on the predicted transition probabilities
-    if (is.null(pv.ids)){
+    if (is.null(pv_ids)){
 
       ###
       ### Create object to store output
-      output.object <- vector("list", length(transitions.out))
-      names(output.object) <- paste("state", transitions.out, sep = "")
+      output_object <- vector("list", length(transitions_out))
+      names(output_object) <- paste("state", transitions_out, sep = "")
 
       ###
       ### Loop through and generate observed event probabilities
-      for (state in 1:length(transitions.out)){
+      for (state in 1:length(transitions_out)){
 
-        ### Assign state.k
-        state.k <- transitions.out[state]
+        ### Assign state_k
+        state_k <- transitions_out[state]
 
         ### Calculate observed event probabilities
-        if (curve.type == "loess"){
-          obs <- calc_obs_pv_loess_model(pred = data.raw.lmk.js[,paste("tp.pred", state.k, sep = "")],
-                                         pv = pv.out[,paste("pstate", state.k, sep = "")],
-                                         data.to.plot = data.to.plot[,paste("tp.pred", state.k, sep = "")],
-                                         loess.span = loess.span,
-                                         loess.degree = loess.degree,
-                                         loess.surface = loess.surface,
-                                         loess.statistics = loess.statistics,
-                                         loess.trace.hat = loess.trace.hat,
-                                         loess.cell = loess.cell,
-                                         loess.iterations = loess.iterations,
-                                         loess.iterTrace = loess.iterTrace,
+        if (curve_type == "loess"){
+          obs <- calc_obs_pv_loess_model(pred = data_raw_lmk_js[,paste("tp_pred", state_k, sep = "")],
+                                         pv = pv_out[,paste("pstate", state_k, sep = "")],
+                                         data_to_plot = data_to_plot[,paste("tp_pred", state_k, sep = "")],
+                                         loess_span = loess_span,
+                                         loess_degree = loess_degree,
+                                         loess_surface = loess_surface,
+                                         loess_statistics = loess_statistics,
+                                         loess_trace_hat = loess_trace_hat,
+                                         loess_cell = loess_cell,
+                                         loess_iterations = loess_iterations,
+                                         loess_iterTrace = loess_iterTrace,
                                          CI = CI,
-                                         CI.type = CI.type)
-        } else if (curve.type == "rcs"){
-          obs <- calc_obs_pv_rcs_model(pred = data.raw.lmk.js[,paste("tp.pred", state.k, sep = "")],
-                                       pv = pv.out[,paste("pstate", state.k, sep = "")],
-                                       data.to.plot = data.to.plot[,paste("tp.pred", state.k, sep = "")],
-                                       rcs.nk = rcs.nk,
+                                         CI_type = CI_type)
+        } else if (curve_type == "rcs"){
+          obs <- calc_obs_pv_rcs_model(pred = data_raw_lmk_js[,paste("tp_pred", state_k, sep = "")],
+                                       pv = pv_out[,paste("pstate", state_k, sep = "")],
+                                       data_to_plot = data_to_plot[,paste("tp_pred", state_k, sep = "")],
+                                       rcs_nk = rcs_nk,
                                        CI = CI,
-                                       CI.type = CI.type)
+                                       CI_type = CI_type)
         }
 
         ### Create output object
-        if ("id" %in% colnames(data.to.plot)) {
-          output.object[[state]] <- data.frame(
-            "id" = data.to.plot$id,
-            "pred" = data.to.plot[,paste("tp.pred", state.k, sep = "")],
+        if ("id" %in% colnames(data_to_plot)) {
+          output_object[[state]] <- data.frame(
+            "id" = data_to_plot$id,
+            "pred" = data_to_plot[,paste("tp_pred", state_k, sep = "")],
             obs,
-            "pv" = pv.out[,paste("pstate", state.k, sep = "")])
+            "pv" = pv_out[,paste("pstate", state_k, sep = "")])
 
         } else {
-          output.object[[state]] <- data.frame(
-            "pred" = data.to.plot[,paste("tp.pred", state.k, sep = "")],
+          output_object[[state]] <- data.frame(
+            "pred" = data_to_plot[,paste("tp_pred", state_k, sep = "")],
             obs,
-            "pv" = pv.out[,paste("pstate", state.k, sep = "")])
+            "pv" = pv_out[,paste("pstate", state_k, sep = "")])
         }
 
       }
 
       ###
-      ### If boot.format is true, just return the observed event probabilities for the first state
-      if(boot.format == TRUE){
-        output.object <- output.object[[1]]$obs
+      ### If boot_format is true, just return the observed event probabilities for the first state
+      if(boot_format == TRUE){
+        output_object <- output_object[[1]]$obs
       }
 
-      ### If pseudo-values have been user-inputted, skip the majority of steps and just fit the calibration model using pv.precalc and data.raw
+      ### If pseudo-values have been user-inputted, skip the majority of steps and just fit the calibration model using pv_precalc and data_raw
     }
-  } else if (!is.null(pv.precalc)){
+  } else if (!is.null(pv_precalc)){
 
     ###
     ### Create object to store output
-    output.object <- vector("list", length(transitions.out))
-    names(output.object) <- paste("state", transitions.out, sep = "")
+    output_object <- vector("list", length(transitions_out))
+    names(output_object) <- paste("state", transitions_out, sep = "")
 
     ###
     ### Loop through and generate observed event probabilities
-    for (state in 1:length(transitions.out)){
+    for (state in 1:length(transitions_out)){
 
-      ### Assign state.k
-      state.k <- transitions.out[state]
+      ### Assign state_k
+      state_k <- transitions_out[state]
 
       ### Calculate observed event probabilities
-      if (curve.type == "loess"){
-        obs <- calc_obs_pv_loess_model(pred = data.raw[,paste("tp.pred", state.k, sep = "")],
-                                       pv = pv.precalc[,paste("pstate", state.k, sep = "")],
-                                       data.to.plot = data.to.plot[,paste("tp.pred", state.k, sep = "")],
-                                       loess.span = loess.span,
-                                       loess.degree = loess.degree,
-                                       loess.surface = loess.surface,
-                                       loess.statistics = loess.statistics,
-                                       loess.trace.hat = loess.trace.hat,
-                                       loess.cell = loess.cell,
-                                       loess.iterations = loess.iterations,
-                                       loess.iterTrace = loess.iterTrace,
+      if (curve_type == "loess"){
+        obs <- calc_obs_pv_loess_model(pred = data_raw[,paste("tp_pred", state_k, sep = "")],
+                                       pv = pv_precalc[,paste("pstate", state_k, sep = "")],
+                                       data_to_plot = data_to_plot[,paste("tp_pred", state_k, sep = "")],
+                                       loess_span = loess_span,
+                                       loess_degree = loess_degree,
+                                       loess_surface = loess_surface,
+                                       loess_statistics = loess_statistics,
+                                       loess_trace_hat = loess_trace_hat,
+                                       loess_cell = loess_cell,
+                                       loess_iterations = loess_iterations,
+                                       loess_iterTrace = loess_iterTrace,
                                        CI = CI,
-                                       CI.type = CI.type)
-      } else if (curve.type == "rcs"){
-        obs <- calc_obs_pv_rcs_model(pred = data.raw[,paste("tp.pred", state.k, sep = "")],
-                                     pv = pv.precalc[,paste("pstate", state.k, sep = "")],
-                                     data.to.plot = data.to.plot[,paste("tp.pred", state.k, sep = "")],
-                                     rcs.nk = rcs.nk,
+                                       CI_type = CI_type)
+      } else if (curve_type == "rcs"){
+        obs <- calc_obs_pv_rcs_model(pred = data_raw[,paste("tp_pred", state_k, sep = "")],
+                                     pv = pv_precalc[,paste("pstate", state_k, sep = "")],
+                                     data_to_plot = data_to_plot[,paste("tp_pred", state_k, sep = "")],
+                                     rcs_nk = rcs_nk,
                                      CI = CI,
-                                     CI.type = CI.type)
+                                     CI_type = CI_type)
       }
 
       ### Create output object
-      if ("id" %in% colnames(data.to.plot)){
-        output.object[[state]] <- data.frame(
-          "id" = data.to.plot$id,
-          "pred" = data.to.plot[,paste("tp.pred", state.k, sep = "")],
+      if ("id" %in% colnames(data_to_plot)){
+        output_object[[state]] <- data.frame(
+          "id" = data_to_plot$id,
+          "pred" = data_to_plot[,paste("tp_pred", state_k, sep = "")],
           obs,
-          "pv" = pv.precalc[,paste("pstate", state.k, sep = "")])
+          "pv" = pv_precalc[,paste("pstate", state_k, sep = "")])
 
       } else {
-        output.object[[state]] <- data.frame(
-          "pred" = data.to.plot[,paste("tp.pred", state.k, sep = "")],
+        output_object[[state]] <- data.frame(
+          "pred" = data_to_plot[,paste("tp_pred", state_k, sep = "")],
           obs,
-          "pv" = pv.precalc[,paste("pstate", state.k, sep = "")])
+          "pv" = pv_precalc[,paste("pstate", state_k, sep = "")])
       }
     }
   }
 
-  return(output.object)
+  return(output_object)
 
 }
 
@@ -802,37 +804,37 @@ calc_obs_pv_boot <- function(data.raw,
 #' Estimate Aalen-Johansen estimator for a cohort of individuals
 #'
 #' @description
-#' Estimates Aalen-Johansen estimator for the transition probabilities in cohort data.ms.
+#' Estimates Aalen-Johansen estimator for the transition probabilities in cohort data_ms.
 #' Estimates transition probabilities at time t if in state j at time 0
-#' The Aalen-Johansen estimator for the entire cohort (including individual person_id.eval)
-#' is inputted manually (obs.aj), to speed up computational time if calculating pseudo-values
+#' The Aalen-Johansen estimator for the entire cohort (including individual person_id_eval)
+#' is inputted manually (obs_aj), to speed up computational time if calculating pseudo-values
 #' for multiple individuals from the same cohort.
 #'
 #' Function is called in calibmsm::calc_obs_pv_boot
 #'
-#' @param data.ms Validation data in `msdata` format
+#' @param data_ms Validation data in `msdata` format
 #' @param tmat Transition probability matrix
 #' @param t Follow up time at which calibration is to be assessed
 #' @param j Landmark state at which predictions were made
 #'
 #' @noRd
-calc_aj <- function(data.ms, tmat, t, j){
+calc_aj <- function(data_ms, tmat, t, j){
 
   ### Assign max state number
-  max.state <- ncol(tmat)
+  max_state <- ncol(tmat)
 
   ### Fit csh's with no predictors
   strata <- survival::strata
-  csh.aj <- survival::coxph(survival::Surv(Tstart, Tstop, status) ~ strata(trans), data.ms)
+  csh_aj <- survival::coxph(survival::Surv(Tstart, Tstop, status) ~ strata(trans), data_ms)
 
   ### Calculate cumulative incidence functions using the new transition matrix
   suppressWarnings(
-    msfit.aj <- mstate::msfit(csh.aj, trans = tmat)
+    msfit_aj <- mstate::msfit(csh_aj, trans = tmat)
   )
 
   ### Calculate Aalen-Johansen estimator
   suppressWarnings(
-    pt.aj <- mstate::probtrans(msfit.aj, predt = 0)
+    pt_aj <- mstate::probtrans(msfit_aj, predt = 0)
   )
 
   ### Note that warnings are suppressed at both these stages because user will be warned if there are states which can possibly be moved to, but no individual
@@ -843,18 +845,18 @@ calc_aj <- function(data.ms, tmat, t, j){
   ### A) is correct, and B) we aren't interested in those states anyway
 
   ### Extract the closest time in the data to the time we want to evaluate at
-  t.dat <- pt.aj[[j]]$time[max(which(pt.aj[[j]]$time <= t))]
+  t_dat <- pt_aj[[j]]$time[max(which(pt_aj[[j]]$time <= t))]
 
   ### Extract AJ estimator at this time point
-  obs.aj <- pt.aj[[j]][pt.aj[[j]]$time == t.dat, paste("pstate", 1:max.state, sep = "")]
+  obs_aj <- pt_aj[[j]][pt_aj[[j]]$time == t_dat, paste("pstate", 1:max_state, sep = "")]
 
   ### Extract AJ standard error  at this time point
-  obs.aj.se <- pt.aj[[j]][pt.aj[[j]]$time == t.dat, paste("se", 1:max.state, sep = "")]
+  obs_aj_se <- pt_aj[[j]][pt_aj[[j]]$time == t_dat, paste("se", 1:max_state, sep = "")]
 
   ### Create output object
-  output.object <- list("obs.aj" = obs.aj, "obs.aj.se" = obs.aj.se)
+  output_object <- list("obs_aj" = obs_aj, "obs_aj_se" = obs_aj_se)
 
-  return(output.object)
+  return(output_object)
 
 }
 
@@ -863,38 +865,38 @@ calc_aj <- function(data.ms, tmat, t, j){
 #' Estimate pseudo-values for the transition probabilities based on the Aalen-Johansen estimator
 #'
 #' @description
-#' Estimates the pseudo-values for an individual (person_id.eval) from cohort data.ms.
+#' Estimates the pseudo-values for an individual (person_id_eval) from cohort data_ms.
 #' Calculates psuedo-values for transition probabilities at time t if in state j at time 0
-#' The Aalen-Johansen estimator for the entire cohort (including individual person_id.eval)
-#' is inputted manually (obs.aj), to speed up computaitonal time if calculating pseudo-values
+#' The Aalen-Johansen estimator for the entire cohort (including individual person_id_eval)
+#' is inputted manually (obs_aj), to speed up computaitonal time if calculating pseudo-values
 #' for multiple individuals from the same cohort.
 #'
 #' Function is called in calibmsm::calc_obs_pv_boot
 #'
-#' @param person_id.eval id of individual to calculate the pseudo-value for
-#' @param data.ms Validation data in `msdata` format
-#' @param obs.aj Aalen-Johansen estimator of the transition probabilities in the entire cohort (not excluding person_id.eval)
+#' @param person_id_eval id of individual to calculate the pseudo-value for
+#' @param data_ms Validation data in `msdata` format
+#' @param obs_aj Aalen-Johansen estimator of the transition probabilities in the entire cohort (not excluding person_id_eval)
 #' @param tmat Transition probability matrix
-#' @param n.cohort Size of cohort (number of unique entries in data.ms)
+#' @param n_cohort Size of cohort (number of unique entries in data_ms)
 #' @param t Follow up time at which calibration is to be assessed
 #' @param j Landmark state at which predictions were made
 #'
 #' @noRd
-calc_pv_aj <- function(person_id.eval, data.ms, obs.aj, tmat, n.cohort, t, j){
+calc_pv_aj <- function(person_id_eval, data_ms, obs_aj, tmat, n_cohort, t, j){
 
   ### Calculate AJ estimate without patient in dataset
-  est.drop.pat <- calc_aj(subset(data.ms, id != person_id.eval),
+  est_drop_pat <- calc_aj(subset(data_ms, id != person_id_eval),
                           tmat = tmat,
                           t = t,
                           j = j)
 
   ### Retain just the estimate (not the standard error)
-  est.drop.pat <- est.drop.pat[["obs.aj"]]
+  est_drop_pat <- est_drop_pat[["obs_aj"]]
 
   ### Calculate the pseudo-value
-  pv.pat <- n.cohort*obs.aj - (n.cohort-1)*est.drop.pat
+  pv_pat <- n_cohort*obs_aj - (n_cohort-1)*est_drop_pat
 
-  return(pv.pat)
+  return(pv_pat)
 
 }
 
@@ -908,86 +910,86 @@ calc_pv_aj <- function(person_id.eval, data.ms, obs.aj, tmat, n.cohort, t, j){
 #' @returns A vector of observed event probabilities.
 #'
 #' @noRd
-calc_obs_pv_loess_model <- function(pred, pv, data.to.plot,
-                                    loess.span,
-                                    loess.degree,
-                                    loess.surface,
-                                    loess.statistics,
-                                    loess.trace.hat,
-                                    loess.cell,
-                                    loess.iterations,
-                                    loess.iterTrace,
+calc_obs_pv_loess_model <- function(pred, pv, data_to_plot,
+                                    loess_span,
+                                    loess_degree,
+                                    loess_surface,
+                                    loess_statistics,
+                                    loess_trace_hat,
+                                    loess_cell,
+                                    loess_iterations,
+                                    loess_iterTrace,
                                     CI,
-                                    CI.type){
+                                    CI_type){
 
   ### Fit model
   if (CI != FALSE){
-    if (CI.type == "parametric"){
-      loess.model <- stats::loess(pv ~ pred,
-                                  span = loess.span,
-                                  degree = loess.degree,
-                                  control = stats::loess.control(surface = loess.surface,
-                                                                 statistics = loess.statistics,
-                                                                 trace.hat = loess.trace.hat,
-                                                                 cell = loess.cell,
-                                                                 iterations = loess.iterations,
-                                                                 iterTrace = loess.iterTrace))
+    if (CI_type == "parametric"){
+      loess_model <- stats::loess(pv ~ pred,
+                                  span = loess_span,
+                                  degree = loess_degree,
+                                  control = stats::loess.control(surface = loess_surface,
+                                                                 statistics = loess_statistics,
+                                                                 trace.hat = loess_trace_hat,
+                                                                 cell = loess_cell,
+                                                                 iterations = loess_iterations,
+                                                                 iterTrace = loess_iterTrace))
     }
   } else {
     ### If not requiring standard errors for parametric confidence, let statistics = "none" for computational efficiency
-    loess.model <- stats::loess(pv ~ pred,
-                                span = loess.span,
-                                degree = loess.degree,
-                                control = stats::loess.control(surface = loess.surface,
+    loess_model <- stats::loess(pv ~ pred,
+                                span = loess_span,
+                                degree = loess_degree,
+                                control = stats::loess.control(surface = loess_surface,
                                                                statistics = "none",
-                                                               trace.hat = loess.trace.hat,
-                                                               cell = loess.cell,
-                                                               iterations = loess.iterations,
-                                                               iterTrace = loess.iterTrace))
+                                                               trace.hat = loess_trace_hat,
+                                                               cell = loess_cell,
+                                                               iterations = loess_iterations,
+                                                               iterTrace = loess_iterTrace))
   }
 
 
   ## Calculate predicted observed probabilities (and confidence intervals if requested using parametric approach)
   ## Note we do not calculate standard errors if confidence interval has been requested using the bootstrap (or if no CI requested)
   if (CI != FALSE){
-    if (CI.type == "parametric"){
+    if (CI_type == "parametric"){
       ## Need to split up individuals into smaller grouped otherwise predict.loess with SE = TRUE will give an
       ## error, as it will create a matrix that is too large.
 
       ## Split data into groups of size 10000
-      data.to.plot.list <- split(data.to.plot,
-                                 rep(1:ceiling(length(data.to.plot)/10000), each = 10000, length.out = length(data.to.plot)))
+      data_to_plot_list <- split(data_to_plot,
+                                 rep(1:ceiling(length(data_to_plot)/10000), each = 10000, length.out = length(data_to_plot)))
 
       ## Define alpha for CIs
       alpha <- (1-CI/100)/2
 
       ## Predict observed and create data frame
-      obs.data <- lapply(1:length(data.to.plot.list),
+      obs_data <- lapply(1:length(data_to_plot_list),
                          function(x) {
                            ## Predict observed
-                           obs <- predict(loess.model, newdata = data.to.plot.list[[x]], se = TRUE)
+                           obs <- predict(loess_model, newdata = data_to_plot_list[[x]], se = TRUE)
 
                            ## Put into dataframe
-                           obs.df <- data.frame("obs" = obs$fit,
-                                                "obs.lower" = obs$fit - stats::qnorm(1-alpha)*obs$se,
-                                                "obs.upper" = obs$fit + stats::qnorm(1-alpha)*obs$se)
+                           obs_df <- data.frame("obs" = obs$fit,
+                                                "obs_lower" = obs$fit - stats::qnorm(1-alpha)*obs$se,
+                                                "obs_upper" = obs$fit + stats::qnorm(1-alpha)*obs$se)
                            ## Return
-                           return(obs.df)
+                           return(obs_df)
                          })
 
       ## Combine into one data frame
-      obs.data <- do.call("rbind", obs.data)
+      obs_data <- do.call("rbind", obs_data)
 
     }
   } else {
     ## Predict observed
-    obs <- predict(loess.model, newdata = data.to.plot)
+    obs <- predict(loess_model, newdata = data_to_plot)
     ## Put into dataframe
-    obs.data <- data.frame("obs" = obs)
+    obs_data <- data.frame("obs" = obs)
   }
 
-  ### Return obs.data
-  return(obs.data)
+  ### Return obs_data
+  return(obs_data)
 
 }
 
@@ -1000,66 +1002,66 @@ calc_obs_pv_loess_model <- function(pred, pv, data.to.plot,
 #' @returns A vector of observed event probabilities.
 #'
 #' @noRd
-calc_obs_pv_rcs_model <- function(pred, pv, data.to.plot, rcs.nk, CI, CI.type){
+calc_obs_pv_rcs_model <- function(pred, pv, data_to_plot, rcs_nk, CI, CI_type){
 
   ### Start by transforming pred onto logit scale
-  pred.logit <- log(pred/(1-pred))
+  pred_logit <- log(pred/(1-pred))
 
   ### Create spline terms based on predicted risks
-  rcs.pred <- Hmisc::rcspline.eval(pred.logit, nk=rcs.nk, inclx=T)
-  colnames(rcs.pred) <- paste("rcs.x", 1:ncol(rcs.pred), sep = "")
-  knots.pred <- attr(rcs.pred,"knots")
+  rcs_pred <- Hmisc::rcspline.eval(pred_logit, nk=rcs_nk, inclx=T)
+  colnames(rcs_pred) <- paste("rcs_x", 1:ncol(rcs_pred), sep = "")
+  knots_pred <- attr(rcs_pred,"knots")
 
-  ### Create spline terms in data.to.plot (using same knot locations derived from the predicted risks)
-  ### Note that if data.to.plot == pred, these will be the same
+  ### Create spline terms in data_to_plot (using same knot locations derived from the predicted risks)
+  ### Note that if data_to_plot == pred, these will be the same
 
   ### First transform onto logit scale
-  data.to.plot <- log(data.to.plot/(1 - data.to.plot))
+  data_to_plot <- log(data_to_plot/(1 - data_to_plot))
 
   ### Create spline terms
-  rcs.data.to.plot <- data.frame(Hmisc::rcspline.eval(data.to.plot ,knots = knots.pred, inclx=T))
-  colnames(rcs.data.to.plot) <- paste("rcs.x", 1:ncol(rcs.data.to.plot), sep = "")
+  rcs_data_to_plot <- data.frame(Hmisc::rcspline.eval(data_to_plot, knots = knots_pred, inclx=T))
+  colnames(rcs_data_to_plot) <- paste("rcs_x", 1:ncol(rcs_data_to_plot), sep = "")
 
   ### Create dataset in which to fit the model
-  data.rcs <- data.frame("pv" = pv, rcs.pred)
+  data_rcs <- data.frame("pv" = pv, rcs_pred)
 
   ### Define equation
-  eq.LHS <- paste("pv ~ ", sep = "")
-  eq.RHS <- paste("rcs.x", 1:ncol(rcs.data.to.plot), sep = "", collapse = "+")
-  eq.rcs <- stats::formula(paste(eq.LHS, eq.RHS, sep = ""))
+  eq_LHS <- paste("pv ~ ", sep = "")
+  eq_RHS <- paste("rcs_x", 1:ncol(rcs_data_to_plot), sep = "", collapse = "+")
+  eq_rcs <- stats::formula(paste(eq_LHS, eq_RHS, sep = ""))
 
   ## Fit the model using logit link function
-  rcs.model <- stats::glm(eq.rcs, data = data.rcs, family = stats::gaussian(link = "logit"), start = rep(0, ncol(rcs.pred) + 1))
+  rcs_model <- stats::glm(eq_rcs, data = data_rcs, family = stats::gaussian(link = "logit"), start = rep(0, ncol(rcs_pred) + 1))
 
   ## Calculate predicted observed probabilities (and confidence intervals if requested using parametric approach)
   ## Note we do not calculate standard errors if confidence interval has been requested using the bootstrap
   if (CI == FALSE){
     ## Predict observed
-    obs <- predict(rcs.model, newdata = rcs.data.to.plot, type = "link")
+    obs <- predict(rcs_model, newdata = rcs_data_to_plot, type = "link")
     ## Put into dataframe
-    obs.data <- data.frame("obs" = 1/(1+exp(-obs)))
+    obs_data <- data.frame("obs" = 1/(1+exp(-obs)))
   } else if (CI != FALSE){
-    if (CI.type == "bootstrap"){
+    if (CI_type == "bootstrap"){
       ## Predict observed
-      obs <- predict(rcs.model, newdata = rcs.data.to.plot, type = "link")
+      obs <- predict(rcs_model, newdata = rcs_data_to_plot, type = "link")
       ## Put into data frame
-      obs.data <- data.frame("obs" = 1/(1+exp(-obs)))
-    } else if (CI.type == "parametric"){
+      obs_data <- data.frame("obs" = 1/(1+exp(-obs)))
+    } else if (CI_type == "parametric"){
       ## Predict observed
-      obs <- predict(rcs.model, newdata = rcs.data.to.plot, type = "link", se.fit = TRUE)
+      obs <- predict(rcs_model, newdata = rcs_data_to_plot, type = "link", se.fit = TRUE)
       ## Define alpha for CIs
       alpha <- (1-CI/100)/2
       ## Put into dataframe
-      obs.data <- data.frame("obs" = 1/(1+exp(-obs$fit)),
-                             "obs.lower" = 1/(1+exp(-(obs$fit - stats::qnorm(1-alpha)*obs$se.fit))),
-                             "obs.upper" = 1/(1+exp(-(obs$fit + stats::qnorm(1-alpha)*obs$se.fit)))
+      obs_data <- data.frame("obs" = 1/(1+exp(-obs$fit)),
+                             "obs_lower" = 1/(1+exp(-(obs$fit - stats::qnorm(1-alpha)*obs$se.fit))),
+                             "obs_upper" = 1/(1+exp(-(obs$fit + stats::qnorm(1-alpha)*obs$se.fit)))
       )
     }
 
   }
 
-  ### Return obs.data
-  return(obs.data)
+  ### Return obs_data
+  return(obs_data)
 
 }
 

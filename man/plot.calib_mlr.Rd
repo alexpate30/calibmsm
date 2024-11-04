@@ -11,20 +11,20 @@ using \code{\link{calib_msm}}.}
   combine = TRUE,
   ncol = NULL,
   nrow = NULL,
-  size.point = 0.5,
-  size.text = 12,
-  transparency.plot = 0.25,
-  marg.density = FALSE,
-  marg.density.size = 5,
-  marg.density.type = "density",
-  marg.rug = FALSE,
-  marg.rug.transparency = 0.1,
-  titles.include = TRUE,
+  size_point = 0.5,
+  size_text = 12,
+  transparency_plot = 0.25,
+  marg_density = FALSE,
+  marg_density_size = 5,
+  marg_density_type = "density",
+  marg_rug = FALSE,
+  marg_rug_transparency = 0.1,
+  titles_include = TRUE,
   titles = NULL,
-  axis.titles.x = NULL,
-  axis.titles.text.x = "Predicted risk",
-  axis.titles.y = NULL,
-  axis.titles.text.y = "Observed risk"
+  axis_titles_x = NULL,
+  axis_titles_text_x = "Predicted risk",
+  axis_titles_y = NULL,
+  axis_titles_text_y = "Predicted-observed risk"
 )
 }
 \arguments{
@@ -38,33 +38,33 @@ using \code{\link{calib_msm}}.}
 
 \item{nrow}{Number of rows for combined calibration plot}
 
-\item{size.point}{Size of points in scatter plot}
+\item{size_point}{Size of points in scatter plot}
 
-\item{size.text}{Size of text in plot}
+\item{size_text}{Size of text in plot}
 
-\item{transparency.plot}{Degree of transparency for points in the calibration scatter plot}
+\item{transparency_plot}{Degree of transparency for points in the calibration scatter plot}
 
-\item{marg.density}{Whether to produce marginal density plots TRUE/FALSE}
+\item{marg_density}{Whether to produce marginal density plots TRUE/FALSE}
 
-\item{marg.density.size}{Size of the main plot relative to the density plots (see \code{\link[ggExtra]{ggMarginal}})}
+\item{marg_density_size}{Size of the main plot relative to the density plots (see \code{\link[ggExtra]{ggMarginal}})}
 
-\item{marg.density.type}{What type of marginal plot to show (see \code{\link[ggExtra]{ggMarginal}})}
+\item{marg_density_type}{What type of marginal plot to show (see \code{\link[ggExtra]{ggMarginal}})}
 
-\item{marg.rug}{Whether to produce marginal rug plots TRUE/FALSE}
+\item{marg_rug}{Whether to produce marginal rug plots TRUE/FALSE}
 
-\item{marg.rug.transparency}{Degree of transparency for the density rug plot along each axis}
+\item{marg_rug_transparency}{Degree of transparency for the density rug plot along each axis}
 
-\item{titles.include}{Whether to include titles for each individual calibration plots}
+\item{titles_include}{Whether to include titles for each individual calibration plots}
 
-\item{titles}{Vector of titles for the calibration plots. Defaults to "State k" for each plot.}
+\item{titles}{Vector of titles for the calibration plots_ Defaults to "State k" for each plot_}
 
-\item{axis.titles.x}{Position of plots for which to include title on x-axis}
+\item{axis_titles_x}{Position of plots for which to include title on x-axis}
 
-\item{axis.titles.text.x}{x-axis title}
+\item{axis_titles_text_x}{x-axis title}
 
-\item{axis.titles.y}{Position of plots for which to include title on y-axis}
+\item{axis_titles_y}{Position of plots for which to include title on y-axis}
 
-\item{axis.titles.text.y}{y-axis title}
+\item{axis_titles_text_y}{y-axis title}
 }
 \value{
 If \code{combine = TRUE}, returns an object of classes \code{gg}, \code{ggplot}, and \code{ggarrange},
@@ -79,32 +79,32 @@ estimated using the MLR-IPCW approach.
 # Using competing risks data out of initial state (see vignette: ... -in-competing-risk-setting).
 # Estimate and plot MLR-IPCW calibration scatter plots for the predicted transition
 # probabilities at time t = 1826, when predictions were made at time
-# s = 0 in state j = 1. These predicted transition probabilities are stored in tp.cmprsk.j0.
+# s = 0 in state j = 1. These predicted transition probabilities are stored in tp_cmprsk_j0.
 
 # To minimise example time we reduce the datasets to 150 individuals.
 # Extract the predicted transition probabilities out of state j = 1 for first 150 individuals
-tp.pred <- tp.cmprsk.j0 |>
+tp_pred <- tp_cmprsk_j0 |>
  dplyr::filter(id \%in\% 1:150) |>
  dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
 # Reduce ebmtcal to first 150 individuals
 ebmtcal <- ebmtcal |> dplyr::filter(id \%in\% 1:150)
-# Reduce msebmtcal.cmprsk to first 150 individuals
-msebmtcal.cmprsk <- msebmtcal.cmprsk |> dplyr::filter(id \%in\% 1:150)
+# Reduce msebmtcal_cmprsk to first 150 individuals
+msebmtcal_cmprsk <- msebmtcal_cmprsk |> dplyr::filter(id \%in\% 1:150)
 
 # Now estimate the observed event probabilities for each possible transition.
-dat.calib <-
-calib_msm(data.ms = msebmtcal.cmprsk,
- data.raw = ebmtcal,
+dat_calib <-
+calib_msm(data_ms = msebmtcal_cmprsk,
+ data_raw = ebmtcal,
  j=1,
  s=0,
  t = 1826,
- tp.pred = tp.pred,
- calib.type = "mlr",
- w.covs = c("year", "agecl", "proph", "match"),
- mlr.ps.int = 2,
- mlr.degree = 2)
+ tp_pred = tp_pred,
+ calib_type = "mlr",
+ w_covs = c("year", "agecl", "proph", "match"),
+ mlr_ps_int = 2,
+ mlr_degree = 2)
 
  # These are then plotted
- plot(dat.calib, combine = TRUE, nrow = 2, ncol = 3)
+ plot(dat_calib, combine = TRUE, nrow = 2, ncol = 3)
 
 }

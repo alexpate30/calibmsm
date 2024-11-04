@@ -14,117 +14,117 @@
 #' @returns A list of datasets for each calibration plot.
 #'
 #' @noRd
-calib_mlr_ipcw <- function(data.raw,
-                           data.ms,
+calib_mlr_ipcw <- function(data_raw,
+                           data_ms,
                            j,
                            s,
                            t,
-                           weights.provided,
-                           w.covs,
-                           w.function,
-                           w.landmark.type,
-                           w.max,
-                           w.stabilised,
-                           w.max.follow,
-                           mlr.smoother.type,
-                           mlr.ps.int,
-                           mlr.degree,
-                           mlr.s.df,
-                           mlr.niknots,
+                           weights_provided,
+                           w_covs,
+                           w_function,
+                           w_landmark_type,
+                           w_max,
+                           w_stabilised,
+                           w_max_follow,
+                           mlr_smoother_type,
+                           mlr_ps_int,
+                           mlr_degree,
+                           mlr_s_df,
+                           mlr_niknots,
                            CI,
-                           CI.R.boot,
-                           CI.seed,
-                           valid.transitions,
-                           assess.moderate,
-                           assess.mean, ...){
+                           CI_R_boot,
+                           CI_seed,
+                           valid_transitions,
+                           assess_moderate,
+                           assess_mean, ...){
 
   ## Create landmarked dataset
-  data.raw.lmk.js.uncens <-  apply_landmark(data.raw = data.raw, data.ms = data.ms, j = j, s = s, t = t, exclude.cens.t = TRUE)
+  data_raw_lmk_js_uncens <-  apply_landmark(data_raw = data_raw, data_ms = data_ms, j = j, s = s, t = t, exclude_cens_t = TRUE)
 
   ## Calculate weights
-  ## Note this is done in the entire dataset data.boot, which has its own functionality (w.landmark.type) to landmark on j and s, or just s, before
+  ## Note this is done in the entire dataset data_boot, which has its own functionality (w_landmark_type) to landmark on j and s, or just s, before
   ## calculating the weights
-  if (weights.provided == FALSE){
+  if (weights_provided == FALSE){
 
-    ## If custom function for estimating weights has been inputted ("w.function"), replace "calc_weights" with this function
-    if (!is.null(w.function)){
-      calc_weights <- w.function
+    ## If custom function for estimating weights has been inputted ("w_function"), replace "calc_weights" with this function
+    if (!is.null(w_function)){
+      calc_weights <- w_function
     }
 
     ## Calculate the weights
-    weights <- calc_weights(data.ms = data.ms,
-                            data.raw = data.raw,
-                            covs = w.covs,
+    weights <- calc_weights(data_ms = data_ms,
+                            data_raw = data_raw,
+                            covs = w_covs,
                             t = t,
                             s = s,
-                            landmark.type = w.landmark.type,
+                            landmark_type = w_landmark_type,
                             j = j,
-                            max.weight = w.max,
-                            stabilised = w.stabilised,
-                            max.follow = w.max.follow,
+                            max_weight = w_max,
+                            stabilised = w_stabilised,
+                            max_follow = w_max_follow,
                             ...)
 
-    ## Add weights to data.boot
-    data.raw.lmk.js.uncens <- dplyr::left_join(data.raw.lmk.js.uncens, dplyr::distinct(weights), by = dplyr::join_by(id))
+    ## Add weights to data_boot
+    data_raw_lmk_js_uncens <- dplyr::left_join(data_raw_lmk_js_uncens, dplyr::distinct(weights), by = dplyr::join_by(id))
 
   }
 
   ### Assign reference category
-  ref.cat <- paste(valid.transitions[1])
+  ref_cat <- paste(valid_transitions[1])
 
   ###
   ### Calibration plots/Moderate Calibration
   ###
-  if (assess.moderate == TRUE){
+  if (assess_moderate == TRUE){
 
     ### Define equation
-    eq.LHS <- paste("state.poly.fac ~ ")
-    if (mlr.smoother.type == "s"){
-      eq.RHS <- paste("s(mlr.lp", 1:(length(valid.transitions) - 1), ", df = mlr.s.df)", sep = "", collapse = "+")
-    } else if (mlr.smoother.type == "sm.ps"){
-      eq.RHS <- paste("sm.ps(mlr.lp", 1:(length(valid.transitions) - 1), ", ps.int = mlr.ps.int, degree = mlr.degree)", sep = "", collapse = "+")
-    } else if (mlr.smoother.type == "sm.os"){
-      eq.RHS <- paste("sm.os(mlr.lp", 1:(length(valid.transitions) - 1), ", niknots = mlr.niknots)", sep = "", collapse = "+")
+    eq_LHS <- paste("state_poly_fac ~ ")
+    if (mlr_smoother_type == "s"){
+      eq_RHS <- paste("s(mlr_lp", 1:(length(valid_transitions) - 1), ", df = mlr_s_df)", sep = "", collapse = "+")
+    } else if (mlr_smoother_type == "sm.ps"){
+      eq_RHS <- paste("sm.ps(mlr_lp", 1:(length(valid_transitions) - 1), ", ps.int = mlr_ps_int, degree = mlr_degree)", sep = "", collapse = "+")
+    } else if (mlr_smoother_type == "sm.os"){
+      eq_RHS <- paste("sm.os(mlr_lp", 1:(length(valid_transitions) - 1), ", niknots = mlr_niknots)", sep = "", collapse = "+")
     }
-    eq.mlr <- stats::as.formula(paste(eq.LHS, eq.RHS, sep =""))
+    eq_mlr <- stats::as.formula(paste(eq_LHS, eq_RHS, sep =""))
 
     ### Apply nominal recalibration framework of van Hoorde et al., (2014)
-    calib.model <- VGAM::vgam(eq.mlr, weights = data.raw.lmk.js.uncens[, "ipcw"],
-                              data = data.raw.lmk.js.uncens, family = VGAM::multinomial(refLevel = ref.cat))
+    calib_model <- VGAM::vgam(eq_mlr, weights = data_raw_lmk_js_uncens[, "ipcw"],
+                              data = data_raw_lmk_js_uncens, family = VGAM::multinomial(refLevel = ref_cat))
 
     ###
-    ### Generate predicted-observed risks and add to data.raw.lmk.js.uncens
+    ### Generate predicted-observed risks and add to data_raw_lmk_js_uncens
 
     ## Create dataframe to store
-    dat.mlr.pred.obs <- data.frame(matrix(NA, ncol = length(valid.transitions), nrow = nrow(data.raw.lmk.js.uncens)))
+    dat_mlr_pred_obs <- data.frame(matrix(NA, ncol = length(valid_transitions), nrow = nrow(data_raw_lmk_js_uncens)))
     ## Assign colnames
-    colnames(dat.mlr.pred.obs) <- paste("mlr.pred.obs", valid.transitions, sep = "")
-    ## Calc pred.obs for those who are uncensored
-    mlr.pred.obs <- VGAM::predictvglm(calib.model, newdata = data.raw.lmk.js.uncens, type = "response")
+    colnames(dat_mlr_pred_obs) <- paste("mlr_pred_obs", valid_transitions, sep = "")
+    ## Calc pred_obs for those who are uncensored
+    mlr_pred_obs <- VGAM::predictvglm(calib_model, newdata = data_raw_lmk_js_uncens, type = "response")
     ## Assign to appropriate individuals
-    dat.mlr.pred.obs[, ] <- mlr.pred.obs
+    dat_mlr_pred_obs[, ] <- mlr_pred_obs
 
-    ### Then add it to data.raw.lmk.js.uncens
-    data.raw.lmk.js.uncens <- cbind(data.raw.lmk.js.uncens, dat.mlr.pred.obs)
+    ### Then add it to data_raw_lmk_js_uncens
+    data_raw_lmk_js_uncens <- cbind(data_raw_lmk_js_uncens, dat_mlr_pred_obs)
 
     ### Assign output
-    output.object <- dplyr::select(data.raw.lmk.js.uncens, id, paste("tp.pred", valid.transitions, sep = ""), paste("mlr.pred.obs", valid.transitions, sep = ""))
+    output_object <- dplyr::select(data_raw_lmk_js_uncens, id, paste("tp_pred", valid_transitions, sep = ""), paste("mlr_pred_obs", valid_transitions, sep = ""))
 
     ### Get plotdata in same format as calib_blr
     ## Start by creating new output object
-    output.object.plots <- vector("list", length(valid.transitions))
-    names(output.object.plots) <- paste("state", valid.transitions, sep = "")
+    output_object_plots <- vector("list", length(valid_transitions))
+    names(output_object_plots) <- paste("state", valid_transitions, sep = "")
 
     ## Loop through and create output object for each valid transition (same format as for BLR-IPCW and PV)
-    for (k in 1:length(valid.transitions)){
+    for (k in 1:length(valid_transitions)){
 
       ## Assign state of interest
-      state.k <- valid.transitions[k]
+      state_k <- valid_transitions[k]
 
       ## Create output object
-      output.object.plots[[k]] <- data.frame("id" = output.object[, "id"],
-                                             "pred" = output.object[, paste("tp.pred", valid.transitions[k], sep = "")],
-                                             "obs" = output.object[, paste("mlr.pred.obs", valid.transitions[k], sep = "")])
+      output_object_plots[[k]] <- data.frame("id" = output_object[, "id"],
+                                             "pred" = output_object[, paste("tp_pred", valid_transitions[k], sep = "")],
+                                             "obs" = output_object[, paste("mlr_pred_obs", valid_transitions[k], sep = "")])
     }
 
   }
@@ -132,71 +132,73 @@ calib_mlr_ipcw <- function(data.raw,
   ###
   ### Calibration intercept
   ###
-  if (assess.mean == TRUE){
+  if (assess_mean == TRUE){
 
     if (CI != FALSE){
 
       ### Create object to store plot data
-      output.object.mean <- vector("list", length(valid.transitions))
-      names(output.object.mean) <- paste("state", valid.transitions, sep = "")
+      output_object_mean <- vector("list", length(valid_transitions))
+      names(output_object_mean) <- paste("state", valid_transitions, sep = "")
 
       ### Define alpha for CI's
       alpha <- (1-CI/100)/2
 
       ### Set seed for bootstrapping
-      set.seed(CI.seed)
+      if (!is.null(CI_seed)){
+        set.seed(CI_seed)
+      }
 
       ### Apply bootstrapping
-      boot.mean <- boot::boot(data.raw, calc_mean_mlr_boot, R = CI.R.boot,
-                              data.ms = data.ms,
-                              state.k = state.k,
+      boot_mean <- boot::boot(data_raw, calc_mean_mlr_boot, R = CI_R_boot,
+                              data_ms = data_ms,
+                              state_k = state_k,
                               j = j,
                               s2 = s,
                               t = t,
-                              weights.provided = weights.provided,
-                              w.function = w.function,
-                              w.covs = w.covs,
-                              w.landmark.type = w.landmark.type,
-                              w.max = w.max,
-                              w.stabilised = w.stabilised,
-                              w.max.follow = w.max.follow,
-                              valid.transitions = valid.transitions, ...)
+                              weights_provided = weights_provided,
+                              w_function = w_function,
+                              w_covs = w_covs,
+                              w_landmark_type = w_landmark_type,
+                              w_max = w_max,
+                              w_stabilised = w_stabilised,
+                              w_max_follow = w_max_follow,
+                              valid_transitions = valid_transitions, ...)
 
       ### Extract confidence bands
-      lower <- apply(boot.mean$t, 2, stats::quantile, probs = alpha, na.rm = TRUE)
-      upper <- apply(boot.mean$t, 2, stats::quantile, probs = 1-alpha, na.rm = TRUE)
+      lower <- apply(boot_mean$t, 2, stats::quantile, probs = alpha, na.rm = TRUE)
+      upper <- apply(boot_mean$t, 2, stats::quantile, probs = 1-alpha, na.rm = TRUE)
 
       ### Cycle through states and assign to correct part of output object
-      for (state in 1:length(valid.transitions)){
+      for (state in 1:length(valid_transitions)){
 
         ### Put into output object
-        output.object.mean[[state]] <- c("mean" = as.numeric(boot.mean$t0[state]),
-                                         "mean.lower" = as.numeric(lower[state]),
-                                         "mean.upper" = as.numeric(upper[state]))
+        output_object_mean[[state]] <- c("mean" = as.numeric(boot_mean$t0[state]),
+                                         "mean_lower" = as.numeric(lower[state]),
+                                         "mean_upper" = as.numeric(upper[state]))
 
       }
 
     } else if (CI == FALSE){
 
       ### Assess mean calibration
-      output.object.mean <- calc_mean_mlr_boot(data.raw = data.raw,
-                                               indices = 1:nrow(data.raw),
-                                               data.ms = data.ms,
-                                               state.k = state.k,
+      output_object_mean <- calc_mean_mlr_boot(data_raw = data_raw,
+                                               indices = 1:nrow(data_raw),
+                                               data_ms = data_ms,
+                                               state_k = state_k,
                                                j = j,
                                                s2 = s,
                                                t = t,
-                                               weights.provided = weights.provided,
-                                               w.function = w.function,
-                                               w.covs = w.covs,
-                                               w.landmark.type = w.landmark.type,
-                                               w.max = w.max,
-                                               w.stabilised = w.stabilised,
-                                               w.max.follow = w.max.follow,
-                                               valid.transitions = valid.transitions, ...)
+                                               weights_provided = weights_provided,
+                                               w_function = w_function,
+                                               w_covs = w_covs,
+                                               w_landmark_type = w_landmark_type,
+                                               w_max = w_max,
+                                               w_stabilised = w_stabilised,
+                                               w_max_follow = w_max_follow,
+                                               valid_transitions = valid_transitions, ...)
 
       ### Put into output object
-      names(output.object.mean) <- paste("state", valid.transitions, sep = "")
+      names(output_object_mean) <- paste("state", valid_transitions, sep = "")
 
     }
 
@@ -212,42 +214,42 @@ calib_mlr_ipcw <- function(data.raw,
   # i2 <- rbind(0, 1, 0, 0)
   # i3 <- rbind(0, 0, 1, 0)
   # i4 <- rbind(0, 0, 0, 1)
-  # clist <- list("(Intercept)" = i, "mlr.lp1" = i1, "mlr.lp2" = i2, "mlr.lp3" = i3, "mlr.lp4" = i4)
+  # clist <- list("(Intercept)" = i, "mlr_lp1" = i1, "mlr_lp2" = i2, "mlr_lp3" = i3, "mlr_lp4" = i4)
   # clist
   #
   # ### Apply nominal recalibration framework
   # ###
   #
   # ### Define equation
-  # eq.LHS <- paste("state.poly.fac ~ ")
-  # eq.RHS <- paste("mlr.lp", 1:(length(valid.transitions) - 1), sep = "", collapse = "+")
-  # eq.mlr <- stats::as.formula(paste(eq.LHS, eq.RHS, sep =""))
+  # eq_LHS <- paste("state_poly_fac ~ ")
+  # eq_RHS <- paste("mlr_lp", 1:(length(valid_transitions) - 1), sep = "", collapse = "+")
+  # eq_mlr <- stats::as.formula(paste(eq_LHS, eq_RHS, sep =""))
   #
   # ### Fit model to estimate slopes
-  # mlr.slope.model <- VGAM::vgam(state.poly.fac ~ mlr.lp1 + mlr.lp2 + mlr.lp3 + mlr.lp4, constraints = clist, weights = ipcw,
-  #                           data = data.raw.lmk.js.uncens, family = VGAM::multinomial(refLevel = ref.cat))
+  # mlr_slope_model <- VGAM::vgam(state_poly_fac ~ mlr_lp1 + mlr_lp2 + mlr_lp3 + mlr_lp4, constraints = clist, weights = ipcw,
+  #                           data = data_raw_lmk_js_uncens, family = VGAM::multinomial(refLevel = ref_cat))
   #
   # ### Extract slopes and standard errors
-  # mlr.slopes <- mlr.slope.model@coefficients[paste("mlr.lp", 1:(length(valid.transitions) - 1), sep = "")]
-  # mlr.slopes.se <- sqrt(diag(stats::vcov(mlr.slope.model))[paste("mlr.lp", 1:(length(valid.transitions) - 1), sep = "")])
+  # mlr_slopes <- mlr_slope_model@coefficients[paste("mlr_lp", 1:(length(valid_transitions) - 1), sep = "")]
+  # mlr_slopes_se <- sqrt(diag(stats::vcov(mlr_slope_model))[paste("mlr_lp", 1:(length(valid_transitions) - 1), sep = "")])
   #
   # ### Define output object
-  # output.object.weak <- list("slopes" = mlr.slopes, "slopes.se" = mlr.slopes.se)
+  # output_object_weak <- list("slopes" = mlr_slopes, "slopes_se" = mlr_slopes_se)
 
   ### Define combined output object
-  output.object.comb <- vector("list")
+  output_object_comb <- vector("list")
 
-  if (assess.moderate == TRUE){
-    output.object.comb[["plotdata"]] <- output.object.plots
+  if (assess_moderate == TRUE){
+    output_object_comb[["plotdata"]] <- output_object_plots
   }
-  if (assess.mean == TRUE){
-    output.object.comb[["mean"]] <- output.object.mean
+  if (assess_mean == TRUE){
+    output_object_comb[["mean"]] <- output_object_mean
   }
-  # if (assess.weak == TRUE){
-  #   output.object.comb[["weak"]] <- output.object.weak
+  # if (assess_weak == TRUE){
+  #   output_object_comb[["weak"]] <- output_object_weak
   # }
 
-  return(output.object.comb)
+  return(output_object_comb)
 
 }
 
@@ -259,100 +261,100 @@ calib_mlr_ipcw <- function(data.raw,
 #'
 #' @details
 #' Function written in a format so that it can be used in combination with \code{\link[boot]{boot}}
-#' for bootstrapping. Specifying `indices = 1:nrow(data.raw)` will return the calibration
+#' for bootstrapping. Specifying `indices = 1:nrow(data_raw)` will return the calibration
 #' of interest.
 #'
 #' @returns Mean calibration and calibration slope for a given state.
 #'
 #' @noRd
-calc_mean_mlr_boot <- function(data.raw,
+calc_mean_mlr_boot <- function(data_raw,
                                indices,
-                               data.ms,
-                               state.k,
+                               data_ms,
+                               state_k,
                                j,
                                s2, # can't use 's' because it matches an argument for the boot function
                                t,
-                               weights.provided,
-                               w.function,
-                               w.covs,
-                               w.landmark.type,
-                               w.max,
-                               w.stabilised,
-                               w.max.follow,
-                               valid.transitions, ...){
+                               weights_provided,
+                               w_function,
+                               w_covs,
+                               w_landmark_type,
+                               w_max,
+                               w_stabilised,
+                               w_max_follow,
+                               valid_transitions, ...){
 
   ## Create bootstrapped dataset
-  data.boot <- data.raw[indices, ]
+  data_boot <- data_raw[indices, ]
 
   ## Create landmarked dataset
-  data.boot.lmk.js.uncens <-  apply_landmark(data.raw = data.boot, data.ms = data.ms, j = j, s = s2, t = t, exclude.cens.t = TRUE)
+  data_boot_lmk_js_uncens <-  apply_landmark(data_raw = data_boot, data_ms = data_ms, j = j, s = s2, t = t, exclude_cens_t = TRUE)
 
   ## Calculate weights
-  ## Note this is done in the entire dataset data.boot, which has its own functionality (w.landmark.type) to landmark on j and s, or just s, before
+  ## Note this is done in the entire dataset data_boot, which has its own functionality (w_landmark_type) to landmark on j and s, or just s, before
   ## calculating the weights
-  if (weights.provided == FALSE){
+  if (weights_provided == FALSE){
 
-    ## If custom function for estimating weights has been inputted ("w.function"), replace "calc_weights" with this function
-    if (!is.null(w.function)){
-      calc_weights <- w.function
+    ## If custom function for estimating weights has been inputted ("w_function"), replace "calc_weights" with this function
+    if (!is.null(w_function)){
+      calc_weights <- w_function
     }
 
     ## Calculate the weights
-    weights <- calc_weights(data.ms = data.ms,
-                            data.raw = data.boot,
-                            covs = w.covs,
+    weights <- calc_weights(data_ms = data_ms,
+                            data_raw = data_boot,
+                            covs = w_covs,
                             t = t,
                             s = s2,
-                            landmark.type = w.landmark.type,
+                            landmark_type = w_landmark_type,
                             j = j,
-                            max.weight = w.max,
-                            stabilised = w.stabilised,
-                            max.follow = w.max.follow,
+                            max_weight = w_max,
+                            stabilised = w_stabilised,
+                            max_follow = w_max_follow,
                             ...)
 
-    ## Add weights to data.boot
-    data.boot.lmk.js.uncens <- dplyr::left_join(data.boot.lmk.js.uncens, dplyr::distinct(weights), by = dplyr::join_by(id))
+    ## Add weights to data_boot
+    data_boot_lmk_js_uncens <- dplyr::left_join(data_boot_lmk_js_uncens, dplyr::distinct(weights), by = dplyr::join_by(id))
 
   }
 
   ### Assign reference category
-  ref.cat <- paste(valid.transitions[1])
+  ref_cat <- paste(valid_transitions[1])
 
   ### Define equation
-  eq.LHS <- paste("state.poly.fac ~ ")
-  eq.RHS <- paste("mlr.lp", 1:(length(valid.transitions) - 1), sep = "", collapse = "+")
-  eq.mlr <- stats::as.formula(paste(eq.LHS, eq.RHS, sep =""))
+  eq_LHS <- paste("state_poly_fac ~ ")
+  eq_RHS <- paste("mlr_lp", 1:(length(valid_transitions) - 1), sep = "", collapse = "+")
+  eq_mlr <- stats::as.formula(paste(eq_LHS, eq_RHS, sep =""))
 
   ### Fit model to estimate intercepts
-  mlr.int.model <- VGAM::vgam(data.boot.lmk.js.uncens$state.poly.fac ~ 1,
-                              offset = as.matrix(data.boot.lmk.js.uncens[, paste("mlr.lp", 1:(length(valid.transitions) - 1), sep = "")]),
-                              weights = data.boot.lmk.js.uncens$ipcw,
-                              family = VGAM::multinomial(refLevel = ref.cat))
+  mlr_int_model <- VGAM::vgam(data_boot_lmk_js_uncens$state_poly_fac ~ 1,
+                              offset = as.matrix(data_boot_lmk_js_uncens[, paste("mlr_lp", 1:(length(valid_transitions) - 1), sep = "")]),
+                              weights = data_boot_lmk_js_uncens$ipcw,
+                              family = VGAM::multinomial(refLevel = ref_cat))
 
   ###  Now need to calculate predicted-observed values for each state using this model, and calculate mean difference from predicted risks
 
   ### Create a new dataset with linear predictors from the model (intercept plus offset)
-  data.pred.obs.lp <- matrix( nrow = nrow(data.boot.lmk.js.uncens), ncol = length(valid.transitions) - 1)
-  for (state in 1:(length(valid.transitions) - 1)){
-    data.pred.obs.lp[,state] <-
-      exp(stats::coefficients(mlr.int.model)[state] + data.boot.lmk.js.uncens[,paste("mlr.lp", state, sep = "")])
+  data_pred_obs_lp <- matrix( nrow = nrow(data_boot_lmk_js_uncens), ncol = length(valid_transitions) - 1)
+  for (state in 1:(length(valid_transitions) - 1)){
+    data_pred_obs_lp[,state] <-
+      exp(stats::coefficients(mlr_int_model)[state] + data_boot_lmk_js_uncens[,paste("mlr_lp", state, sep = "")])
   }
 
   ### Now calculate the predicted probabilities
-  p1 <- 1/(1 + rowSums(data.pred.obs.lp))
-  p.rest <- data.pred.obs.lp/(1 + rowSums(data.pred.obs.lp))
+  p1 <- 1/(1 + rowSums(data_pred_obs_lp))
+  p_rest <- data_pred_obs_lp/(1 + rowSums(data_pred_obs_lp))
 
   ### Put together into dataset of predicted-observed values from the intercept model
-  int.pred.obs <- data.frame(cbind(p1, p.rest))
-  colnames(int.pred.obs) <- paste("pred.obs.", valid.transitions, sep = "")
+  int_pred_obs <- data.frame(cbind(p1, p_rest))
+  colnames(int_pred_obs) <- paste("pred_obs_", valid_transitions, sep = "")
 
   ### Check rows sum to 1 as expected
-  # rowSums(int.pred.obs)
+  # rowSums(int_pred_obs)
 
   ### Get difference between predicted-observed and predicted risks
-  int.diff <- colMeans(int.pred.obs - data.boot.lmk.js.uncens[,paste("tp.pred", valid.transitions, sep = "")])
-  names(int.diff) <- paste("state", valid.transitions, sep = "")
+  int_diff <- colMeans(int_pred_obs - data_boot_lmk_js_uncens[,paste("tp_pred", valid_transitions, sep = "")])
+  names(int_diff) <- paste("state", valid_transitions, sep = "")
 
-  return(int.diff)
+  return(int_diff)
 
 }

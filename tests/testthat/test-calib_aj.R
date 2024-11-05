@@ -153,7 +153,7 @@ test_that("check calib_pv output, pv_group_vars specified", {
 
 
 ### Run tests pv_group_vars and pv_n_pctls specified
-test_that("check calib_pv output, pv_group_vars and pv_n_pctls specified", {
+test_that("check calib_pv output, pv_group_vars and pv_n_pctls specified ", {
 
   skip_on_cran()
 

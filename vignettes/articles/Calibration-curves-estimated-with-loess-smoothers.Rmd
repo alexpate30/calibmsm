@@ -35,7 +35,7 @@ head(msebmtcal)
 data("tps0")
 head(tps0)
 
-t.eval <- 1826
+t_eval <- 1826
 ```
 
 # Estimation of calibration curves out of state j = 1 at time s = 0 using loess smoothers

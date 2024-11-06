@@ -157,6 +157,9 @@ test_that("check calib_pv output, pv_group_vars and pv_n_pctls specified ", {
 
   skip_on_cran()
 
+  ## Set seed
+  set.seed(101)
+
   ## Reduce to 50 individuals
   # Extract the predicted transition probabilities out of state j = 1 for first 50 individuals
   tp_pred <- tps0 |>

@@ -99,7 +99,7 @@ Finally we assess the calibration of this competing risks model using the graphi
 
 ```{r}
 calc_calib_gcc_mod <- function(data_ms, data_raw, j, s, t, p_est, nk = 3){
-  
+                                        
   ### Assign colnames to p_est
   colnames(p_est) <- paste("p_est", 1:ncol(p_est), sep = "")
   
@@ -136,7 +136,7 @@ calc_calib_gcc_mod <- function(data_ms, data_raw, j, s, t, p_est, nk = 3){
   plots_list <- vector("list", length(valid_transitions))
   
   for (k in 1:length(valid_transitions)){
-    
+   
     ### Assign state.k
     state_k <- as.numeric(valid_transitions[k])
     
@@ -172,7 +172,7 @@ calc_calib_gcc_mod <- function(data_ms, data_raw, j, s, t, p_est, nk = 3){
     eq_LHS <- paste("survival::Surv(Tstart,Tstop,status==1)~")
     eq_RHS <- paste("rcs_x", 1:ncol(rcs_mat), sep = "", collapse = "+")
     eq <- formula(paste(eq_LHS, eq_RHS, sep = ""))
-    model_calibrate_fg <- rms::cph(eq,weights=weight_cens,x=T,y=T,surv=T,data=valid_df_crprep)
+    model_calibrate_fg <- rms::cph(eq,weights=weight.cens,x=T,y=T,surv=T,data=valid_df_crprep)
     
     ### Generate predicted probabilities and standard errors
     valid_df$obs_fg <- 1-rms::survest(model_calibrate_fg,newdata=valid_df_crprep,time=t-s)$surv

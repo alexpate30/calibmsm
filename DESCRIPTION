@@ -50,7 +50,8 @@ Suggests:
     knitr,
     rmarkdown,
     R.rsp,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    survminer
 VignetteBuilder: knitr, R.rsp
 URL: https://alexpate30.github.io/calibmsm/
 Config/testthat/edition: 3

@@ -31,6 +31,7 @@ library(calibmsm)
 library(ggplot2)
 library(dplyr)
 library(survival)
+requireNamespace("survminer", quietly = TRUE)
 library(survminer)
 ```
 
@@ -91,7 +92,7 @@ Testing the proportional hazards assumption, we find this does not hold for any 
 
 ```{r}
 phtest <- cox.zph(model_ipcw_ph)
-ggcoxzph(phtest, resid = FALSE, se = FALSE)
+survminer::ggcoxzph(phtest, resid = FALSE, se = FALSE)
 ```
 
 We can therefore conclude that it is not the `year` variable alone driving poor estimation of the weights, however, the proportional hazards assumption does not hold. We will therefore proceed to estimate the weights using a flexible parametric model and evaluate whether there are any differences.

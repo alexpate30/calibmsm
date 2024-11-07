@@ -33,6 +33,8 @@ library(dplyr)
 library(survival)
 requireNamespace("survminer", quietly = TRUE)
 library(survminer)
+requireNamespace("flexsurv", quietly = TRUE)
+library(flexsurv)
 ```
 
 Load data:

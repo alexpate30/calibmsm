@@ -37,8 +37,8 @@
     <li><a class="dropdown-item" href="../articles/Calibration-curves-estimated-with-loess-smoothers.html">Calibration-curves-estimated-with-loess-smoothers</a></li>
     <li><a class="dropdown-item" href="../articles/Comparison-in-competing-risks-setting.html">Comparison-in-competing-risks-setting</a></li>
     <li><a class="dropdown-item" href="../articles/Directory-of-vignettes.html">A catalogue of links and descriptions for the vignettes/articles</a></li>
-    <li><a class="dropdown-item" href="../articles/Evaluation-of-estimation-of-IPCWs.html">Evaluation-of-estimation-of-IPCWs</a></li>
     <li><a class="dropdown-item" href="../articles/Overview.html">Overview</a></li>
+    <li><a class="dropdown-item" href="../articles/Sensitivity-analysis-for-IPCWs.html">Sensitivity-analyses-for-IPCWs</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -72,6 +72,25 @@
 <p>Please click the link below to access the <strong>Overview</strong>
 vignette, which is a static pdf document which cannot be directly viewed
 through this html webpage.</p>
+<p>**Please note that if the censoring mechanism is not conditionally
+independent from the outcome process X(t) given Z, i.e. the rate of
+censoring changes depending on the outcome state that an individual is
+in, then current implementation of the BLR-IPCW and MLR-IPCW approaches
+will be invalid. There is no problem with the methods in general,
+however, in this setting, the outcome history up until time t must be
+conditioned on in some way when estimating the weights. For now, we
+would like to emphasise to users that in order to implement the BLR-IPCW
+and MLR-IPCW approaches, it is essential for the outcome and censoring
+mechanism to be conditionally independent given some set of baseline
+covariates
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>𝐙</mi><annotation encoding="application/x-tex">\mathbf{Z}</annotation></semantics></math>,
+which is the scenario these methods have been tested in. For more
+details around this, please refer to the .</p>
+<p>We believe the censoring mechanism in this clinical exemplar meets
+this criteria, however the discussion of the results has not been
+updated to reflect this. This vignette is currently undergoing peer
+review. Once the peer review process is over, this vignette will be
+updated to fully reflect this.**</p>
 <!--- <iframe src="overview_vignette.pdf"/> -->
 <p><a href="overview_vignette.pdf" target="_blank">Vignette:
 Overview</a></p>
@@ -85,7 +104,7 @@ Overview</a></p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer>

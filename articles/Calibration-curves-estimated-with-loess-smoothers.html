@@ -37,8 +37,8 @@
     <li><a class="dropdown-item" href="../articles/Calibration-curves-estimated-with-loess-smoothers.html">Calibration-curves-estimated-with-loess-smoothers</a></li>
     <li><a class="dropdown-item" href="../articles/Comparison-in-competing-risks-setting.html">Comparison-in-competing-risks-setting</a></li>
     <li><a class="dropdown-item" href="../articles/Directory-of-vignettes.html">A catalogue of links and descriptions for the vignettes/articles</a></li>
-    <li><a class="dropdown-item" href="../articles/Evaluation-of-estimation-of-IPCWs.html">Evaluation-of-estimation-of-IPCWs</a></li>
     <li><a class="dropdown-item" href="../articles/Overview.html">Overview</a></li>
+    <li><a class="dropdown-item" href="../articles/Sensitivity-analysis-for-IPCWs.html">Sensitivity-analyses-for-IPCWs</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -122,7 +122,7 @@ vignette</a> for a more detailed description of this data.</p>
 <span><span class="co">#&gt; 4  4   50     1   42    1    50       1   84     1  117     1 1995-1998 20-40</span></span>
 <span><span class="co">#&gt; 5  5   22     1 1133    0  1133       0  114     1 1133     0 1995-1998   &gt;40</span></span>
 <span><span class="co">#&gt; 6  6   33     1   27    1    33       1 1427     0 1427     0 1995-1998 20-40</span></span>
-<span><span class="co">#&gt;   proph              match dtcens dtcens.s</span></span>
+<span><span class="co">#&gt;   proph              match dtcens dtcens_s</span></span>
 <span><span class="co">#&gt; 1    no no gender mismatch    995        1</span></span>
 <span><span class="co">#&gt; 2    no no gender mismatch    422        0</span></span>
 <span><span class="co">#&gt; 3    no no gender mismatch   1264        1</span></span>
@@ -157,7 +157,7 @@ vignette</a> for a more detailed description of this data.</p>
 <span><span class="co">#&gt; 5 0.03419721 0.01367768 0.03423941 0.02329644 0.03688586 1</span></span>
 <span><span class="co">#&gt; 6 0.02375770 0.01257276 0.02317348 0.01649531 0.01602438 1</span></span>
 <span></span>
-<span><span class="va">t.eval</span> <span class="op">&lt;-</span> <span class="fl">1826</span></span></code></pre></div>
+<span><span class="va">t_eval</span> <span class="op">&lt;-</span> <span class="fl">1826</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="estimation-of-calibration-curves-out-of-state-j-1-at-time-s-0-using-loess-smoothers">Estimation of calibration curves out of state j = 1 at time s = 0
@@ -184,7 +184,7 @@ at time
 from the object . These are the transition probabilities we aim to
 assess the calibration of.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">tp.pred.s0</span> <span class="op">&lt;-</span> <span class="va">tps0</span> <span class="op">|&gt;</span></span>
+<code class="sourceCode R"><span><span class="va">tp_pred_s0</span> <span class="op">&lt;-</span> <span class="va">tps0</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">j</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu">any_of</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"pstate"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>We now produce calibration curves using loess smoothers for the
@@ -196,68 +196,64 @@ parameters. A smaller span and/or degree will create a more smoother
 line. This is done for both the BLR-IPCW and pseudo-value calibration
 curves.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dat.calib.blr</span> <span class="op">&lt;-</span></span>
-<span>  <span class="fu"><a href="../reference/calib_msm.html">calib_msm</a></span><span class="op">(</span>data.ms <span class="op">=</span> <span class="va">msebmtcal</span>,</span>
-<span>           data.raw <span class="op">=</span> <span class="va">ebmtcal</span>,</span>
+<code class="sourceCode R"><span><span class="va">dat_calib_blr</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu"><a href="../reference/calib_msm.html">calib_msm</a></span><span class="op">(</span>data_ms <span class="op">=</span> <span class="va">msebmtcal</span>,</span>
+<span>           data_raw <span class="op">=</span> <span class="va">ebmtcal</span>,</span>
 <span>           j <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>           s <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>           t <span class="op">=</span> <span class="va">t.eval</span>,</span>
-<span>           tp.pred <span class="op">=</span> <span class="va">tp.pred.s0</span>,</span>
-<span>           calib.type <span class="op">=</span> <span class="st">'blr'</span>,</span>
-<span>           curve.type <span class="op">=</span> <span class="st">"loess"</span>,</span>
-<span>           w.covs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span>, <span class="st">"agecl"</span>, <span class="st">"proph"</span>, <span class="st">"match"</span><span class="op">)</span>,</span>
+<span>           t <span class="op">=</span> <span class="va">t_eval</span>,</span>
+<span>           tp_pred <span class="op">=</span> <span class="va">tp_pred_s0</span>,</span>
+<span>           calib_type <span class="op">=</span> <span class="st">'blr'</span>,</span>
+<span>           curve_type <span class="op">=</span> <span class="st">"loess"</span>,</span>
+<span>           w_covs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span>, <span class="st">"agecl"</span>, <span class="st">"proph"</span>, <span class="st">"match"</span><span class="op">)</span>,</span>
 <span>           CI <span class="op">=</span> <span class="fl">95</span>,</span>
-<span>           CI.type <span class="op">=</span> <span class="st">"bootstrap"</span>,</span>
-<span>           CI.R.boot <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in calib_blr_ipcw(data.raw = data.raw, data.ms = data.ms, tp.pred.plot = tp.pred.plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 1 </span></span>
-<span><span class="co">#&gt;  THERE ARE  92  ITERATIONS WITH NA's </span></span>
-<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 0.96</span></span>
-<span><span class="co">#&gt; Warning in calib_blr_ipcw(data.raw = data.raw, data.ms = data.ms, tp.pred.plot = tp.pred.plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 2 </span></span>
-<span><span class="co">#&gt;  THERE ARE  113  ITERATIONS WITH NA's </span></span>
-<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.075</span></span>
-<span><span class="co">#&gt; Warning in calib_blr_ipcw(data.raw = data.raw, data.ms = data.ms, tp.pred.plot = tp.pred.plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 3 </span></span>
-<span><span class="co">#&gt;  THERE ARE  120  ITERATIONS WITH NA's </span></span>
-<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.135</span></span>
-<span><span class="co">#&gt; Warning in calib_blr_ipcw(data.raw = data.raw, data.ms = data.ms, tp.pred.plot = tp.pred.plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 4 </span></span>
-<span><span class="co">#&gt;  THERE ARE  123  ITERATIONS WITH NA's </span></span>
-<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.23</span></span>
-<span><span class="co">#&gt; Warning in calib_blr_ipcw(data.raw = data.raw, data.ms = data.ms, tp.pred.plot = tp.pred.plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 5 </span></span>
+<span>           CI_type <span class="op">=</span> <span class="st">"bootstrap"</span>,</span>
+<span>           CI_R_boot <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in calib_blr_ipcw(data_raw = data_raw, data_ms = data_ms, tp_pred_plot = tp_pred_plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 1 </span></span>
+<span><span class="co">#&gt;  THERE ARE  85  ITERATIONS WITH NA's </span></span>
+<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 0.835</span></span>
+<span><span class="co">#&gt; Warning in calib_blr_ipcw(data_raw = data_raw, data_ms = data_ms, tp_pred_plot = tp_pred_plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 2 </span></span>
+<span><span class="co">#&gt;  THERE ARE  125  ITERATIONS WITH NA's </span></span>
+<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.205</span></span>
+<span><span class="co">#&gt; Warning in calib_blr_ipcw(data_raw = data_raw, data_ms = data_ms, tp_pred_plot = tp_pred_plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 3 </span></span>
+<span><span class="co">#&gt;  THERE ARE  133  ITERATIONS WITH NA's </span></span>
+<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.29</span></span>
+<span><span class="co">#&gt; Warning in calib_blr_ipcw(data_raw = data_raw, data_ms = data_ms, tp_pred_plot = tp_pred_plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 4 </span></span>
+<span><span class="co">#&gt;  THERE ARE  115  ITERATIONS WITH NA's </span></span>
+<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.025</span></span>
+<span><span class="co">#&gt; Warning in calib_blr_ipcw(data_raw = data_raw, data_ms = data_ms, tp_pred_plot = tp_pred_plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 5 </span></span>
+<span><span class="co">#&gt;  THERE ARE  117  ITERATIONS WITH NA's </span></span>
+<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.16</span></span>
+<span><span class="co">#&gt; Warning in calib_blr_ipcw(data_raw = data_raw, data_ms = data_ms, tp_pred_plot = tp_pred_plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 6 </span></span>
 <span><span class="co">#&gt;  THERE ARE  111  ITERATIONS WITH NA's </span></span>
-<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.155</span></span>
-<span><span class="co">#&gt; Warning in calib_blr_ipcw(data.raw = data.raw, data.ms = data.ms, tp.pred.plot = tp.pred.plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 6 </span></span>
-<span><span class="co">#&gt;  THERE ARE  121  ITERATIONS WITH NA's </span></span>
-<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.185</span></span>
+<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.115</span></span>
 <span></span>
-<span><span class="va">dat.calib.pv</span> <span class="op">&lt;-</span></span>
-<span>  <span class="fu"><a href="../reference/calib_msm.html">calib_msm</a></span><span class="op">(</span>data.ms <span class="op">=</span> <span class="va">msebmtcal</span>,</span>
-<span>           data.raw <span class="op">=</span> <span class="va">ebmtcal</span>,</span>
+<span><span class="va">dat_calib_pv</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu"><a href="../reference/calib_msm.html">calib_msm</a></span><span class="op">(</span>data_ms <span class="op">=</span> <span class="va">msebmtcal</span>,</span>
+<span>           data_raw <span class="op">=</span> <span class="va">ebmtcal</span>,</span>
 <span>           j <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>           s <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>           t <span class="op">=</span> <span class="va">t.eval</span>,</span>
-<span>           tp.pred <span class="op">=</span> <span class="va">tp.pred.s0</span>,</span>
-<span>           calib.type <span class="op">=</span> <span class="st">'pv'</span>,</span>
-<span>           curve.type <span class="op">=</span> <span class="st">"loess"</span>,</span>
-<span>           pv.group.vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span><span class="op">)</span>,</span>
-<span>           pv.n.pctls <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>           t <span class="op">=</span> <span class="va">t_eval</span>,</span>
+<span>           tp_pred <span class="op">=</span> <span class="va">tp_pred_s0</span>,</span>
+<span>           calib_type <span class="op">=</span> <span class="st">'pv'</span>,</span>
+<span>           curve_type <span class="op">=</span> <span class="st">"loess"</span>,</span>
+<span>           pv_group_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span><span class="op">)</span>,</span>
+<span>           pv_n_pctls <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>           CI <span class="op">=</span> <span class="fl">95</span>,</span>
-<span>           CI.type <span class="op">=</span> <span class="st">'parametric'</span><span class="op">)</span></span></code></pre></div>
+<span>           CI_type <span class="op">=</span> <span class="st">'parametric'</span><span class="op">)</span></span></code></pre></div>
 <p>We now produce calibration plots using the function.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat.calib.blr</span><span class="op">)</span></span></code></pre></div>
-<div class="figure">
-<img src="Calibration-curves-estimated-with-loess-smoothers_files/figure-html/unnamed-chunk-5-1.png" alt="Figure 1: BLR-IPCW calibration plots out of state j = 1 at time s = 0  estimated using loess smoothers" width="720"><p class="caption">
-Figure 1: BLR-IPCW calibration plots out of state j = 1 at time s = 0
-estimated using loess smoothers
-</p>
-</div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat_calib_blr</span><span class="op">)</span></span>
+<span><span class="co">#&gt; TableGrob (2 x 1) "arrange": 2 grobs</span></span>
+<span><span class="co">#&gt;   z     cells    name              grob</span></span>
+<span><span class="co">#&gt; 1 1 (1-1,1-1) arrange   gtable[arrange]</span></span>
+<span><span class="co">#&gt; 2 2 (2-2,1-1) arrange gtable[guide-box]</span></span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat.calib.pv</span><span class="op">)</span></span></code></pre></div>
-<div class="figure">
-<img src="Calibration-curves-estimated-with-loess-smoothers_files/figure-html/unnamed-chunk-6-1.png" alt="Figure 2: pseudo-value calibration plots out of state j = 1 at time s = 0 estimated using loess smoothers" width="720"><p class="caption">
-Figure 2: pseudo-value calibration plots out of state j = 1 at time s =
-0 estimated using loess smoothers
-</p>
-</div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat_calib_pv</span><span class="op">)</span></span>
+<span><span class="co">#&gt; TableGrob (2 x 1) "arrange": 2 grobs</span></span>
+<span><span class="co">#&gt;   z     cells    name              grob</span></span>
+<span><span class="co">#&gt; 1 1 (1-1,1-1) arrange   gtable[arrange]</span></span>
+<span><span class="co">#&gt; 2 2 (2-2,1-1) arrange gtable[guide-box]</span></span></code></pre></div>
 <p>The equivalent Figures from the <a href="https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf">Overview
 vignette</a>, produced using restricted cubic splines, are Figures 2 and
 3.</p>
@@ -282,7 +278,7 @@ at time
 from the object . These are the transition probabilities we aim to
 assess the calibration of.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">tp.pred.s100</span> <span class="op">&lt;-</span> <span class="va">tps100</span> <span class="op">|&gt;</span></span>
+<code class="sourceCode R"><span><span class="va">tp_pred_s100</span> <span class="op">&lt;-</span> <span class="va">tps100</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">j</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu">any_of</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"pstate"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>We now produce calibration curves using loess smoothers for the
@@ -294,71 +290,67 @@ parameters. A smaller span and/or degree will create a more smoother
 line. This is done for both the BLR-IPCW and pseudo-value calibration
 curves.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dat.calib.blr</span> <span class="op">&lt;-</span></span>
-<span>  <span class="fu"><a href="../reference/calib_msm.html">calib_msm</a></span><span class="op">(</span>data.ms <span class="op">=</span> <span class="va">msebmtcal</span>,</span>
-<span>           data.raw <span class="op">=</span> <span class="va">ebmtcal</span>,</span>
+<code class="sourceCode R"><span><span class="va">dat_calib_blr</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu"><a href="../reference/calib_msm.html">calib_msm</a></span><span class="op">(</span>data_ms <span class="op">=</span> <span class="va">msebmtcal</span>,</span>
+<span>           data_raw <span class="op">=</span> <span class="va">ebmtcal</span>,</span>
 <span>           j <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>           s <span class="op">=</span> <span class="fl">100</span>,</span>
-<span>           t <span class="op">=</span> <span class="va">t.eval</span>,</span>
-<span>           tp.pred <span class="op">=</span> <span class="va">tp.pred.s100</span>,</span>
-<span>           calib.type <span class="op">=</span> <span class="st">'blr'</span>,</span>
-<span>           curve.type <span class="op">=</span> <span class="st">"loess"</span>,</span>
-<span>           w.covs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span>, <span class="st">"agecl"</span>, <span class="st">"proph"</span>, <span class="st">"match"</span><span class="op">)</span>,</span>
+<span>           t <span class="op">=</span> <span class="va">t_eval</span>,</span>
+<span>           tp_pred <span class="op">=</span> <span class="va">tp_pred_s100</span>,</span>
+<span>           calib_type <span class="op">=</span> <span class="st">'blr'</span>,</span>
+<span>           curve_type <span class="op">=</span> <span class="st">"loess"</span>,</span>
+<span>           w_covs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span>, <span class="st">"agecl"</span>, <span class="st">"proph"</span>, <span class="st">"match"</span><span class="op">)</span>,</span>
 <span>           CI <span class="op">=</span> <span class="fl">95</span>,</span>
-<span>           CI.type <span class="op">=</span> <span class="st">"bootstrap"</span>,</span>
-<span>           CI.R.boot <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in calib_msm(data.ms = msebmtcal, data.raw = ebmtcal, j = 1, s = 100, : In the landmark cohort of individuals uncensored and in state j at time s,</span></span>
+<span>           CI_type <span class="op">=</span> <span class="st">"bootstrap"</span>,</span>
+<span>           CI_R_boot <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in calib_msm(data_ms = msebmtcal, data_raw = ebmtcal, j = 1, s = 100, : In the landmark cohort of individuals uncensored and in state j at time s,</span></span>
 <span><span class="co">#&gt;     there are some states have less than 50 people at the time at which calibration is being assessed (t).</span></span>
 <span><span class="co">#&gt;     Warnings and errors may occur when the models are fitted to estimate the calibration curves due to small sample size.</span></span>
 <span><span class="co">#&gt;     This warning has been written to try and intercept some uninformative error messages when the underlying statistical models fail.</span></span>
 <span><span class="co">#&gt;     The number to flag this warning (50) has been chosen arbitrarily, and does not constitute a sufficient sample size from a statistical point of view.</span></span>
-<span><span class="co">#&gt; Warning in calib_blr_ipcw(data.raw = data.raw, data.ms = data.ms, tp.pred.plot = tp.pred.plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 1 </span></span>
-<span><span class="co">#&gt;  THERE ARE  113  ITERATIONS WITH NA's </span></span>
-<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.07</span></span>
-<span><span class="co">#&gt; Warning in calib_blr_ipcw(data.raw = data.raw, data.ms = data.ms, tp.pred.plot = tp.pred.plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 2 </span></span>
-<span><span class="co">#&gt;  THERE ARE  132  ITERATIONS WITH NA's </span></span>
-<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.165</span></span>
-<span><span class="co">#&gt; Warning in calib_blr_ipcw(data.raw = data.raw, data.ms = data.ms, tp.pred.plot = tp.pred.plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 5 </span></span>
-<span><span class="co">#&gt;  THERE ARE  113  ITERATIONS WITH NA's </span></span>
-<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.115</span></span>
-<span><span class="co">#&gt; Warning in calib_blr_ipcw(data.raw = data.raw, data.ms = data.ms, tp.pred.plot = tp.pred.plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 6 </span></span>
-<span><span class="co">#&gt;  THERE ARE  125  ITERATIONS WITH NA's </span></span>
-<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.18</span></span>
+<span><span class="co">#&gt; Warning in calib_blr_ipcw(data_raw = data_raw, data_ms = data_ms, tp_pred_plot = tp_pred_plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 1 </span></span>
+<span><span class="co">#&gt;  THERE ARE  124  ITERATIONS WITH NA's </span></span>
+<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.105</span></span>
+<span><span class="co">#&gt; Warning in calib_blr_ipcw(data_raw = data_raw, data_ms = data_ms, tp_pred_plot = tp_pred_plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 2 </span></span>
+<span><span class="co">#&gt;  THERE ARE  120  ITERATIONS WITH NA's </span></span>
+<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.205</span></span>
+<span><span class="co">#&gt; Warning in calib_blr_ipcw(data_raw = data_raw, data_ms = data_ms, tp_pred_plot = tp_pred_plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 5 </span></span>
+<span><span class="co">#&gt;  THERE ARE  99  ITERATIONS WITH NA's </span></span>
+<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 0.955</span></span>
+<span><span class="co">#&gt; Warning in calib_blr_ipcw(data_raw = data_raw, data_ms = data_ms, tp_pred_plot = tp_pred_plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 6 </span></span>
+<span><span class="co">#&gt;  THERE ARE  140  ITERATIONS WITH NA's </span></span>
+<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.375</span></span>
 <span></span>
-<span><span class="va">dat.calib.pv</span> <span class="op">&lt;-</span></span>
-<span>  <span class="fu"><a href="../reference/calib_msm.html">calib_msm</a></span><span class="op">(</span>data.ms <span class="op">=</span> <span class="va">msebmtcal</span>,</span>
-<span>           data.raw <span class="op">=</span> <span class="va">ebmtcal</span>,</span>
+<span><span class="va">dat_calib_pv</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu"><a href="../reference/calib_msm.html">calib_msm</a></span><span class="op">(</span>data_ms <span class="op">=</span> <span class="va">msebmtcal</span>,</span>
+<span>           data_raw <span class="op">=</span> <span class="va">ebmtcal</span>,</span>
 <span>           j <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>           s <span class="op">=</span> <span class="fl">100</span>,</span>
-<span>           t <span class="op">=</span> <span class="va">t.eval</span>,</span>
-<span>           tp.pred <span class="op">=</span> <span class="va">tp.pred.s100</span>,</span>
-<span>           calib.type <span class="op">=</span> <span class="st">'pv'</span>,</span>
-<span>           curve.type <span class="op">=</span> <span class="st">"loess"</span>,</span>
-<span>           pv.group.vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span><span class="op">)</span>,</span>
+<span>           t <span class="op">=</span> <span class="va">t_eval</span>,</span>
+<span>           tp_pred <span class="op">=</span> <span class="va">tp_pred_s100</span>,</span>
+<span>           calib_type <span class="op">=</span> <span class="st">'pv'</span>,</span>
+<span>           curve_type <span class="op">=</span> <span class="st">"loess"</span>,</span>
+<span>           pv_group_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span><span class="op">)</span>,</span>
 <span>           CI <span class="op">=</span> <span class="fl">95</span>,</span>
-<span>           CI.type <span class="op">=</span> <span class="st">'parametric'</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in calib_msm(data.ms = msebmtcal, data.raw = ebmtcal, j = 1, s = 100, : In the landmark cohort of individuals uncensored and in state j at time s,</span></span>
+<span>           CI_type <span class="op">=</span> <span class="st">'parametric'</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in calib_msm(data_ms = msebmtcal, data_raw = ebmtcal, j = 1, s = 100, : In the landmark cohort of individuals uncensored and in state j at time s,</span></span>
 <span><span class="co">#&gt;     there are some states have less than 50 people at the time at which calibration is being assessed (t).</span></span>
 <span><span class="co">#&gt;     Warnings and errors may occur when the models are fitted to estimate the calibration curves due to small sample size.</span></span>
 <span><span class="co">#&gt;     This warning has been written to try and intercept some uninformative error messages when the underlying statistical models fail.</span></span>
 <span><span class="co">#&gt;     The number to flag this warning (50) has been chosen arbitrarily, and does not constitute a sufficient sample size from a statistical point of view.</span></span></code></pre></div>
 <p>We now produce calibration plots using the function.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat.calib.blr</span><span class="op">)</span></span></code></pre></div>
-<div class="figure">
-<img src="Calibration-curves-estimated-with-loess-smoothers_files/figure-html/unnamed-chunk-9-1.png" alt="Figure 3: BLR-IPCW calibration plots out of state j = 1 at time s = 100 estimated using loess smoothers" width="720"><p class="caption">
-Figure 3: BLR-IPCW calibration plots out of state j = 1 at time s = 100
-estimated using loess smoothers
-</p>
-</div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat_calib_blr</span><span class="op">)</span></span>
+<span><span class="co">#&gt; TableGrob (2 x 1) "arrange": 2 grobs</span></span>
+<span><span class="co">#&gt;   z     cells    name              grob</span></span>
+<span><span class="co">#&gt; 1 1 (1-1,1-1) arrange   gtable[arrange]</span></span>
+<span><span class="co">#&gt; 2 2 (2-2,1-1) arrange gtable[guide-box]</span></span></code></pre></div>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat.calib.pv</span><span class="op">)</span></span></code></pre></div>
-<div class="figure">
-<img src="Calibration-curves-estimated-with-loess-smoothers_files/figure-html/unnamed-chunk-10-1.png" alt="Figure 4: pseudo-value calibration plots out of state j = 1 at time s = 100 estimated using loess smoothers" width="720"><p class="caption">
-Figure 4: pseudo-value calibration plots out of state j = 1 at time s =
-100 estimated using loess smoothers
-</p>
-</div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat_calib_pv</span><span class="op">)</span></span>
+<span><span class="co">#&gt; TableGrob (2 x 1) "arrange": 2 grobs</span></span>
+<span><span class="co">#&gt;   z     cells    name              grob</span></span>
+<span><span class="co">#&gt; 1 1 (1-1,1-1) arrange   gtable[arrange]</span></span>
+<span><span class="co">#&gt; 2 2 (2-2,1-1) arrange gtable[guide-box]</span></span></code></pre></div>
 <p>The equivalent Figures from the <a href="https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf">Overview
 vignette</a>, produced using restricted cubic splines, are Figures 5 and
 6.</p>
@@ -383,7 +375,7 @@ at time
 from the object . These are the transition probabilities we aim to
 assess the calibration of.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">tp.pred.s100</span> <span class="op">&lt;-</span> <span class="va">tps100</span> <span class="op">|&gt;</span></span>
+<code class="sourceCode R"><span><span class="va">tp_pred_s100</span> <span class="op">&lt;-</span> <span class="va">tps100</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">j</span> <span class="op">==</span> <span class="fl">3</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu">any_of</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"pstate"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>We now produce calibration curves using loess smoothers for the
@@ -395,71 +387,67 @@ parameters. A smaller span and/or degree will create a more smoother
 line. This is done for both the BLR-IPCW and pseudo-value calibration
 curves.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dat.calib.blr</span> <span class="op">&lt;-</span></span>
-<span>  <span class="fu"><a href="../reference/calib_msm.html">calib_msm</a></span><span class="op">(</span>data.ms <span class="op">=</span> <span class="va">msebmtcal</span>,</span>
-<span>           data.raw <span class="op">=</span> <span class="va">ebmtcal</span>,</span>
+<code class="sourceCode R"><span><span class="va">dat_calib_blr</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu"><a href="../reference/calib_msm.html">calib_msm</a></span><span class="op">(</span>data_ms <span class="op">=</span> <span class="va">msebmtcal</span>,</span>
+<span>           data_raw <span class="op">=</span> <span class="va">ebmtcal</span>,</span>
 <span>           j <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>           s <span class="op">=</span> <span class="fl">100</span>,</span>
-<span>           t <span class="op">=</span> <span class="va">t.eval</span>,</span>
-<span>           tp.pred <span class="op">=</span> <span class="va">tp.pred.s100</span>,</span>
-<span>           calib.type <span class="op">=</span> <span class="st">'blr'</span>,</span>
-<span>           curve.type <span class="op">=</span> <span class="st">"loess"</span>,</span>
-<span>           w.covs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span>, <span class="st">"agecl"</span>, <span class="st">"proph"</span>, <span class="st">"match"</span><span class="op">)</span>,</span>
+<span>           t <span class="op">=</span> <span class="va">t_eval</span>,</span>
+<span>           tp_pred <span class="op">=</span> <span class="va">tp_pred_s100</span>,</span>
+<span>           calib_type <span class="op">=</span> <span class="st">'blr'</span>,</span>
+<span>           curve_type <span class="op">=</span> <span class="st">"loess"</span>,</span>
+<span>           w_covs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span>, <span class="st">"agecl"</span>, <span class="st">"proph"</span>, <span class="st">"match"</span><span class="op">)</span>,</span>
 <span>           CI <span class="op">=</span> <span class="fl">95</span>,</span>
-<span>           CI.type <span class="op">=</span> <span class="st">"bootstrap"</span>,</span>
-<span>           CI.R.boot <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in calib_msm(data.ms = msebmtcal, data.raw = ebmtcal, j = 3, s = 100, : In the landmark cohort of individuals uncensored and in state j at time s,</span></span>
+<span>           CI_type <span class="op">=</span> <span class="st">"bootstrap"</span>,</span>
+<span>           CI_R_boot <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in calib_msm(data_ms = msebmtcal, data_raw = ebmtcal, j = 3, s = 100, : In the landmark cohort of individuals uncensored and in state j at time s,</span></span>
 <span><span class="co">#&gt;     there are some states have less than 50 people at the time at which calibration is being assessed (t).</span></span>
 <span><span class="co">#&gt;     Warnings and errors may occur when the models are fitted to estimate the calibration curves due to small sample size.</span></span>
 <span><span class="co">#&gt;     This warning has been written to try and intercept some uninformative error messages when the underlying statistical models fail.</span></span>
 <span><span class="co">#&gt;     The number to flag this warning (50) has been chosen arbitrarily, and does not constitute a sufficient sample size from a statistical point of view.</span></span>
-<span><span class="co">#&gt; Warning in calib_blr_ipcw(data.raw = data.raw, data.ms = data.ms, tp.pred.plot = tp.pred.plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 3 </span></span>
-<span><span class="co">#&gt;  THERE ARE  107  ITERATIONS WITH NA's </span></span>
-<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 0.995</span></span>
-<span><span class="co">#&gt; Warning in calib_blr_ipcw(data.raw = data.raw, data.ms = data.ms, tp.pred.plot = tp.pred.plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 4 </span></span>
-<span><span class="co">#&gt;  THERE ARE  133  ITERATIONS WITH NA's </span></span>
-<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.265</span></span>
-<span><span class="co">#&gt; Warning in calib_blr_ipcw(data.raw = data.raw, data.ms = data.ms, tp.pred.plot = tp.pred.plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 5 </span></span>
-<span><span class="co">#&gt;  THERE ARE  126  ITERATIONS WITH NA's </span></span>
-<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.26</span></span>
-<span><span class="co">#&gt; Warning in calib_blr_ipcw(data.raw = data.raw, data.ms = data.ms, tp.pred.plot = tp.pred.plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 6 </span></span>
-<span><span class="co">#&gt;  THERE ARE  129  ITERATIONS WITH NA's </span></span>
-<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.19</span></span>
+<span><span class="co">#&gt; Warning in calib_blr_ipcw(data_raw = data_raw, data_ms = data_ms, tp_pred_plot = tp_pred_plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 3 </span></span>
+<span><span class="co">#&gt;  THERE ARE  124  ITERATIONS WITH NA's </span></span>
+<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.165</span></span>
+<span><span class="co">#&gt; Warning in calib_blr_ipcw(data_raw = data_raw, data_ms = data_ms, tp_pred_plot = tp_pred_plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 4 </span></span>
+<span><span class="co">#&gt;  THERE ARE  116  ITERATIONS WITH NA's </span></span>
+<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.15</span></span>
+<span><span class="co">#&gt; Warning in calib_blr_ipcw(data_raw = data_raw, data_ms = data_ms, tp_pred_plot = tp_pred_plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 5 </span></span>
+<span><span class="co">#&gt;  THERE ARE  121  ITERATIONS WITH NA's </span></span>
+<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.23</span></span>
+<span><span class="co">#&gt; Warning in calib_blr_ipcw(data_raw = data_raw, data_ms = data_ms, tp_pred_plot = tp_pred_plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 6 </span></span>
+<span><span class="co">#&gt;  THERE ARE  112  ITERATIONS WITH NA's </span></span>
+<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.07</span></span>
 <span></span>
-<span><span class="va">dat.calib.pv</span> <span class="op">&lt;-</span></span>
-<span>  <span class="fu"><a href="../reference/calib_msm.html">calib_msm</a></span><span class="op">(</span>data.ms <span class="op">=</span> <span class="va">msebmtcal</span>,</span>
-<span>           data.raw <span class="op">=</span> <span class="va">ebmtcal</span>,</span>
+<span><span class="va">dat_calib_pv</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu"><a href="../reference/calib_msm.html">calib_msm</a></span><span class="op">(</span>data_ms <span class="op">=</span> <span class="va">msebmtcal</span>,</span>
+<span>           data_raw <span class="op">=</span> <span class="va">ebmtcal</span>,</span>
 <span>           j <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>           s <span class="op">=</span> <span class="fl">100</span>,</span>
-<span>           t <span class="op">=</span> <span class="va">t.eval</span>,</span>
-<span>           tp.pred <span class="op">=</span> <span class="va">tp.pred.s100</span>,</span>
-<span>           calib.type <span class="op">=</span> <span class="st">'pv'</span>,</span>
-<span>           curve.type <span class="op">=</span> <span class="st">"loess"</span>,</span>
-<span>           pv.group.vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span><span class="op">)</span>,</span>
+<span>           t <span class="op">=</span> <span class="va">t_eval</span>,</span>
+<span>           tp_pred <span class="op">=</span> <span class="va">tp_pred_s100</span>,</span>
+<span>           calib_type <span class="op">=</span> <span class="st">'pv'</span>,</span>
+<span>           curve_type <span class="op">=</span> <span class="st">"loess"</span>,</span>
+<span>           pv_group_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span><span class="op">)</span>,</span>
 <span>           CI <span class="op">=</span> <span class="fl">95</span>,</span>
-<span>           CI.type <span class="op">=</span> <span class="st">'parametric'</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in calib_msm(data.ms = msebmtcal, data.raw = ebmtcal, j = 3, s = 100, : In the landmark cohort of individuals uncensored and in state j at time s,</span></span>
+<span>           CI_type <span class="op">=</span> <span class="st">'parametric'</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in calib_msm(data_ms = msebmtcal, data_raw = ebmtcal, j = 3, s = 100, : In the landmark cohort of individuals uncensored and in state j at time s,</span></span>
 <span><span class="co">#&gt;     there are some states have less than 50 people at the time at which calibration is being assessed (t).</span></span>
 <span><span class="co">#&gt;     Warnings and errors may occur when the models are fitted to estimate the calibration curves due to small sample size.</span></span>
 <span><span class="co">#&gt;     This warning has been written to try and intercept some uninformative error messages when the underlying statistical models fail.</span></span>
 <span><span class="co">#&gt;     The number to flag this warning (50) has been chosen arbitrarily, and does not constitute a sufficient sample size from a statistical point of view.</span></span></code></pre></div>
 <p>We now produce calibration plots using the function.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat.calib.blr</span><span class="op">)</span></span></code></pre></div>
-<div class="figure">
-<img src="Calibration-curves-estimated-with-loess-smoothers_files/figure-html/unnamed-chunk-13-1.png" alt="Figure 5: BLR-IPCW calibration plots out of state j = 3 at time s = 100 estimated using loess smoothers" width="720"><p class="caption">
-Figure 5: BLR-IPCW calibration plots out of state j = 3 at time s = 100
-estimated using loess smoothers
-</p>
-</div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat_calib_blr</span><span class="op">)</span></span>
+<span><span class="co">#&gt; TableGrob (2 x 1) "arrange": 2 grobs</span></span>
+<span><span class="co">#&gt;   z     cells    name              grob</span></span>
+<span><span class="co">#&gt; 1 1 (1-1,1-1) arrange   gtable[arrange]</span></span>
+<span><span class="co">#&gt; 2 2 (2-2,1-1) arrange gtable[guide-box]</span></span></code></pre></div>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat.calib.pv</span><span class="op">)</span></span></code></pre></div>
-<div class="figure">
-<img src="Calibration-curves-estimated-with-loess-smoothers_files/figure-html/unnamed-chunk-14-1.png" alt="Figure 6: pseudo-value calibration plots out of state j = 3 at time s = 100 estimated using loess smoothers" width="720"><p class="caption">
-Figure 6: pseudo-value calibration plots out of state j = 3 at time s =
-100 estimated using loess smoothers
-</p>
-</div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat_calib_pv</span><span class="op">)</span></span>
+<span><span class="co">#&gt; TableGrob (2 x 1) "arrange": 2 grobs</span></span>
+<span><span class="co">#&gt;   z     cells    name              grob</span></span>
+<span><span class="co">#&gt; 1 1 (1-1,1-1) arrange   gtable[arrange]</span></span>
+<span><span class="co">#&gt; 2 2 (2-2,1-1) arrange gtable[guide-box]</span></span></code></pre></div>
 <p>The equivalent Figures from the <a href="https://alexpate30.github.io/calibmsm/articles/overview_vignette.pdf">Overview
 vignette</a>, produced using restricted cubic splines, are Figures 7 and
 8.</p>
@@ -497,136 +485,128 @@ particularly worried about, as seems to be driven by small sample size
 when assessing calibration at time s = 100.</p>
 <p>Compare the following graphs to figures 1 and 2 above. First do .</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dat.calib.blr</span> <span class="op">&lt;-</span></span>
-<span>  <span class="fu"><a href="../reference/calib_msm.html">calib_msm</a></span><span class="op">(</span>data.ms <span class="op">=</span> <span class="va">msebmtcal</span>,</span>
-<span>           data.raw <span class="op">=</span> <span class="va">ebmtcal</span>,</span>
+<code class="sourceCode R"><span><span class="va">dat_calib_blr</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu"><a href="../reference/calib_msm.html">calib_msm</a></span><span class="op">(</span>data_ms <span class="op">=</span> <span class="va">msebmtcal</span>,</span>
+<span>           data_raw <span class="op">=</span> <span class="va">ebmtcal</span>,</span>
 <span>           j <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>           s <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>           t <span class="op">=</span> <span class="va">t.eval</span>,</span>
-<span>           tp.pred <span class="op">=</span> <span class="va">tp.pred.s0</span>,</span>
-<span>           calib.type <span class="op">=</span> <span class="st">'blr'</span>,</span>
-<span>           curve.type <span class="op">=</span> <span class="st">"loess"</span>,</span>
-<span>           loess.span <span class="op">=</span> <span class="fl">0.9</span>,</span>
-<span>           w.covs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span>, <span class="st">"agecl"</span>, <span class="st">"proph"</span>, <span class="st">"match"</span><span class="op">)</span>,</span>
+<span>           t <span class="op">=</span> <span class="va">t_eval</span>,</span>
+<span>           tp_pred <span class="op">=</span> <span class="va">tp_pred_s0</span>,</span>
+<span>           calib_type <span class="op">=</span> <span class="st">'blr'</span>,</span>
+<span>           curve_type <span class="op">=</span> <span class="st">"loess"</span>,</span>
+<span>           loess_span <span class="op">=</span> <span class="fl">0.9</span>,</span>
+<span>           w_covs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span>, <span class="st">"agecl"</span>, <span class="st">"proph"</span>, <span class="st">"match"</span><span class="op">)</span>,</span>
 <span>           CI <span class="op">=</span> <span class="fl">95</span>,</span>
-<span>           CI.type <span class="op">=</span> <span class="st">"bootstrap"</span>,</span>
-<span>           CI.R.boot <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in calib_blr_ipcw(data.raw = data.raw, data.ms = data.ms, tp.pred.plot = tp.pred.plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 1 </span></span>
-<span><span class="co">#&gt;  THERE ARE  92  ITERATIONS WITH NA's </span></span>
-<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 0.96</span></span>
-<span><span class="co">#&gt; Warning in calib_blr_ipcw(data.raw = data.raw, data.ms = data.ms, tp.pred.plot = tp.pred.plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 2 </span></span>
-<span><span class="co">#&gt;  THERE ARE  113  ITERATIONS WITH NA's </span></span>
-<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.075</span></span>
-<span><span class="co">#&gt; Warning in calib_blr_ipcw(data.raw = data.raw, data.ms = data.ms, tp.pred.plot = tp.pred.plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 3 </span></span>
-<span><span class="co">#&gt;  THERE ARE  120  ITERATIONS WITH NA's </span></span>
+<span>           CI_type <span class="op">=</span> <span class="st">"bootstrap"</span>,</span>
+<span>           CI_R_boot <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in calib_blr_ipcw(data_raw = data_raw, data_ms = data_ms, tp_pred_plot = tp_pred_plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 1 </span></span>
+<span><span class="co">#&gt;  THERE ARE  94  ITERATIONS WITH NA's </span></span>
+<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 0.91</span></span>
+<span><span class="co">#&gt; Warning in calib_blr_ipcw(data_raw = data_raw, data_ms = data_ms, tp_pred_plot = tp_pred_plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 2 </span></span>
+<span><span class="co">#&gt;  THERE ARE  118  ITERATIONS WITH NA's </span></span>
+<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.16</span></span>
+<span><span class="co">#&gt; Warning in calib_blr_ipcw(data_raw = data_raw, data_ms = data_ms, tp_pred_plot = tp_pred_plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 3 </span></span>
+<span><span class="co">#&gt;  THERE ARE  116  ITERATIONS WITH NA's </span></span>
+<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 0.95</span></span>
+<span><span class="co">#&gt; Warning in calib_blr_ipcw(data_raw = data_raw, data_ms = data_ms, tp_pred_plot = tp_pred_plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 4 </span></span>
+<span><span class="co">#&gt;  THERE ARE  119  ITERATIONS WITH NA's </span></span>
 <span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.135</span></span>
-<span><span class="co">#&gt; Warning in calib_blr_ipcw(data.raw = data.raw, data.ms = data.ms, tp.pred.plot = tp.pred.plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 4 </span></span>
-<span><span class="co">#&gt;  THERE ARE  123  ITERATIONS WITH NA's </span></span>
-<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.23</span></span>
-<span><span class="co">#&gt; Warning in calib_blr_ipcw(data.raw = data.raw, data.ms = data.ms, tp.pred.plot = tp.pred.plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 5 </span></span>
-<span><span class="co">#&gt;  THERE ARE  111  ITERATIONS WITH NA's </span></span>
-<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.155</span></span>
-<span><span class="co">#&gt; Warning in calib_blr_ipcw(data.raw = data.raw, data.ms = data.ms, tp.pred.plot = tp.pred.plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 6 </span></span>
-<span><span class="co">#&gt;  THERE ARE  121  ITERATIONS WITH NA's </span></span>
-<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.185</span></span>
+<span><span class="co">#&gt; Warning in calib_blr_ipcw(data_raw = data_raw, data_ms = data_ms, tp_pred_plot = tp_pred_plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 5 </span></span>
+<span><span class="co">#&gt;  THERE ARE  131  ITERATIONS WITH NA's </span></span>
+<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.315</span></span>
+<span><span class="co">#&gt; Warning in calib_blr_ipcw(data_raw = data_raw, data_ms = data_ms, tp_pred_plot = tp_pred_plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 6 </span></span>
+<span><span class="co">#&gt;  THERE ARE  115  ITERATIONS WITH NA's </span></span>
+<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.145</span></span>
 <span></span>
-<span><span class="va">dat.calib.pv</span> <span class="op">&lt;-</span></span>
-<span>  <span class="fu"><a href="../reference/calib_msm.html">calib_msm</a></span><span class="op">(</span>data.ms <span class="op">=</span> <span class="va">msebmtcal</span>,</span>
-<span>           data.raw <span class="op">=</span> <span class="va">ebmtcal</span>,</span>
+<span><span class="va">dat_calib_pv</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu"><a href="../reference/calib_msm.html">calib_msm</a></span><span class="op">(</span>data_ms <span class="op">=</span> <span class="va">msebmtcal</span>,</span>
+<span>           data_raw <span class="op">=</span> <span class="va">ebmtcal</span>,</span>
 <span>           j <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>           s <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>           t <span class="op">=</span> <span class="va">t.eval</span>,</span>
-<span>           tp.pred <span class="op">=</span> <span class="va">tp.pred.s0</span>,</span>
-<span>           calib.type <span class="op">=</span> <span class="st">'pv'</span>,</span>
-<span>           curve.type <span class="op">=</span> <span class="st">"loess"</span>,</span>
-<span>           loess.span <span class="op">=</span> <span class="fl">0.9</span>,</span>
-<span>           pv.group.vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span><span class="op">)</span>,</span>
-<span>           pv.n.pctls <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>           t <span class="op">=</span> <span class="va">t_eval</span>,</span>
+<span>           tp_pred <span class="op">=</span> <span class="va">tp_pred_s0</span>,</span>
+<span>           calib_type <span class="op">=</span> <span class="st">'pv'</span>,</span>
+<span>           curve_type <span class="op">=</span> <span class="st">"loess"</span>,</span>
+<span>           loess_span <span class="op">=</span> <span class="fl">0.9</span>,</span>
+<span>           pv_group_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span><span class="op">)</span>,</span>
+<span>           pv_n_pctls <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>           CI <span class="op">=</span> <span class="fl">95</span>,</span>
-<span>           CI.type <span class="op">=</span> <span class="st">'parametric'</span><span class="op">)</span></span></code></pre></div>
+<span>           CI_type <span class="op">=</span> <span class="st">'parametric'</span><span class="op">)</span></span></code></pre></div>
 <p>We now produce calibration plots using the function.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat.calib.blr</span><span class="op">)</span></span></code></pre></div>
-<div class="figure">
-<img src="Calibration-curves-estimated-with-loess-smoothers_files/figure-html/unnamed-chunk-16-1.png" alt="Figure 7: BLR-IPCW calibration plots out of state j = 1 at time s = 0  estimated using loess smoothers, span = 0.9" width="720"><p class="caption">
-Figure 7: BLR-IPCW calibration plots out of state j = 1 at time s = 0
-estimated using loess smoothers, span = 0.9
-</p>
-</div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat_calib_blr</span><span class="op">)</span></span>
+<span><span class="co">#&gt; TableGrob (2 x 1) "arrange": 2 grobs</span></span>
+<span><span class="co">#&gt;   z     cells    name              grob</span></span>
+<span><span class="co">#&gt; 1 1 (1-1,1-1) arrange   gtable[arrange]</span></span>
+<span><span class="co">#&gt; 2 2 (2-2,1-1) arrange gtable[guide-box]</span></span></code></pre></div>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat.calib.pv</span><span class="op">)</span></span></code></pre></div>
-<div class="figure">
-<img src="Calibration-curves-estimated-with-loess-smoothers_files/figure-html/unnamed-chunk-17-1.png" alt="Figure 8: pseudo-value calibration plots out of state j = 1 at time s = 0 estimated using loess smoothers, span = 0.9" width="720"><p class="caption">
-Figure 8: pseudo-value calibration plots out of state j = 1 at time s =
-0 estimated using loess smoothers, span = 0.9
-</p>
-</div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat_calib_pv</span><span class="op">)</span></span>
+<span><span class="co">#&gt; TableGrob (2 x 1) "arrange": 2 grobs</span></span>
+<span><span class="co">#&gt;   z     cells    name              grob</span></span>
+<span><span class="co">#&gt; 1 1 (1-1,1-1) arrange   gtable[arrange]</span></span>
+<span><span class="co">#&gt; 2 2 (2-2,1-1) arrange gtable[guide-box]</span></span></code></pre></div>
 <p>Then do .</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">dat.calib.blr</span> <span class="op">&lt;-</span></span>
-<span>  <span class="fu"><a href="../reference/calib_msm.html">calib_msm</a></span><span class="op">(</span>data.ms <span class="op">=</span> <span class="va">msebmtcal</span>,</span>
-<span>           data.raw <span class="op">=</span> <span class="va">ebmtcal</span>,</span>
+<code class="sourceCode R"><span><span class="va">dat_calib_blr</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu"><a href="../reference/calib_msm.html">calib_msm</a></span><span class="op">(</span>data_ms <span class="op">=</span> <span class="va">msebmtcal</span>,</span>
+<span>           data_raw <span class="op">=</span> <span class="va">ebmtcal</span>,</span>
 <span>           j <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>           s <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>           t <span class="op">=</span> <span class="va">t.eval</span>,</span>
-<span>           tp.pred <span class="op">=</span> <span class="va">tp.pred.s0</span>,</span>
-<span>           calib.type <span class="op">=</span> <span class="st">'blr'</span>,</span>
-<span>           curve.type <span class="op">=</span> <span class="st">"loess"</span>,</span>
-<span>           loess.span <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>           w.covs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span>, <span class="st">"agecl"</span>, <span class="st">"proph"</span>, <span class="st">"match"</span><span class="op">)</span>,</span>
+<span>           t <span class="op">=</span> <span class="va">t_eval</span>,</span>
+<span>           tp_pred <span class="op">=</span> <span class="va">tp_pred_s0</span>,</span>
+<span>           calib_type <span class="op">=</span> <span class="st">'blr'</span>,</span>
+<span>           curve_type <span class="op">=</span> <span class="st">"loess"</span>,</span>
+<span>           loess_span <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>           w_covs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span>, <span class="st">"agecl"</span>, <span class="st">"proph"</span>, <span class="st">"match"</span><span class="op">)</span>,</span>
 <span>           CI <span class="op">=</span> <span class="fl">95</span>,</span>
-<span>           CI.type <span class="op">=</span> <span class="st">"bootstrap"</span>,</span>
-<span>           CI.R.boot <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning in calib_blr_ipcw(data.raw = data.raw, data.ms = data.ms, tp.pred.plot = tp.pred.plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 1 </span></span>
-<span><span class="co">#&gt;  THERE ARE  92  ITERATIONS WITH NA's </span></span>
-<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 0.96</span></span>
-<span><span class="co">#&gt; Warning in calib_blr_ipcw(data.raw = data.raw, data.ms = data.ms, tp.pred.plot = tp.pred.plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 2 </span></span>
-<span><span class="co">#&gt;  THERE ARE  113  ITERATIONS WITH NA's </span></span>
-<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.075</span></span>
-<span><span class="co">#&gt; Warning in calib_blr_ipcw(data.raw = data.raw, data.ms = data.ms, tp.pred.plot = tp.pred.plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 3 </span></span>
-<span><span class="co">#&gt;  THERE ARE  120  ITERATIONS WITH NA's </span></span>
-<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.135</span></span>
-<span><span class="co">#&gt; Warning in calib_blr_ipcw(data.raw = data.raw, data.ms = data.ms, tp.pred.plot = tp.pred.plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 4 </span></span>
+<span>           CI_type <span class="op">=</span> <span class="st">"bootstrap"</span>,</span>
+<span>           CI_R_boot <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning in calib_blr_ipcw(data_raw = data_raw, data_ms = data_ms, tp_pred_plot = tp_pred_plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 1 </span></span>
+<span><span class="co">#&gt;  THERE ARE  86  ITERATIONS WITH NA's </span></span>
+<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 0.805</span></span>
+<span><span class="co">#&gt; Warning in calib_blr_ipcw(data_raw = data_raw, data_ms = data_ms, tp_pred_plot = tp_pred_plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 2 </span></span>
+<span><span class="co">#&gt;  THERE ARE  130  ITERATIONS WITH NA's </span></span>
+<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.27</span></span>
+<span><span class="co">#&gt; Warning in calib_blr_ipcw(data_raw = data_raw, data_ms = data_ms, tp_pred_plot = tp_pred_plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 3 </span></span>
+<span><span class="co">#&gt;  THERE ARE  128  ITERATIONS WITH NA's </span></span>
+<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.255</span></span>
+<span><span class="co">#&gt; Warning in calib_blr_ipcw(data_raw = data_raw, data_ms = data_ms, tp_pred_plot = tp_pred_plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 4 </span></span>
 <span><span class="co">#&gt;  THERE ARE  123  ITERATIONS WITH NA's </span></span>
-<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.23</span></span>
-<span><span class="co">#&gt; Warning in calib_blr_ipcw(data.raw = data.raw, data.ms = data.ms, tp.pred.plot = tp.pred.plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 5 </span></span>
-<span><span class="co">#&gt;  THERE ARE  111  ITERATIONS WITH NA's </span></span>
-<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.155</span></span>
-<span><span class="co">#&gt; Warning in calib_blr_ipcw(data.raw = data.raw, data.ms = data.ms, tp.pred.plot = tp.pred.plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 6 </span></span>
-<span><span class="co">#&gt;  THERE ARE  121  ITERATIONS WITH NA's </span></span>
-<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.185</span></span>
+<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.125</span></span>
+<span><span class="co">#&gt; Warning in calib_blr_ipcw(data_raw = data_raw, data_ms = data_ms, tp_pred_plot = tp_pred_plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 5 </span></span>
+<span><span class="co">#&gt;  THERE ARE  132  ITERATIONS WITH NA's </span></span>
+<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.285</span></span>
+<span><span class="co">#&gt; Warning in calib_blr_ipcw(data_raw = data_raw, data_ms = data_ms, tp_pred_plot = tp_pred_plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 6 </span></span>
+<span><span class="co">#&gt;  THERE ARE  112  ITERATIONS WITH NA's </span></span>
+<span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.02</span></span>
 <span></span>
-<span><span class="va">dat.calib.pv</span> <span class="op">&lt;-</span></span>
-<span>  <span class="fu"><a href="../reference/calib_msm.html">calib_msm</a></span><span class="op">(</span>data.ms <span class="op">=</span> <span class="va">msebmtcal</span>,</span>
-<span>           data.raw <span class="op">=</span> <span class="va">ebmtcal</span>,</span>
+<span><span class="va">dat_calib_pv</span> <span class="op">&lt;-</span></span>
+<span>  <span class="fu"><a href="../reference/calib_msm.html">calib_msm</a></span><span class="op">(</span>data_ms <span class="op">=</span> <span class="va">msebmtcal</span>,</span>
+<span>           data_raw <span class="op">=</span> <span class="va">ebmtcal</span>,</span>
 <span>           j <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>           s <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>           t <span class="op">=</span> <span class="va">t.eval</span>,</span>
-<span>           tp.pred <span class="op">=</span> <span class="va">tp.pred.s0</span>,</span>
-<span>           calib.type <span class="op">=</span> <span class="st">'pv'</span>,</span>
-<span>           curve.type <span class="op">=</span> <span class="st">"loess"</span>,</span>
-<span>           loess.span <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>           pv.group.vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span><span class="op">)</span>,</span>
-<span>           pv.n.pctls <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>           t <span class="op">=</span> <span class="va">t_eval</span>,</span>
+<span>           tp_pred <span class="op">=</span> <span class="va">tp_pred_s0</span>,</span>
+<span>           calib_type <span class="op">=</span> <span class="st">'pv'</span>,</span>
+<span>           curve_type <span class="op">=</span> <span class="st">"loess"</span>,</span>
+<span>           loess_span <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>           pv_group_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span><span class="op">)</span>,</span>
+<span>           pv_n_pctls <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>           CI <span class="op">=</span> <span class="fl">95</span>,</span>
-<span>           CI.type <span class="op">=</span> <span class="st">'parametric'</span><span class="op">)</span></span></code></pre></div>
+<span>           CI_type <span class="op">=</span> <span class="st">'parametric'</span><span class="op">)</span></span></code></pre></div>
 <p>We now produce calibration plots using the function.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat.calib.blr</span><span class="op">)</span></span></code></pre></div>
-<div class="figure">
-<img src="Calibration-curves-estimated-with-loess-smoothers_files/figure-html/unnamed-chunk-19-1.png" alt="Figure 9: BLR-IPCW calibration plots out of state j = 1 at time s = 0  estimated using loess smoothers, span = 1" width="720"><p class="caption">
-Figure 9: BLR-IPCW calibration plots out of state j = 1 at time s = 0
-estimated using loess smoothers, span = 1
-</p>
-</div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat_calib_blr</span><span class="op">)</span></span>
+<span><span class="co">#&gt; TableGrob (2 x 1) "arrange": 2 grobs</span></span>
+<span><span class="co">#&gt;   z     cells    name              grob</span></span>
+<span><span class="co">#&gt; 1 1 (1-1,1-1) arrange   gtable[arrange]</span></span>
+<span><span class="co">#&gt; 2 2 (2-2,1-1) arrange gtable[guide-box]</span></span></code></pre></div>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat.calib.pv</span><span class="op">)</span></span></code></pre></div>
-<div class="figure">
-<img src="Calibration-curves-estimated-with-loess-smoothers_files/figure-html/unnamed-chunk-20-1.png" alt="Figure 10: pseudo-value calibration plots out of state j = 1 at time s = 0 estimated using loess smoothers, span = 1" width="720"><p class="caption">
-Figure 10: pseudo-value calibration plots out of state j = 1 at time s =
-0 estimated using loess smoothers, span = 1
-</p>
-</div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat_calib_pv</span><span class="op">)</span></span>
+<span><span class="co">#&gt; TableGrob (2 x 1) "arrange": 2 grobs</span></span>
+<span><span class="co">#&gt;   z     cells    name              grob</span></span>
+<span><span class="co">#&gt; 1 1 (1-1,1-1) arrange   gtable[arrange]</span></span>
+<span><span class="co">#&gt; 2 2 (2-2,1-1) arrange gtable[guide-box]</span></span></code></pre></div>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div id="ref-Austin2020" class="csl-entry">
 Austin, Peter C., Frank E. Harrell, and David van Klaveren. 2020.
@@ -660,7 +640,7 @@ Software</em> 38 (7). <a href="https://cran.r-project.org/package=mstate" class=
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer>

@@ -1,14 +1,14 @@
 pandoc: 3.1.11
-pkgdown: 2.1.0
+pkgdown: 2.1.1
 pkgdown_sha: ~
 articles:
   articles/BLR-IPCW-manual-bootstrap: BLR-IPCW-manual-bootstrap.html
   articles/Calibration-curves-estimated-with-loess-smoothers: Calibration-curves-estimated-with-loess-smoothers.html
   articles/Comparison-in-competing-risks-setting: Comparison-in-competing-risks-setting.html
   Directory-of-vignettes: Directory-of-vignettes.html
-  articles/Evaluation-of-estimation-of-IPCWs: Evaluation-of-estimation-of-IPCWs.html
   articles/Overview: Overview.html
-last_built: 2024-08-09T07:09Z
+  articles/Sensitivity-analysis-for-IPCWs: Sensitivity-analysis-for-IPCWs.html
+last_built: 2024-11-07T13:52Z
 urls:
   reference: https://alexpate30.github.io/calibmsm/reference
   article: https://alexpate30.github.io/calibmsm/articles

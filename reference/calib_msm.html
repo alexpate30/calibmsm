@@ -36,8 +36,8 @@ Pseudo-values: Pseudo-values estimated using the Aalen-Johansen estimator (Aalen
     <li><a class="dropdown-item" href="../articles/Calibration-curves-estimated-with-loess-smoothers.html">Calibration-curves-estimated-with-loess-smoothers</a></li>
     <li><a class="dropdown-item" href="../articles/Comparison-in-competing-risks-setting.html">Comparison-in-competing-risks-setting</a></li>
     <li><a class="dropdown-item" href="../articles/Directory-of-vignettes.html">A catalogue of links and descriptions for the vignettes/articles</a></li>
-    <li><a class="dropdown-item" href="../articles/Evaluation-of-estimation-of-IPCWs.html">Evaluation-of-estimation-of-IPCWs</a></li>
     <li><a class="dropdown-item" href="../articles/Overview.html">Overview</a></li>
+    <li><a class="dropdown-item" href="../articles/Sensitivity-analysis-for-IPCWs.html">Sensitivity-analyses-for-IPCWs</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -66,47 +66,47 @@ weights, based on the nominal calibration  framework of van Hoorde et al. (2014,
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">calib_msm</span><span class="op">(</span></span>
-<span>  <span class="va">data.ms</span>,</span>
-<span>  <span class="va">data.raw</span>,</span>
+<span>  <span class="va">data_ms</span>,</span>
+<span>  <span class="va">data_raw</span>,</span>
 <span>  <span class="va">j</span>,</span>
 <span>  <span class="va">s</span>,</span>
 <span>  <span class="va">t</span>,</span>
-<span>  <span class="va">tp.pred</span>,</span>
-<span>  tp.pred.plot <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  calib.type <span class="op">=</span> <span class="st">"blr"</span>,</span>
-<span>  curve.type <span class="op">=</span> <span class="st">"rcs"</span>,</span>
-<span>  rcs.nk <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>  loess.span <span class="op">=</span> <span class="fl">0.75</span>,</span>
-<span>  loess.degree <span class="op">=</span> <span class="fl">2</span>,</span>
-<span>  loess.surface <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"interpolate"</span>, <span class="st">"direct"</span><span class="op">)</span>,</span>
-<span>  loess.statistics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"approximate"</span>, <span class="st">"exact"</span>, <span class="st">"none"</span><span class="op">)</span>,</span>
-<span>  loess.trace.hat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"exact"</span>, <span class="st">"approximate"</span><span class="op">)</span>,</span>
-<span>  loess.cell <span class="op">=</span> <span class="fl">0.2</span>,</span>
-<span>  loess.iterations <span class="op">=</span> <span class="fl">4</span>,</span>
-<span>  loess.iterTrace <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  mlr.smoother.type <span class="op">=</span> <span class="st">"sm.ps"</span>,</span>
-<span>  mlr.ps.int <span class="op">=</span> <span class="fl">4</span>,</span>
-<span>  mlr.degree <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>  mlr.s.df <span class="op">=</span> <span class="fl">4</span>,</span>
-<span>  mlr.niknots <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  <span class="va">tp_pred</span>,</span>
+<span>  tp_pred_plot <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  calib_type <span class="op">=</span> <span class="st">"blr"</span>,</span>
+<span>  curve_type <span class="op">=</span> <span class="st">"rcs"</span>,</span>
+<span>  rcs_nk <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  loess_span <span class="op">=</span> <span class="fl">0.75</span>,</span>
+<span>  loess_degree <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  loess_surface <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"interpolate"</span>, <span class="st">"direct"</span><span class="op">)</span>,</span>
+<span>  loess_statistics <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"approximate"</span>, <span class="st">"exact"</span>, <span class="st">"none"</span><span class="op">)</span>,</span>
+<span>  loess_trace_hat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"exact"</span>, <span class="st">"approximate"</span><span class="op">)</span>,</span>
+<span>  loess_cell <span class="op">=</span> <span class="fl">0.2</span>,</span>
+<span>  loess_iterations <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  loess_iterTrace <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  mlr_smoother_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sm.ps"</span>, <span class="st">"sm.os"</span>, <span class="st">"s"</span><span class="op">)</span>,</span>
+<span>  mlr_ps_int <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  mlr_degree <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  mlr_s_df <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>  mlr_niknots <span class="op">=</span> <span class="fl">4</span>,</span>
 <span>  weights <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  w.function <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  w.covs <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  w.landmark.type <span class="op">=</span> <span class="st">"state"</span>,</span>
-<span>  w.max <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>  w.stabilised <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  w.max.follow <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  pv.group.vars <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  pv.n.pctls <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  pv.precalc <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  pv.ids <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  w_function <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  w_covs <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  w_landmark_type <span class="op">=</span> <span class="st">"state"</span>,</span>
+<span>  w_max <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>  w_stabilised <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  w_max_follow <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  pv_group_vars <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  pv_n_pctls <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  pv_precalc <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  pv_ids <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  CI <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  CI.type <span class="op">=</span> <span class="st">"bootstrap"</span>,</span>
-<span>  CI.R.boot <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  CI.seed <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>  transitions.out <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  assess.moderate <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  assess.mean <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  CI_type <span class="op">=</span> <span class="st">"bootstrap"</span>,</span>
+<span>  CI_R_boot <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  CI_seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  transitions_out <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  assess_moderate <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  assess_mean <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -115,11 +115,11 @@ weights, based on the nominal calibration  framework of van Hoorde et al. (2014,
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
 
 
-<dl><dt id="arg-data-ms">data.ms<a class="anchor" aria-label="anchor" href="#arg-data-ms"></a></dt>
+<dl><dt id="arg-data-ms">data_ms<a class="anchor" aria-label="anchor" href="#arg-data-ms"></a></dt>
 <dd><p>Validation data in <code>msdata</code> format</p></dd>
 
 
-<dt id="arg-data-raw">data.raw<a class="anchor" aria-label="anchor" href="#arg-data-raw"></a></dt>
+<dt id="arg-data-raw">data_raw<a class="anchor" aria-label="anchor" href="#arg-data-raw"></a></dt>
 <dd><p>Validation data in <code>data.frame</code> (one row per individual)</p></dd>
 
 
@@ -135,75 +135,75 @@ weights, based on the nominal calibration  framework of van Hoorde et al. (2014,
 <dd><p>Follow up time at which calibration is to be assessed</p></dd>
 
 
-<dt id="arg-tp-pred">tp.pred<a class="anchor" aria-label="anchor" href="#arg-tp-pred"></a></dt>
+<dt id="arg-tp-pred">tp_pred<a class="anchor" aria-label="anchor" href="#arg-tp-pred"></a></dt>
 <dd><p>Data frame or matrix of predicted transition probabilities at time t, if in state j at time s. There must be a separate column for the predicted transition probabilities into every state, even if these predicted transition probabilities are 0.</p></dd>
 
 
-<dt id="arg-tp-pred-plot">tp.pred.plot<a class="anchor" aria-label="anchor" href="#arg-tp-pred-plot"></a></dt>
+<dt id="arg-tp-pred-plot">tp_pred_plot<a class="anchor" aria-label="anchor" href="#arg-tp-pred-plot"></a></dt>
 <dd><p>Data frame or matrix of predicted risks for each possible transition over which to plot the calibration curves. Argument provided to enable user to apply bootstrapping manually.</p></dd>
 
 
-<dt id="arg-calib-type">calib.type<a class="anchor" aria-label="anchor" href="#arg-calib-type"></a></dt>
+<dt id="arg-calib-type">calib_type<a class="anchor" aria-label="anchor" href="#arg-calib-type"></a></dt>
 <dd><p>Whether calibration plots are estimated using BLR-IPCW ('blr'), MLR-IPCW ('mlr') or pseudo-values ('pv')</p></dd>
 
 
-<dt id="arg-curve-type">curve.type<a class="anchor" aria-label="anchor" href="#arg-curve-type"></a></dt>
+<dt id="arg-curve-type">curve_type<a class="anchor" aria-label="anchor" href="#arg-curve-type"></a></dt>
 <dd><p>Whether calibration curves are estimated using restricted cubic splines ('rcs') or loess smoothers ('loess')</p></dd>
 
 
-<dt id="arg-rcs-nk">rcs.nk<a class="anchor" aria-label="anchor" href="#arg-rcs-nk"></a></dt>
+<dt id="arg-rcs-nk">rcs_nk<a class="anchor" aria-label="anchor" href="#arg-rcs-nk"></a></dt>
 <dd><p>Number of knots when curves are estimated using restricted cubic splines</p></dd>
 
 
-<dt id="arg-loess-span">loess.span<a class="anchor" aria-label="anchor" href="#arg-loess-span"></a></dt>
+<dt id="arg-loess-span">loess_span<a class="anchor" aria-label="anchor" href="#arg-loess-span"></a></dt>
 <dd><p>Span when curves are estimated using loess smoothers</p></dd>
 
 
-<dt id="arg-loess-degree">loess.degree<a class="anchor" aria-label="anchor" href="#arg-loess-degree"></a></dt>
-<dd><p>Degree when curves are estimated. using loess smoothers</p></dd>
+<dt id="arg-loess-degree">loess_degree<a class="anchor" aria-label="anchor" href="#arg-loess-degree"></a></dt>
+<dd><p>Degree when curves are estimated_ using loess smoothers</p></dd>
 
 
-<dt id="arg-loess-surface">loess.surface<a class="anchor" aria-label="anchor" href="#arg-loess-surface"></a></dt>
+<dt id="arg-loess-surface">loess_surface<a class="anchor" aria-label="anchor" href="#arg-loess-surface"></a></dt>
 <dd><p>see <code><a href="https://rdrr.io/r/stats/loess.control.html" class="external-link">loess.control</a></code></p></dd>
 
 
-<dt id="arg-loess-statistics">loess.statistics<a class="anchor" aria-label="anchor" href="#arg-loess-statistics"></a></dt>
+<dt id="arg-loess-statistics">loess_statistics<a class="anchor" aria-label="anchor" href="#arg-loess-statistics"></a></dt>
 <dd><p>see <code><a href="https://rdrr.io/r/stats/loess.control.html" class="external-link">loess.control</a></code></p></dd>
 
 
-<dt id="arg-loess-trace-hat">loess.trace.hat<a class="anchor" aria-label="anchor" href="#arg-loess-trace-hat"></a></dt>
+<dt id="arg-loess-trace-hat">loess_trace_hat<a class="anchor" aria-label="anchor" href="#arg-loess-trace-hat"></a></dt>
 <dd><p>see <code><a href="https://rdrr.io/r/stats/loess.control.html" class="external-link">loess.control</a></code></p></dd>
 
 
-<dt id="arg-loess-cell">loess.cell<a class="anchor" aria-label="anchor" href="#arg-loess-cell"></a></dt>
+<dt id="arg-loess-cell">loess_cell<a class="anchor" aria-label="anchor" href="#arg-loess-cell"></a></dt>
 <dd><p>see <code><a href="https://rdrr.io/r/stats/loess.control.html" class="external-link">loess.control</a></code></p></dd>
 
 
-<dt id="arg-loess-iterations">loess.iterations<a class="anchor" aria-label="anchor" href="#arg-loess-iterations"></a></dt>
+<dt id="arg-loess-iterations">loess_iterations<a class="anchor" aria-label="anchor" href="#arg-loess-iterations"></a></dt>
 <dd><p>see <code><a href="https://rdrr.io/r/stats/loess.control.html" class="external-link">loess.control</a></code></p></dd>
 
 
-<dt id="arg-loess-itertrace">loess.iterTrace<a class="anchor" aria-label="anchor" href="#arg-loess-itertrace"></a></dt>
+<dt id="arg-loess-itertrace">loess_iterTrace<a class="anchor" aria-label="anchor" href="#arg-loess-itertrace"></a></dt>
 <dd><p>see <code><a href="https://rdrr.io/r/stats/loess.control.html" class="external-link">loess.control</a></code></p></dd>
 
 
-<dt id="arg-mlr-smoother-type">mlr.smoother.type<a class="anchor" aria-label="anchor" href="#arg-mlr-smoother-type"></a></dt>
+<dt id="arg-mlr-smoother-type">mlr_smoother_type<a class="anchor" aria-label="anchor" href="#arg-mlr-smoother-type"></a></dt>
 <dd><p>Type of smoothing applied. Takes values <code>s</code> (see <code><a href="https://rdrr.io/pkg/VGAM/man/s.html" class="external-link">s</a></code>), <code>sm.ps</code> (see <code><a href="https://rdrr.io/pkg/VGAM/man/sm.ps.html" class="external-link">sm.ps</a></code>) or <code>sm.os</code> (see <code><a href="https://rdrr.io/pkg/VGAM/man/sm.os.html" class="external-link">sm.os</a></code>).</p></dd>
 
 
-<dt id="arg-mlr-ps-int">mlr.ps.int<a class="anchor" aria-label="anchor" href="#arg-mlr-ps-int"></a></dt>
+<dt id="arg-mlr-ps-int">mlr_ps_int<a class="anchor" aria-label="anchor" href="#arg-mlr-ps-int"></a></dt>
 <dd><p>the number of equally-spaced B spline intervals in the vector spline smoother (see <code><a href="https://rdrr.io/pkg/VGAM/man/sm.ps.html" class="external-link">sm.ps</a></code>)</p></dd>
 
 
-<dt id="arg-mlr-degree">mlr.degree<a class="anchor" aria-label="anchor" href="#arg-mlr-degree"></a></dt>
+<dt id="arg-mlr-degree">mlr_degree<a class="anchor" aria-label="anchor" href="#arg-mlr-degree"></a></dt>
 <dd><p>the degree of B-spline basis in the vector spline smoother (see <code><a href="https://rdrr.io/pkg/VGAM/man/sm.ps.html" class="external-link">sm.ps</a></code>)</p></dd>
 
 
-<dt id="arg-mlr-s-df">mlr.s.df<a class="anchor" aria-label="anchor" href="#arg-mlr-s-df"></a></dt>
+<dt id="arg-mlr-s-df">mlr_s_df<a class="anchor" aria-label="anchor" href="#arg-mlr-s-df"></a></dt>
 <dd><p>degrees of freedom of vector spline (see <code><a href="https://rdrr.io/pkg/VGAM/man/s.html" class="external-link">s</a></code>)</p></dd>
 
 
-<dt id="arg-mlr-niknots">mlr.niknots<a class="anchor" aria-label="anchor" href="#arg-mlr-niknots"></a></dt>
+<dt id="arg-mlr-niknots">mlr_niknots<a class="anchor" aria-label="anchor" href="#arg-mlr-niknots"></a></dt>
 <dd><p>number of interior knots (see <code><a href="https://rdrr.io/pkg/VGAM/man/sm.os.html" class="external-link">sm.os</a></code>)</p></dd>
 
 
@@ -211,43 +211,43 @@ weights, based on the nominal calibration  framework of van Hoorde et al. (2014,
 <dd><p>Vector of inverse probability of censoring weights</p></dd>
 
 
-<dt id="arg-w-function">w.function<a class="anchor" aria-label="anchor" href="#arg-w-function"></a></dt>
+<dt id="arg-w-function">w_function<a class="anchor" aria-label="anchor" href="#arg-w-function"></a></dt>
 <dd><p>Custom function for estimating the inverse probability of censoring weights</p></dd>
 
 
-<dt id="arg-w-covs">w.covs<a class="anchor" aria-label="anchor" href="#arg-w-covs"></a></dt>
+<dt id="arg-w-covs">w_covs<a class="anchor" aria-label="anchor" href="#arg-w-covs"></a></dt>
 <dd><p>Character vector of variable names to adjust for when calculating inverse probability of censoring weights</p></dd>
 
 
-<dt id="arg-w-landmark-type">w.landmark.type<a class="anchor" aria-label="anchor" href="#arg-w-landmark-type"></a></dt>
+<dt id="arg-w-landmark-type">w_landmark_type<a class="anchor" aria-label="anchor" href="#arg-w-landmark-type"></a></dt>
 <dd><p>Whether weights are estimated in all individuals uncensored at time s ('all') or only in individuals uncensored and in state j at time s ('state')</p></dd>
 
 
-<dt id="arg-w-max">w.max<a class="anchor" aria-label="anchor" href="#arg-w-max"></a></dt>
+<dt id="arg-w-max">w_max<a class="anchor" aria-label="anchor" href="#arg-w-max"></a></dt>
 <dd><p>Maximum bound for inverse probability of censoring weights</p></dd>
 
 
-<dt id="arg-w-stabilised">w.stabilised<a class="anchor" aria-label="anchor" href="#arg-w-stabilised"></a></dt>
+<dt id="arg-w-stabilised">w_stabilised<a class="anchor" aria-label="anchor" href="#arg-w-stabilised"></a></dt>
 <dd><p>Indicates whether inverse probability of censoring weights should be stabilised or not</p></dd>
 
 
-<dt id="arg-w-max-follow">w.max.follow<a class="anchor" aria-label="anchor" href="#arg-w-max-follow"></a></dt>
+<dt id="arg-w-max-follow">w_max_follow<a class="anchor" aria-label="anchor" href="#arg-w-max-follow"></a></dt>
 <dd><p>Maximum follow up for model calculating inverse probability of censoring weights. Reducing this to <code>t</code> + 1 may aid in the proportional hazards assumption being met in this model.</p></dd>
 
 
-<dt id="arg-pv-group-vars">pv.group.vars<a class="anchor" aria-label="anchor" href="#arg-pv-group-vars"></a></dt>
+<dt id="arg-pv-group-vars">pv_group_vars<a class="anchor" aria-label="anchor" href="#arg-pv-group-vars"></a></dt>
 <dd><p>Variables to group by before calculating pseudo-values</p></dd>
 
 
-<dt id="arg-pv-n-pctls">pv.n.pctls<a class="anchor" aria-label="anchor" href="#arg-pv-n-pctls"></a></dt>
+<dt id="arg-pv-n-pctls">pv_n_pctls<a class="anchor" aria-label="anchor" href="#arg-pv-n-pctls"></a></dt>
 <dd><p>Number of percentiles of predicted risk to group by before calculating pseudo-values</p></dd>
 
 
-<dt id="arg-pv-precalc">pv.precalc<a class="anchor" aria-label="anchor" href="#arg-pv-precalc"></a></dt>
+<dt id="arg-pv-precalc">pv_precalc<a class="anchor" aria-label="anchor" href="#arg-pv-precalc"></a></dt>
 <dd><p>Pre-calculated pseudo-values</p></dd>
 
 
-<dt id="arg-pv-ids">pv.ids<a class="anchor" aria-label="anchor" href="#arg-pv-ids"></a></dt>
+<dt id="arg-pv-ids">pv_ids<a class="anchor" aria-label="anchor" href="#arg-pv-ids"></a></dt>
 <dd><p>Id's of individuals to calculate pseudo-values for</p></dd>
 
 
@@ -255,32 +255,32 @@ weights, based on the nominal calibration  framework of van Hoorde et al. (2014,
 <dd><p>Size of confidence intervals as a %</p></dd>
 
 
-<dt id="arg-ci-type">CI.type<a class="anchor" aria-label="anchor" href="#arg-ci-type"></a></dt>
+<dt id="arg-ci-type">CI_type<a class="anchor" aria-label="anchor" href="#arg-ci-type"></a></dt>
 <dd><p>Method for estimating confidence interval (currently restricted to <code>bootstrap</code>)</p></dd>
 
 
-<dt id="arg-ci-r-boot">CI.R.boot<a class="anchor" aria-label="anchor" href="#arg-ci-r-boot"></a></dt>
+<dt id="arg-ci-r-boot">CI_R_boot<a class="anchor" aria-label="anchor" href="#arg-ci-r-boot"></a></dt>
 <dd><p>Number of bootstrap replicates when estimating the confidence interval for the calibration curve</p></dd>
 
 
-<dt id="arg-ci-seed">CI.seed<a class="anchor" aria-label="anchor" href="#arg-ci-seed"></a></dt>
+<dt id="arg-ci-seed">CI_seed<a class="anchor" aria-label="anchor" href="#arg-ci-seed"></a></dt>
 <dd><p>Seed for bootstrapping procedure</p></dd>
 
 
-<dt id="arg-transitions-out">transitions.out<a class="anchor" aria-label="anchor" href="#arg-transitions-out"></a></dt>
+<dt id="arg-transitions-out">transitions_out<a class="anchor" aria-label="anchor" href="#arg-transitions-out"></a></dt>
 <dd><p>Transitions for which to calculate calibration curves. Will do all possible transitions if left as NULL.</p></dd>
 
 
-<dt id="arg-assess-moderate">assess.moderate<a class="anchor" aria-label="anchor" href="#arg-assess-moderate"></a></dt>
+<dt id="arg-assess-moderate">assess_moderate<a class="anchor" aria-label="anchor" href="#arg-assess-moderate"></a></dt>
 <dd><p>TRUE/FALSE whether to estimate data for calibration plots</p></dd>
 
 
-<dt id="arg-assess-mean">assess.mean<a class="anchor" aria-label="anchor" href="#arg-assess-mean"></a></dt>
+<dt id="arg-assess-mean">assess_mean<a class="anchor" aria-label="anchor" href="#arg-assess-mean"></a></dt>
 <dd><p>TRUE/FALSE whether to estimate mean calibration</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Extra arguments to be passed to w.function (custom function for estimating weights)</p></dd>
+<dd><p>Extra arguments to be passed to w_function (custom function for estimating weights)</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -289,11 +289,11 @@ weights, based on the nominal calibration  framework of van Hoorde et al. (2014,
 <code>plotdata</code> and <code>metadata</code>. The <code>plotdata</code> element contains the
 data for the calibration plots. This will itself be a list with each element
 containing calibration plot data for the transition probabilities into each of the possible
-states. Each list element contains patient ids (<code>id</code>) from <code>data.raw</code>, the predicted
+states. Each list element contains patient ids (<code>id</code>) from <code>data_raw</code>, the predicted
 transition probabilities (<code>pred</code>) and the estimated observed event
-probabilities (<code>obs</code>). If a confidence interval is requested, upper (<code>obs.upper</code>)
-and lower (<code>obs.lower</code>) bounds for the observed event probabilities are also returned.
-If tp.pred.plot is specified, column (<code>id</code>) is not returned.
+probabilities (<code>obs</code>). If a confidence interval is requested, upper (<code>obs_upper</code>)
+and lower (<code>obs_lower</code>) bounds for the observed event probabilities are also returned.
+If tp_pred_plot is specified, column (<code>id</code>) is not returned.
 The <code>metadata</code> element contains metadata including: a vector of the possible transitions,
 a vector of which transitions calibration curves have been estimated for, the
 size of the confidence interval, the method for estimating the calibration curve
@@ -302,16 +302,16 @@ and other user specified information.</p>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Observed event probabilities at time <code>t</code> are estimated for predicted
-transition probabilities <code>tp.pred</code> out of state <code>j</code> at time <code>s</code>.</p>
-<p><code>calib.type = 'blr'</code> estimates calibration curves using techniques for assessing
+transition probabilities <code>tp_pred</code> out of state <code>j</code> at time <code>s</code>.</p>
+<p><code>calib_type = 'blr'</code> estimates calibration curves using techniques for assessing
 the calibration of a binary logistic regression model (Van Calster et al., 2016).
 A choice between restricted cubic splines and loess smoothers for estimating the
-calibration curve can be made using <code>curve.type</code>. Landmarking (van Houwelingen HC, 2007)
+calibration curve can be made using <code>curve_type</code>. Landmarking (van Houwelingen HC, 2007)
 is applied to only assess calibration in individuals who are uncensored and in state <code>j</code> at time <code>s</code>.
 Calibration can only be assessed in individuals who are also uncensored at time <code>t</code>,
 which is accounted for using inverse probability of censoring weights (Hernan M, Robins J, 2020).
 See method BLR-IPCW from Pate et al., (2024) for a full explanation of the approach.</p>
-<p><code>calib.type = 'mlr'</code> estimates calibration scatter plots using a technique for assessing
+<p><code>calib_type = 'mlr'</code> estimates calibration scatter plots using a technique for assessing
 the calibration of multinomial logistic regression models, namely the nominal
 calibration framework of van Hoorde et al. (2014, 2015). Landmarking (van Houwelingen HC, 2007)
 is applied to only assess calibration in individuals who are uncensored
@@ -319,39 +319,39 @@ and in state <code>j</code> at time <code>s</code>. Calibration can only be asse
 who are also uncensored at time <code>t</code>, which is accounted for using inverse probability
 of censoring weights (Hernan M, Robins J, 2020). See method BLR-IPCW from Pate et al., (2024)
 for a full explanation of the approach.</p>
-<p><code>calib.type = 'pv'</code> estimates calibration curves using using pseudo-values (Andersen PK, Pohar Perme M, 2010)
+<p><code>calib_type = 'pv'</code> estimates calibration curves using using pseudo-values (Andersen PK, Pohar Perme M, 2010)
 calculated using the Aalen-Johansen estimator (Aalen OO, Johansen S, 1978).
 Calibration curves are generated by regressing the pseudo-values on the predicted transition probabilities.
 A choice between restricted cubic splines and loess smoothers for estimating the
-calibration curve can be made using <code>curve.type</code>. Landmarking (van Houwelingen HC, 2007)
+calibration curve can be made using <code>curve_type</code>. Landmarking (van Houwelingen HC, 2007)
 is applied to only assess calibration in individuals who are uncensored and in state <code>j</code> at time <code>s</code>.
 The nature of pseudo-values means calibration can be assessed in all landmarked individuals,
 regardless of their censoring time. See method Pseudo-value approach from Pate et al., (2024)
 for a full explanation of the approach.</p>
-<p>Two datasets for the same cohort of inidividuals must be provided. Firstly, <code>data.raw</code>
+<p>Two datasets for the same cohort of inidividuals must be provided. Firstly, <code>data_raw</code>
 must be a <code>data.frame</code> with one row per individual containing the variables for
-the time until censoring (<code>dtcens</code>), and an indicator for censoring <code>dtcens.s</code>,
-where (<code>dtcens.s = 1</code>) if an individual is censored at time <code>dtcens</code>, and <code>dtcens.s = 0</code>
+the time until censoring (<code>dtcens</code>), and an indicator for censoring <code>dtcens_s</code>,
+where (<code>dtcens_s = 1</code>) if an individual is censored at time <code>dtcens</code>, and <code>dtcens_s = 0</code>
 otherwise. When an individual enters an absorbing state, this prevents censoring
-from happening (i.e. dtcens.s = 0). <code>data.raw</code> must also contain the desired variables
-for estimating the weights. Secondly, <code>data.ms</code> must be a dataset of class <code>msdata</code>,
+from happening (i.e. dtcens_s = 0). <code>data_raw</code> must also contain the desired variables
+for estimating the weights. Secondly, <code>data_ms</code> must be a dataset of class <code>msdata</code>,
 generated using the <code>[mstate]</code> package. This dataset is used to apply the landmarking
-and identify which state individuals are in at time <code>t</code>. While <code>data.ms</code> can be
-derived from <code>data.raw</code>, it would be inefficient to do this within <code>calibmsm::calib_msm</code>
+and identify which state individuals are in at time <code>t</code>. While <code>data_ms</code> can be
+derived from <code>data_raw</code>, it would be inefficient to do this within <code>calibmsm::calib_msm</code>
 due to the bootstrapping procedure, and therefore they must be inputted seperately.</p>
 <p>Unless the user specifies the weights using <code>weights</code>, the weights are
 estimated using a cox-proportional hazard model, assuming a linear
-functional form of the variables defined in <code>w.covs</code>. We urge users to
+functional form of the variables defined in <code>w_covs</code>. We urge users to
 specify their own model for estimating the weights. The <code>weights</code> argument
-must be a vector with length equal to the number of rows of <code>data.raw</code>.</p>
-<p>Confidence intervals cannot be produced for the calibration scatter plots (<code>calib.type = 'mlr'</code>).
-For calibration curves estimated using <code>calib.type = 'blr'</code>, confidence intervals
-can only be estimated using bootstrapping (<code>CI.type = 'bootstrap</code>). This procedure uses the internal method for
+must be a vector with length equal to the number of rows of <code>data_raw</code>.</p>
+<p>Confidence intervals cannot be produced for the calibration scatter plots (<code>calib_type = 'mlr'</code>).
+For calibration curves estimated using <code>calib_type = 'blr'</code>, confidence intervals
+can only be estimated using bootstrapping (<code>CI_type = 'bootstrap</code>). This procedure uses the internal method for
 estimating weights, we therefore encourage users to specify their own bootstrapping
 procedure, which incorporates their own model for estimating the weights. Details
 on how to do this are provided in the vignette <em>BLR-IPCW-manual-bootstrap</em>.
-For calibration curves estimated using <code>calib.type = 'pv'</code>, confidence intervals
-can be estimated using bootstrapping (<code>CI.type = 'bootstrap</code>) or parametric formulae (<code>CI.type = 'parametric</code>).
+For calibration curves estimated using <code>calib_type = 'pv'</code>, confidence intervals
+can be estimated using bootstrapping (<code>CI_type = 'bootstrap</code>) or parametric formulae (<code>CI_type = 'parametric</code>).
 For computational reasons we recommend using the parametric approach.</p>
 <p>The calibration plots can be plotted using <code><a href="plot.calib_msm.html">plot.calib_msm</a></code> and <code><a href="plot.calib_mlr.html">plot.calib_mlr</a></code>.</p>
     </div>
@@ -392,20 +392,20 @@ URL https://link.springer.com/book/10.1007/978-1-4939-2818-7.</p>
 <span class="r-in"><span><span class="co"># s = 0 in state j = 1. These predicted transition probabilities are stored in tps0.</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Extract the predicted transition probabilities out of state j = 1</span></span></span>
-<span class="r-in"><span><span class="va">tp.pred</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">tps0</span>, <span class="va">j</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span>, <span class="fu">any_of</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"pstate"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tp_pred</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">tps0</span>, <span class="va">j</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span>, <span class="fu">any_of</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"pstate"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Now estimate the observed event probabilities for each possible transition.</span></span></span>
-<span class="r-in"><span><span class="va">dat.calib</span> <span class="op">&lt;-</span></span></span>
-<span class="r-in"><span><span class="fu">calib_msm</span><span class="op">(</span>data.ms <span class="op">=</span> <span class="va">msebmtcal</span>,</span></span>
-<span class="r-in"><span> data.raw <span class="op">=</span> <span class="va">ebmtcal</span>,</span></span>
+<span class="r-in"><span><span class="va">dat_calib</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span><span class="fu">calib_msm</span><span class="op">(</span>data_ms <span class="op">=</span> <span class="va">msebmtcal</span>,</span></span>
+<span class="r-in"><span> data_raw <span class="op">=</span> <span class="va">ebmtcal</span>,</span></span>
 <span class="r-in"><span> j<span class="op">=</span><span class="fl">1</span>,</span></span>
 <span class="r-in"><span> s<span class="op">=</span><span class="fl">0</span>,</span></span>
 <span class="r-in"><span> t <span class="op">=</span> <span class="fl">1826</span>,</span></span>
-<span class="r-in"><span> tp.pred <span class="op">=</span> <span class="va">tp.pred</span>,</span></span>
-<span class="r-in"><span> w.covs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span>, <span class="st">"agecl"</span>, <span class="st">"proph"</span>, <span class="st">"match"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span> tp_pred <span class="op">=</span> <span class="va">tp_pred</span>,</span></span>
+<span class="r-in"><span> w_covs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span>, <span class="st">"agecl"</span>, <span class="st">"proph"</span>, <span class="st">"match"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Summarise the output</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">dat.calib</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">dat_calib</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> The method used to assess calibration was BLR-IPCW</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> There were non-zero predicted transition probabilities into states  1,2,3,4,5,6</span>
@@ -468,7 +468,7 @@ URL https://link.springer.com/book/10.1007/978-1-4939-2818-7.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer></div>

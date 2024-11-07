@@ -24,8 +24,8 @@ estimated using BLR-IPCW and pseudo-value approaches."></head><body>
     <li><a class="dropdown-item" href="../articles/Calibration-curves-estimated-with-loess-smoothers.html">Calibration-curves-estimated-with-loess-smoothers</a></li>
     <li><a class="dropdown-item" href="../articles/Comparison-in-competing-risks-setting.html">Comparison-in-competing-risks-setting</a></li>
     <li><a class="dropdown-item" href="../articles/Directory-of-vignettes.html">A catalogue of links and descriptions for the vignettes/articles</a></li>
-    <li><a class="dropdown-item" href="../articles/Evaluation-of-estimation-of-IPCWs.html">Evaluation-of-estimation-of-IPCWs</a></li>
     <li><a class="dropdown-item" href="../articles/Overview.html">Overview</a></li>
+    <li><a class="dropdown-item" href="../articles/Sensitivity-analysis-for-IPCWs.html">Sensitivity-analyses-for-IPCWs</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -57,23 +57,23 @@ estimated using BLR-IPCW and pseudo-value approaches.</p>
 <span>  combine <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  ncol <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  nrow <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  size.line <span class="op">=</span> <span class="fl">0.5</span>,</span>
-<span>  size.text <span class="op">=</span> <span class="fl">12</span>,</span>
-<span>  marg.density <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  marg.density.size <span class="op">=</span> <span class="fl">5</span>,</span>
-<span>  marg.density.type <span class="op">=</span> <span class="st">"density"</span>,</span>
-<span>  marg.rug <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  marg.rug.transparency <span class="op">=</span> <span class="fl">0.1</span>,</span>
-<span>  titles.include <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  size_line <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  size_text <span class="op">=</span> <span class="fl">12</span>,</span>
+<span>  marg_density <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  marg_density_size <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  marg_density_type <span class="op">=</span> <span class="st">"density"</span>,</span>
+<span>  marg_rug <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  marg_rug_transparency <span class="op">=</span> <span class="fl">0.1</span>,</span>
+<span>  titles_include <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  titles <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  axis.titles.x <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  axis.titles.text.x <span class="op">=</span> <span class="st">"Predicted risk"</span>,</span>
-<span>  axis.titles.y <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  axis.titles.text.y <span class="op">=</span> <span class="st">"Observed risk"</span>,</span>
-<span>  legend.include <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  legend.seperate <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  legend.title <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  legend.position <span class="op">=</span> <span class="st">"bottom"</span></span>
+<span>  axis_titles_x <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  axis_titles_text_x <span class="op">=</span> <span class="st">"Predicted risk"</span>,</span>
+<span>  axis_titles_y <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  axis_titles_text_y <span class="op">=</span> <span class="st">"Predicted-observed risk"</span>,</span>
+<span>  legend_include <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  legend_seperate <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  legend_title <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  legend_position <span class="op">=</span> <span class="st">"bottom"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -101,35 +101,35 @@ estimated using BLR-IPCW and pseudo-value approaches.</p>
 <dd><p>Number of rows for combined calibration plot</p></dd>
 
 
-<dt id="arg-size-line">size.line<a class="anchor" aria-label="anchor" href="#arg-size-line"></a></dt>
+<dt id="arg-size-line">size_line<a class="anchor" aria-label="anchor" href="#arg-size-line"></a></dt>
 <dd><p>Size of line plots</p></dd>
 
 
-<dt id="arg-size-text">size.text<a class="anchor" aria-label="anchor" href="#arg-size-text"></a></dt>
+<dt id="arg-size-text">size_text<a class="anchor" aria-label="anchor" href="#arg-size-text"></a></dt>
 <dd><p>Size of text in plot</p></dd>
 
 
-<dt id="arg-marg-density">marg.density<a class="anchor" aria-label="anchor" href="#arg-marg-density"></a></dt>
+<dt id="arg-marg-density">marg_density<a class="anchor" aria-label="anchor" href="#arg-marg-density"></a></dt>
 <dd><p>Whether to produce marginal density plots TRUE/FALSE</p></dd>
 
 
-<dt id="arg-marg-density-size">marg.density.size<a class="anchor" aria-label="anchor" href="#arg-marg-density-size"></a></dt>
+<dt id="arg-marg-density-size">marg_density_size<a class="anchor" aria-label="anchor" href="#arg-marg-density-size"></a></dt>
 <dd><p>Size of the main plot relative to the density plots (see <code><a href="https://rdrr.io/pkg/ggExtra/man/ggMarginal.html" class="external-link">ggMarginal</a></code>)</p></dd>
 
 
-<dt id="arg-marg-density-type">marg.density.type<a class="anchor" aria-label="anchor" href="#arg-marg-density-type"></a></dt>
+<dt id="arg-marg-density-type">marg_density_type<a class="anchor" aria-label="anchor" href="#arg-marg-density-type"></a></dt>
 <dd><p>What type of marginal plot to show (see <code><a href="https://rdrr.io/pkg/ggExtra/man/ggMarginal.html" class="external-link">ggMarginal</a></code>)</p></dd>
 
 
-<dt id="arg-marg-rug">marg.rug<a class="anchor" aria-label="anchor" href="#arg-marg-rug"></a></dt>
+<dt id="arg-marg-rug">marg_rug<a class="anchor" aria-label="anchor" href="#arg-marg-rug"></a></dt>
 <dd><p>Whether to produce marginal rug plots TRUE/FALSE</p></dd>
 
 
-<dt id="arg-marg-rug-transparency">marg.rug.transparency<a class="anchor" aria-label="anchor" href="#arg-marg-rug-transparency"></a></dt>
+<dt id="arg-marg-rug-transparency">marg_rug_transparency<a class="anchor" aria-label="anchor" href="#arg-marg-rug-transparency"></a></dt>
 <dd><p>Degree of transparency for the density rug plot along each axis</p></dd>
 
 
-<dt id="arg-titles-include">titles.include<a class="anchor" aria-label="anchor" href="#arg-titles-include"></a></dt>
+<dt id="arg-titles-include">titles_include<a class="anchor" aria-label="anchor" href="#arg-titles-include"></a></dt>
 <dd><p>Whether to include titles for each individual calibration plots</p></dd>
 
 
@@ -137,35 +137,35 @@ estimated using BLR-IPCW and pseudo-value approaches.</p>
 <dd><p>Vector of titles for the calibration plots. Defaults to "State k" for each plot.</p></dd>
 
 
-<dt id="arg-axis-titles-x">axis.titles.x<a class="anchor" aria-label="anchor" href="#arg-axis-titles-x"></a></dt>
+<dt id="arg-axis-titles-x">axis_titles_x<a class="anchor" aria-label="anchor" href="#arg-axis-titles-x"></a></dt>
 <dd><p>Position of plots for which to include title on x-axis</p></dd>
 
 
-<dt id="arg-axis-titles-text-x">axis.titles.text.x<a class="anchor" aria-label="anchor" href="#arg-axis-titles-text-x"></a></dt>
+<dt id="arg-axis-titles-text-x">axis_titles_text_x<a class="anchor" aria-label="anchor" href="#arg-axis-titles-text-x"></a></dt>
 <dd><p>x-axis title</p></dd>
 
 
-<dt id="arg-axis-titles-y">axis.titles.y<a class="anchor" aria-label="anchor" href="#arg-axis-titles-y"></a></dt>
+<dt id="arg-axis-titles-y">axis_titles_y<a class="anchor" aria-label="anchor" href="#arg-axis-titles-y"></a></dt>
 <dd><p>Position of plots for which to include title on y-axis</p></dd>
 
 
-<dt id="arg-axis-titles-text-y">axis.titles.text.y<a class="anchor" aria-label="anchor" href="#arg-axis-titles-text-y"></a></dt>
+<dt id="arg-axis-titles-text-y">axis_titles_text_y<a class="anchor" aria-label="anchor" href="#arg-axis-titles-text-y"></a></dt>
 <dd><p>y-axis title</p></dd>
 
 
-<dt id="arg-legend-include">legend.include<a class="anchor" aria-label="anchor" href="#arg-legend-include"></a></dt>
+<dt id="arg-legend-include">legend_include<a class="anchor" aria-label="anchor" href="#arg-legend-include"></a></dt>
 <dd><p>Whether to produce a legend</p></dd>
 
 
-<dt id="arg-legend-seperate">legend.seperate<a class="anchor" aria-label="anchor" href="#arg-legend-seperate"></a></dt>
+<dt id="arg-legend-seperate">legend_seperate<a class="anchor" aria-label="anchor" href="#arg-legend-seperate"></a></dt>
 <dd><p>= Whether to include legend in plot (FALSE) or as a seperate object (TRUE)</p></dd>
 
 
-<dt id="arg-legend-title">legend.title<a class="anchor" aria-label="anchor" href="#arg-legend-title"></a></dt>
+<dt id="arg-legend-title">legend_title<a class="anchor" aria-label="anchor" href="#arg-legend-title"></a></dt>
 <dd><p>Title of legend</p></dd>
 
 
-<dt id="arg-legend-position">legend.position<a class="anchor" aria-label="anchor" href="#arg-legend-position"></a></dt>
+<dt id="arg-legend-position">legend_position<a class="anchor" aria-label="anchor" href="#arg-legend-position"></a></dt>
 <dd><p>Position of legend</p></dd>
 
 </dl></div>
@@ -183,21 +183,28 @@ class <code>list</code>, each element containing an object of class <code>gg</co
 <span class="r-in"><span><span class="co"># s = 0 in state j = 1. These predicted transition probabilities are stored in tps0.</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Extract the predicted transition probabilities out of state j = 1</span></span></span>
-<span class="r-in"><span><span class="va">tp.pred</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">tps0</span>, <span class="va">j</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span>, <span class="fu">any_of</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"pstate"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">tp_pred</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">tps0</span>, <span class="va">j</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span>, <span class="fu">any_of</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="st">"pstate"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span>, sep <span class="op">=</span> <span class="st">""</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Now estimate the observed event probabilities for each possible transition.</span></span></span>
-<span class="r-in"><span><span class="va">dat.calib</span> <span class="op">&lt;-</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="calib_msm.html">calib_msm</a></span><span class="op">(</span>data.ms <span class="op">=</span> <span class="va">msebmtcal</span>,</span></span>
-<span class="r-in"><span> data.raw <span class="op">=</span> <span class="va">ebmtcal</span>,</span></span>
+<span class="r-in"><span><span class="va">dat_calib</span> <span class="op">&lt;-</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="calib_msm.html">calib_msm</a></span><span class="op">(</span>data_ms <span class="op">=</span> <span class="va">msebmtcal</span>,</span></span>
+<span class="r-in"><span> data_raw <span class="op">=</span> <span class="va">ebmtcal</span>,</span></span>
 <span class="r-in"><span> j<span class="op">=</span><span class="fl">1</span>,</span></span>
 <span class="r-in"><span> s<span class="op">=</span><span class="fl">0</span>,</span></span>
 <span class="r-in"><span> t <span class="op">=</span> <span class="fl">1826</span>,</span></span>
-<span class="r-in"><span> tp.pred <span class="op">=</span> <span class="va">tp.pred</span>,</span></span>
-<span class="r-in"><span> w.covs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span>, <span class="st">"agecl"</span>, <span class="st">"proph"</span>, <span class="st">"match"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span> tp_pred <span class="op">=</span> <span class="va">tp_pred</span>,</span></span>
+<span class="r-in"><span> w_covs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"year"</span>, <span class="st">"agecl"</span>, <span class="st">"proph"</span>, <span class="st">"match"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span> <span class="co"># These are then plotted</span></span></span>
-<span class="r-in"><span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat.calib</span>, combine <span class="op">=</span> <span class="cn">TRUE</span>, nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="plot.calib_msm-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat_calib</span>, combine <span class="op">=</span> <span class="cn">TRUE</span>, nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> TableGrob (2 x 3) "arrange": 6 grobs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   z     cells    name                grob</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 1 (1-1,1-1) arrange ggExtraPlot[layout]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 2 (1-1,2-2) arrange ggExtraPlot[layout]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 3 (1-1,3-3) arrange ggExtraPlot[layout]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 4 (2-2,1-1) arrange ggExtraPlot[layout]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 5 (2-2,2-2) arrange ggExtraPlot[layout]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 6 (2-2,3-3) arrange ggExtraPlot[layout]</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -210,7 +217,7 @@ class <code>list</code>, each element containing an object of class <code>gg</co
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
 </div>
 
     </footer></div>

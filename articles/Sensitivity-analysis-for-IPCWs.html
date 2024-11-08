@@ -381,8 +381,7 @@ Parmar 2002)</span> (implemented in R using
 <span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">output_weights</span><span class="op">)</span></span>
 <span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>First lets look at the distribution of the weights.</p>
-<p>We can verify this by comparing the weights</p>
+<p>We then use this function to calculate the weights:</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ebmtcal</span><span class="op">$</span><span class="va">ipcw_fp</span> <span class="op">&lt;-</span> <span class="fu">calc_weights_flexsurv</span><span class="op">(</span>data_ms <span class="op">=</span> <span class="va">msebmtcal</span>, </span>
 <span>                                data_raw <span class="op">=</span> <span class="va">ebmtcal</span>, </span>
@@ -404,8 +403,11 @@ implemented as the input to argument <code>w_function</code> in
 <code>calib_msm</code>. The function <code>calc_weights_flexsurv</code>
 also has an extra argument (<code>covs_tv</code>) compared to the
 default function for estimating the weights (<code>calc_weights</code>).
-This variable is used to specify the variables which <em>Glen please
-add</em>, and should also be specified when running
+This variable is used to specify the variables which are modelled as
+time-varying coefficients (time-varying hazard ratio), wherein the
+coefficient is modelled as a spline term (function uses 3 degrees of
+freedom) as described in <span class="citation">Royston and Parmar
+(2002)</span>. This variable should also be specified when running
 <code>calib_msm</code>. For comparison, we plot the calibration curves
 using the default internal approach (cox proportional hazards). First
 estimate the calibration curves:</p>
@@ -448,25 +450,23 @@ estimate the calibration curves:</p>
 <span>            covs_tv <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"year"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Plot the calibration curves:</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat_calib_blr_coxph</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## TableGrob (2 x 3) "arrange": 6 grobs</span></span>
-<span><span class="co">##   z     cells    name                grob</span></span>
-<span><span class="co">## 1 1 (1-1,1-1) arrange ggExtraPlot[layout]</span></span>
-<span><span class="co">## 2 2 (1-1,2-2) arrange ggExtraPlot[layout]</span></span>
-<span><span class="co">## 3 3 (1-1,3-3) arrange ggExtraPlot[layout]</span></span>
-<span><span class="co">## 4 4 (2-2,1-1) arrange ggExtraPlot[layout]</span></span>
-<span><span class="co">## 5 5 (2-2,2-2) arrange ggExtraPlot[layout]</span></span>
-<span><span class="co">## 6 6 (2-2,3-3) arrange ggExtraPlot[layout]</span></span></code></pre>
-<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat_calib_blr_flexsurv</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## TableGrob (2 x 3) "arrange": 6 grobs</span></span>
-<span><span class="co">##   z     cells    name                grob</span></span>
-<span><span class="co">## 1 1 (1-1,1-1) arrange ggExtraPlot[layout]</span></span>
-<span><span class="co">## 2 2 (1-1,2-2) arrange ggExtraPlot[layout]</span></span>
-<span><span class="co">## 3 3 (1-1,3-3) arrange ggExtraPlot[layout]</span></span>
-<span><span class="co">## 4 4 (2-2,1-1) arrange ggExtraPlot[layout]</span></span>
-<span><span class="co">## 5 5 (2-2,2-2) arrange ggExtraPlot[layout]</span></span>
-<span><span class="co">## 6 6 (2-2,3-3) arrange ggExtraPlot[layout]</span></span></code></pre>
+<code class="sourceCode R"><span><span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/grid.draw.html" class="external-link">grid.draw</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat_calib_blr_coxph</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<p class="caption">
+BLR-IPCW calibration curves when using a cox proportional hazards model
+to estimate the weights
+</p>
+<img src="Sensitivity-analysis-for-IPCWs_files/figure-html/unnamed-chunk-12-1.png" alt="BLR-IPCW calibration curves when using a cox proportional hazards model to estimate the weights" width="720">
+</div>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/grid.draw.html" class="external-link">grid.draw</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat_calib_blr_flexsurv</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="figure">
+<p class="caption">
+BLR-IPCW calibration curves when using a flexible parametric model to
+estimate the weights
+</p>
+<img src="Sensitivity-analysis-for-IPCWs_files/figure-html/unnamed-chunk-13-1.png" alt="BLR-IPCW calibration curves when using a flexible parametric model to estimate the weights" width="720">
+</div>
 <p>There is very little difference, and the estimated calibration curves
 are not very sensitive to the choice of model to estimate the inverse
 probability of censoring weights. The difference between the BLR-IPCW
@@ -491,14 +491,14 @@ this assumption with a number of steps.</p>
 <p>We start by looking at all individuals that pass through states 1, 2,
 3 and 4, and see what proportion of individuals remain in these states
 until they are censored:</p>
-<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ebmtcal</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span></span>
 <span>    n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>    prop.cens <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">ae.s</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">&amp;</span> <span class="va">rec.s</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">&amp;</span> <span class="va">recae.s</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">&amp;</span> <span class="va">srv.s</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">&amp;</span> <span class="va">rel.s</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##      n prop.cens</span></span>
 <span><span class="co">## 1 2279 0.1456779</span></span></code></pre>
-<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ebmtcal</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">rec.s</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span></span>
@@ -506,7 +506,7 @@ until they are censored:</p>
 <span>    prop.cens <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">recae.s</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">&amp;</span> <span class="va">srv.s</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">&amp;</span> <span class="va">rel.s</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##      n prop.cens</span></span>
 <span><span class="co">## 1 1218 0.3341544</span></span></code></pre>
-<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ebmtcal</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ae.s</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span></span>
@@ -514,7 +514,7 @@ until they are censored:</p>
 <span>    prop.cens <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">recae.s</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">&amp;</span> <span class="va">srv.s</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">&amp;</span> <span class="va">rel.s</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##      n prop.cens</span></span>
 <span><span class="co">## 1 1134 0.1948854</span></span></code></pre>
-<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ebmtcal</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">recae.s</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span></span>
@@ -529,28 +529,28 @@ impacted by the competing risks of other events.</p>
 <p>A more information measure is to look at the proportion of
 individuals that are censored in each state, that are censored within
 5-years.</p>
-<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ebmtcal</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ae.s</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">&amp;</span> <span class="va">rec.s</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">&amp;</span> <span class="va">recae.s</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">&amp;</span> <span class="va">srv.s</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">&amp;</span> <span class="va">rel.s</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>, mean.fup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">dtcens</span><span class="op">)</span>,</span>
 <span>            mean.fup.lower.1826 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">dtcens</span> <span class="op">&lt;</span> <span class="fl">1826</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##     n mean.fup mean.fup.lower.1826</span></span>
 <span><span class="co">## 1 332 2392.286           0.3795181</span></span></code></pre>
-<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ebmtcal</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">rec.s</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">&amp;</span> <span class="va">recae.s</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">&amp;</span> <span class="va">srv.s</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">&amp;</span> <span class="va">rel.s</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>, mean.fup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">dtcens</span><span class="op">)</span>,</span>
 <span>            mean.fup.lower.1826 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">dtcens</span> <span class="op">&lt;</span> <span class="fl">1826</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##     n mean.fup mean.fup.lower.1826</span></span>
 <span><span class="co">## 1 407 2259.007           0.4152334</span></span></code></pre>
-<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ebmtcal</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">ae.s</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">&amp;</span> <span class="va">recae.s</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">&amp;</span> <span class="va">srv.s</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">&amp;</span> <span class="va">rel.s</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>, mean.fup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">dtcens</span><span class="op">)</span>,</span>
 <span>            mean.fup.lower.1826 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">dtcens</span> <span class="op">&lt;</span> <span class="fl">1826</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##     n mean.fup mean.fup.lower.1826</span></span>
 <span><span class="co">## 1 221 3082.977           0.1764706</span></span></code></pre>
-<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ebmtcal</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">recae.s</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">&amp;</span> <span class="va">srv.s</span> <span class="op">==</span> <span class="fl">0</span> <span class="op">&amp;</span> <span class="va">rel.s</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html" class="external-link">n</a></span><span class="op">(</span><span class="op">)</span>, mean.fup <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">dtcens</span><span class="op">)</span>,</span>
@@ -576,7 +576,7 @@ highly predictive of adverse event, and we know that year is highly
 predictive of follow up time too. In this case, the relationship would
 be explained by a variable available at baseline, however, we see that
 adverse events are quite similar across different year categories:</p>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ebmtcal</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">year</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">ae.s</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 2</span></span></span>
 <span><span class="co">##   year      `mean(ae.s)`</span></span>
@@ -586,7 +586,7 @@ adverse events are quite similar across different year categories:</p>
 <span><span class="co">## <span style="color: #BCBCBC;">3</span> 1995-1998        0.487</span></span></code></pre>
 <p>We also look at the distribution of the other variables across those
 who do and do not have an adverse event.</p>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ebmtcal</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">agecl</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">ae.s</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 2</span></span></span>
 <span><span class="co">##   agecl `mean(ae.s)`</span></span>
@@ -594,14 +594,14 @@ who do and do not have an adverse event.</p>
 <span><span class="co">## <span style="color: #BCBCBC;">1</span> &lt;=20         0.445</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">2</span> 20-40        0.514</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">3</span> &gt;40          0.517</span></span></code></pre>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ebmtcal</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">proph</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">ae.s</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 2</span></span></span>
 <span><span class="co">##   proph `mean(ae.s)`</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>        <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">1</span> no           0.520</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">2</span> yes          0.428</span></span></code></pre>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ebmtcal</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">match</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">ae.s</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 2</span></span></span>
 <span><span class="co">##   match              `mean(ae.s)`</span></span>
@@ -621,7 +621,7 @@ probability of censoring weights estimated earlier, we take the mean
 weight, grouped by the outcome state individuals are in at 5-years.</p>
 <p>We start by identifying which state each individual is in at
 5-years.</p>
-<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">### Extract which state individuals are in at time t</span></span>
 <span><span class="va">ids_state_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/vector.html" class="external-link">vector</a></span><span class="op">(</span><span class="st">"list"</span>, <span class="fl">6</span><span class="op">)</span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">k</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">)</span><span class="op">{</span></span>
@@ -642,7 +642,7 @@ weight, grouped by the outcome state individuals are in at 5-years.</p>
 <span><span class="va">ebmtcal</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="va">ebmtcal</span>, state_poly <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="va">state_poly</span><span class="op">)</span>,</span>
 <span>                          state_poly_fac <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">state_poly</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Then calculate mean weight within each group:</p>
-<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ebmtcal</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">state_poly</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>mean_weight <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">ipcw_ph</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 7 × 2</span></span></span>
 <span><span class="co">##   state_poly mean_weight</span></span>

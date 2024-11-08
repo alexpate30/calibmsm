@@ -227,9 +227,7 @@ calc_weights_flexsurv <- function(data_ms, data_raw, covs = NULL, t, s, landmark
 }
 ```
 
-First lets look at the distribution of the weights.
-
-We can verify this by comparing the weights 
+We then use this function to calculate the weights:
 
 ```{r}
 ebmtcal$ipcw_fp <- calc_weights_flexsurv(data_ms = msebmtcal, 
@@ -248,7 +246,7 @@ ebmtcal |>
 
 We see there is very little difference compared to when the weights were estimated using the cox-proportional hazards model.
 
-Next we use this function to estimate the calibration curves. This is implemented as the input to argument `w_function` in `calib_msm`. The function `calc_weights_flexsurv` also has an extra argument (`covs_tv`) compared to the default function for estimating the weights (`calc_weights`). This variable is used to specify the variables which *Glen please add*, and should also be specified when running `calib_msm`. For comparison, we plot the calibration curves using the default internal approach (cox proportional hazards). First estimate the calibration curves:
+Next we use this function to estimate the calibration curves. This is implemented as the input to argument `w_function` in `calib_msm`. The function `calc_weights_flexsurv` also has an extra argument (`covs_tv`) compared to the default function for estimating the weights (`calc_weights`). This variable is used to specify the variables which are modelled as time-varying coefficients (time-varying hazard ratio), wherein the coefficient is modelled as a spline term (function uses 3 degrees of freedom) as described in @Royston2002. This variable should also be specified when running `calib_msm`. For comparison, we plot the calibration curves using the default internal approach (cox proportional hazards). First estimate the calibration curves:
 
 ```{r}
 ### Define predicted transition probabilities out of state j = 1 at time s = 0
@@ -292,11 +290,11 @@ dat_calib_blr_flexsurv <-
 Plot the calibration curves:
 
 ```{r, fig.width = 7.5, fig.height = 5, fig.fullwidth = TRUE, fig.cap = "BLR-IPCW calibration curves when using a cox proportional hazards model to estimate the weights", fig.topcaption = TRUE}
-plot(dat_calib_blr_coxph)
+grid::grid.draw(plot(dat_calib_blr_coxph))
 ```
 
 ```{r, fig.width = 7.5, fig.height = 5, fig.fullwidth = TRUE, fig.cap = "BLR-IPCW calibration curves when using a flexible parametric model to estimate the weights", fig.topcaption = TRUE}
-plot(dat_calib_blr_flexsurv)
+grid::grid.draw(plot(dat_calib_blr_flexsurv))
 ```
 
 There is very little difference, and the estimated calibration curves are not very sensitive to the choice of model to estimate the inverse probability of censoring weights. The difference between the BLR-IPCW and pseudo-calibration curves is therefore unlikely to be driven by this. We therefore turn our attention to the assumption that the outcome and censoring distributions are conditionally independent given the weights.

@@ -24,18 +24,24 @@ extract_ids_states <- function(data_ms, tmat, j, t){
     ids_state_j <- base::subset(data_ms, from == j & Tstart <= t & t < Tstop) |>
       dplyr::select(id) |>
       dplyr::distinct(id)
-    ## Put into numeric vector
-    ids_state_j <- as.numeric(ids_state_j$id)
+
   } else if (j %in% absorbing_states){
     ### For absorbing state, just have to have moved into it
     ids_state_j <- base::subset(data_ms, to == j & t >= Tstop & status == 1) |>
       dplyr::select(id) |>
       dplyr::distinct(id)
-    ## Put into numeric vector
+
+  }
+
+  ## Put into numeric vector
+  if (is.factor(data_ms$id) == FALSE){
     ids_state_j <- as.numeric(ids_state_j$id)
+  } else if (is.factor(data_ms$id) == TRUE){
+    ids_state_j <- as.numeric(as.character(ids_state_j$id))
   }
 
   return(ids_state_j)
+
 }
 
 

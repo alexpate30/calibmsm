@@ -227,89 +227,6 @@ calib_msm <- function(data_ms,
                       assess_mean = TRUE,
                       ...){
 
-  # rm(list=ls())
-  #
-  # devtools::load_all()
-  #   data("ebmtcal")
-  #   data("msebmtcal")
-  #   data("tps0")
-  #   data("tps100")
-  # calib_type <- "pv"
-  # data_raw <- ebmtcal
-  # data_ms <- msebmtcal
-  # tp_pred <- tps0 |>
-  #   subset(j == 1) |>
-  #   dplyr::select(paste("pstate", 1:6, sep = ""))
-  #
-  # data_raw <- ebmtcal[ebmtcal$id %in% 1:50, ]
-  # data_ms <- msebmtcal[msebmtcal$id %in% 1:50, ]
-  # tp_pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
-  # tp_pred <- tp_pred[1:50, ]
-  #
-  #
-  # j <- 1
-  # s <- 0
-  # t <- 1826
-  #
-  # curve_type = "rcs"
-  # tp_pred_plot = NULL
-  # transitions_out = NULL
-  # weights = NULL
-  #
-  # w_covs = NULL
-  # w_landmark_type = "state"
-  # w_max = 10
-  # w_stabilised = FALSE
-  # w_max_follow = NULL
-  # w_function = NULL
-  #
-  # CI = FALSE
-  # # CI = 95
-  # CI_R_boot = 2
-  # rcs_nk = 3
-  # CI_type = "bootstrap"
-  #
-  # CI_seed = 1
-  # loess_span = 1
-  # loess_degree = 1
-  #
-  # pv_group_vars = c("year")
-  # pv_n_pctls = 2
-  #
-  # mlr_smoother_type = "sm.ps"
-  # mlr_ps_int = 4
-  # mlr_degree = 3
-  # mlr_s_df = 4
-  # mlr_niknots = 4
-  # assess_moderate = TRUE
-  # assess_mean = TRUE
-  #
-  # pv_precalc = NULL
-  # str(data_raw)
-  #
-  # pv_group_vars = NULL
-  # tp_pred <- readRDS("P:/Documents/aaa_incline/DEBUG.tp.pred.rds")
-  # data_raw <- readRDS("P:/Documents/aaa_incline/DEBUG.data.raw.rds")
-  # data_ms <- readRDS("P:/Documents/aaa_incline/DEBUG.data.ms.rds")
-  # pv_n_pctls = 10
-  # t <- 2557
-
-  # str(ebmtcal)
-  # str(readRDS("P:/Documents/aaa_incline/data.raw.reduc.rds"))
-  # calib_type <- "blr"
-  #
-  # # ## Calculate manual weights
-  # # weights_manual <-
-  # #   calc_weights(data_ms = msebmtcal,
-  # #                data_raw = ebmtcal,
-  # #                t = 1826,
-  # #                s = 0,
-  # #                landmark_type = "state",
-  # #                j = 1,
-  # #                max_weight = 10,
-  # #                stabilised = FALSE)
-  # # weights <- weights_manual$ipcw
-
   ###########################
   ### Warnings and errors ###
   ###########################
@@ -468,10 +385,12 @@ calib_msm <- function(data_ms,
   ## Identify individuals in state j at time s
   temp_ids_lmk <- lapply(valid_transitions, extract_ids_states, data_ms = temp_landmark, tmat = attributes(data_ms)$trans, t = t)
   if (any(unlist(lapply(temp_ids_lmk, length)) < 30)){
-    warning("In the landmark cohort of individuals uncensored and in state j at time s,
-    there are some states have less than 30 people in them at the time calibration is being assessed (t).
-    Warnings and errors may occur when the models to estimate the calibration curves are fitted, due to small sample size.
-    The number to flag this warning (30) has been chosen arbitrarily, and does not constitute a sufficient sample size from a statistical point of view.")
+    warning(cat("In the landmark cohort of individuals uncensored and in state j at time s, states {",
+                paste(valid_transitions[which(unlist(lapply(temp_ids_lmk, length)) <= 50)], collapse = ","),
+                "} have less than 30 people in them at the time calibration is being assessed (t).
+              Warnings and errors may occur when the models to estimate the calibration curves are fitted, due to small sample size.
+              The number to flag this warning (30) has been chosen arbitrarily, and does not constitute a sufficient sample size from
+              a statistical point of view.", sep = ""))
   }
   rm(temp_landmark, temp_ids_lmk)
 

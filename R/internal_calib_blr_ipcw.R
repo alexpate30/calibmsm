@@ -536,7 +536,7 @@ calc_obs_blr_rcs_boot <- function(data_raw,
   suppressWarnings(
     rcs_model <- rms::lrm(eq_rcs,
                           data = data_boot_lmk_js_uncens,
-                          weights = data_boot_lmk_js_uncens[, "ipcw"])
+                          weights = data_boot_lmk_js_uncens[, "ipcw"], maxit = 1000)
   )
 
   ## Create predicted observed probabilities for data_to_plot.

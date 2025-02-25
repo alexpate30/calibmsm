@@ -467,12 +467,11 @@ calib_msm <- function(data_ms,
 
   ## Identify individuals in state j at time s
   temp_ids_lmk <- lapply(valid_transitions, extract_ids_states, data_ms = temp_landmark, tmat = attributes(data_ms)$trans, t = t)
-  if (any(unlist(lapply(temp_ids_lmk, length)) < 50)){
+  if (any(unlist(lapply(temp_ids_lmk, length)) < 30)){
     warning("In the landmark cohort of individuals uncensored and in state j at time s,
-    there are some states have less than 50 people at the time at which calibration is being assessed (t).
-    Warnings and errors may occur when the models are fitted to estimate the calibration curves due to small sample size.
-    This warning has been written to try and intercept some uninformative error messages when the underlying statistical models fail.
-    The number to flag this warning (50) has been chosen arbitrarily, and does not constitute a sufficient sample size from a statistical point of view.")
+    there are some states have less than 30 people in them at the time calibration is being assessed (t).
+    Warnings and errors may occur when the models to estimate the calibration curves are fitted, due to small sample size.
+    The number to flag this warning (30) has been chosen arbitrarily, and does not constitute a sufficient sample size from a statistical point of view.")
   }
   rm(temp_landmark, temp_ids_lmk)
 

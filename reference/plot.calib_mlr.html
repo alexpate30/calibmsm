@@ -191,10 +191,9 @@ class <code>list</code>, each element containing an object of class <code>gg</co
 <span class="r-in"><span> mlr_ps_int <span class="op">=</span> <span class="fl">2</span>,</span></span>
 <span class="r-in"><span> mlr_degree <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>In the landmark cohort of individuals uncensored and in state j at time s,</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>     there are some states have less than 50 people at the time at which calibration is being assessed (t).</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>     Warnings and errors may occur when the models are fitted to estimate the calibration curves due to small sample size.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>     This warning has been written to try and intercept some uninformative error messages when the underlying statistical models fail.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>     The number to flag this warning (50) has been chosen arbitrarily, and does not constitute a sufficient sample size from a statistical point of view.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>     there are some states have less than 30 people in them at the time calibration is being assessed (t).</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>     Warnings and errors may occur when the models to estimate the calibration curves are fitted, due to small sample size.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>     The number to flag this warning (30) has been chosen arbitrarily, and does not constitute a sufficient sample size from a statistical point of view.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span> <span class="co"># These are then plotted</span></span></span>
 <span class="r-in"><span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat_calib</span>, combine <span class="op">=</span> <span class="cn">TRUE</span>, nrow <span class="op">=</span> <span class="fl">2</span>, ncol <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>

@@ -304,10 +304,9 @@ curves.</p>
 <span>           CI_type <span class="op">=</span> <span class="st">"bootstrap"</span>,</span>
 <span>           CI_R_boot <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning in calib_msm(data_ms = msebmtcal, data_raw = ebmtcal, j = 1, s = 100, : In the landmark cohort of individuals uncensored and in state j at time s,</span></span>
-<span><span class="co">#&gt;     there are some states have less than 50 people at the time at which calibration is being assessed (t).</span></span>
-<span><span class="co">#&gt;     Warnings and errors may occur when the models are fitted to estimate the calibration curves due to small sample size.</span></span>
-<span><span class="co">#&gt;     This warning has been written to try and intercept some uninformative error messages when the underlying statistical models fail.</span></span>
-<span><span class="co">#&gt;     The number to flag this warning (50) has been chosen arbitrarily, and does not constitute a sufficient sample size from a statistical point of view.</span></span>
+<span><span class="co">#&gt;     there are some states have less than 30 people in them at the time calibration is being assessed (t).</span></span>
+<span><span class="co">#&gt;     Warnings and errors may occur when the models to estimate the calibration curves are fitted, due to small sample size.</span></span>
+<span><span class="co">#&gt;     The number to flag this warning (30) has been chosen arbitrarily, and does not constitute a sufficient sample size from a statistical point of view.</span></span>
 <span><span class="co">#&gt; Warning in calib_blr_ipcw(data_raw = data_raw, data_ms = data_ms, tp_pred_plot = tp_pred_plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 1 </span></span>
 <span><span class="co">#&gt;  THERE ARE  124  ITERATIONS WITH NA's </span></span>
 <span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.105</span></span>
@@ -334,10 +333,9 @@ curves.</p>
 <span>           CI <span class="op">=</span> <span class="fl">95</span>,</span>
 <span>           CI_type <span class="op">=</span> <span class="st">'parametric'</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning in calib_msm(data_ms = msebmtcal, data_raw = ebmtcal, j = 1, s = 100, : In the landmark cohort of individuals uncensored and in state j at time s,</span></span>
-<span><span class="co">#&gt;     there are some states have less than 50 people at the time at which calibration is being assessed (t).</span></span>
-<span><span class="co">#&gt;     Warnings and errors may occur when the models are fitted to estimate the calibration curves due to small sample size.</span></span>
-<span><span class="co">#&gt;     This warning has been written to try and intercept some uninformative error messages when the underlying statistical models fail.</span></span>
-<span><span class="co">#&gt;     The number to flag this warning (50) has been chosen arbitrarily, and does not constitute a sufficient sample size from a statistical point of view.</span></span></code></pre></div>
+<span><span class="co">#&gt;     there are some states have less than 30 people in them at the time calibration is being assessed (t).</span></span>
+<span><span class="co">#&gt;     Warnings and errors may occur when the models to estimate the calibration curves are fitted, due to small sample size.</span></span>
+<span><span class="co">#&gt;     The number to flag this warning (30) has been chosen arbitrarily, and does not constitute a sufficient sample size from a statistical point of view.</span></span></code></pre></div>
 <p>We now produce calibration plots using the function.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat_calib_blr</span><span class="op">)</span></span>
@@ -401,10 +399,9 @@ curves.</p>
 <span>           CI_type <span class="op">=</span> <span class="st">"bootstrap"</span>,</span>
 <span>           CI_R_boot <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning in calib_msm(data_ms = msebmtcal, data_raw = ebmtcal, j = 3, s = 100, : In the landmark cohort of individuals uncensored and in state j at time s,</span></span>
-<span><span class="co">#&gt;     there are some states have less than 50 people at the time at which calibration is being assessed (t).</span></span>
-<span><span class="co">#&gt;     Warnings and errors may occur when the models are fitted to estimate the calibration curves due to small sample size.</span></span>
-<span><span class="co">#&gt;     This warning has been written to try and intercept some uninformative error messages when the underlying statistical models fail.</span></span>
-<span><span class="co">#&gt;     The number to flag this warning (50) has been chosen arbitrarily, and does not constitute a sufficient sample size from a statistical point of view.</span></span>
+<span><span class="co">#&gt;     there are some states have less than 30 people in them at the time calibration is being assessed (t).</span></span>
+<span><span class="co">#&gt;     Warnings and errors may occur when the models to estimate the calibration curves are fitted, due to small sample size.</span></span>
+<span><span class="co">#&gt;     The number to flag this warning (30) has been chosen arbitrarily, and does not constitute a sufficient sample size from a statistical point of view.</span></span>
 <span><span class="co">#&gt; Warning in calib_blr_ipcw(data_raw = data_raw, data_ms = data_ms, tp_pred_plot = tp_pred_plot, : WARNING, SOME BOOTSTRAPPED OBSERVED EVENT PROBABILITIES WERE NA FOR STATE 3 </span></span>
 <span><span class="co">#&gt;  THERE ARE  124  ITERATIONS WITH NA's </span></span>
 <span><span class="co">#&gt;  THE MEAN NUMBER OF NA's IN EACH ITERATION IS 1.165</span></span>
@@ -431,10 +428,9 @@ curves.</p>
 <span>           CI <span class="op">=</span> <span class="fl">95</span>,</span>
 <span>           CI_type <span class="op">=</span> <span class="st">'parametric'</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning in calib_msm(data_ms = msebmtcal, data_raw = ebmtcal, j = 3, s = 100, : In the landmark cohort of individuals uncensored and in state j at time s,</span></span>
-<span><span class="co">#&gt;     there are some states have less than 50 people at the time at which calibration is being assessed (t).</span></span>
-<span><span class="co">#&gt;     Warnings and errors may occur when the models are fitted to estimate the calibration curves due to small sample size.</span></span>
-<span><span class="co">#&gt;     This warning has been written to try and intercept some uninformative error messages when the underlying statistical models fail.</span></span>
-<span><span class="co">#&gt;     The number to flag this warning (50) has been chosen arbitrarily, and does not constitute a sufficient sample size from a statistical point of view.</span></span></code></pre></div>
+<span><span class="co">#&gt;     there are some states have less than 30 people in them at the time calibration is being assessed (t).</span></span>
+<span><span class="co">#&gt;     Warnings and errors may occur when the models to estimate the calibration curves are fitted, due to small sample size.</span></span>
+<span><span class="co">#&gt;     The number to flag this warning (30) has been chosen arbitrarily, and does not constitute a sufficient sample size from a statistical point of view.</span></span></code></pre></div>
 <p>We now produce calibration plots using the function.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat_calib_blr</span><span class="op">)</span></span>

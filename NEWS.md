@@ -1,3 +1,9 @@
+# calibmsm 1.1.2
+
+* Change of code format to snake_case for all function arguments.
+
+* Updating of overview vignette, and sensitivity-analyses-for-IPCWs, to bring inline with published manuscript.
+
 # calibmsm 1.1.1
 
 * Minor update introducing a new S3 generic `metadata`, and updated some S3 methods which were producing errors.

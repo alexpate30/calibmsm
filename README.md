@@ -67,29 +67,44 @@ knots. A 95% confidence interval is calculated using bootstrapping with
 library(calibmsm)
 
 ## Extract relevant predicted risks from tps0
-tp.pred <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
+tp_pred_s0 <- dplyr::select(dplyr::filter(tps0, j == 1), any_of(paste("pstate", 1:6, sep = "")))
 
 ## Calculate observed event probabilities
-dat.calib.blr <-
-  calib_msm(data.ms = msebmtcal,
-          data.raw = ebmtcal,
-          j = 1,
-          s = 0,
-          t = 1826,
-          tp.pred = tp.pred,
-          calib.type = "blr",
-          curve.type = "rcs",
-          rcs.nk = 3,
-          w.covs = c("year", "agecl", "proph", "match"),
-          CI = 95,
-          CI.R.boot = 200)
-
-
-## Plot calibration plots
-plot(dat.calib.blr, combine = TRUE, nrow = 2, ncol = 3, axis.titles.x = c(4,5,6), axis.titles.y = c(1,4))
+dat_calib_blr <-
+  calib_msm(data_ms = msebmtcal,
+            data_raw = ebmtcal,
+            j = 1,
+            s = 0,
+            t = 1826,
+            tp_pred = tp_pred_s0,
+            calib_type = "blr",
+            curve_type = "rcs",
+            rcs_nk = 3,
+            w_covs = c("year", "agecl", "proph", "match"),
+            CI = 95,
+            CI_R_boot = 200)
 ```
 
-<img src="man/figures/README-example-1.png" width="100%" />
+We can then plot the calibration plots:
+
+``` r
+plot(dat_calib_blr, combine = TRUE, nrow = 2, ncol = 3, axis.titles.x = c(4,5,6), axis.titles.y = c(1,4), marg_density = FALSE)
+```
+
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+
+If wanting to include marginal density plots (recommended, also the
+default) then the output is a gTable, that must then in turn be plotted,
+i.e:
+
+``` r
+marg_density_plot <- plot(dat_calib_blr, combine = TRUE, nrow = 2, ncol = 3, axis.titles.x = c(4,5,6), axis.titles.y = c(1,4))
+plot(marg_density_plot)
+```
+
+<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
+
+At this step `plot` can also be replcaed by `grid::grid.draw`.
 
 ## Getting help
 

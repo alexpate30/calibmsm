@@ -337,84 +337,84 @@ test_that("check calib_pv output, (j = 1, s = 0), groups_vars and pv_n_pctls spe
   msebmtcal <- msebmtcal |> dplyr::filter(id %in% 1:50)
 
   ## Calculate observed event probabilities when both pv_group_vars and pv_n_pctls are specified
-  dat_calib_pv_1 <- calib_msm(data_ms = msebmtcal,
-                              data_raw = ebmtcal,
-                              j = 1,
-                              s = 0,
-                              t = 1826,
-                              tp_pred = tp_pred,
-                              calib_type = 'pv',
-                              curve_type = "loess",
-                              loess_span = 1,
-                              loess_degree = 1,
-                              pv_group_vars = c("year"),
-                              pv_n_pctls = 2,
-                              tp_pred_plot = NULL, transitions_out = NULL)
+  dat_calib_pv_1 <- suppressWarnings(calib_msm(data_ms = msebmtcal,
+                                               data_raw = ebmtcal,
+                                               j = 1,
+                                               s = 0,
+                                               t = 1826,
+                                               tp_pred = tp_pred,
+                                               calib_type = 'pv',
+                                               curve_type = "loess",
+                                               loess_span = 1,
+                                               loess_degree = 1,
+                                               pv_group_vars = c("year"),
+                                               pv_n_pctls = 2,
+                                               tp_pred_plot = NULL, transitions_out = NULL))
 
   expect_equal(ncol(dat_calib_pv_1[["plotdata"]][[1]]), 4)
   expect_equal(length(dat_calib_pv_1[["plotdata"]]), 6)
 
   ## Check same results when just calculating pseudo-values for first three individuals
-  dat_calib_pv_ids_1 <- calib_msm(data_ms = msebmtcal,
-                                  data_raw = ebmtcal,
-                                  j = 1,
-                                  s = 0,
-                                  t = 1826,
-                                  tp_pred = tp_pred,
-                                  calib_type = 'pv',
-                                  pv_group_vars = c("year"),
-                                  pv_n_pctls = 2,
-                                  pv_ids = 1:3,
-                                  tp_pred_plot = NULL, transitions_out = NULL)
+  dat_calib_pv_ids_1 <- suppressWarnings(calib_msm(data_ms = msebmtcal,
+                                                   data_raw = ebmtcal,
+                                                   j = 1,
+                                                   s = 0,
+                                                   t = 1826,
+                                                   tp_pred = tp_pred,
+                                                   calib_type = 'pv',
+                                                   pv_group_vars = c("year"),
+                                                   pv_n_pctls = 2,
+                                                   pv_ids = 1:3,
+                                                   tp_pred_plot = NULL, transitions_out = NULL))
 
   expect_equal(dat_calib_pv_1[["plotdata"]][[1]][1:3, "pv"], dat_calib_pv_ids_1[[1]][,2])
   expect_equal(dat_calib_pv_1[["plotdata"]][[6]][1:3, "pv"], dat_calib_pv_ids_1[[1]][,7])
 
   ## Check same results when just calculating pseudo-values for first three individuals, but specify transitions 1 and 6
-  dat_calib_pv_ids_1_tout <- calib_msm(data_ms = msebmtcal,
-                                       data_raw = ebmtcal,
-                                       j = 1,
-                                       s = 0,
-                                       t = 1826,
-                                       tp_pred = tp_pred,
-                                       calib_type = 'pv',
-                                       pv_group_vars = c("year"),
-                                       pv_n_pctls = 2,
-                                       pv_ids = 1:3,
-                                       tp_pred_plot = NULL, transitions_out = c(1,6))
+  dat_calib_pv_ids_1_tout <- suppressWarnings(calib_msm(data_ms = msebmtcal,
+                                                        data_raw = ebmtcal,
+                                                        j = 1,
+                                                        s = 0,
+                                                        t = 1826,
+                                                        tp_pred = tp_pred,
+                                                        calib_type = 'pv',
+                                                        pv_group_vars = c("year"),
+                                                        pv_n_pctls = 2,
+                                                        pv_ids = 1:3,
+                                                        tp_pred_plot = NULL, transitions_out = c(1,6)))
 
   expect_equal(dat_calib_pv_ids_1_tout[[1]][,2], dat_calib_pv_ids_1[[1]][,2])
   expect_equal(dat_calib_pv_ids_1_tout[[1]][,3], dat_calib_pv_ids_1[[1]][,7])
   expect_equal(ncol(dat_calib_pv_ids_1_tout[["plotdata"]]), 3)
 
   ## Calculate observed event probabilities for pv_group_vars
-  dat_calib_pv_2 <- calib_msm(data_ms = msebmtcal,
-                              data_raw = ebmtcal,
-                              j = 1,
-                              s = 0,
-                              t = 1826,
-                              tp_pred = tp_pred,
-                              calib_type = 'pv',
-                              curve_type = "loess",
-                              loess_span = 1,
-                              loess_degree = 1,
-                              pv_group_vars = c("year"),
-                              tp_pred_plot = NULL, transitions_out = NULL)
+  dat_calib_pv_2 <- suppressWarnings(calib_msm(data_ms = msebmtcal,
+                                               data_raw = ebmtcal,
+                                               j = 1,
+                                               s = 0,
+                                               t = 1826,
+                                               tp_pred = tp_pred,
+                                               calib_type = 'pv',
+                                               curve_type = "loess",
+                                               loess_span = 1,
+                                               loess_degree = 1,
+                                               pv_group_vars = c("year"),
+                                               tp_pred_plot = NULL, transitions_out = NULL))
 
   expect_equal(ncol(dat_calib_pv_2[["plotdata"]][[1]]), 4)
   expect_equal(length(dat_calib_pv_2[["plotdata"]]), 6)
 
   ## Check same results when just calculating pseudo-values for first three individuals
-  dat_calib_pv_ids_2 <- calib_msm(data_ms = msebmtcal,
-                                  data_raw = ebmtcal,
-                                  j = 1,
-                                  s = 0,
-                                  t = 1826,
-                                  tp_pred = tp_pred,
-                                  calib_type = 'pv',
-                                  pv_group_vars = c("year"),
-                                  pv_ids = 1:3,
-                                  tp_pred_plot = NULL, transitions_out = NULL)
+  dat_calib_pv_ids_2 <- suppressWarnings(calib_msm(data_ms = msebmtcal,
+                                                   data_raw = ebmtcal,
+                                                   j = 1,
+                                                   s = 0,
+                                                   t = 1826,
+                                                   tp_pred = tp_pred,
+                                                   calib_type = 'pv',
+                                                   pv_group_vars = c("year"),
+                                                   pv_ids = 1:3,
+                                                   tp_pred_plot = NULL, transitions_out = NULL))
 
   expect_equal(dat_calib_pv_2[["plotdata"]][[1]][1:3, "pv"], dat_calib_pv_ids_2[[1]][,2])
   expect_equal(dat_calib_pv_2[["plotdata"]][[6]][1:3, "pv"], dat_calib_pv_ids_2[[1]][,7])
@@ -423,48 +423,48 @@ test_that("check calib_pv output, (j = 1, s = 0), groups_vars and pv_n_pctls spe
   ## pseudo-values are just calculated for all states anyway_
 
   ## Calculate observed event probabilities for pv_n_pctls
-  dat_calib_pv_3 <- calib_msm(data_ms = msebmtcal,
-                              data_raw = ebmtcal,
-                              j = 1,
-                              s = 0,
-                              t = 1826,
-                              tp_pred = tp_pred,
-                              calib_type = 'pv',
-                              curve_type = "loess",
-                              loess_span = 1,
-                              loess_degree = 1,
-                              pv_n_pctls = 2,
-                              tp_pred_plot = NULL, transitions_out = NULL)
+  dat_calib_pv_3 <- suppressWarnings(calib_msm(data_ms = msebmtcal,
+                                               data_raw = ebmtcal,
+                                               j = 1,
+                                               s = 0,
+                                               t = 1826,
+                                               tp_pred = tp_pred,
+                                               calib_type = 'pv',
+                                               curve_type = "loess",
+                                               loess_span = 1,
+                                               loess_degree = 1,
+                                               pv_n_pctls = 2,
+                                               tp_pred_plot = NULL, transitions_out = NULL))
 
   expect_equal(ncol(dat_calib_pv_3[["plotdata"]][[1]]), 4)
   expect_equal(length(dat_calib_pv_3[["plotdata"]]), 6)
 
   ## Check same results when just calculating pseudo-values for first three individuals
-  dat_calib_pv_ids_3 <- calib_msm(data_ms = msebmtcal,
-                                  data_raw = ebmtcal,
-                                  j = 1,
-                                  s = 0,
-                                  t = 1826,
-                                  tp_pred = tp_pred,
-                                  calib_type = 'pv',
-                                  pv_n_pctls = 2,
-                                  pv_ids = 1:3,
-                                  tp_pred_plot = NULL, transitions_out = NULL)
+  dat_calib_pv_ids_3 <- suppressWarnings(calib_msm(data_ms = msebmtcal,
+                                                   data_raw = ebmtcal,
+                                                   j = 1,
+                                                   s = 0,
+                                                   t = 1826,
+                                                   tp_pred = tp_pred,
+                                                   calib_type = 'pv',
+                                                   pv_n_pctls = 2,
+                                                   pv_ids = 1:3,
+                                                   tp_pred_plot = NULL, transitions_out = NULL))
 
   expect_equal(dat_calib_pv_3[["plotdata"]][[1]][1:3, "pv"], dat_calib_pv_ids_3[[1]][,2])
   expect_equal(dat_calib_pv_3[["plotdata"]][[6]][1:3, "pv"], dat_calib_pv_ids_3[[1]][,7])
 
   ## Check same results when just calculating pseudo-values for first three individuals, but specify transitions 1 and 6
-  dat_calib_pv_ids_3_tout <- calib_msm(data_ms = msebmtcal,
-                                       data_raw = ebmtcal,
-                                       j = 1,
-                                       s = 0,
-                                       t = 1826,
-                                       tp_pred = tp_pred,
-                                       calib_type = 'pv',
-                                       pv_n_pctls = 2,
-                                       pv_ids = 1:3,
-                                       tp_pred_plot = NULL, transitions_out = c(1,6))
+  dat_calib_pv_ids_3_tout <- suppressWarnings(calib_msm(data_ms = msebmtcal,
+                                                        data_raw = ebmtcal,
+                                                        j = 1,
+                                                        s = 0,
+                                                        t = 1826,
+                                                        tp_pred = tp_pred,
+                                                        calib_type = 'pv',
+                                                        pv_n_pctls = 2,
+                                                        pv_ids = 1:3,
+                                                        tp_pred_plot = NULL, transitions_out = c(1,6)))
 
   expect_equal(dat_calib_pv_ids_3_tout[[1]][,2], dat_calib_pv_ids_3[[1]][,2])
   expect_equal(dat_calib_pv_ids_3_tout[[1]][,3], dat_calib_pv_ids_3[[1]][,7])

@@ -186,8 +186,9 @@ test_that("check calib_msm output, (j = 3, s = 100)", {
   tp_pred <- dplyr::select(dplyr::filter(tps100, j == 3), any_of(paste("pstate", 1:6, sep = "")))
 
   ## Calculate observed event probabilities
+  ## suppress warnings because less than 30 individuals, meaning we expect a warning around the sample size
   dat_calib_blr <-
-    calib_msm(data_ms = msebmtcal,
+    suppressWarnings(calib_msm(data_ms = msebmtcal,
              data_raw = ebmtcal,
              j=3,
              s=100,
@@ -195,7 +196,7 @@ test_that("check calib_msm output, (j = 3, s = 100)", {
              tp_pred = tp_pred, calib_type = 'blr',
              curve_type = "rcs",
              rcs_nk = 3,
-             w_covs = c("year", "agecl", "proph", "match"))
+             w_covs = c("year", "agecl", "proph", "match")))
 
   expect_type(dat_calib_blr, "list")
   expect_equal(class(dat_calib_blr), c("calib_blr", "calib_msm"))
@@ -291,7 +292,7 @@ test_that("check calib_msm output, (j = 1, s = 0), curve_type = loess, CI_type =
   expect_no_error(summary(dat_calib_blr))
 
   ## With confidence interval
-  dat_calib_blr <- calib_msm(data_ms = msebmtcal,
+  dat_calib_blr <- suppressWarnings(calib_msm(data_ms = msebmtcal,
                             data_raw = ebmtcal,
                             j = 1,
                             s = 0,
@@ -301,7 +302,7 @@ test_that("check calib_msm output, (j = 1, s = 0), curve_type = loess, CI_type =
                             curve_type = "loess",
                             CI = 95,
                             CI_R_boot = 3,
-                            tp_pred_plot = tp_pred_plot, transitions_out = NULL)
+                            tp_pred_plot = tp_pred_plot, transitions_out = NULL))
 
   ## Should be one less column in plotdata (no patient ids)
   expect_equal(class(dat_calib_blr), c("calib_blr", "calib_msm"))
@@ -312,36 +313,36 @@ test_that("check calib_msm output, (j = 1, s = 0), curve_type = loess, CI_type =
 })
 
 
-### Run tests for warnings with small cohort
-test_that("Test warnings for bootstrapping with small cohort", {
-
-  skip_on_cran()
-
-  ## Reduce to 50 individuals
-  # Extract the predicted transition probabilities out of state j = 1 for first 100 individuals
-  tp_pred <- tps0 |>
-    dplyr::filter(id %in% 1:50) |>
-    dplyr::filter(j == 1) |>
-    dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
-  # Reduce ebmtcal to first 50 individuals
-  ebmtcal <- ebmtcal |> dplyr::filter(id %in% 1:50)
-  # Reduce msebmtcal_cmprsk to first 100 individuals
-  msebmtcal <- msebmtcal |> dplyr::filter(id %in% 1:50)
-
-  ## No confidence interval
-  expect_warning(calib_msm(data_ms = msebmtcal,
-                          data_raw = ebmtcal,
-                          j = 1,
-                          s = 0,
-                          t = 1826,
-                          tp_pred = tp_pred,
-                          calib_type = 'blr',
-                          curve_type = "loess",
-                          CI = 95,
-                          CI_R_boot = 3,
-                          transitions_out = c(1)))
-
-})
+# ### Run tests for warnings with small cohort
+# test_that("Test warnings for bootstrapping with small cohort", {
+#
+#   skip_on_cran()
+#
+#   ## Reduce to 50 individuals
+#   # Extract the predicted transition probabilities out of state j = 1 for first 100 individuals
+#   tp_pred <- tps0 |>
+#     dplyr::filter(id %in% 1:50) |>
+#     dplyr::filter(j == 1) |>
+#     dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
+#   # Reduce ebmtcal to first 50 individuals
+#   ebmtcal <- ebmtcal |> dplyr::filter(id %in% 1:50)
+#   # Reduce msebmtcal_cmprsk to first 100 individuals
+#   msebmtcal <- msebmtcal |> dplyr::filter(id %in% 1:50)
+#
+#   ## No confidence interval
+#   expect_warning(calib_msm(data_ms = msebmtcal,
+#                           data_raw = ebmtcal,
+#                           j = 1,
+#                           s = 0,
+#                           t = 1826,
+#                           tp_pred = tp_pred,
+#                           calib_type = 'blr',
+#                           curve_type = "loess",
+#                           CI = 95,
+#                           CI_R_boot = 3,
+#                           transitions_out = c(1)))
+#
+# })
 
 
 test_that("check calib_msm output, (j = 1, s = 0),

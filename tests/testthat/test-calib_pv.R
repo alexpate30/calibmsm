@@ -2,6 +2,8 @@
 ### Tests for calibration curves produced using pseudo-values (calib_type = 'pv')
 ###
 
+### Warnings are suppressed because these are expected due to small sample size (neccesary for tests to run if reasonable time)
+
 ### Run tests for when curve_type = "loess" and CI_type = "bootstrap"_
 test_that("check calib_pv output, (j = 1, s = 0), curve_type = loess, CI_type = bootstrap", {
 

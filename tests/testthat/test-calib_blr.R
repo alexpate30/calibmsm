@@ -2,6 +2,8 @@
 ### Tests for calibration curves produced using BLR-IPCW (calib_type = 'blr')
 ###
 
+### Warnings occasionally suppressed because these are expected due to small sample size (neccesary for tests to run if reasonable time)
+
 test_that("check calib_msm output, (j = 1, s = 0), curve_type = rcs, stabilised vs unstabilised", {
 
   ## Extract relevant predicted risks from tps0

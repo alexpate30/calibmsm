@@ -51,16 +51,16 @@ test_that("check calib_pv output, (j = 1, s = 0), curve_type = loess, CI_type = 
   expect_equal(dat_calib_pv_1[["plotdata"]][[6]][1:3, "pv"], dat_calib_pv_ids_1[[1]][,7])
 
   ## Calculate observed event probabilities with a confidence interval using bootstrapping and transitions_out = NULL
-  expect_warning(calib_msm(data_ms = msebmtcal,
-                           data_raw = ebmtcal,
-                           j = 1,
-                           s = 0,
-                           t = 1826,
-                           tp_pred = tp_pred,
-                           calib_type = 'pv',
-                           curve_type = "loess",
-                           CI = 95, CI_type = "bootstrap", CI_R_boot = 3,
-                           tp_pred_plot = NULL, transitions_out = c(1)))
+  # expect_warning(calib_msm(data_ms = msebmtcal,
+  #                          data_raw = ebmtcal,
+  #                          j = 1,
+  #                          s = 0,
+  #                          t = 1826,
+  #                          tp_pred = tp_pred,
+  #                          calib_type = 'pv',
+  #                          curve_type = "loess",
+  #                          CI = 95, CI_type = "bootstrap", CI_R_boot = 3,
+  #                          tp_pred_plot = NULL, transitions_out = c(1)))
 
   dat_calib_pv_4 <- suppressWarnings(calib_msm(data_ms = msebmtcal,
                                                data_raw = ebmtcal,

@@ -1,6 +1,6 @@
 Package: calibmsm
 Title: Calibration Plots for the Transition Probabilities from Multistate Models
-Version: 1.1.1
+Version: 1.1.2
 Authors@R:
   c(
   person(given = "Alexander", family = "Pate", email = "alexander.pate@manchester.ac.uk", role = c("aut", "cre", "cph"),

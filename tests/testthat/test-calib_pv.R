@@ -19,15 +19,15 @@ test_that("check calib_pv output, (j = 1, s = 0), curve_type = loess, CI_type = 
   msebmtcal <- msebmtcal |> dplyr::filter(id %in% 1:50)
 
   ## Calculate observed event probabilities using transitions_out = NULL
-  dat_calib_pv_1 <- calib_msm(data_ms = msebmtcal,
-                              data_raw = ebmtcal,
-                              j = 1,
-                              s = 0,
-                              t = 1826,
-                              tp_pred = tp_pred,
-                              calib_type = 'pv',
-                              curve_type = "loess",
-                              tp_pred_plot = NULL, transitions_out = NULL)
+  dat_calib_pv_1 <- suppressWarnings(calib_msm(data_ms = msebmtcal,
+                                               data_raw = ebmtcal,
+                                               j = 1,
+                                               s = 0,
+                                               t = 1826,
+                                               tp_pred = tp_pred,
+                                               calib_type = 'pv',
+                                               curve_type = "loess",
+                                               tp_pred_plot = NULL, transitions_out = NULL))
 
   expect_equal(class(dat_calib_pv_1), c("calib_pv", "calib_msm"))
   expect_equal(dat_calib_pv_1[["metadata"]][["curve_type"]], "loess")
@@ -35,15 +35,15 @@ test_that("check calib_pv output, (j = 1, s = 0), curve_type = loess, CI_type = 
   expect_no_error(summary(dat_calib_pv_1))
 
   ## Check same results when just calculating pseudo-values for first three individuals
-  dat_calib_pv_ids_1 <- calib_msm(data_ms = msebmtcal,
-                                  data_raw = ebmtcal,
-                                  j = 1,
-                                  s = 0,
-                                  t = 1826,
-                                  tp_pred = tp_pred,
-                                  calib_type = 'pv',
-                                  pv_ids = 1:3,
-                                  tp_pred_plot = NULL, transitions_out = NULL)
+  dat_calib_pv_ids_1 <- suppressWarnings(calib_msm(data_ms = msebmtcal,
+                                                   data_raw = ebmtcal,
+                                                   j = 1,
+                                                   s = 0,
+                                                   t = 1826,
+                                                   tp_pred = tp_pred,
+                                                   calib_type = 'pv',
+                                                   pv_ids = 1:3,
+                                                   tp_pred_plot = NULL, transitions_out = NULL))
 
   expect_equal(dat_calib_pv_1[["plotdata"]][[1]][1:3, "pv"], dat_calib_pv_ids_1[[1]][,2])
   expect_equal(dat_calib_pv_1[["plotdata"]][[6]][1:3, "pv"], dat_calib_pv_ids_1[[1]][,7])
@@ -148,31 +148,31 @@ test_that("check calib_pv output, (j = 1, s = 0), curve_type = loess, CI_type = 
   msebmtcal <- msebmtcal |> dplyr::filter(id %in% 1:50)
 
   ## Calculate observed event probabilities using transitions_out = NULL
-  dat_calib_pv_1 <- calib_msm(data_ms = msebmtcal,
-                              data_raw = ebmtcal,
-                              j = 1,
-                              s = 0,
-                              t = 1826,
-                              tp_pred = tp_pred,
-                              calib_type = 'pv',
-                              curve_type = "loess",
-                              tp_pred_plot = NULL, transitions_out = NULL)
+  dat_calib_pv_1 <- suppressWarnings(calib_msm(data_ms = msebmtcal,
+                                               data_raw = ebmtcal,
+                                               j = 1,
+                                               s = 0,
+                                               t = 1826,
+                                               tp_pred = tp_pred,
+                                               calib_type = 'pv',
+                                               curve_type = "loess",
+                                               tp_pred_plot = NULL, transitions_out = NULL))
 
   expect_equal(dat_calib_pv_1[["metadata"]][["curve_type"]], "loess")
   expect_equal(ncol(dat_calib_pv_1[["plotdata"]][[1]]), 4)
   expect_no_error(summary(dat_calib_pv_1))
 
   ## Calculate observed event probabilities with a confidence interval using parametric approach
-  dat_calib_pv_5 <- calib_msm(data_ms = msebmtcal,
-                              data_raw = ebmtcal,
-                              j = 1,
-                              s = 0,
-                              t = 1826,
-                              tp_pred = tp_pred,
-                              calib_type = 'pv',
-                              curve_type = "loess",
-                              CI = 95, CI_type = "parametric",
-                              tp_pred_plot = NULL, transitions_out = c(1,2))
+  dat_calib_pv_5 <- suppressWarnings(calib_msm(data_ms = msebmtcal,
+                                               data_raw = ebmtcal,
+                                               j = 1,
+                                               s = 0,
+                                               t = 1826,
+                                               tp_pred = tp_pred,
+                                               calib_type = 'pv',
+                                               curve_type = "loess",
+                                               CI = 95, CI_type = "parametric",
+                                               tp_pred_plot = NULL, transitions_out = c(1,2)))
 
   expect_equal(ncol(dat_calib_pv_5[["plotdata"]][[1]]), 6)
 
@@ -194,16 +194,16 @@ test_that("check calib_pv output, (j = 1, s = 0), curve_type = loess, CI_type = 
     dplyr::select(any_of(paste("pstate", 1:6, sep = "")))
 
   ## With confidence interval
-  dat_calib_pv_10 <- calib_msm(data_ms = msebmtcal,
-                               data_raw = ebmtcal,
-                               j = 1,
-                               s = 0,
-                               t = 1826,
-                               tp_pred = tp_pred,
-                               calib_type = 'pv',
-                               curve_type = "loess",
-                               CI = 95, CI_type = "parametric",
-                               tp_pred_plot = tp_pred_plot, transitions_out = NULL)
+  dat_calib_pv_10 <- suppressWarnings(calib_msm(data_ms = msebmtcal,
+                                                data_raw = ebmtcal,
+                                                j = 1,
+                                                s = 0,
+                                                t = 1826,
+                                                tp_pred = tp_pred,
+                                                calib_type = 'pv',
+                                                curve_type = "loess",
+                                                CI = 95, CI_type = "parametric",
+                                                tp_pred_plot = tp_pred_plot, transitions_out = NULL))
 
   str(dat_calib_pv_10)
   expect_equal(ncol(dat_calib_pv_10[["plotdata"]][[1]]), 5)
@@ -232,15 +232,15 @@ test_that("check calib_pv output, (j = 1, s = 0), curve_type = rcs, CI_type = bo
   msebmtcal <- msebmtcal |> dplyr::filter(id %in% 1:150)
 
   ## Calculate observed event probabilities using transitions_out = NULL
-  dat_calib_pv_1 <- calib_msm(data_ms = msebmtcal,
-                              data_raw = ebmtcal,
-                              j = 1,
-                              s = 0,
-                              t = 1826,
-                              tp_pred = tp_pred,
-                              calib_type = 'pv',
-                              curve_type = "rcs",
-                              tp_pred_plot = NULL, transitions_out = c(1))
+  dat_calib_pv_1 <- suppressWarnings(calib_msm(data_ms = msebmtcal,
+                                               data_raw = ebmtcal,
+                                               j = 1,
+                                               s = 0,
+                                               t = 1826,
+                                               tp_pred = tp_pred,
+                                               calib_type = 'pv',
+                                               curve_type = "rcs",
+                                               tp_pred_plot = NULL, transitions_out = c(1)))
 
   expect_equal(dat_calib_pv_1[["metadata"]][["curve_type"]], "rcs")
   expect_equal(ncol(dat_calib_pv_1[["plotdata"]][[1]]), 4)
@@ -284,31 +284,31 @@ test_that("check calib_pv output, (j = 1, s = 0), curve_type = rcs, CI_type = bo
   msebmtcal <- msebmtcal |> dplyr::filter(id %in% 1:150)
 
   ## Calculate observed event probabilities using transitions_out = NULL
-  dat_calib_pv_1 <- calib_msm(data_ms = msebmtcal,
-                              data_raw = ebmtcal,
-                              j = 1,
-                              s = 0,
-                              t = 1826,
-                              tp_pred = tp_pred,
-                              calib_type = 'pv',
-                              curve_type = "rcs",
-                              tp_pred_plot = NULL, transitions_out = c(1))
+  dat_calib_pv_1 <- suppressWarnings(calib_msm(data_ms = msebmtcal,
+                                               data_raw = ebmtcal,
+                                               j = 1,
+                                               s = 0,
+                                               t = 1826,
+                                               tp_pred = tp_pred,
+                                               calib_type = 'pv',
+                                               curve_type = "rcs",
+                                               tp_pred_plot = NULL, transitions_out = c(1)))
 
   expect_equal(dat_calib_pv_1[["metadata"]][["curve_type"]], "rcs")
   expect_equal(ncol(dat_calib_pv_1[["plotdata"]][[1]]), 4)
   expect_no_error(summary(dat_calib_pv_1))
 
   ## Calculate observed event probabilities with a confidence interval using parametric approach
-  dat_calib_pv_4 <- calib_msm(data_ms = msebmtcal,
-                              data_raw = ebmtcal,
-                              j = 1,
-                              s = 0,
-                              t = 1826,
-                              tp_pred = tp_pred,
-                              calib_type = 'pv',
-                              curve_type = "rcs",
-                              CI = 95, CI_type = "parametric",
-                              tp_pred_plot = NULL, transitions_out = c(1))
+  dat_calib_pv_4 <- suppressWarnings(calib_msm(data_ms = msebmtcal,
+                                               data_raw = ebmtcal,
+                                               j = 1,
+                                               s = 0,
+                                               t = 1826,
+                                               tp_pred = tp_pred,
+                                               calib_type = 'pv',
+                                               curve_type = "rcs",
+                                               CI = 95, CI_type = "parametric",
+                                               tp_pred_plot = NULL, transitions_out = c(1)))
 
   expect_equal(ncol(dat_calib_pv_4[["plotdata"]][[1]]), 6)
 
@@ -527,15 +527,15 @@ test_that("check calib_pv output, (j = 3, s = 100), pv_group_vars defined", {
 
   ## Calculate observed event probabilities
   dat_calib_pv <-
-    calib_msm(data_ms = msebmtcal,
-              data_raw = ebmtcal,
-              j=3,
-              s=100,
-              t = 1826,
-              tp_pred = tp_pred, calib_type = 'pv',
-              curve_type = "rcs",
-              rcs_nk = 3,
-              pv_group_vars = c("year"))
+    suppressWarnings(calib_msm(data_ms = msebmtcal,
+                               data_raw = ebmtcal,
+                               j=3,
+                               s=100,
+                               t = 1826,
+                               tp_pred = tp_pred, calib_type = 'pv',
+                               curve_type = "rcs",
+                               rcs_nk = 3,
+                               pv_group_vars = c("year")))
 
   expect_type(dat_calib_pv, "list")
   expect_equal(class(dat_calib_pv), c("calib_pv", "calib_msm"))
@@ -558,15 +558,15 @@ test_that("check calib_pv output, (j = 3, s = 100), pv_n_pctls defined", {
 
   ## Calculate observed event probabilities
   dat_calib_pv <-
-    calib_msm(data_ms = msebmtcal,
-              data_raw = ebmtcal,
-              j=3,
-              s=100,
-              t = 1826,
-              tp_pred = tp_pred, calib_type = 'pv',
-              curve_type = "rcs",
-              rcs_nk = 3,
-              pv_n_pctls = 2)
+    suppressWarnings(calib_msm(data_ms = msebmtcal,
+                               data_raw = ebmtcal,
+                               j=3,
+                               s=100,
+                               t = 1826,
+                               tp_pred = tp_pred, calib_type = 'pv',
+                               curve_type = "rcs",
+                               rcs_nk = 3,
+                               pv_n_pctls = 2))
 
   expect_type(dat_calib_pv, "list")
   expect_equal(class(dat_calib_pv), c("calib_pv", "calib_msm"))
@@ -588,16 +588,16 @@ test_that("check calib_pv output, (j = 3, s = 100), pv_group_vars and pv_n_pctls
 
   ## Calculate observed event probabilities
   dat_calib_pv <-
-    calib_msm(data_ms = msebmtcal,
-              data_raw = ebmtcal,
-              j=3,
-              s=100,
-              t = 1826,
-              tp_pred = tp_pred, calib_type = 'pv',
-              curve_type = "rcs",
-              rcs_nk = 3,
-              pv_group_vars = c("year"),
-              pv_n_pctls = 2)
+    suppressWarnings(calib_msm(data_ms = msebmtcal,
+                               data_raw = ebmtcal,
+                               j=3,
+                               s=100,
+                               t = 1826,
+                               tp_pred = tp_pred, calib_type = 'pv',
+                               curve_type = "rcs",
+                               rcs_nk = 3,
+                               pv_group_vars = c("year"),
+                               pv_n_pctls = 2))
 
   expect_type(dat_calib_pv, "list")
   expect_equal(class(dat_calib_pv), c("calib_pv", "calib_msm"))

@@ -6,15 +6,15 @@ test_that("check plot_calib_msm output (j = 1, s = 0)", {
   ## Calculate observed event probabilities
   dat_calib_blr <-
     calib_msm(data_ms = msebmtcal,
-             data_raw = ebmtcal,
-             j=1,
-             s=0,
-             t = 1826,
-             tp_pred = tp_pred,
-             calib_type = "blr",
-             curve_type = "rcs",
-             rcs_nk = 3,
-             w_covs = c("year", "agecl", "proph", "match"))
+              data_raw = ebmtcal,
+              j=1,
+              s=0,
+              t = 1826,
+              tp_pred = tp_pred,
+              calib_type = "blr",
+              curve_type = "rcs",
+              rcs_nk = 3,
+              w_covs = c("year", "agecl", "proph", "match"))
 
   ## Plot calibration plots and run tests
   plot_object <- plot(dat_calib_blr, combine = TRUE, nrow = 2, ncol = 3)
@@ -49,17 +49,17 @@ test_that("check plot_calib_msm output (j = 1, s = 0) with CI", {
   ## Calculate observed event probabilities
   dat_calib_blr <-
     calib_msm(data_ms = msebmtcal,
-             data_raw = ebmtcal,
-             j=1,
-             s=0,
-             t = 1826,
-             tp_pred = tp_pred,
-             calib_type = "blr",
-             curve_type = "rcs",
-             rcs_nk = 3,
-             w_covs = c("year", "agecl", "proph", "match"),
-             CI = 95,
-             CI_R_boot = 5)
+              data_raw = ebmtcal,
+              j=1,
+              s=0,
+              t = 1826,
+              tp_pred = tp_pred,
+              calib_type = "blr",
+              curve_type = "rcs",
+              rcs_nk = 3,
+              w_covs = c("year", "agecl", "proph", "match"),
+              CI = 95,
+              CI_R_boot = 5)
 
   ## Plot calibration plots and run tests without marginal density plots
   plot_object <- plot(dat_calib_blr, combine = TRUE, nrow = 2, ncol = 3)
@@ -86,16 +86,16 @@ test_that("check plot_calib_msm output (j = 3, s = 100)", {
 
   ## Calculate observed event probabilities
   dat_calib_blr <-
-    calib_msm(data_ms = msebmtcal,
-             data_raw = ebmtcal,
-             j=3,
-             s=100,
-             t = 1826,
-             tp_pred = tp_pred,
-             calib_type = "blr",
-             curve_type = "rcs",
-             rcs_nk = 3,
-             w_covs = c("year", "agecl", "proph", "match"))
+    suppressWarnings(calib_msm(data_ms = msebmtcal,
+                               data_raw = ebmtcal,
+                               j=3,
+                               s=100,
+                               t = 1826,
+                               tp_pred = tp_pred,
+                               calib_type = "blr",
+                               curve_type = "rcs",
+                               rcs_nk = 3,
+                               w_covs = c("year", "agecl", "proph", "match")))
 
   ## Plot calibration plots and run tests
   plot_object <- plot(dat_calib_blr, combine = TRUE, nrow = 2, ncol = 3)
@@ -123,14 +123,14 @@ test_that("check plot_calib_pv output (j = 1, s = 0)", {
   ## Calculate observed event probabilities
   dat_calib_pv <-
     suppressWarnings(calib_msm(data_ms = msebmtcal,
-                              data_raw = ebmtcal,
-                              j=1,
-                              s=0,
-                              t = 1826,
-                              tp_pred = tp_pred,
-                              calib_type = "pv",
-                              curve_type = "rcs",
-                              rcs_nk = 3))
+                               data_raw = ebmtcal,
+                               j=1,
+                               s=0,
+                               t = 1826,
+                               tp_pred = tp_pred,
+                               calib_type = "pv",
+                               curve_type = "rcs",
+                               rcs_nk = 3))
 
   ## Plot calibration plots and run tests
   plot_object <- plot(dat_calib_pv, combine = TRUE)
@@ -157,16 +157,16 @@ test_that("check plot_calib_pv output (j = 1, s = 0) with CI", {
   ## Calculate observed event probabilities
   dat_calib_pv <-
     suppressWarnings(calib_msm(data_ms = msebmtcal,
-                              data_raw = ebmtcal,
-                              j=1,
-                              s=0,
-                              t = 1826,
-                              tp_pred = tp_pred,
-                              calib_type = "pv",
-                              curve_type = "rcs",
-                              rcs_nk = 3,
-                              CI = 95,
-                              CI_type = "parametric"))
+                               data_raw = ebmtcal,
+                               j=1,
+                               s=0,
+                               t = 1826,
+                               tp_pred = tp_pred,
+                               calib_type = "pv",
+                               curve_type = "rcs",
+                               rcs_nk = 3,
+                               CI = 95,
+                               CI_type = "parametric"))
 
   ## Plot calibration plots and run tests
   plot_object <- plot(dat_calib_pv, combine = TRUE)
@@ -193,17 +193,17 @@ test_that("check plot_calib_pv output (j = 3, s = 100) with CI", {
 
   ## Calculate observed event probabilities
   dat_calib_pv <-
-    calib_msm(data_ms = msebmtcal,
-             data_raw = ebmtcal,
-             j=3,
-             s=100,
-             t = 1826,
-             tp_pred = tp_pred,
-             calib_type = "pv",
-             curve_type = "rcs",
-             rcs_nk = 3,
-             CI = 95,
-             CI_type = "parametric")
+    suppressWarnings(calib_msm(data_ms = msebmtcal,
+                               data_raw = ebmtcal,
+                               j=3,
+                               s=100,
+                               t = 1826,
+                               tp_pred = tp_pred,
+                               calib_type = "pv",
+                               curve_type = "rcs",
+                               rcs_nk = 3,
+                               CI = 95,
+                               CI_type = "parametric"))
 
   ## Plot calibration plots and run tests
   plot_object <- plot(dat_calib_pv, combine = TRUE)
@@ -236,13 +236,13 @@ test_that("check plot_calib_mlr output (j = 1, s = 0)", {
   suppressWarnings(
     dat_calib_mlr <-
       calib_msm(data_ms = msebmtcal,
-               data_raw = ebmtcal,
-               j=1,
-               s=0,
-               t = 1826,
-               tp_pred = tp_pred,
-               calib_type = "mlr",
-               w_covs = c("year", "agecl", "proph", "match"))
+                data_raw = ebmtcal,
+                j=1,
+                s=0,
+                t = 1826,
+                tp_pred = tp_pred,
+                calib_type = "mlr",
+                w_covs = c("year", "agecl", "proph", "match"))
   )
 
   ## Plot calibration plots and run tests
@@ -264,13 +264,13 @@ test_that("check plot_calib_mlr output (j = 3, s = 100)", {
   suppressWarnings(
     dat_calib_mlr <-
       calib_msm(data_ms = msebmtcal,
-               data_raw = ebmtcal,
-               j=3,
-               s=100,
-               t = 1826,
-               tp_pred = tp_pred,
-               calib_type = "mlr",
-               w_covs = c("year", "agecl", "proph", "match"))
+                data_raw = ebmtcal,
+                j=3,
+                s=100,
+                t = 1826,
+                tp_pred = tp_pred,
+                calib_type = "mlr",
+                w_covs = c("year", "agecl", "proph", "match"))
   )
 
   ## Plot calibration plots and run tests

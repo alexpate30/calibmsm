@@ -7,10 +7,6 @@ vignette: >
 
 Please click the link below to access the **Overview** vignette, which is a static pdf document which cannot be directly viewed through this html webpage.
 
-**Please note that if the censoring mechanism is not conditionally independent from the outcome process X(t) given Z, i.e. the rate of censoring changes depending on the outcome state that an individual is in, then current implementation of the BLR-IPCW and MLR-IPCW approaches will be invalid. There is no problem with the methods in general, however, in this setting, the outcome history up until time t must be conditioned on in some way when estimating the weights. For now, we would like to emphasise to users that in order to implement the BLR-IPCW and MLR-IPCW approaches, it is essential for the outcome and censoring mechanism to be conditionally independent given some set of baseline covariates $\mathbf{Z}$, which is the scenario these methods have been tested in. For more details around this, please refer to the \href{https://alexpate30.github.io/calibmsm/articles/Sensitivity-analysis-for-IPCWs.html}{vignette-Sensitivity-analysis-for-IPCWs}.
-
-We believe the censoring mechanism in this clinical exemplar meets this criteria, however the discussion of the results has not been updated to reflect this. This vignette is currently undergoing peer review. Once the peer review process is over, this vignette will be updated to fully reflect this.**
-
 <!--- <iframe src="overview_vignette.pdf"/> -->
 
 [Vignette: Overview](overview_vignette.pdf){target="_blank"}

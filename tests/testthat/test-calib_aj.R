@@ -207,3 +207,5 @@ test_that("check calib_pv output, pv_group_vars and pv_n_pctls specified ", {
   expect_equal(as.numeric(dat_calib_aj_1[["mean"]][6]), as.numeric(dat_calib_aj_CI_1[["mean"]][[6]][1]))
 
 })
+
+### Finish tests

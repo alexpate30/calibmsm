@@ -25,9 +25,7 @@ test_that("check plot_calib_msm output (j = 1, s = 0)", {
 
   ## Plot calibration plots and run tests with marginal density plots
   plot_object <- plot(dat_calib_blr, combine = TRUE, nrow = 2, ncol = 3, marg_density = FALSE, marg_density_size = 1)
-  expect_length(plot_object, 11)
-  expect_equal(class(plot_object), c("gg", "ggplot", "ggarrange"))
-
+  expect_true(ggplot2::is_ggplot(plot_object))
   ## Plot calibration plots and run tests with marginal rug plots
   plot_object <- plot(dat_calib_blr, combine = TRUE, nrow = 2, ncol = 3, marg_rug = TRUE)
   expect_equal(class(plot_object), c("gtable", "gTree", "grob", "gDesc"))
@@ -70,7 +68,7 @@ test_that("check plot_calib_msm output (j = 1, s = 0) with CI", {
 
   ## Plot calibration plots and run tests with marginal density plots
   plot_object <- plot(dat_calib_blr, combine = TRUE, nrow = 2, ncol = 3, marg_density = FALSE, marg_density_size = 1)
-  expect_equal(class(plot_object), c("gg", "ggplot", "ggarrange"))
+  expect_true(ggplot2::is_ggplot(plot_object))
 
   ## Plot calibration plots and run tests with marginal rug plots
   plot_object <- plot(dat_calib_blr, combine = TRUE, nrow = 2, ncol = 3, marg_rug = TRUE)
@@ -247,7 +245,7 @@ test_that("check plot_calib_mlr output (j = 1, s = 0)", {
 
   ## Plot calibration plots and run tests
   plot_object <- plot(dat_calib_mlr, combine = TRUE, nrow = 2, ncol = 3)
-  expect_equal(class(plot_object),  c("gg", "ggplot", "ggarrange"))
+  expect_true(ggplot2::is_ggplot(plot_object))
   plot_object <- plot(dat_calib_mlr, combine = FALSE, nrow = 2, ncol = 3)
   expect_length(plot_object, 6)
   expect_type(plot_object, "list")
@@ -275,7 +273,7 @@ test_that("check plot_calib_mlr output (j = 3, s = 100)", {
 
   ## Plot calibration plots and run tests
   plot_object <- plot(dat_calib_mlr, combine = TRUE, nrow = 2, ncol = 3)
-  expect_equal(class(plot_object),  c("gg", "ggplot", "ggarrange"))
+  expect_true(ggplot2::is_ggplot(plot_object))
   plot_object <- plot(dat_calib_mlr, combine = FALSE, nrow = 2, ncol = 3)
   expect_length(plot_object, 4)
   expect_type(plot_object, "list")

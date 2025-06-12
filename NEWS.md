@@ -1,3 +1,7 @@
+# calibmsm 1.1.3
+
+* Fix tests identified as failing from reverse dependency checks due to upcoming changes in the new release of ggplot2, which is now transitioning to S7 class (see [here](https://github.com/tidyverse/ggplot2/issues/6498))
+
 # calibmsm 1.1.2
 
 * Change of code format to snake_case for all function arguments.

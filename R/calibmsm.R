@@ -256,11 +256,14 @@ calib_msm <- function(data_ms,
     warning("All patients in data_ms are not contained in data_raw. Landmarking can still be applied, but potential mismatch in these two datasets?")
   }
 
-  ### Stop if variables dtcens and dtcens_s do not exist, and if any NA values for dtcens
-  if (!("dtcens" %in% colnames(data_raw)) | !("dtcens_s" %in% colnames(data_raw))){
-    stop("data_raw should contains variables dtcens and dtcens_s")
-  } else if (!(sum(is.na(data_raw$dtcens)) == 0)){
-    stop("NA values found in dtcens. Censoring time must be known for all individuals.")
+  ### Stop if variables dtcens and dtcens_s do not exist, and if any NA values for dtcens, and wanting
+  ### to use calib_type = "blr" or "mlr"
+  if (calib_type %in% c("blr", "mlr")){
+    if (!("dtcens" %in% colnames(data_raw)) | !("dtcens_s" %in% colnames(data_raw))){
+      stop("data_raw should contains variables dtcens and dtcens_s")
+    } else if (!(sum(is.na(data_raw$dtcens)) == 0)){
+      stop("NA values found in dtcens. Censoring time must be known for all individuals.")
+    }
   }
 
   ### Stop if weights inputted manually, and confidence interval requested internally

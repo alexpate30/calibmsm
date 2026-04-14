@@ -11,7 +11,9 @@ Assess the calibration of an existing (i.e. previously developed) multistate mod
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://github.com/alexpate30/calibmsm}
   \item \url{https://alexpate30.github.io/calibmsm/}
+  \item Report bugs at \url{https://github.com/alexpate30/calibmsm/issues}
 }
 
 }

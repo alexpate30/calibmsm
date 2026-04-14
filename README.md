@@ -3,6 +3,10 @@
 
 # calibmsm
 
+*There is currently an issue with the extract_smoking function. This has
+been fixed on the GitHub version of the package and will be pushed to
+CRAN on the 10th September*.
+
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/alexpate30/calibmsm/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/alexpate30/calibmsm/actions/workflows/R-CMD-check.yaml)
@@ -91,7 +95,7 @@ We can then plot the calibration plots:
 plot(dat_calib_blr, combine = TRUE, nrow = 2, ncol = 3, axis.titles.x = c(4,5,6), axis.titles.y = c(1,4), marg_density = FALSE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-4-1.png" alt="" width="100%" />
 
 If wanting to include marginal density plots (recommended, also the
 default) then the output is a gTable, that must then in turn be plotted,
@@ -102,7 +106,7 @@ marg_density_plot <- plot(dat_calib_blr, combine = TRUE, nrow = 2, ncol = 3, axi
 plot(marg_density_plot)
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
+<img src="man/figures/README-unnamed-chunk-5-1.png" alt="" width="100%" />
 
 At this step `plot` can also be replcaed by `grid::grid.draw`.
 

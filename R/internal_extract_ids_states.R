@@ -88,10 +88,10 @@ apply_landmark <- function(data_raw, data_ms, j, s, t, exclude_cens_t = FALSE, d
 #' were in state j at time s.
 #'
 #' @noRd
-identify_valid_transitions <- function(data_raw, data_ms, j, s, t){
+identify_valid_transitions <- function(data_raw, data_ms, j, s, t, exclude_cens_t = FALSE){
 
-  ### Landmark the dataset, retaining only individuals uncensored at time t
-  data_raw_lmk_js <- apply_landmark(data_raw = data_raw, data_ms, j = j, s = s, t = t, exclude_cens_t = TRUE)
+  ### Landmark the dataset
+  data_raw_lmk_js <- apply_landmark(data_raw = data_raw, data_ms, j = j, s = s, t = t, exclude_cens_t = exclude_cens_t)
 
   ### Assign the maximum state an individual may enter
   max_state <- max(data_ms$to)

@@ -1,0 +1,38 @@
+# calibmsm: Calibration Plots for the Transition Probabilities from Multistate Models
+
+Assess the calibration of an existing (i.e. previously developed)
+multistate model through calibration plots. Calibration is assessed
+using one of three methods. 1) Calibration methods for binary logistic
+regression models applied at a fixed time point in conjunction with
+inverse probability of censoring weights. 2) Calibration methods for
+multinomial logistic regression models applied at a fixed time point in
+conjunction with inverse probability of censoring weights. 3)
+Pseudo-values estimated using the Aalen-Johansen estimator of observed
+risk. All methods are applied in conjunction with landmarking when
+required. These calibration plots evaluate the calibration (in a
+validation cohort of interest) of the transition probabilities estimated
+from an existing multistate model. While package development has focused
+on multistate models, calibration plots can be produced for any model
+which utilises information post baseline to update predictions (e.g.
+dynamic models); competing risks models; or standard single outcome
+survival models, where predictions can be made at any landmark time.
+Please see Pate et al. (2024)
+[doi:10.1002/sim.10094](https://doi.org/10.1002/sim.10094) and Pate et
+al. (2024)
+<https://alexpate30.github.io/calibmsm/articles/Overview.html>.
+
+## See also
+
+Useful links:
+
+- <https://alexpate30.github.io/calibmsm/>
+
+## Author
+
+**Maintainer**: Alexander Pate <alexander.pate@manchester.ac.uk>
+([ORCID](https://orcid.org/0000-0002-0849-3458)) \[copyright holder\]
+
+Other contributors:
+
+- Glen P Martin <glen.martin@manchester.ac.uk>
+  ([ORCID](https://orcid.org/0000-0002-3410-9472)) \[funder, reviewer\]

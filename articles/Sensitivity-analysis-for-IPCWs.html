@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">calibmsm</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -187,8 +187,8 @@ stratified by <code>year</code>.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ebmtcal</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">dtcens</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">year</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></span></code></pre>
-<p><img src="Sensitivity-analysis-for-IPCWs_files/figure-html/unnamed-chunk-3-1.png" width="700"></p>
+<pre><code><span><span class="co">## `stat_bin()` using `bins = 30`. Pick better value `binwidth`.</span></span></code></pre>
+<p><img src="Sensitivity-analysis-for-IPCWs_files/figure-html/unnamed-chunk-3-1.png" class="r-plt" alt="" width="700"></p>
 <p>When fitting a cox proportional hazards model to estimate the
 weights, this will clearly violate the proportional hazards assumption
 given there is differential follow up in each group. This is why we
@@ -207,16 +207,16 @@ fitting this model. This is specified through the
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ebmtcal</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">ipcw_ph</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></span></code></pre>
+<pre><code><span><span class="co">## `stat_bin()` using `bins = 30`. Pick better value `binwidth`.</span></span></code></pre>
 <pre><code><span><span class="co">## Warning: Removed 501 rows containing non-finite outside the scale range</span></span>
 <span><span class="co">## (`stat_bin()`).</span></span></code></pre>
-<p><img src="Sensitivity-analysis-for-IPCWs_files/figure-html/unnamed-chunk-5-1.png" width="700"></p>
+<p><img src="Sensitivity-analysis-for-IPCWs_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" alt="" width="700"></p>
 <p>These weights are estimated by fitting the following model:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ebmtcal_5y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="va">ebmtcal</span>,</span>
-<span>                     dtcens_s <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span><span class="va">dtcens</span> <span class="op">&gt;</span> <span class="fl">1826</span> <span class="op">~</span> <span class="fl">0</span>,</span>
+<span>                     dtcens_s <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span><span class="va">dtcens</span> <span class="op">&gt;</span> <span class="fl">1826</span> <span class="op">~</span> <span class="fl">0</span>,</span>
 <span>                                          <span class="cn">TRUE</span> <span class="op">~</span> <span class="va">dtcens_s</span><span class="op">)</span>,</span>
-<span>                     dtcens <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span><span class="va">dtcens</span> <span class="op">&gt;</span> <span class="fl">1826</span> <span class="op">~</span> <span class="fl">1826</span>,</span>
+<span>                     dtcens <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span><span class="va">dtcens</span> <span class="op">&gt;</span> <span class="fl">1826</span> <span class="op">~</span> <span class="fl">1826</span>,</span>
 <span>                                        <span class="cn">TRUE</span> <span class="op">~</span> <span class="va">dtcens</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">model_ipcw_ph</span> <span class="op">&lt;-</span> <span class="fu">survival</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/coxph.html" class="external-link">coxph</a></span><span class="op">(</span><span class="fu">survival</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survival/man/Surv.html" class="external-link">Surv</a></span><span class="op">(</span><span class="va">dtcens</span>, <span class="va">dtcens_s</span><span class="op">)</span> <span class="op">~</span> <span class="va">year</span> <span class="op">+</span> <span class="va">agecl</span> <span class="op">+</span> <span class="va">proph</span> <span class="op">+</span> <span class="va">match</span>, data <span class="op">=</span> <span class="va">ebmtcal_5y</span><span class="op">)</span></span>
@@ -244,7 +244,7 @@ no worse than the other variables.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">phtest</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/survival/man/cox.zph.html" class="external-link">cox.zph</a></span><span class="op">(</span><span class="va">model_ipcw_ph</span><span class="op">)</span></span>
 <span><span class="fu">survminer</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/survminer/man/ggcoxzph.html" class="external-link">ggcoxzph</a></span><span class="op">(</span><span class="va">phtest</span>, resid <span class="op">=</span> <span class="cn">FALSE</span>, se <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Sensitivity-analysis-for-IPCWs_files/figure-html/unnamed-chunk-7-1.png" width="700"></p>
+<p><img src="Sensitivity-analysis-for-IPCWs_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" alt="" width="700"></p>
 <p>We can therefore conclude that it is not the <code>year</code>
 variable alone driving poor estimation of the weights, however, the
 proportional hazards assumption does not hold. We will therefore proceed
@@ -271,9 +271,9 @@ Parmar 2002)</span> (implemented in R using
 <span>      <span class="kw"><a href="https://rdrr.io/r/base/stop.html" class="external-link">stop</a></span><span class="op">(</span><span class="st">"Max follow cannot be smaller than t"</span><span class="op">)</span></span>
 <span>    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
 <span>      <span class="va">data_raw</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span><span class="va">data_raw</span>,</span>
-<span>                                dtcens_s <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span><span class="va">dtcens</span> <span class="op">&lt;</span> <span class="va">max_follow</span> <span class="op">+</span> <span class="fl">2</span> <span class="op">~</span> <span class="va">dtcens_s</span>,</span>
+<span>                                dtcens_s <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span><span class="va">dtcens</span> <span class="op">&lt;</span> <span class="va">max_follow</span> <span class="op">+</span> <span class="fl">2</span> <span class="op">~</span> <span class="va">dtcens_s</span>,</span>
 <span>                                                            <span class="va">dtcens</span> <span class="op">&gt;=</span> <span class="va">max_follow</span> <span class="op">+</span> <span class="fl">2</span> <span class="op">~</span> <span class="fl">0</span><span class="op">)</span>,</span>
-<span>                                dtcens <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span><span class="va">dtcens</span> <span class="op">&lt;</span> <span class="va">max_follow</span> <span class="op">+</span> <span class="fl">2</span> <span class="op">~</span> <span class="va">dtcens</span>,</span>
+<span>                                dtcens <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html" class="external-link">case_when</a></span><span class="op">(</span><span class="va">dtcens</span> <span class="op">&lt;</span> <span class="va">max_follow</span> <span class="op">+</span> <span class="fl">2</span> <span class="op">~</span> <span class="va">dtcens</span>,</span>
 <span>                                                          <span class="va">dtcens</span> <span class="op">&gt;=</span> <span class="va">max_follow</span> <span class="op">+</span> <span class="fl">2</span> <span class="op">~</span> <span class="va">max_follow</span> <span class="op">+</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span>    <span class="op">}</span></span>
 <span>  <span class="op">}</span></span>
@@ -393,10 +393,10 @@ Parmar 2002)</span> (implemented in R using
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ebmtcal</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">ipcw_fp</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html" class="external-link">geom_histogram</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></span></code></pre>
+<pre><code><span><span class="co">## `stat_bin()` using `bins = 30`. Pick better value `binwidth`.</span></span></code></pre>
 <pre><code><span><span class="co">## Warning: Removed 501 rows containing non-finite outside the scale range</span></span>
 <span><span class="co">## (`stat_bin()`).</span></span></code></pre>
-<p><img src="Sensitivity-analysis-for-IPCWs_files/figure-html/unnamed-chunk-10-1.png" width="700"></p>
+<p><img src="Sensitivity-analysis-for-IPCWs_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" alt="" width="700"></p>
 <p>We see there is very little difference compared to when the weights
 were estimated using the cox-proportional hazards model.</p>
 <p>Next we use this function to estimate the calibration curves. This is
@@ -457,7 +457,7 @@ estimate the calibration curves:</p>
 BLR-IPCW calibration curves when using a cox proportional hazards model
 to estimate the weights
 </p>
-<img src="Sensitivity-analysis-for-IPCWs_files/figure-html/unnamed-chunk-12-1.png" alt="BLR-IPCW calibration curves when using a cox proportional hazards model to estimate the weights" width="720">
+<img src="Sensitivity-analysis-for-IPCWs_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" alt="BLR-IPCW calibration curves when using a cox proportional hazards model to estimate the weights" width="720">
 </div>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">grid</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grid/grid.draw.html" class="external-link">grid.draw</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat_calib_blr_flexsurv</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -466,7 +466,7 @@ to estimate the weights
 BLR-IPCW calibration curves when using a flexible parametric model to
 estimate the weights
 </p>
-<img src="Sensitivity-analysis-for-IPCWs_files/figure-html/unnamed-chunk-13-1.png" alt="BLR-IPCW calibration curves when using a flexible parametric model to estimate the weights" width="720">
+<img src="Sensitivity-analysis-for-IPCWs_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" alt="BLR-IPCW calibration curves when using a flexible parametric model to estimate the weights" width="720">
 </div>
 <p>There is very little difference, and the estimated calibration curves
 are not very sensitive to the choice of model to estimate the inverse
@@ -744,7 +744,7 @@ Software</em> 38 (7). <a href="https://cran.r-project.org/package=mstate" class=
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

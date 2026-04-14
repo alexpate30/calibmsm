@@ -25,7 +25,11 @@ al. (2024)
 
 Useful links:
 
+- <https://github.com/alexpate30/calibmsm>
+
 - <https://alexpate30.github.io/calibmsm/>
+
+- Report bugs at <https://github.com/alexpate30/calibmsm/issues>
 
 ## Author
 

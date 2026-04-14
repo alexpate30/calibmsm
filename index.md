@@ -1,5 +1,9 @@
 # calibmsm
 
+*There is currently an issue with the extract_smoking function. This has
+been fixed on the GitHub version of the package and will be pushed to
+CRAN on the 10th September*.
+
 The goal of **calibmsm** is to provide a set of tools for estimating
 calibration plots when validating an existing (i.e. previously
 developed) multistate model. While the vignettes and articles for this

@@ -151,30 +151,56 @@ calc_weights <- function(data_ms, data_raw, covs = NULL, t, s, landmark_type = "
   ### This is the linear predictor times the cumulative hazard at time t, and appropriate transformation to get a risk
   data_raw_save$pcw <- as.numeric(exp(-exp(data_raw_save$lp)*data_weights$hazard[max(which(data_weights$time <= t - s))]))
 
-  ## Write a function which will extract the uncensored probability for an individual with linear predictor lp at a given time t
-  prob_uncens_func <- function(input){
+  ### Commenting out old code for estimating weights (probability of not being censored at time t)
+  ### Previously it was inefficient
+  ### New code is more efficient. Leaving old code here temporarily before pushing to CRAN
+  ### Want to do a test to check these are doing the exact same thing before removing
+  # ## Write a function which will extract the uncensored probability for an individual with linear predictor lp at a given time t
+  # prob_uncens_func <- function(input){
+  #
+  #   ## Assign t and person_id
+  #   t <- input[1]
+  #   lp <- input[2]
+  #
+  #   if (t <= 0){
+  #     return(NA)
+  #   } else if (t > 0){
+  #     ## Get hazard at appropriate time
+  #     if (t < min(data_weights$time)){
+  #       bhaz_t <- 0
+  #     } else if (t >= min(data_weights$time)){
+  #       bhaz_t <- data_weights$hazard[max(which(data_weights$time <= t))]
+  #     }
+  #
+  #     ## Return risk
+  #     return(exp(-exp(lp)*bhaz_t))
+  #   }
+  # }
+  #
+  # ### Apply this function to all the times at which individuals have entered an absorbing state prior to censoring
+  # data_raw_save$pcw[obs_absorbed_prior] <- apply(data_raw_save[obs_absorbed_prior, c("dtcens_modified", "lp")], 1, FUN = prob_uncens_func)
 
-    ## Assign t and person_id
-    t <- input[1]
-    lp <- input[2]
+  ### Extract times and linear predictors for absorbed individuals (vectorised, no loop)
+  times_absorbed <- data_raw_save$dtcens_modified[obs_absorbed_prior]
+  lp_absorbed    <- data_raw_save$lp[obs_absorbed_prior]
 
-    if (t <= 0){
-      return(NA)
-    } else if (t > 0){
-      ## Get hazard at appropriate time
-      if (t < min(data_weights$time)){
-        bhaz_t <- 0
-      } else if (t >= min(data_weights$time)){
-        bhaz_t <- data_weights$hazard[max(which(data_weights$time <= t))]
-      }
+  ### Get the position of the baseline hazard vector that is the maximum time, smaller than or equal to t.
+  # findInterval() does a vectorised binary search:
+  # For each value in times_absorbed, returns the index of the largest
+  # data_weights$time that is <= that value (0 if none qualifies, i.e. time absorbed is smaller than first event)
+  idx <- findInterval(times_absorbed, data_weights$time)
 
-      ## Return risk
-      return(exp(-exp(lp)*bhaz_t))
-    }
-  }
+  ### Extract the baseline hazard at time t for each individual
+  bhaz_t <- ifelse(idx == 0, 0, data_weights$hazard[idx])
 
-  ### Apply this function to all the times at which individuals have entered an absorbing state prior to censoring
-  data_raw_save$pcw[obs_absorbed_prior] <- apply(data_raw_save[obs_absorbed_prior, c("dtcens_modified", "lp")], 1, FUN = prob_uncens_func)
+  ### Turn into survival probability and add this to data_raw_save
+  # If t = 0 or negative, return NA
+  # Otherwise, calculate survival probability
+  data_raw_save$pcw[obs_absorbed_prior] <- ifelse(
+    times_absorbed <= 0,
+    NA,
+    exp(-exp(lp_absorbed) * bhaz_t)
+  )
 
   ### For individuals who were censored prior to t, assign the weight as NA
   data_raw_save$pcw[obs_censored_prior] <- NA

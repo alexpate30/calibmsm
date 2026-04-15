@@ -88,7 +88,7 @@ apply_landmark <- function(data_raw, data_ms, j, s, t, exclude_cens_t = FALSE, d
 #' were in state j at time s.
 #'
 #' @noRd
-identify_valid_transitions <- function(data_raw, data_ms, j, s, t, exclude_cens_t = FALSE){
+identify_valid_transitions_old <- function(data_raw, data_ms, j, s, t, exclude_cens_t = FALSE){
 
   ### Landmark the dataset
   data_raw_lmk_js <- apply_landmark(data_raw = data_raw, data_ms, j = j, s = s, t = t, exclude_cens_t = exclude_cens_t)
@@ -122,6 +122,41 @@ identify_valid_transitions <- function(data_raw, data_ms, j, s, t, exclude_cens_
 
 }
 
+
+#' Identify valid transitions
+#'
+#' @description
+#' Identify states which can be entered when in state j at time s
+#'
+#' Note that this returns which states have people in at time t, amongst those that
+#' were in state j at time s.
+#'
+#' @noRd
+identify_valid_transitions <- function(data_raw, data_ms, j, s, t, exclude_cens_t = FALSE){
+
+  ### Landmark the dataset
+  data_raw_lmk_js <- apply_landmark(data_raw = data_raw, data_ms, j = j, s = s, t = t, exclude_cens_t = exclude_cens_t)
+
+  ### Assign the maximum state an individual may enter
+  max_state <- max(data_ms$to)
+
+  ### Extract transition matrix from msdata object
+  tmat <- attributes(data_ms)$trans
+
+  ### Create a variable to say which state an individual was in at the time of interest
+  ## Create list containing the relevant data
+  v1 <- data_raw_lmk_js$id
+
+  ### For each state k in 1:max_state, check whether any individual from the landmarked cohort is in that
+  ### state at time t.
+  valid_transitions <- Filter(function(k) {
+    ids_k <- extract_ids_states(data_ms, tmat, k, t)
+    any(v1 %in% ids_k)
+  }, 1:max_state)
+
+  return(as.numeric(valid_transitions))
+
+}
 
 #' Apply bootstrapping to a dataset of class `msdata`
 #'
